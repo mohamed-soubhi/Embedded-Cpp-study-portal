@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>If-Else Branching &amp; Boolean Decision Trees - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">SelectionFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">if/else</span> <span class="tag">Decision Trees</span> <span class="tag">Guard Clauses</span> <span class="tag">Early Return</span> <span class="tag">Clean Code</span>
+      </div>
+      <h1 class="project-title">Nested if/else Decision Trees, Inverted Guards &amp; Early Return Idioms</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring if/else selection statements and multi-branch decision trees. We contrast deeply nested if-else ladders ('Arrow Anti-Pattern') with clean Guard Clauses and Early Returns, analyzing their impact on stack frames and code readability.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	int age;
+	cout &lt;&lt; &quot;Welcome to the Pub and Grille!&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;Please enter your age:  &quot;;
+	cin &gt;&gt; age;
+
+	if (age &gt;= 21) {
+		cout &lt;&lt; &quot;Would you like a beer?&quot; &lt;&lt; endl;
+	}
+	else if (age &gt;= 16) {
+		cout &lt;&lt; &quot;Would you like a Coke?&quot; &lt;&lt; endl;
+		cout &lt;&lt; &quot;At least you can drive!&quot; &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;Would you like a Coke?&quot; &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; &quot;Thanks for coming to the Pub and Grille!&quot; &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Multi-Way Selection Trees</h3>
+        <p>Nested <code>if-else</code> constructs evaluate conditions in top-down sequential order, executing the first block whose condition is true.</p>
+
+        <h3>2. Guard Clauses & Early Returns</h3>
+        <p>Inverting error checks to exit early (Guard Clauses) flattens nested code, reduces cyclomatic complexity, and makes execution paths immediately visible.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Reducing Cyclomatic Complexity</h3>
+        <p>Automotive safety standards (ISO 26262 / MISRA) enforce strict limits on <strong>Cyclomatic Complexity (typically $\le 10$)</strong> per function. Using guard clauses keeps complexity low and ensures all error paths are testable.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Refactoring nested if-else ladders into clean early return guards:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+enum class ValveState : uint8_t { Closed = 0, Open, Fault };
+
+ValveState evaluatePressureSensor(uint32_t psi, bool is_powered) noexcept {
+    // 1. Guard against hardware power failure
+    if (!is_powered) return ValveState::Fault;
+    
+    // 2. Guard against over-pressure emergency
+    if (psi &gt; 150) return ValveState::Open;
+    
+    // 3. Normal operating state
+    return ValveState::Closed;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;Cyclomatic Complexity&#x27; in software engineering?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A quantitative metric measuring the number of linearly independent paths through a function&#x27;s source code</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The clock speed of the CPU in GHz</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The amount of heap memory allocated by a class</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The number of lines in a header file</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Cyclomatic complexity counts decision points (if, while, for, case), measuring code complexity and required unit test paths.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the primary advantage of using &#x27;Guard Clauses&#x27; with early returns over deeply nested if-else blocks?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> They eliminate deep nesting (the &#x27;Arrow Anti-Pattern&#x27;), handle error cases immediately, and keep happy-path code linearly readable</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> They make code compile in assembly</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> They allocate variables in Flash memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They double CPU clock speed</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Guard clauses validate preconditions upfront and return immediately, keeping main logic flat and unnested.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> In an &#x27;if (A) ... else if (B) ... else ...&#x27; construct, how many blocks can possibly execute?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> At most 1 block (the first condition that evaluates to true, or the else fallback)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> All blocks that are true</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Exactly 2 blocks</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 0 blocks always</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            An <code>if / else if / else</code> chain is mutually exclusive; exactly one branch executes.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why do safety-critical standards like ISO 26262 restrict cyclomatic complexity to small numbers (e.g. &lt;= 10)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> High complexity exponentially increases the number of execution paths, making 100% complete MC/DC test coverage impossible to verify</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To reduce power supply voltage</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Because microcontrollers can only count to 10</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To fit code onto floppy disks</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Low complexity guarantees that all execution paths can be systematically tested and proven safe under formal verification.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="control_statements_intro.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="retired_women.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

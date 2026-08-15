@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Numbers: PRNG vs Hardware True RNG (TRNG) - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">DieRolls</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">PRNG</span> <span class="tag">TRNG</span> <span class="tag">Hardware RNG</span> <span class="tag">Entropy</span> <span class="tag">Cryptography</span>
+      </div>
+      <h1 class="project-title">std::rand() Hazards, Seed Management &amp; Hardware True Random Number Generators (TRNG)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring random number generation and dice simulation. We analyze the severe cryptographic and statistical flaws of std::rand() (Linear Congruential Generators), seed initialization from uninitialized ADC noise, and hardware True Random Number Generators (TRNG peripherals) on microcontrollers (e.g. STM32 RNG).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+
+using namespace std;
+
+int main() {
+
+	srand(time(nullptr));
+
+	int dieValue;
+
+	for (int i = 0; i &lt; 10; i++) {
+		dieValue = rand() % 6 + 1;
+		cout &lt;&lt; &quot;Roll &quot; &lt;&lt; (i + 1) &lt;&lt; &quot;: &quot; &lt;&lt; dieValue &lt;&lt; endl;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Pseudo-Random Number Generators (PRNG)</h3>
+        <p>Standard <code>std::rand()</code> is a <strong>Linear Congruential Generator (LCG)</strong>. Given the same initial seed (<code>std::srand(seed)</code>), it produces the exact same deterministic sequence of numbers.</p>
+
+        <h3>2. Modulo Bias</h3>
+        <p>Computing <code>rand() % 6</code> introduces <strong>Modulo Bias</strong>: lower numbers have a slightly higher probability of being chosen because <code>RAND_MAX</code> is rarely an exact multiple of 6.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Microcontroller Hardware True RNG (TRNG)</h3>
+        <p>Modern microcontrollers (such as STM32, ESP32, nRF52) feature dedicated on-chip <strong>Hardware TRNG peripherals</strong>. They harvest physical analog thermal noise from ring oscillators to produce 100% non-deterministic cryptographic entropy for AES keys, BLE pairing, and secure boot.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Hardware True Random Number Generator (TRNG) driver:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Hardware TRNG Peripheral Access (STM32 RNG)
+struct HardwareRNG {
+    volatile uint32_t CR;  // Control Register
+    volatile uint32_t SR;  // Status Register
+    volatile uint32_t DR;  // Data Register (32-bit random word)
+};
+
+uint32_t getHardwareTrueRandom() noexcept {
+    HardwareRNG* const rng = reinterpret_cast&lt;HardwareRNG*&gt;(0x50060800);
+    while ((rng-&gt;SR &amp; 1UL) == 0); // Wait for Data Ready (DRDY)
+    return rng-&gt;DR; // True physical analog entropy!
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is &#x27;std::rand()&#x27; strictly prohibited for cryptographic keys, BLE pairing, or secure IoT boot?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It is a deterministic Linear Congruential Generator with short cycles; observing a few outputs allows attackers to predict all future keys</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It runs too slowly</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It consumes 100KB of RAM</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It can only generate negative numbers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::rand()</code> is mathematically predictable and not cryptographically secure; attackers can reverse-engineer internal state from a few samples.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What physical phenomenon do on-chip hardware True Random Number Generators (TRNG) sample to generate entropy?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Analog thermal noise, transistor shot noise, and jitter from internal analog ring oscillators</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The CPU crystal frequency</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The number of lines of code</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The ambient room temperature in Celsius</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Hardware TRNGs sample physical analog thermal noise across multiple asynchronous ring oscillators to produce true non-deterministic entropy.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is &#x27;Modulo Bias&#x27; when scaling random numbers (e.g. rand() % 6)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A statistical distortion where numbers below the remainder of RAND_MAX % 6 occur with higher probability than numbers above it</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A compiler error caused by division</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A memory leak on the heap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A hardware fault on ARM</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When the generator range is not an exact multiple of the target range, smaller outcomes receive one extra value in the mapping, skewing fairness.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How do developers without a hardware TRNG seed a PRNG on basic microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Sample the least significant bits of an unconnected, floating analog ADC pin to capture ambient electromagnetic noise</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Hardcode the seed to 0</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Use the compiler version number</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Use the baud rate</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Reading a floating ADC pin captures ambient atmospheric electromagnetic noise, providing an initial random seed for PRNG algorithms.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="continue_break.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="random_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

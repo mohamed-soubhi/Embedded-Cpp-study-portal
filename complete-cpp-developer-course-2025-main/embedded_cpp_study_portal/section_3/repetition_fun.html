@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iteration Loops: While, Do-While &amp; For Loop Mechanics - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">RepetitionFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">while</span> <span class="tag">do-while</span> <span class="tag">for loops</span> <span class="tag">Pre-Test vs Post-Test</span> <span class="tag">Assembly</span>
+      </div>
+      <h1 class="project-title">Pre-Test (while) vs Post-Test (do-while) Loops &amp; ARM Assembly Generation</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring loop structures: while (pre-test), do-while (post-test), and for loops. We analyze their assembly generation on ARM Cortex-M, demonstrate why do-while loops execute the loop body at least once, and examine infinite loop super-loops in embedded systems.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	// while
+	int count = 0;
+
+	while (count &lt; 10) {
+		cout &lt;&lt; &quot;Count: &quot; &lt;&lt; count &lt;&lt; endl;
+		count++;
+	}
+
+	// do-while
+	int counter2 = 100;
+
+	do {
+		cout &lt;&lt; &quot;Counter2: &quot; &lt;&lt; counter2 &lt;&lt; endl;
+		counter2++;
+	} while (counter2 &lt; 10);
+
+	// for loop
+	for (int i = 0; i &lt; 10; i++) {
+		cout &lt;&lt; &quot;i is &quot; &lt;&lt; i &lt;&lt; endl;
+	}
+
+	// sentinel-controlled repetition
+
+	int input;
+
+	cout &lt;&lt; &quot;Enter a non-negative integer (or a negative number to quit):&quot;;
+	cin &gt;&gt; input;
+
+	while (input &gt;= 0) {
+		cout &lt;&lt; &quot;You entered: &quot; &lt;&lt; input &lt;&lt; endl;
+		cout &lt;&lt; &quot;Enter another (or negative to quit): &quot;;
+		cin &gt;&gt; input;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Pre-Test vs Post-Test Loops</h3>
+        <ul>
+          <li><strong>Pre-Test (<code>while</code>, <code>for</code>):</strong> Evaluates condition BEFORE executing the body. May execute 0 times if condition is initially false.</li>
+          <li><strong>Post-Test (<code>do-while</code>):</strong> Executes the body FIRST, then evaluates the condition at the end. <strong>Always executes at least once!</strong></li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Embedded 'Super-Loop' Architecture</h3>
+        <p>Bare-metal microcontrollers without an RTOS use an intentional infinite loop (<code>while (true) { ... }</code>) as the master task scheduler, servicing state machines and peripheral interrupts continuously.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Embedded non-blocking super-loop architecture:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+void serviceSensors() noexcept;
+void updateActuators() noexcept;
+void feedHardwareWatchdog() noexcept;
+
+void mainSuperLoop() noexcept {
+    while (true) { // Master bare-metal super-loop
+        serviceSensors();
+        updateActuators();
+        feedHardwareWatchdog(); // Reset watchdog counter
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the fundamental operational difference between a &#x27;while&#x27; loop and a &#x27;do-while&#x27; loop?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A &#x27;while&#x27; loop tests its condition before the first iteration (may execute 0 times); a &#x27;do-while&#x27; loop tests its condition after each iteration (guaranteed to execute at least once)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A &#x27;do-while&#x27; loop runs in background threads</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A &#x27;while&#x27; loop can only count up to 100</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A &#x27;do-while&#x27; loop uses double precision</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>do-while</code> evaluates at the bottom of the loop, ensuring the loop body executes at least one time.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is a &#x27;Super-Loop&#x27; architecture in bare-metal microcontroller firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> An infinite while(true) loop in main() that continuously polls inputs, processes state machines, and drives outputs without an operating system</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A loop that overclocks the CPU</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A recursive function that never terminates</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A compiler optimization flag</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Super-loops form the foundational execution model of bare-metal microcontrollers, executing sequential tasks in an infinite loop.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why is &#x27;feeding the Watchdog Timer&#x27; essential inside an embedded super-loop?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> If the firmware hangs in a deadlock or infinite loop, failing to reset the watchdog causes hardware to reboot the MCU safely</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To keep the crystal warm</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To recharge the coin cell battery</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To clear Flash memory sectors</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The hardware Watchdog Timer resets the microcontroller if software hangs and fails to reload the counter periodically.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What does a &#x27;for (init; cond; step)&#x27; loop compile to in assembly relative to a &#x27;while (cond)&#x27; loop?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Identical assembly code; &#x27;for&#x27; and &#x27;while&#x27; are syntactic variations of the same underlying loop construct</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A &#x27;for&#x27; loop uses twice as much RAM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A &#x27;while&#x27; loop cannot be unrolled</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A &#x27;for&#x27; loop disables compiler optimizations</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Compilers generate identical branch/test instructions for both <code>for</code> and <code>while</code> loops.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="rock_paper_scissors.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="sum_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

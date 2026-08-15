@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ratio Calculations, Integer Scaling &amp; Loss of Precision - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 2</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 2</a>
+      <span class="sep">/</span>
+      <span class="current">Percentages</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-2">Section 2</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Integer Scaling</span> <span class="tag">Precision Loss</span> <span class="tag">Multiply-Before-Divide</span> <span class="tag">Overflow</span> <span class="tag">Percentages</span>
+      </div>
+      <h1 class="project-title">Integer Ratio Division, Order of Operations &amp; Multiply-Before-Divide Scaling</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Calculating percentage ratios from integer variables. We examine the classic beginner integer division pitfall (e.g. (count / total) * 100 evaluating to 0), enforce the Multiply-Before-Divide rule, and protect against 32-bit overflow using 64-bit intermediate accumulators.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+
+	string fullName;
+	string location;
+	int initialScore;
+
+	cout &lt;&lt; &quot;Please enter your full name: &quot; &lt;&lt; endl;
+	getline(cin, fullName);
+
+	cout &lt;&lt; &quot;Please enter your city, state/province, and country: &quot; &lt;&lt; endl;
+	getline(cin, location);
+
+	cout &lt;&lt; &quot;Please enter your score (0 to 100): &quot; &lt;&lt; endl;
+	cin &gt;&gt; initialScore;
+
+	cout &lt;&lt; &quot;Hello, &quot; &lt;&lt; fullName &lt;&lt; endl;
+	cout &lt;&lt; &quot;We heard you are from &quot; &lt;&lt; location &lt;&lt; endl;
+	cout &lt;&lt; &quot;Your original score is &quot; &lt;&lt; initialScore
+		&lt;&lt; &quot;, but with five points added, your score is &quot;
+		&lt;&lt; (initialScore + 5) &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Zero-Result Pitfall</h3>
+        <p>In integer arithmetic, evaluating <code>(part / total) * 100</code> performs integer division first. When <code>part &lt; total</code>, <code>part / total</code> truncates to <code>0</code>, resulting in <code>0 * 100 = 0%</code>!</p>
+
+        <h3>2. The Multiply-Before-Divide Rule</h3>
+        <p>To preserve precision, always multiply first: <code>(part * 100) / total</code>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Preventing Intermediate Overflow</h3>
+        <p>Multiplying <code>part * 100</code> can overflow 32-bit integer limits if <code>part &gt; 42,949,672</code>. Casting to <code>uint64_t</code> during the multiplication step guarantees 100% overflow immunity.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Safe, high-precision integer percentage calculation:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Calculates percentage (0-100%) with 0 float overhead and 0 overflow risk
+constexpr uint32_t calculatePercentage(uint32_t part, uint32_t total) noexcept {
+    if (total == 0) return 0;
+    // 64-bit promotion prevents 32-bit intermediate multiplication overflow
+    return static_cast&lt;uint32_t&gt;((static_cast&lt;uint64_t&gt;(part) * 100UL) / total);
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why does the C++ integer expression &#x27;(5 / 10) * 100&#x27; evaluate to 0 instead of 50?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Integer division 5 / 10 truncates to 0 before multiplication by 100 occurs</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler replaces 100 with 0</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Parentheses are illegal in arithmetic expressions</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> C++ does not support percentages</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because division occurs first, $5/10 = 0$ in integer arithmetic. Then $0 \times 100 = 0$.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the &#x27;Multiply-Before-Divide&#x27; rule in fixed-point and integer embedded math?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Perform multiplication by the scale factor (e.g. 100) before dividing, preserving precision without fractional truncation</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Always use double precision</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Divide by zero first to check bounds</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Multiply by 2 then shift left</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Multiplying before dividing preserves resolution in the upper bits before integer truncation occurs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the danger of &#x27;(part * 1000) / total&#x27; when &#x27;part&#x27; is a large uint32_t variable?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &#x27;part * 1000&#x27; can overflow the 32-bit integer limit (4,294,967,295), causing silent data corruption</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It triggers a division by zero</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It deletes the total variable</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It causes flash memory wear</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            If $part \times 1000 > 2^{32}-1$, 32-bit overflow occurs. Casting to <code>uint64_t</code> before multiplication prevents this.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How do you calculate basis points (0.01% resolution, e.g. 5000 = 50.00%) using integer math?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> (static_cast&lt;uint64_t&gt;(part) * 10000UL) / total</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> (part / total) * 10000</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> (part * 10) / total</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> part % total</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Multiplying by 10,000 provides $1/10,000$ ($0.01\%$) resolution with integer arithmetic.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="sunny_warm.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="tip_calculator.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

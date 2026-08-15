@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loop Control: Break, Continue &amp; Early Loop Termination - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">ContinueBreak</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">break</span> <span class="tag">continue</span> <span class="tag">Early Exit</span> <span class="tag">Loop Control</span> <span class="tag">Linear Search</span>
+      </div>
+      <h1 class="project-title">break vs continue Flow Control, Search Loops &amp; Nested Loop Escape Idioms</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing loop interruption statements: break (immediate loop exit) and continue (skip to next iteration). We explore early loop termination during buffer searches and safe multi-level nested loop breakout idioms.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	int count = 0;
+
+	while (count &lt;= 10) {
+		if (count == 5) {
+			count++;
+			break;
+		}
+
+		cout &lt;&lt; count &lt;&lt; endl;
+		count++;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. <code>break</code> vs <code>continue</code></h3>
+        <ul>
+          <li><code>break</code>: Immediately terminates the enclosing loop; execution resumes at the first statement following the loop.</li>
+          <li><code>continue</code>: Skips the remainder of the current iteration and jumps directly to the loop update/condition check.</li>
+        </ul>
+
+        <h3>2. Multi-Level Loop Escapes</h3>
+        <p>In C++, <code>break</code> exits only the innermost loop. Escaping nested loops cleanly is best achieved by refactoring the search into a dedicated function with an <code>early return</code>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Real-Time Worst-Case vs Average-Case Search</h3>
+        <p>While <code>break</code> speeds up average-case search, real-time safety systems must guarantee execution time under the <strong>Worst-Case Execution Time (WCET)</strong> scenario (when the target item is at the very last index or absent).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Clean early-return linear search replacing nested break flags:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+
+// Early return cleanly terminates search without complex break flags
+size_t findSensorFaultIndex(const uint16_t* samples, size_t count, uint16_t threshold) noexcept {
+    for (size_t i = 0; i &lt; count; ++i) {
+        if (samples[i] &gt; threshold) {
+            return i; // Found fault! Exits loop and function immediately
+        }
+    }
+    return static_cast&lt;size_t&gt;(-1); // No fault found
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the difference between &#x27;break&#x27; and &#x27;continue&#x27; inside a for loop?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &#x27;break&#x27; terminates the entire loop immediately; &#x27;continue&#x27; skips the rest of the current iteration and advances to the next iteration</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> &#x27;break&#x27; restarts the loop from 0</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &#x27;continue&#x27; terminates the program</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &#x27;break&#x27; pauses execution for 10ms</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>break</code> exits the loop completely, while <code>continue</code> skips the rest of the current pass and begins the next loop cycle.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How many levels of nested loops does a single &#x27;break;&#x27; statement exit in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Exactly 1 level (the innermost enclosing loop)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> All nested loops</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 2 levels</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It depends on the compiler</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>break</code> applies strictly to the innermost loop or switch statement enclosing it.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the cleanest C++ idiom to exit from 3 levels of deeply nested search loops?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Encapsulate the nested loops in a dedicated helper function and execute an early &#x27;return&#x27; when the item is found</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Use 3 consecutive break statements on the same line</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Throw an exception</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Restart the microcontroller</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Extracting nested loops into a helper function allows an immediate <code>return</code> to exit all loops simultaneously with zero flag variables.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is &#x27;WCET&#x27; in real-time safety-critical firmware analysis?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Worst-Case Execution Time: the maximum possible execution duration a piece of code can take on target hardware under worst-case inputs</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Wireless Controller Energy Tracker</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Watchdog Clock Enable Timer</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Wideband Channel Error Test</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            WCET is the provable upper bound on execution duration, critical for verifying that real-time interrupt deadlines are never missed.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="even_only.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="die_rolls.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

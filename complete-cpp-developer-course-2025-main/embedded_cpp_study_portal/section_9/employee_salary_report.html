@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabular Formatting, Stream Manipulators &amp; Statistical Aggregation - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 9</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 9</a>
+      <span class="sep">/</span>
+      <span class="current">EmployeeSalaryReport</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-9">Section 9</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">&lt;iomanip&gt;</span> <span class="tag">setw</span> <span class="tag">setprecision</span> <span class="tag">Formatting</span> <span class="tag">Statistical Reports</span>
+      </div>
+      <h1 class="project-title">Formatted Stream Manipulators (&lt;iomanip&gt;), Fixed-Width Alignments &amp; Sensor Summary Reports</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Generating formatted tabular text reports using <iomanip> (std::setw, std::setprecision, std::fixed). We analyze table column alignment, computing running averages/min/max statistics, and generating ASCII telemetry summary logs for embedded serial terminals.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">salaries.txt</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+int main() {
+	ifstream infile(&quot;salaries.txt&quot;);
+
+	if (!infile) {
+		cerr &lt;&lt; &quot;Error opening file.  Aborting...&quot; &lt;&lt; endl;
+		return 1;
+	}
+
+	double salary;
+	int employeeCount = 0;
+	double totalSalary = 0.0;
+	int highEarners = 0;
+
+	while (infile &gt;&gt; salary) {
+		if (salary &lt; 0 || salary &gt; 1000000) {
+			//skip invalid data
+			continue;
+		}
+
+		employeeCount++;
+		totalSalary += salary;
+
+		if (salary &gt; 100000) {
+			highEarners++;
+		}
+	}//end while
+
+	infile.close();
+
+	double averageSalary = (employeeCount &gt; 0) ? totalSalary / employeeCount : 0.0;
+
+	cout &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; setprecision(2);
+	cout &lt;&lt; &quot;Employee Salary Report&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;-------------------------------&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;Total Employees:               &quot; &lt;&lt; employeeCount &lt;&lt; endl;
+	cout &lt;&lt; &quot;Total Payroll:                 $&quot; &lt;&lt; totalSalary &lt;&lt; endl;
+	cout &lt;&lt; &quot;Average Salary:                $&quot; &lt;&lt; averageSalary &lt;&lt; endl;
+	cout &lt;&lt; &quot;Over $100,000 Earners:         &quot; &lt;&lt; highEarners &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">55000
+72000
+98000
+121000
+45000
+105000
+86000
+34000
+145000
+99999</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Formatted Stream Manipulators (<code>&lt;iomanip&gt;</code>)</h3>
+        <ul>
+          <li><code>std::setw(N)</code>: Sets field width for the next item.</li>
+          <li><code>std::setprecision(N)</code>: Sets decimal precision.</li>
+          <li><code>std::fixed</code>: Formats floating-point numbers with fixed decimal notation.</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Embedded ASCII Telemetry Tables</h3>
+        <p>In satellite and drone serial consoles, formatted ASCII tables provide human-readable sensor health summaries over radio telemetry links.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Lightweight string buffer table formatter:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstdio&gt;
+
+struct SensorReport {
+    uint8_t  id;
+    int16_t  temp_c;
+    uint16_t voltage_mv;
+};
+
+// Compact snprintf formatting: 0 <iomanip> Flash bloat!
+void formatReportLine(const SensorReport&amp; r, char* out_buf, size_t buf_len) noexcept {
+    snprintf(out_buf, buf_len, "| ID: %02u | Temp: %+03d C | V: %04u mV |\r\n",
+             r.id, r.temp_c, r.voltage_mv);
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Which header file provides stream manipulators like std::setw, std::setprecision, and std::setfill?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &lt;iomanip&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> &lt;iostream&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &lt;stdlib.h&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &lt;sstream&gt;</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>&lt;iomanip&gt;</code> contains formatting manipulators for parameterized stream formatting.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is &#x27;snprintf()&#x27; often preferred over &#x27;&lt;iomanip&gt;&#x27; for formatting text in small microcontroller firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &#x27;snprintf()&#x27; is extremely compact in Flash ROM, avoids linking heavy C++ locale machinery, and prevents buffer overflows with explicit length bounds</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> &#x27;snprintf()&#x27; is faster than CPU clock speed</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &#x27;snprintf()&#x27; only works on 8-bit AVR</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &#x27;&lt;iomanip&gt;&#x27; cannot output numbers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>snprintf()</code> provides bounded, format-string-based output with minimal Flash footprint compared to heavy C++ streams.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the scope of &#x27;std::setw(10)&#x27; when applied to a stream (cout &lt;&lt; setw(10) &lt;&lt; a &lt;&lt; b;)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It applies ONLY to the very next single item (&#x27;a&#x27;); subsequent items (&#x27;b&#x27;) revert to default formatting</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It applies permanently to all future items</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It formats the entire line</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It sets width for the next 10 items</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::setw</code> is non-sticky: it affects only the immediately following output token.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How do you calculate running minimum and maximum values across a stream of numbers in $O(1)$ memory?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Initialize min = +INFINITY, max = -INFINITY, and update with std::min() / std::max() on each element</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Store all elements in a sorted array</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Use a hash table</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Re-read the file from the start on every item</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Tracking running min/max requires only two scalar variables updated on each iteration ($O(1)$ space).
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="movie_genres.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="student_roster.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

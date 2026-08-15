@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arithmetic Operators, Integer Promotion &amp; Overflow UB - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 2</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 2</a>
+      <span class="sep">/</span>
+      <span class="current">ArithmeticFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-2">Section 2</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Arithmetic</span> <span class="tag">Integer Promotion</span> <span class="tag">Signed Overflow UB</span> <span class="tag">Saturating Math</span> <span class="tag">Assembly</span>
+      </div>
+      <h1 class="project-title">Integer Promotion Rules, Signed Overflow Undefined Behavior &amp; Saturating Math</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing arithmetic operators (+, -, *, /, %). We explore C++ Integer Promotion rules (small integer types are promoted to int during math), Signed Overflow Undefined Behavior (UB) which compilers exploit to optimize away safety checks, and ARM Cortex-M hardware saturating arithmetic instructions (QADD, QSUB).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	// + addition
+	// - subtraction
+	// * multiplication 
+	// / division
+	// % modulus (remainder)
+
+	int a = 10;
+	int b = 3;
+
+	int sum = a + b;
+	int difference = a - b;
+	int product = a * b;
+	int quotient = a / b;
+	int remainder = a % b;
+
+	// +=  Add and assign
+	// -=  Subtract and assign
+	// *=  Multiply and assign
+	// /=  Divide and assign
+	// %=  Modulus and assign
+
+
+	int result = 10;
+	result += 15;   // result = result + 15;
+	cout &lt;&lt; &quot;Result: &quot; &lt;&lt; result &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;Sum: &quot; &lt;&lt; sum &lt;&lt; endl;
+	cout &lt;&lt; &quot;Difference: &quot; &lt;&lt; difference &lt;&lt; endl;
+	cout &lt;&lt; &quot;Product: &quot; &lt;&lt; product &lt;&lt; endl;
+	cout &lt;&lt; &quot;Quotient: &quot; &lt;&lt; quotient &lt;&lt; endl;
+	cout &lt;&lt; &quot;Remainder: &quot; &lt;&lt; remainder &lt;&lt; endl;
+
+
+	int myInt = 5;
+	myInt++;   //increment operator, same as myInt += 1;  or myInt = myInt + 1;
+	cout &lt;&lt; myInt &lt;&lt; endl;
+
+	myInt--;   //decrement operator, same as myInt -= 1; or myInt = myInt - 1;
+
+	cout &lt;&lt; myInt &lt;&lt; endl;
+
+
+	int myNum = 10;
+	myNum += 5;
+	myNum *= 2;
+	myNum *= 2;
+	myNum *= 2;
+
+	cout &lt;&lt; &quot;Final value: &quot; &lt;&lt; myNum &lt;&lt; endl;
+
+
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Integer Promotion</h3>
+        <p>In C++, arithmetic operations on types smaller than <code>int</code> (<code>uint8_t</code>, <code>int8_t</code>, <code>int16_t</code>) automatically promote operands to <code>int</code> before computation.</p>
+
+        <h3>2. Signed vs Unsigned Overflow</h3>
+        <ul>
+          <li><strong>Unsigned Overflow:</strong> Well-defined by the standard to wrap around modulo $2^N$.</li>
+          <li><strong>Signed Overflow:</strong> <strong>UNDEFINED BEHAVIOR (UB)</strong>. The compiler assumes signed overflow never occurs, and may optimize away sanity/safety bounds checks!</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Hardware Saturating Arithmetic (DSP QADD / QSUB)</h3>
+        <p>In audio and sensor processing, wrap-around overflow causes deafening acoustic clicks or motor runaway. ARM Cortex-M DSP instructions clamp out-of-range results to maximum/minimum limits in a single clock cycle.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Software saturating integer addition:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;algorithm&gt;
+
+// Saturating addition: Clamps to 255 rather than wrapping to 0
+constexpr uint8_t add_saturating_u8(uint8_t a, uint8_t b) noexcept {
+    uint16_t sum = static_cast&lt;uint16_t&gt;(a) + b;
+    return static_cast&lt;uint8_t&gt;(sum &gt; 255 ? 255 : sum);
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the behavior of signed integer overflow (e.g. INT_MAX + 1) in standard C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Undefined Behavior (UB); the compiler may optimize away downstream bounds checks assuming it is impossible</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Guaranteed to wrap around to INT_MIN</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Throws a std::overflow_error exception</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Sets the integer to 0</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Signed overflow is Undefined Behavior in C++. Compilers are free to assume overflow never happens, often eliminating critical safety range checks.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What happens under C++ Integer Promotion rules when two uint8_t variables are added (uint8_t a = 100, b = 200; auto c = a + b;)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Both operands are promoted to &#x27;int&#x27; (32 bits), and the expression evaluates to an &#x27;int&#x27; with value 300</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The result immediately wraps to uint8_t (44)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A compile-time type mismatch occurs</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The variables are cast to float</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Under integer promotion rules, types narrower than <code>int</code> are promoted to <code>int</code> before arithmetic evaluation.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is &#x27;saturating arithmetic&#x27; in embedded DSP and motor control algorithms?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Arithmetic where results that exceed the maximum representable value clamp to MAX instead of wrapping around to 0 or negative numbers</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Arithmetic performed in liquids</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Arithmetic that disables the CPU clock</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Floating-point math in software</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Saturating arithmetic clamps values at bounds limits (e.g. 255 for uint8_t), preventing sudden sign inversion or wrap-around glitches in control loops.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What does unsigned integer overflow guarantee in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Deterministic modulo arithmetic wrap-around (e.g. 255 + 1 == 0 for uint8_t)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Undefined Behavior</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Hardware HardFault trap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Stack frame corruption</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Unsigned integer arithmetic in C++ is guaranteed to wrap modulo $2^N$ according to the standard.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="text_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="relational_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

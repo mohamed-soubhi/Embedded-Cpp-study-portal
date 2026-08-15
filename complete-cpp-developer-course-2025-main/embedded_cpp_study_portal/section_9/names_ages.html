@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallel File Streams, Synchronization &amp; Correlation Records - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 9</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 9</a>
+      <span class="sep">/</span>
+      <span class="current">NamesAges</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-9">Section 9</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Parallel Streams</span> <span class="tag">Record Synchronization</span> <span class="tag">Relational Data</span> <span class="tag">Validation</span>
+      </div>
+      <h1 class="project-title">Parallel File Stream Synchronization, Record Alignment &amp; Relational Records in Flash</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Synchronizing parallel file streams (names.txt and ages.txt). We analyze stream synchronization, detecting mismatched record lengths, and unifying multi-file tabular data into coherent C++ aggregate structures.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">names.txt</button>
+            <button class="code-tab" data-target="file-tab-2">ages.txt</button>
+            <button class="code-tab" data-target="file-tab-3">output.txt</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+	ifstream nameFile(&quot;names.txt&quot;);
+	ifstream ageFile(&quot;ages.txt&quot;);
+	ofstream outfile(&quot;output.txt&quot;);
+
+	if (!nameFile || !ageFile) {
+		cerr &lt;&lt; &quot;Problem opening one of the input files.  Exiting.&quot; &lt;&lt; endl;
+		return 1;
+	}
+
+	string tempName;
+	int tempAge;
+
+	while (getline(nameFile, tempName) &amp;&amp; (ageFile &gt;&gt; tempAge)) {
+		outfile &lt;&lt; tempName &lt;&lt; &quot; &quot; &lt;&lt; tempAge &lt;&lt; endl;
+	}
+
+
+	nameFile.close();
+	ageFile.close();
+	outfile.close();
+	cout &lt;&lt; &quot;Done writing to output.txt!&quot; &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">John Robinson
+Sally Samuels
+Ali Rahman
+Steven Sardine
+Otis Campbell
+Samantha Struthers</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">25
+30
+52
+10
+19
+17</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-3">
+          <pre class="code-block">John Robinson 25
+Sally Samuels 30
+Ali Rahman 52
+Steven Sardine 10
+Otis Campbell 19
+Samantha Struthers 17
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Parallel Stream Synchronization</h3>
+        <p>Reading from multiple files simultaneously and correlating line $N$ of file 1 with line $N$ of file 2. If one file has fewer entries, stream state checks must handle record mismatch.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Multi-Channel Sensor Log Synchronization</h3>
+        <p>In aerospace telemetry loggers (e.g. flight data recorders), separate streams (IMU accelerometers, GPS coordinates, Pitot tube airspeed) are synchronized by matching timestamps into unified frame packets.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Unified synchronized telemetry record:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+struct SynchronizedFlightFrame {
+    uint32_t timestamp_ms;
+    int16_t  accel_z_mg;
+    int32_t  gps_latitude_scaled;
+    uint16_t airspeed_knots;
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the primary risk of storing relational data across two separate parallel files (e.g. names.txt and ages.txt)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Desynchronization: if one file is modified, corrupted, or has missing lines, all subsequent paired records become misaligned and invalid</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Files cannot be opened simultaneously in C++</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It doubles CPU voltage</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It requires dynamic heap allocation</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Parallel separate files lack referential integrity; a single missing line offsets all subsequent paired records.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How should structured multi-field records be stored in embedded systems to avoid desynchronization?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Encapsulated into a single unified struct or JSON/binary record written to a single unified log stream</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Stored across 10 separate text files</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Stored in CPU registers only</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Transmitted over I2C without storage</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Consolidating related fields into a single struct guarantees atomicity and alignment for every record.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> In the loop &#x27;while (file1 &gt;&gt; name &amp;&amp; file2 &gt;&gt; age)&#x27;, when does the loop terminate?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> As soon as EITHER file reaches End-Of-File or encounters an extraction error</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Only when both files reach EOF simultaneously</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> After exactly 10 iterations</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> When the CPU resets</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Logical AND (<code>&amp;&amp;</code>) stops looping as soon as either stream read fails or encounters EOF.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What check verifies that both parallel files contained the exact same number of lines after loop termination?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Check that both &#x27;file1.eof()&#x27; and &#x27;file2.eof()&#x27; are true</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Check if sizeof(file1) == sizeof(file2)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Check the file names</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Check the compile date</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Verifying that both files reached EOF simultaneously confirms that neither file contained trailing unmatched records.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="twice_file.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="movie_genres.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

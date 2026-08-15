@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stream Transformation, Data Pipelines &amp; Circular EEPROM Rings - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 9</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 9</a>
+      <span class="sep">/</span>
+      <span class="current">TwiceFile</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-9">Section 9</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Streams</span> <span class="tag">Data Pipeline</span> <span class="tag">EEPROM</span> <span class="tag">Circular Logging</span> <span class="tag">Transformation</span>
+      </div>
+      <h1 class="project-title">Input-to-Output Stream Transformations &amp; Circular Ring Logging in EEPROM</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building read-transform-write file pipelines. We analyze streaming mathematical transformation of files and compare file-based streams with circular logging queues stored in non-volatile I2C/SPI EEPROM memory.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">input.txt</button>
+            <button class="code-tab" data-target="file-tab-2">output.txt</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+using namespace std;
+
+int main() {
+	ifstream infile(&quot;input.txt&quot;);
+	ofstream outfile(&quot;output.txt&quot;);
+
+	if (!infile) {
+		cerr &lt;&lt; &quot;Error opening input file&quot; &lt;&lt; endl;
+		return 1;
+	}
+
+	int tempNum;
+
+	while (infile &gt;&gt; tempNum) {
+		outfile &lt;&lt; (tempNum * 2) &lt;&lt; endl;
+	}
+
+	infile.close();
+	outfile.close();
+
+	cout &lt;&lt; &quot;Doubled values written to output.txt!&quot; &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">10
+12
+14
+22
+51
+35
+555
+32
+15
+182
+22</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">20
+24
+28
+44
+102
+70
+1110
+64
+30
+364
+44
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Streaming Data Pipelines</h3>
+        <p>Reading elements sequentially from an input stream, applying a transformation function, and writing directly to an output stream in $O(1)$ memory space.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Non-Volatile EEPROM Circular Buffers</h3>
+        <p>In industrial sensors, small <strong>I2C EEPROMs (e.g. 24LC256 - 32KB)</strong> store error event logs. Because EEPROM allows byte-level writes with 1,000,000+ erase endurance, circular ring structures log telemetry indefinitely.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Streaming data transformer:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+
+// In-place streaming sensor sample scaler
+void scaleSensorStream(const int16_t* in_samples, int16_t* out_samples, size_t count, int16_t multiplier) noexcept {
+    for (size_t i = 0; i &lt; count; ++i) {
+        out_samples[i] = in_samples[i] * multiplier;
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> How does I2C/SPI EEPROM differ from NOR Flash memory in embedded hardware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> EEPROM allows true byte-level overwriting without requiring full sector erases, and provides higher endurance (1,000,000+ cycles)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> EEPROM is read-only</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> EEPROM requires 64-bit microcontrollers</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Flash memory is faster for single byte writes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            EEPROM allows erasing and writing individual bytes independently, making it ideal for parameter storage and high-frequency event logging.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the memory complexity of a streaming data transformation pipeline that processes items one at a time?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> O(1) constant auxiliary RAM space</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> O(N) memory space</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> O(N^2) memory space</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> O(log N) memory space</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Processing items one by one in a stream pipeline requires only a single element buffer, operating in $O(1)$ RAM.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens if a stream extraction &#x27;in_file &gt;&gt; val&#x27; reaches End-Of-File (EOF)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The stream sets its eofbit flag and the extraction expression evaluates to false in a boolean context</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The CPU reboots</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A HardFault is generated</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The file is deleted</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Upon reaching EOF, <code>eofbit</code> is set, causing <code>while (in_file &gt;&gt; val)</code> loops to terminate cleanly.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why is closing file streams explicitly (or via RAII scope exit) critical before reading the destination file?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To ensure all pending data buffered in memory is flushed and written to disk before the subsequent reader accesses it</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To reduce RAM clock speed</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To encrypt the file</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To prevent compiler syntax errors</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Closing a file flushes all remaining cached buffer data to physical media, ensuring readers see complete files.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="file_output_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="names_ages.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

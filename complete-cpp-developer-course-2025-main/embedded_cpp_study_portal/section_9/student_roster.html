@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Object Serialization, Binary Structs &amp; CRC32 Integrity - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 9</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 9</a>
+      <span class="sep">/</span>
+      <span class="current">StudentRoster</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-9">Section 9</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Serialization</span> <span class="tag">Binary Structs</span> <span class="tag">CRC32</span> <span class="tag">Data Integrity</span> <span class="tag">Non-Volatile Storage</span>
+      </div>
+      <h1 class="project-title">Class Object File Serialization, Binary Record Streaming &amp; CRC32 Checksums</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building class object serialization and roster persistence. We compare text-based serialization with raw binary struct serialization (write/read), analyze endianness and struct padding issues across different CPU architectures, and implement CRC32 checksum verification to detect Flash corruption.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Student.h</button>
+            <button class="code-tab" data-target="file-tab-2">Student.cpp</button>
+            <button class="code-tab" data-target="file-tab-3">students.txt</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;vector&gt;
+#include &lt;iomanip&gt;
+#include &quot;Student.h&quot;
+using namespace std;
+
+int main() {
+	ifstream infile(&quot;students.txt&quot;);
+
+	if (!infile) {
+		cerr &lt;&lt; &quot;Failed to open students.txt&quot; &lt;&lt; endl;
+		return 1;
+	}
+
+	vector&lt;Student*&gt; roster;
+	string first;
+	string last;
+	double gpa;
+
+	while (infile &gt;&gt; first &gt;&gt; last &gt;&gt; gpa) {
+		if (gpa &gt;= 0.0 &amp;&amp; gpa &lt;= 4.0) {
+			Student* s = new Student(first, last, gpa);
+			roster.push_back(s);
+		}
+	}
+
+	infile.close();
+
+	cout &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; setprecision(2);
+	cout &lt;&lt; &quot;Student Roster: &quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;---------------------------------&quot; &lt;&lt; endl;
+
+	double sum = 0;
+	int honors = 0;
+
+	for (Student* s : roster) {
+		cout &lt;&lt; setw(20) &lt;&lt; left &lt;&lt; s-&gt;getFullName()
+			&lt;&lt; &quot;GPA: &quot; &lt;&lt; s-&gt;getGPA() &lt;&lt; endl;
+
+		sum += s-&gt;getGPA();
+
+		if (s-&gt;getGPA() &gt;= 3.5) {
+			honors++;
+		}
+	}//end for
+
+	double avgGPA = (roster.size() &gt; 0) ? sum / roster.size() : 0.0;
+
+	cout &lt;&lt; &quot;\nClass Average GPA: &quot; &lt;&lt; avgGPA &lt;&lt; endl;
+	cout &lt;&lt; &quot;Honor Roll Students: &quot; &lt;&lt; honors &lt;&lt; endl;
+
+	//cleanup
+
+	for (Student* s : roster) {
+		delete s;
+	}
+
+	roster.clear();
+
+	return 0;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef STUDENT_H
+#define STUDENT_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class Student {
+	public:
+		Student(string firstName, string lastName, double gpa);
+		string getFullName() const;
+		double getGPA() const;
+
+	private:
+		string firstName;
+		string lastName;
+		double gpa;
+};
+
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Student.h&quot;
+
+Student::Student(string firstName, string lastName, double gpa) {
+	this-&gt;firstName = firstName;
+	this-&gt;lastName = lastName;
+	this-&gt;gpa = gpa;
+}
+
+string Student::getFullName() const {
+	return firstName + &quot; &quot; + lastName;
+}
+
+double Student::getGPA() const {
+	return gpa;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-3">
+          <pre class="code-block">Alice Johnson 3.8
+Bob Smith 2.9
+Charlie Baker 3.5
+Dana Lee 4.0
+Evan Grant 1.7
+Faith Liu 3.2
+George Hall 3.9</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Object Serialization & Deserialization</h3>
+        <p>Converting in-memory C++ objects into a linear stream of bytes for persistent storage, and reconstructing objects from byte streams.</p>
+
+        <h3>2. Text vs Binary Serialization</h3>
+        <ul>
+          <li><strong>Text (JSON / CSV / ASCII):</strong> Human-readable; large storage footprint; CPU parsing overhead.</li>
+          <li><strong>Binary:</strong> Direct memory image; compact; fast $O(1)$ copy; sensitive to padding and endianness.</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. CRC32 Hardware Checksum Verification</h3>
+        <p>In safety-critical avionics and automotive ECUs, serialized Flash data records must include a <strong>CRC32 (Cyclic Redundancy Check)</strong> checksum. Microcontrollers feature on-chip <strong>Hardware CRC calculation units</strong> that verify data integrity in single-digit clock cycles.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Binary record serialization with CRC32 integrity verification:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+#pragma pack(push, 1) // Packed: 0 padding bytes across network / Flash
+struct CalibrationRecord {
+    uint32_t magic_header; // 0x55AA55AA
+    uint32_t serial_number;
+    int16_t  zero_offset;
+    uint16_t scale_gain;
+    uint32_t crc32;        // Checksum over payload bytes
+};
+#pragma pack(pop)
+
+uint32_t computeHardwareCrc32(const void* data, size_t len) noexcept {
+    // Feed bytes into STM32 Hardware CRC Peripheral (CRC->DR)...
+    return 0x12345678;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the primary role of a CRC32 checksum appended to serialized Flash configuration records?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To detect bit flips, incomplete writes, and memory corruption upon reading data from non-volatile storage</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To compress the data by 50%</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To encrypt user passwords</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To speed up Flash read speeds</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            CRC32 verifies data integrity, detecting corruptions caused by power interruptions, bit rot, or transmission noise.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why can directly serializing raw structs via &#x27;file.write(reinterpret_cast&lt;char*&gt;(&amp;obj), sizeof(obj))&#x27; fail when ported across different CPU architectures?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Different CPU architectures may have different Endianness (Little-Endian vs Big-Endian) and different compiler struct alignment padding</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Structs cannot be converted to pointers</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> C++ forbids binary file writes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> sizeof returns different numbers every time</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Raw memory images depend on host CPU endianness and compiler padding rules. Cross-platform formats require explicit endian packing (e.g. Protocol Buffers / packed structs).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is &#x27;Endianness&#x27; in computer architecture?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The order in which multi-byte integers are stored in memory addresses (Little-Endian: Least Significant Byte first; Big-Endian: Most Significant Byte first)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The total size of the CPU cache</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The speed of the system clock</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The direction of the stack pointer</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Endianness defines byte ordering in memory: Little-Endian (standard on ARM Cortex-M and x86) stores least-significant bytes at lower addresses.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is the purpose of a &#x27;Magic Number Header&#x27; (e.g. 0x55AA55AA) at the beginning of an EEPROM configuration block?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To quickly verify that the memory region has been formatted and initialized with valid firmware data, rather than containing uninitialized 0xFF Flash bytes</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To overclock the EEPROM chip</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To set the baud rate</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To reset the microcontroller</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Magic headers allow firmware to distinguish initialized valid data from blank/erased Flash memory (which reads 0xFFFFFFFF).
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="employee_salary_report.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="file_input_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

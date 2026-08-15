@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Console I/O vs Microcontroller UART Ring Buffers - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 2</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 2</a>
+      <span class="sep">/</span>
+      <span class="current">KeyboardInput</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-2">Section 2</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">std::cin</span> <span class="tag">Blocking I/O</span> <span class="tag">UART RX</span> <span class="tag">Interrupts</span> <span class="tag">Input Validation</span>
+      </div>
+      <h1 class="project-title">std::cin Stream Blocking vs Non-Blocking Interrupt-Driven UART RX</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring keyboard user input via std::cin. We examine the hazards of blocking I/O in real-time systems, stream fail states (cin.fail()), and how embedded systems replace console streams with non-blocking interrupt-driven UART serial receivers.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+
+	int age;
+	string fullName;
+
+	cout &lt;&lt; &quot;Please enter your age: &quot; &lt;&lt; endl;
+	cin &gt;&gt; age;
+
+	cout &lt;&lt; &quot;You are &quot; &lt;&lt; age &lt;&lt; &quot; years old.&quot; &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;Please enter your full name: &quot; &lt;&lt; endl;
+	cin.get();
+
+	getline(cin, fullName);
+	cout &lt;&lt; &quot;Hello, &quot; &lt;&lt; fullName &lt;&lt; &quot;!&quot; &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. <code>std::cin</code> Stream Extraction</h3>
+        <p><code>std::cin &gt;&gt; var</code> extracts formatted tokens from standard input. If input formatting fails (e.g. typing characters into an integer variable), the stream enters a fail state (<code>cin.fail()</code>) and stops processing input.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Danger of Blocking I/O in Firmware</h3>
+        <p>Functions that block waiting for input halt the entire CPU. In an embedded controller running a motor or heater, blocking for serial input causes runaway hardware destruction. All embedded I/O must be <strong>non-blocking or interrupt-driven</strong>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Non-blocking interrupt-driven UART byte receiver:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Non-blocking UART receiver check
+bool uart_try_read(uint8_t&amp; out_byte) noexcept {
+    volatile uint32_t* const USART1_SR = reinterpret_cast&lt;volatile uint32_t*&gt;(0x40013800);
+    volatile uint32_t* const USART1_DR = reinterpret_cast&lt;volatile uint32_t*&gt;(0x40013804);
+
+    if (*USART1_SR &amp; (1UL &lt;&lt; 5)) { // RXNE: Read Data Register Not Empty
+        out_byte = static_cast&lt;uint8_t&gt;(*USART1_DR &amp; 0xFF);
+        return true; // Byte received instantly!
+    }
+    return false; // No data available; does NOT block CPU!
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is blocking input (like std::cin &gt;&gt; x) unacceptable in real-time embedded control systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Blocking freezes the CPU, preventing safety control loops (e.g. thermal regulation, motor PWM) from executing</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::cin causes physical damage to RAM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::cin requires 64-bit registers</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Blocking increases power consumption by 1000%</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Blocking operations monopolize CPU execution, preventing critical real-time sensor sampling and actuator control loops from running.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What happens to std::cin when a user enters alphabetic text into an integer variable (int x; cin &gt;&gt; x;)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The stream sets its failbit flag (cin.fail() becomes true), leaves x unmodified, and ignores future extractions until cin.clear() is called</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The program crashes with a segmentation fault</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The characters are converted to ASCII sums</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The variable x is set to infinity</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Stream extraction sets <code>failbit</code> upon formatting failure, requiring <code>cin.clear()</code> and <code>cin.ignore()</code> to recover.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> How do embedded systems handle incoming serial data asynchronously without blocking the CPU?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Hardware UART Receive Interrupts (RXNE ISR) push bytes into a circular ring buffer in the background</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> By polling the port every 5 seconds</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> By using virtual memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> By creating infinite while loops</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            UART RX interrupts trigger whenever a byte arrives in hardware, placing it into a background FIFO queue without stalling the main loop.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Which method clears the error state flags on a C++ input stream?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> cin.clear()</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> cin.reset()</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> cin.flush()</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> cin.empty()</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>cin.clear()</code> clears the error state flags (<code>failbit</code>, <code>badbit</code>), restoring the stream to a working state.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="constant_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="sunny_warm.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

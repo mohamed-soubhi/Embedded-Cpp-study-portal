@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundamental Types vs Fixed-Width Integers (&lt;cstdint&gt;) - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 2</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 2</a>
+      <span class="sep">/</span>
+      <span class="current">VariableFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-2">Section 2</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">&lt;cstdint&gt;</span> <span class="tag">uint8_t</span> <span class="tag">uint32_t</span> <span class="tag">Data Types</span> <span class="tag">Implementation-Defined</span>
+      </div>
+      <h1 class="project-title">Fundamental Types, Implementation-Defined Widths vs Fixed-Width &lt;cstdint&gt; Types</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring fundamental C++ data types (int, double, char, bool). We demonstrate why non-standardized integer widths (e.g. sizeof(int) varies between 16-bit, 32-bit, and 64-bit architectures) cause critical cross-platform bugs, and enforce fixed-width integer types (<cstdint>) across all embedded firmware.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+//using namespace std;
+
+int main() {
+	
+	int myInt;   // declaration
+	double myDouble = 3.14159;
+	myInt = 15;  // initialization
+
+	int x = 10;   // copy initialization (assignment)
+	int y(10);    // direct initialization
+	int z{ 10 };   // uniform (brace) initialization
+
+	int ok = 3.14;  
+	int bad{ 3.14 };  
+
+	double pi = 3;  //widening conversion (no loss of data)
+
+	double stateTaxRate = 0.06;   //state_tax_rate
+
+
+	std::cout &lt;&lt; myInt &lt;&lt; std::endl;
+	std::cout &lt;&lt; myDouble &lt;&lt; std::endl;
+
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Fundamental Types in C++</h3>
+        <p>In C++, fundamental types like <code>int</code>, <code>short</code>, <code>long</code> have implementation-defined bit widths. An <code>int</code> is 16 bits on an 8-bit AVR microcontroller, but 32 bits on an ARM Cortex-M.</p>
+
+        <h3>2. Fixed-Width Integers (<code>&lt;cstdint&gt;</code>)</h3>
+        <p>The <code>&lt;cstdint&gt;</code> header guarantees exact bit-widths across all compilers and CPU architectures (e.g. <code>uint8_t</code>, <code>int16_t</code>, <code>uint32_t</code>, <code>uint64_t</code>).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. MISRA C++:2008 Rule 3-9-2</h3>
+        <p>The basic numerical types (<code>int</code>, <code>short</code>, <code>long</code>) shall not be used; fixed-width types from <code>&lt;cstdint&gt;</code> (or typedefs indicating size and signedness) must be used exclusively to guarantee deterministic hardware bitmasks and avoid porting bugs.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Explicit fixed-width register structures:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Deterministic width across 8-bit, 16-bit, 32-bit, and 64-bit CPUs
+struct AdcChannelConfig {
+    uint8_t  channel_number; // Exactly 8 bits (0-255)
+    uint16_t sampling_cycles;// Exactly 16 bits (0-65535)
+    uint32_t calibration_val;// Exactly 32 bits
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is &#x27;int&#x27; avoided in embedded systems in favor of &#x27;int32_t&#x27; or &#x27;uint16_t&#x27; from &lt;cstdint&gt;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The bit width of &#x27;int&#x27; is implementation-defined (16 bits on 8-bit MCUs, 32 bits on ARM), causing arithmetic bugs when porting code</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The keyword &#x27;int&#x27; is deprecated in C++20</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &#x27;int&#x27; allocates memory on the heap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &#x27;int&#x27; cannot be stored in Flash memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Standard C++ allows <code>int</code> to be 16 or 32 bits depending on architecture. <code>&lt;cstdint&gt;</code> guarantees explicit bit-widths everywhere.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the value range of an 8-bit unsigned integer (uint8_t)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 0 to 255</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> -128 to 127</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 0 to 65,535</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> -32,768 to 32,767</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            An unsigned 8-bit integer ($2^8 = 256$ distinct values) spans from 0 to 255.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which header must be included to access types like uint32_t, int16_t, and uint8_t in modern C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &lt;cstdint&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> &lt;iostream&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &lt;stdlib.h&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &lt;types.h&gt;</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>&lt;cstdint&gt;</code> is the standard C++ header providing exact-width integer typedefs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is &#x27;size_t&#x27; in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> An unsigned integer type capable of representing the size of any object in bytes on the target CPU architecture</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A 16-bit floating point type</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A type used only for strings</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A pointer to Flash memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>size_t</code> is the unsigned architecture-native integer type returned by <code>sizeof</code> and container size methods.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="comment_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="text_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

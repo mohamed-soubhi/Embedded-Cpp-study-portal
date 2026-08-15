@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Flow, Sequential Execution &amp; Branch Instructions - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">ControlStatementsIntro</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Control Flow</span> <span class="tag">Branches</span> <span class="tag">Pipeline Flushes</span> <span class="tag">Branch Prediction</span> <span class="tag">BNE / BEQ</span>
+      </div>
+      <h1 class="project-title">Sequential Execution, Conditional Branches &amp; ARM Cortex-M Pipeline Behavior</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring the foundations of programmatic control flow. We analyze sequential instruction fetching, conditional branching (BNE, BEQ) in assembly, how branch mispredictions flush CPU execution pipelines, and techniques for writing branch-efficient embedded logic.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	int age;
+	age = 17;
+	cout &lt;&lt; &quot;Your age is: &quot; &lt;&lt; age &lt;&lt; endl;
+
+	if (age &gt;= 16) {
+		cout &lt;&lt; &quot;You can drive!&quot; &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;You cannot drive yet!&quot; &lt;&lt; endl;
+	}
+
+	for (int i = 1; i &lt;= age; i++) {
+		cout &lt;&lt; &quot;Happy birthday!&quot; &lt;&lt; endl;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Sequential Execution vs Control Flow Modification</h3>
+        <p>By default, the CPU Program Counter (PC) increments sequentially by 2 or 4 bytes after each instruction fetch. Control statements (<code>if</code>, <code>while</code>, <code>for</code>, <code>switch</code>) modify the PC to jump to non-consecutive memory addresses.</p>
+
+        <h3>2. Conditional Branch Assembly Instructions</h3>
+        <p>On ARM processors, comparisons set condition flags (N, Z, C, V) in the APSR register; conditional branch instructions (<code>BEQ</code>, <code>BNE</code>, <code>BGT</code>, <code>BLT</code>) jump based on these flag states.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. CPU Pipeline Flushes & Branch Penalties</h3>
+        <p>Modern microcontrollers (such as ARM Cortex-M7 with a 6-stage superscalar pipeline) fetch instructions ahead of execution. When a conditional branch is taken unpredictably, the prefetched pipeline instructions must be discarded (flushed), wasting <strong>3 to 7 clock cycles</strong>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Branch-predictable condition ordering (most likely path first):</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Optimize for the 99.9% common case (heartbeat healthy)
+void evaluateHeartbeat(uint32_t missed_ticks) noexcept {
+    if (missed_ticks == 0) [[likely]] {
+        // Fast path: CPU pipeline runs straight through!
+        return;
+    }
+    
+    // Rare fault path
+    triggerSafetyShutdown();
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What happens inside a pipelined CPU when an unpredictable conditional branch is taken?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The instruction pipeline is flushed, discarding prefetched instructions and incurring a latency penalty of several clock cycles</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The CPU switches to 64-bit mode</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The stack pointer is reset to zero</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The compiler re-runs in the background</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Branching to a non-consecutive address invalidates instructions already loaded into the pipeline stages, forcing a pipeline reload (stall).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Which C++20 attributes allow developers to hint to the compiler which branch is most likely to execute?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> [[likely]] and [[unlikely]]</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> [[fast]] and [[slow]]</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> [[inline]] and [[noinline]]</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> [[pure]] and [[const]]</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>[[likely]]</code> and <code>[[unlikely]]</code> (C++20) guide the compiler's code layout to align the most frequent path for sequential execution.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which CPU register stores the memory address of the next instruction to be fetched and executed?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Program Counter (PC / R15)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Link Register (LR / R14)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Stack Pointer (SP / R13)</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Status Register (PSR)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The Program Counter (PC / R15 on ARM) points to the memory address of the instruction being fetched.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How does branchless programming help mitigate branch penalty stalls?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It converts conditional logic into arithmetic operations (e.g. bitmasks and multiplexing) that execute in straight-line assembly with zero branches</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It removes all functions from the codebase</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It runs code in ROM only</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It disables the ALU</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Branchless code eliminates jump instructions entirely, keeping the pipeline saturated and timing invariant.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="streaming_calculator.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="selection_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

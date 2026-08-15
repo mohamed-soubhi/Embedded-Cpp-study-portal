@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Documentation, Doxygen &amp; Self-Documenting Firmware - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 2</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 2</a>
+      <span class="sep">/</span>
+      <span class="current">CommentFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-2">Section 2</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Comments</span> <span class="tag">Doxygen</span> <span class="tag">Documentation</span> <span class="tag">MISRA</span> <span class="tag">Clean Code</span>
+      </div>
+      <h1 class="project-title">C/C++ Comment Syntax, Doxygen Tags (@brief, @param) &amp; Self-Documenting Code</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring single-line (//) and multi-line (/* */) comments. We analyze Doxygen documentation tag standards for embedded APIs (@brief, @param, @return), comment nesting syntax errors, and MISRA C++ guidelines for maintaining clean, self-documenting firmware.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">/* 
+	Lecture:  Comments
+	The Complete C++ Developer Course
+	Instructor: Dr. John Baugh
+*/
+
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	int age = 30;  // This is my current age
+	double salesTax = 0.06;  // This is the Michigan sales tax (6%)
+	
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Comment Syntax in C++</h3>
+        <ul>
+          <li><code>//</code>: Single-line comment (continues until the end of the line).</li>
+          <li><code>/* ... */</code>: Multi-line block comment. <strong>Block comments cannot be nested!</strong></li>
+        </ul>
+
+        <h3>2. Doxygen Markup Standards</h3>
+        <p>Embedded hardware drivers use structured Doxygen tags to auto-generate PDF and HTML documentation for hardware registers and HAL APIs.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. MISRA C++:2008 Rule 2-7-1</h3>
+        <p>The character sequence <code>/*</code> shall not appear within comments, and code shall not be commented out using block comments (conditional compilation <code>#if 0 ... #endif</code> must be used instead).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Production Doxygen driver header documentation:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">/**
+ * @brief  Transmits a single data byte over the SPI1 hardware bus.
+ * @param  payload: The 8-bit unsigned byte to transmit.
+ * @param  timeout_ms: Maximum duration in milliseconds to wait for TXE flag.
+ * @retval 0 on success, -1 on timeout or bus fault error.
+ * @note   This function is reentrant and thread-safe.
+ */
+[[nodiscard]] int32_t spi_transmit_byte(uint8_t payload, uint32_t timeout_ms) noexcept;</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What happens if you attempt to nest block comments: /* outer /* inner */ outer */ in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A syntax error occurs because the first &#x27;*/&#x27; closes the entire comment, leaving trailing characters as invalid code</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler nests them safely</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The inner comment is converted to uppercase</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The comment is saved in Flash ROM</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Block comments terminate at the very first <code>*/</code> encountered, leaving subsequent text exposed as invalid syntax.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the recommended MISRA method for disabling a block of experimental code?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Using preprocessor &#x27;#if 0 ... #endif&#x27; directives rather than block comments</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Writing &#x27;TODO&#x27; on every line</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Deleting the code permanently from Git</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Setting all variables to zero</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>#if 0 ... #endif</code> cleanly disables code blocks without nesting issues or risking accidental unclosed comment syntax bugs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which Doxygen tag is standard for documenting the return value of a hardware driver function?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> @retval or @return</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> @output</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> @result</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> @exit</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>@retval</code> (for specific status return codes) or <code>@return</code> (for general return descriptions) is standard in Doxygen.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Do comments have any impact on the compiled binary file size or RAM usage?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> No, all comments are stripped during the Preprocessing phase and generate zero bytes in Flash or RAM</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Yes, they add 1 byte per character to Flash</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Yes, they consume stack memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Yes, in debug mode only</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The C++ preprocessor strips all comments before compilation begins; comments have zero impact on compiled code or memory.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="hello_world.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="variable_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

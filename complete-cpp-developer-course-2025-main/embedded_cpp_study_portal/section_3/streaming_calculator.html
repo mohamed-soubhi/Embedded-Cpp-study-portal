@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Stream Parsers &amp; Polish Notation Machines - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">StreamingCalculator</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Stream Parsing</span> <span class="tag">CLI</span> <span class="tag">Command Dispatcher</span> <span class="tag">Operator Precedence</span> <span class="tag">Serial Console</span>
+      </div>
+      <h1 class="project-title">Streaming Input Parsing, Operator Precedence &amp; Embedded Command-Line Interfaces (CLI)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building a streaming arithmetic calculator with continuous input parsing. We analyze character stream tokenization, operator precedence state machines, and how embedded systems implement Serial Command Line Interfaces (CLI) for field calibration and hardware diagnostics over UART.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	char package;
+	int numDevices;
+	int totalCost = 0;
+
+	int devicesOver = 0;
+	const int includedA = 1;
+	const int includedB = 3;
+	const int includedC = 5;
+
+	const int baseA = 9;
+	const int baseB = 14;
+	const int baseC = 20;
+
+	const int extraA = 6;
+	const int extraB = 4;
+	const int extraC = 2;
+
+	cout &lt;&lt; &quot;Welcome to the Streaming Subscription Calculator!&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;Enter your package (A, B, or C): &quot;;
+	cin &gt;&gt; package;
+
+	cout &lt;&lt; &quot;Enter number of simultaneous devices user: &quot;;
+	cin &gt;&gt; numDevices;
+
+	if (package == &#x27;A&#x27;) {
+		totalCost += baseA;
+		if (numDevices &gt; includedA) {
+			devicesOver = numDevices - includedA;
+			totalCost += devicesOver * extraA;
+		}
+	}
+	else if (package == &#x27;B&#x27;) {
+		totalCost += baseB;
+		if (numDevices &gt; includedB) {
+			devicesOver = numDevices - includedB;
+			totalCost += devicesOver * extraB;
+		}
+	}
+	else if (package == &#x27;C&#x27;) {
+		totalCost += baseC;
+		if (numDevices &gt; includedC) {
+			devicesOver = numDevices - includedC;
+			totalCost += devicesOver * extraC;
+		}
+	}
+	else {
+		cout &lt;&lt; &quot;Invalid package selection.&quot; &lt;&lt; endl;
+		return 0;
+	}
+
+	cout &lt;&lt; &quot;Your total cost for the month is: $&quot; &lt;&lt; totalCost &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Streaming Token Parsing</h3>
+        <p>Reading alternating numbers and operators from a continuous character stream until a termination command (e.g. <code>'q'</code> or <code>EOF</code>) is received.</p>
+
+        <h3>2. Accumulator State Retention</h3>
+        <p>Preserving running totals across sequential user operations in an accumulator register.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Embedded Serial Command Line Interfaces (CLI)</h3>
+        <p>Production embedded devices implement interactive UART diagnostic CLIs (e.g. <code>set_voltage 3300</code>, <code>read_sensors</code>, <code>dump_logs</code>), parsing ASCII tokens character-by-character from serial buffers.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Embedded UART CLI command tokenizer:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+
+void executeCliCommand(std::string_view cmd) noexcept {
+    if (cmd == "ping") {
+        sendResponse("PONG\r\n");
+    } else if (cmd == "status") {
+        sendResponse("STATUS: ALL SYSTEMS OK\r\n");
+    } else if (cmd == "reset") {
+        system_reboot();
+    } else {
+        sendResponse("ERROR: UNKNOWN COMMAND\r\n");
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the primary role of a serial Command Line Interface (CLI) in embedded firmware development?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Provides an interactive text console over UART for field calibration, firmware configuration, and real-time hardware diagnostics</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Compiles C++ code on the microcontroller</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Renders 3D graphics</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Replaces the hardware crystal oscillator</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Embedded CLIs provide engineer interfaces over serial/UART ports for real-time testing, tuning, and field maintenance.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is character-by-character tokenization preferred over full line buffering in memory-constrained microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It processes tokens immediately as bytes arrive over UART, requiring only a tiny 16-32 byte buffer rather than storing large strings in RAM</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It requires 64-bit integers</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It disables UART interrupts</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It makes strings read-only</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Stream tokenization evaluates tokens on the fly, consuming minimal SRAM compared to buffering entire multi-kilobyte text messages.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is &#x27;Reverse Polish Notation&#x27; (RPN) in stack-based calculator architectures?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A mathematical notation where operators follow their operands (e.g. &#x27;3 4 +&#x27;), eliminating the need for parentheses and complex operator precedence parsers</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A notation written in Russian</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> An encrypted binary format</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A floating-point representation</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            RPN writes operators after operands, making arithmetic evaluation trivial to implement using a simple LIFO stack.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What should an embedded serial parser do when receiving an unrecognized command string?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Emit a structured error response (e.g. &#x27;ERR: UNKNOWN CMD\r\n&#x27;) and flush the current line buffer to recover cleanly</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Crash with a HardFault</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Erase the Flash memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Freeze the CPU in an infinite loop</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Robust parsers reply with an error message and discard invalid characters, maintaining system stability.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="random_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="control_statements_intro.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

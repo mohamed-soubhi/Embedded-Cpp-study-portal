@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern C++ &lt;random&gt; Library vs Legacy C rand() - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 3</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 3</a>
+      <span class="sep">/</span>
+      <span class="current">RandomFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-3">Section 3</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">&lt;random&gt;</span> <span class="tag">std::mt19937</span> <span class="tag">uniform_int_distribution</span> <span class="tag">Mersenne Twister</span> <span class="tag">Distributions</span>
+      </div>
+      <h1 class="project-title">Modern C++ &lt;random&gt; Engines (std::mt19937) vs Distributions (uniform_int_distribution)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring the Modern C++ <random> library introduced in C++11. We contrast legacy C rand() with modern random engines (Mersenne Twister std::mt19937) and statistical distribution mappers (std::uniform_int_distribution), analyzing the 2.5KB RAM state footprint of mt19937 vs lightweight Xorshift32 PRNGs for microcontrollers.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;   // for rand() and srand()
+#include &lt;ctime&gt;     // for time()
+using namespace std;
+
+int main() {
+
+	srand(time(nullptr));   //seeds the RNG with the current time
+
+	int val1 = rand() % 10;   //0 to 9
+	int val2 = rand() % 10 + 1;  //1 to 10
+
+	cout &lt;&lt; val1 &lt;&lt; endl;
+	cout &lt;&lt; val2 &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Engine vs Distribution Separation</h3>
+        <p>C++11 cleanly separates random number generation into two orthogonal concepts:</p>
+        <ul>
+          <li><strong>Random Engine:</strong> Generates a sequence of pseudo-random bits (e.g. <code>std::mt19937</code>).</li>
+          <li><strong>Distribution:</strong> Maps bits into a target mathematical distribution without modulo bias (e.g. <code>std::uniform_int_distribution&lt;int&gt;(1, 6)</code>).</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The RAM Footprint of <code>std::mt19937</code></h3>
+        <p>The Mersenne Twister (<code>std::mt19937</code>) maintains a <strong>624-word state vector (2,496 bytes of SRAM)</strong>. In a 2KB RAM microcontroller, a single <code>mt19937</code> instance exhausts the entire system RAM! Embedded firmware uses lightweight <strong>Xorshift32 (4 bytes of RAM)</strong> instead.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Ultra-lightweight Xorshift32 PRNG (4 Bytes of SRAM Total):</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Marsaglia Xorshift32: High-quality randomness; 4 bytes RAM; 3 clock cycles!
+uint32_t xorshift32(uint32_t&amp; state) noexcept {
+    uint32_t x = state;
+    x ^= x &lt;&lt; 13;
+    x ^= x &gt;&gt; 17;
+    x ^= x &lt;&lt; 5;
+    state = x;
+    return x;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> How much RAM state memory does a std::mt19937 (Mersenne Twister) instance consume?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Approximately 2,500 bytes (624 32-bit state words)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 4 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 16 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 64 kilobytes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::mt19937</code> stores 624 32-bit state integers plus an index ($624 \times 4 + 4 \approx 2,500$ bytes), making it too large for microcontrollers with 2KB-4KB of RAM.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the memory footprint and execution speed of a Xorshift32 PRNG?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Consumes exactly 4 bytes of RAM (1 uint32_t state) and executes in 3 clock cycles using simple XOR and bit-shift operations</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Consumes 1MB of heap</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Takes 1,000 cycles</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Requires an external EEPROM</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Xorshift32 uses a single 32-bit integer state and 3 ALU instructions (shift and XOR), executing in ~3 clock cycles with 4 bytes of RAM.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What does std::uniform_int_distribution&lt;int&gt;(1, 10) guarantee?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A flat, uniform probability distribution across integers 1 to 10 with zero modulo bias</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Only even numbers are generated</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Numbers are sorted in ascending order</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Numbers are generated in 1 clock cycle</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::uniform_int_distribution</code> samples the engine and applies rejection sampling to guarantee statistically uniform, unbiased distributions.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why should a random engine and its distribution be passed to generator functions rather than recreated on every call?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Re-instantiating the engine every call resets its state or re-seeds it with the same timestamp, producing repetitive identical sequences</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To prevent compiler syntax warnings</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To allow floating point operations</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To move the engine to Flash memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Recreating engines on each call resets their internal sequence, generating duplicate values if called within the same timer tick.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="die_rolls.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="streaming_calculator.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum (Foundations)</h5>
+          <ul>
+            <li><a href="../section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="../section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="../section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

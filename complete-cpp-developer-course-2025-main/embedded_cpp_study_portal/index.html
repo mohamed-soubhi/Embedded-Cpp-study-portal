@@ -11,19 +11,23 @@
     <div class="container nav-bar">
       <a href="index.html" class="nav-brand">
         ⚡ C++ & Embedded Systems Deep-Dive Portal
-        <span class="badge-tag">Sections 4–12 (80 Projects)</span>
+        <span class="badge-tag">Complete Curriculum (116 Projects)</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">🏠 Home</a></li>
-        <li><a href="section_4/array_fun.html">Section 4</a></li>
-        <li><a href="section_5/function_fun_1.html">Section 5</a></li>
-        <li><a href="section_6/book_fun.html">Section 6</a></li>
-        <li><a href="section_7/bug_fun.html">Section 7</a></li>
-        <li><a href="section_8/pointer_fun.html">Section 8</a></li>
-        <li><a href="section_10/enum_fun.html">Section 10</a></li>
-        <li><a href="section_11/smart_pointer_fun.html">Section 11</a></li>
-        <li><a href="section_12/array_queue_app.html">Section 12</a></li>
-        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+        <li><a href="section_1/hello.html">Sec 1</a></li>
+        <li><a href="section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
   </header>
@@ -31,7 +35,7 @@
   <main class="container">
     <section class="hero">
       <h1>Modern C++ &amp; Embedded Systems Portal</h1>
-      <p>Comprehensive, deep-dive architectural analysis of 80 course projects across Sections 4, 5, 6, 7, 8, 10, 11, and 12. Complete with fully annotated source code, ARM Cortex-M hardware realities, zero-overhead refactors, and interactive self-checking quizzes.</p>
+      <p>Comprehensive, deep-dive architectural analysis of all 116 course projects across Sections 1 through 12. Complete with fully annotated source code, ARM Cortex-M hardware realities, zero-overhead refactors, and interactive self-checking quizzes.</p>
       
       <!-- Upstream Curriculum & Repository Attribution Card -->
       <div class="reference-banner">
@@ -56,16 +60,20 @@
     <section class="filter-panel">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="projectSearch" class="search-input" placeholder="Search 80 projects by concept (e.g. AAPCS, vtable, MMIO, DMA, heap, alignas), name, or tag...">
+        <input type="text" id="projectSearch" class="search-input" placeholder="Search 116 projects by concept (e.g. AAPCS, vtable, MMIO, DMA, LittleFS, heap, alignas), name, or tag...">
       </div>
       <div class="filter-chips">
         <span class="filter-label">Filter:</span>
-        <button class="chip active" data-filter="all">All Projects (80)</button>
+        <button class="chip active" data-filter="all">All Projects (116)</button>
+        <button class="chip" data-filter="sec-1">Section 1: Toolchains &amp; Linkers (2)</button>
+        <button class="chip" data-filter="sec-2">Section 2: Types &amp; Variables (14)</button>
+        <button class="chip" data-filter="sec-3">Section 3: Control Flow (13)</button>
         <button class="chip" data-filter="sec-4">Section 4: Arrays &amp; Locality (11)</button>
         <button class="chip" data-filter="sec-5">Section 5: Functions &amp; Scope (15)</button>
         <button class="chip" data-filter="sec-6">Section 6: OOP Foundations (6)</button>
         <button class="chip" data-filter="sec-7">Section 7: Exceptions &amp; Faults (9)</button>
         <button class="chip" data-filter="sec-8">Section 8: Pointers &amp; Memory (7)</button>
+        <button class="chip" data-filter="sec-9">Section 9: Streams &amp; Flash FS (7)</button>
         <button class="chip" data-filter="sec-10">Section 10: OOP &amp; Enums (3)</button>
         <button class="chip" data-filter="sec-11">Section 11: Templates &amp; STL (19)</button>
         <button class="chip" data-filter="sec-12">Section 12: Data Structures (10)</button>
@@ -76,6 +84,354 @@
     <!-- Cards Grid -->
     <section class="cards-grid">
       
+        <a href="section_1/hello.html" class="project-card" data-section="1" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-1">Section 1</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">Hello (Visual Studio / MSVC)</h3>
+          <p class="card-desc">Exploring the classic C++ entry point. We deconstruct the 4 stages of the C++ compilation pipeline (Preprocessor, Compiler AST to ...</p>
+          <div class="card-tags">
+            <span class="tag">Toolchains</span> <span class="tag">Preprocessing</span> <span class="tag">Compilation</span>
+          </div>
+        </a>
+
+        <a href="section_1/vsc_hello.html" class="project-card" data-section="1" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-1">Section 1</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">VSC Hello (Cross-Compilation & Toolchains)</h3>
+          <p class="card-desc">Building modern C++ projects using cross-platform toolchains (VS Code, CMake, Ninja). We dissect Host vs Target compilation archit...</p>
+          <div class="card-tags">
+            <span class="tag">Cross-Compilation</span> <span class="tag">arm-none-eabi-gcc</span> <span class="tag">GDB</span>
+          </div>
+        </a>
+
+        <a href="section_2/hello_world.html" class="project-card" data-section="2" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">HelloWorld</h3>
+          <p class="card-desc">Exploring console output via std::cout and std::endl. We analyze why C++ iostreams introduce 20KB-50KB of binary Flash bloat in mi...</p>
+          <div class="card-tags">
+            <span class="tag">std::cout</span> <span class="tag">UART</span> <span class="tag">Semihosting</span>
+          </div>
+        </a>
+
+        <a href="section_2/comment_fun.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">CommentFun</h3>
+          <p class="card-desc">Exploring single-line (//) and multi-line (/* */) comments. We analyze Doxygen documentation tag standards for embedded APIs (@bri...</p>
+          <div class="card-tags">
+            <span class="tag">Comments</span> <span class="tag">Doxygen</span> <span class="tag">Documentation</span>
+          </div>
+        </a>
+
+        <a href="section_2/variable_fun.html" class="project-card" data-section="2" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">VariableFun</h3>
+          <p class="card-desc">Exploring fundamental C++ data types (int, double, char, bool). We demonstrate why non-standardized integer widths (e.g. sizeof(in...</p>
+          <div class="card-tags">
+            <span class="tag"><cstdint></span> <span class="tag">uint8_t</span> <span class="tag">uint32_t</span>
+          </div>
+        </a>
+
+        <a href="section_2/text_fun.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">TextFun</h3>
+          <p class="card-desc">Exploring character types and escape sequences. We examine ASCII encoding tables, character-to-integer conversion, and how non-pri...</p>
+          <div class="card-tags">
+            <span class="tag">char</span> <span class="tag">ASCII</span> <span class="tag">Escape Sequences</span>
+          </div>
+        </a>
+
+        <a href="section_2/arithmetic_fun.html" class="project-card" data-section="2" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">ArithmeticFun</h3>
+          <p class="card-desc">Analyzing arithmetic operators (+, -, *, /, %). We explore C++ Integer Promotion rules (small integer types are promoted to int du...</p>
+          <div class="card-tags">
+            <span class="tag">Arithmetic</span> <span class="tag">Integer Promotion</span> <span class="tag">Signed Overflow UB</span>
+          </div>
+        </a>
+
+        <a href="section_2/relational_fun.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">RelationalFun</h3>
+          <p class="card-desc">Exploring relational comparison operators. We demonstrate why exact equality comparisons (==) on floating-point numbers fail due t...</p>
+          <div class="card-tags">
+            <span class="tag">Relational Operators</span> <span class="tag">Epsilon Comparison</span> <span class="tag">ARM Flags</span>
+          </div>
+        </a>
+
+        <a href="section_2/logical_fun.html" class="project-card" data-section="2" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">LogicalFun</h3>
+          <p class="card-desc">Exploring logical operators (&&, ||, !). We analyze Short-Circuit Evaluation, demonstrate how short-circuiting provides safe null ...</p>
+          <div class="card-tags">
+            <span class="tag">Logical Operators</span> <span class="tag">Short-Circuit</span> <span class="tag">Null Guards</span>
+          </div>
+        </a>
+
+        <a href="section_2/boolean_fun.html" class="project-card" data-section="2" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">BooleanFun</h3>
+          <p class="card-desc">Exploring the boolean data type. We analyze why sizeof(bool) occupies a full 8 bits (1 byte) in memory rather than 1 single bit du...</p>
+          <div class="card-tags">
+            <span class="tag">bool</span> <span class="tag">Bitfields</span> <span class="tag">Bitmasks</span>
+          </div>
+        </a>
+
+        <a href="section_2/constant_fun.html" class="project-card" data-section="2" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">ConstantFun</h3>
+          <p class="card-desc">Analyzing constants in C++. We contrast legacy C preprocessor macros (#define) with type-safe const and compile-time constexpr, ex...</p>
+          <div class="card-tags">
+            <span class="tag">constexpr</span> <span class="tag">const</span> <span class="tag">#define</span>
+          </div>
+        </a>
+
+        <a href="section_2/keyboard_input.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">KeyboardInput</h3>
+          <p class="card-desc">Exploring keyboard user input via std::cin. We examine the hazards of blocking I/O in real-time systems, stream fail states (cin.f...</p>
+          <div class="card-tags">
+            <span class="tag">std::cin</span> <span class="tag">Blocking I/O</span> <span class="tag">UART RX</span>
+          </div>
+        </a>
+
+        <a href="section_2/sunny_warm.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">SunnyWarm</h3>
+          <p class="card-desc">Analyzing compound boolean logic and truth tables. We explore De Morgan's Laws for simplifying complex nested conditions, reducing...</p>
+          <div class="card-tags">
+            <span class="tag">De Morgan's Laws</span> <span class="tag">Boolean Logic</span> <span class="tag">Truth Tables</span>
+          </div>
+        </a>
+
+        <a href="section_2/percentages.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">Percentages</h3>
+          <p class="card-desc">Calculating percentage ratios from integer variables. We examine the classic beginner integer division pitfall (e.g. (count / tota...</p>
+          <div class="card-tags">
+            <span class="tag">Integer Scaling</span> <span class="tag">Precision Loss</span> <span class="tag">Multiply-Before-Divide</span>
+          </div>
+        </a>
+
+        <a href="section_2/tip_calculator.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">TipCalculator</h3>
+          <p class="card-desc">Building tip and tax computation utilities. We explore why floating-point types (float, double) are strictly banned in banking, PO...</p>
+          <div class="card-tags">
+            <span class="tag">Fixed-Point</span> <span class="tag">Cents Math</span> <span class="tag">Currency</span>
+          </div>
+        </a>
+
+        <a href="section_2/secret_agent_id.html" class="project-card" data-section="2" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-2">Section 2</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">SecretAgentID</h3>
+          <p class="card-desc">Building security identifier formatting and user credential validation. We analyze formatted I/O manipulation, string parsing safe...</p>
+          <div class="card-tags">
+            <span class="tag">String Parsing</span> <span class="tag">Buffer Safety</span> <span class="tag">Security Tokens</span>
+          </div>
+        </a>
+
+        <a href="section_3/control_statements_intro.html" class="project-card" data-section="3" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">ControlStatementsIntro</h3>
+          <p class="card-desc">Exploring the foundations of programmatic control flow. We analyze sequential instruction fetching, conditional branching (BNE, BE...</p>
+          <div class="card-tags">
+            <span class="tag">Control Flow</span> <span class="tag">Branches</span> <span class="tag">Pipeline Flushes</span>
+          </div>
+        </a>
+
+        <a href="section_3/selection_fun.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">SelectionFun</h3>
+          <p class="card-desc">Exploring if/else selection statements and multi-branch decision trees. We contrast deeply nested if-else ladders ('Arrow Anti-Pat...</p>
+          <div class="card-tags">
+            <span class="tag">if/else</span> <span class="tag">Decision Trees</span> <span class="tag">Guard Clauses</span>
+          </div>
+        </a>
+
+        <a href="section_3/retired_women.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">RetiredWomen</h3>
+          <p class="card-desc">Analyzing multi-variable conditional logic (age, gender, employment status). We examine Karnaugh Map boolean logic reduction, mult...</p>
+          <div class="card-tags">
+            <span class="tag">Boolean Logic</span> <span class="tag">Karnaugh Maps</span> <span class="tag">Safety Interlocks</span>
+          </div>
+        </a>
+
+        <a href="section_3/grade_fun.html" class="project-card" data-section="3" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">GradeFun</h3>
+          <p class="card-desc">Exploring multi-case selection via switch statements vs if-else chains. We analyze compiler jump table generation (ARM TBB - Table...</p>
+          <div class="card-tags">
+            <span class="tag">switch</span> <span class="tag">Jump Tables</span> <span class="tag">TBB / TBH</span>
+          </div>
+        </a>
+
+        <a href="section_3/leap_year_checker.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">LeapYearChecker</h3>
+          <p class="card-desc">Implementing Gregorian calendar leap year determination. We examine the exact three-tier leap year algorithm (divisible by 4, exce...</p>
+          <div class="card-tags">
+            <span class="tag">RTC</span> <span class="tag">Epoch Time</span> <span class="tag">Leap Year</span>
+          </div>
+        </a>
+
+        <a href="section_3/rock_paper_scissors.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">RockPaperScissors</h3>
+          <p class="card-desc">Building interactive decision trees and win/loss resolution matrices. We model cyclical dominance relationships (Rock beats Scisso...</p>
+          <div class="card-tags">
+            <span class="tag">State Machines</span> <span class="tag">Enums</span> <span class="tag">Transition Matrix</span>
+          </div>
+        </a>
+
+        <a href="section_3/repetition_fun.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">RepetitionFun</h3>
+          <p class="card-desc">Exploring loop structures: while (pre-test), do-while (post-test), and for loops. We analyze their assembly generation on ARM Cort...</p>
+          <div class="card-tags">
+            <span class="tag">while</span> <span class="tag">do-while</span> <span class="tag">for loops</span>
+          </div>
+        </a>
+
+        <a href="section_3/sum_fun.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">SumFun</h3>
+          <p class="card-desc">Accumulating numeric series with loops. We contrast iterative $O(N)$ loop summation with Gauss's closed-form arithmetic series for...</p>
+          <div class="card-tags">
+            <span class="tag">Accumulator</span> <span class="tag">Gauss Formula</span> <span class="tag">Arithmetic Series</span>
+          </div>
+        </a>
+
+        <a href="section_3/even_only.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">EvenOnly</h3>
+          <p class="card-desc">Generating even-number sequences. We demonstrate why advancing the loop step size directly (i += 2) executes twice as fast as iter...</p>
+          <div class="card-tags">
+            <span class="tag">Loop Stride</span> <span class="tag">Filtering</span> <span class="tag">Branch Reduction</span>
+          </div>
+        </a>
+
+        <a href="section_3/continue_break.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">ContinueBreak</h3>
+          <p class="card-desc">Analyzing loop interruption statements: break (immediate loop exit) and continue (skip to next iteration). We explore early loop t...</p>
+          <div class="card-tags">
+            <span class="tag">break</span> <span class="tag">continue</span> <span class="tag">Early Exit</span>
+          </div>
+        </a>
+
+        <a href="section_3/die_rolls.html" class="project-card" data-section="3" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">DieRolls</h3>
+          <p class="card-desc">Exploring random number generation and dice simulation. We analyze the severe cryptographic and statistical flaws of std::rand() (...</p>
+          <div class="card-tags">
+            <span class="tag">PRNG</span> <span class="tag">TRNG</span> <span class="tag">Hardware RNG</span>
+          </div>
+        </a>
+
+        <a href="section_3/random_fun.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">RandomFun</h3>
+          <p class="card-desc">Exploring the Modern C++ <random> library introduced in C++11. We contrast legacy C rand() with modern random engines (Mersenne Tw...</p>
+          <div class="card-tags">
+            <span class="tag"><random></span> <span class="tag">std::mt19937</span> <span class="tag">uniform_int_distribution</span>
+          </div>
+        </a>
+
+        <a href="section_3/streaming_calculator.html" class="project-card" data-section="3" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-3">Section 3</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">StreamingCalculator</h3>
+          <p class="card-desc">Building a streaming arithmetic calculator with continuous input parsing. We analyze character stream tokenization, operator prece...</p>
+          <div class="card-tags">
+            <span class="tag">Stream Parsing</span> <span class="tag">CLI</span> <span class="tag">Command Dispatcher</span>
+          </div>
+        </a>
+
         <a href="section_4/array_fun.html" class="project-card" data-section="4" data-relevance="high">
           <div class="card-top">
             <span class="section-pill section-4">Section 4</span>
@@ -652,6 +1008,90 @@
           </div>
         </a>
 
+        <a href="section_9/file_input_fun.html" class="project-card" data-section="9" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">FileInputFun</h3>
+          <p class="card-desc">Exploring file reading via std::ifstream. We analyze file stream opening, buffer extraction, EOF detection, and contrast hosted PO...</p>
+          <div class="card-tags">
+            <span class="tag">std::ifstream</span> <span class="tag">LittleFS</span> <span class="tag">FatFS</span>
+          </div>
+        </a>
+
+        <a href="section_9/file_output_fun.html" class="project-card" data-section="9" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">FileOutputFun</h3>
+          <p class="card-desc">Exploring file writing via std::ofstream. We analyze write buffering, explicit stream flushing, the severe hazard of power loss du...</p>
+          <div class="card-tags">
+            <span class="tag">std::ofstream</span> <span class="tag">Buffering</span> <span class="tag">Power Loss</span>
+          </div>
+        </a>
+
+        <a href="section_9/twice_file.html" class="project-card" data-section="9" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">TwiceFile</h3>
+          <p class="card-desc">Building read-transform-write file pipelines. We analyze streaming mathematical transformation of files and compare file-based str...</p>
+          <div class="card-tags">
+            <span class="tag">Streams</span> <span class="tag">Data Pipeline</span> <span class="tag">EEPROM</span>
+          </div>
+        </a>
+
+        <a href="section_9/names_ages.html" class="project-card" data-section="9" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">NamesAges</h3>
+          <p class="card-desc">Synchronizing parallel file streams (names.txt and ages.txt). We analyze stream synchronization, detecting mismatched record lengt...</p>
+          <div class="card-tags">
+            <span class="tag">Parallel Streams</span> <span class="tag">Record Synchronization</span> <span class="tag">Relational Data</span>
+          </div>
+        </a>
+
+        <a href="section_9/movie_genres.html" class="project-card" data-section="9" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">MovieGenres</h3>
+          <p class="card-desc">Analyzing category frequency distributions and histograms from file streams. We explore fixed-size category binning, counting algo...</p>
+          <div class="card-tags">
+            <span class="tag">Histograms</span> <span class="tag">Categorization</span> <span class="tag">Frequency Table</span>
+          </div>
+        </a>
+
+        <a href="section_9/employee_salary_report.html" class="project-card" data-section="9" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">EmployeeSalaryReport</h3>
+          <p class="card-desc">Generating formatted tabular text reports using <iomanip> (std::setw, std::setprecision, std::fixed). We analyze table column alig...</p>
+          <div class="card-tags">
+            <span class="tag"><iomanip></span> <span class="tag">setw</span> <span class="tag">setprecision</span>
+          </div>
+        </a>
+
+        <a href="section_9/student_roster.html" class="project-card" data-section="9" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-9">Section 9</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">StudentRoster</h3>
+          <p class="card-desc">Building class object serialization and roster persistence. We compare text-based serialization with raw binary struct serializati...</p>
+          <div class="card-tags">
+            <span class="tag">Serialization</span> <span class="tag">Binary Structs</span> <span class="tag">CRC32</span>
+          </div>
+        </a>
+
         <a href="section_10/enum_fun.html" class="project-card" data-section="10" data-relevance="high">
           <div class="card-top">
             <span class="section-pill section-10">Section 10</span>
@@ -1046,13 +1486,22 @@
       </div>
       <div class="footer-links-group">
         <div class="footer-col">
-          <h5>Course Curriculum</h5>
+          <h5>Course Curriculum (Foundations)</h5>
           <ul>
+            <li><a href="section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="section_2/hello_world.html">Section 2: Types &amp; Variables</a></li>
+            <li><a href="section_3/control_statements_intro.html">Section 3: Control Flow</a></li>
             <li><a href="section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
             <li><a href="section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
             <li><a href="section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Course Curriculum (Advanced)</h5>
+          <ul>
             <li><a href="section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
             <li><a href="section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
             <li><a href="section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
             <li><a href="section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
             <li><a href="section_12/array_queue_app.html">Section 12: Data Structures</a></li>
