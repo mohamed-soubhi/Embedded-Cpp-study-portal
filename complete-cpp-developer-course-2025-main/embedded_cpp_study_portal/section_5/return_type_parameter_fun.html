@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Return Types, Side Effects &amp; Pure Functions in Firmware - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">ReturnTypeParameterFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Return Types</span> <span class="tag">Pure Functions</span> <span class="tag">[[nodiscard]]</span> <span class="tag">Side Effects</span> <span class="tag">Idempotence</span>
+      </div>
+      <h1 class="project-title">Void Functions, In-Out Side Effects vs Pure Functions &amp; [[nodiscard]]</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring return types and function side effects. We examine pure functions vs state-mutating functions and demonstrate how the [[nodiscard]] attribute prevents bugs by enforcing inspection of status returns.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+void printHello();
+void printNumber(int a);
+int giveMe10();
+int addThese(int num1, int num2);
+
+int square(int n);
+
+int main() {
+
+	int num1 = 120;
+	int num2 = 580;
+
+	printHello();
+	printNumber(100);
+
+	int someData = giveMe10();
+	cout &lt;&lt; someData &lt;&lt; endl;
+
+	int totalValue = addThese(num1, num2);
+	cout &lt;&lt; totalValue &lt;&lt; endl;
+
+	printNumber(addThese(num1, 50));
+
+	cout &lt;&lt; square(7) &lt;&lt; endl;
+
+	return 0;
+}
+
+void printHello() {
+	cout &lt;&lt; &quot;Hello there!&quot; &lt;&lt; endl;
+}
+
+void printNumber(int a) {
+	cout &lt;&lt; &quot;The number is &quot; &lt;&lt; a &lt;&lt; endl;
+}
+
+int giveMe10() {
+	return 10;
+}
+
+int addThese(int num1, int num2) {
+	return num1 + num2;
+}
+
+int square(int n) {
+	return n * n;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Pure Functions vs Side Effects</h3>
+        <ul>
+          <li><strong>Pure Functions:</strong> Given the same arguments, always return the same result without modifying global state or hardware.</li>
+          <li><strong>Side-Effecting Functions:</strong> Mutate global variables, modify parameters, or access hardware I/O registers.</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The <code>[[nodiscard]]</code> Attribute</h3>
+        <p>In firmware, functions returning error codes or hardware ACK statuses must not be ignored. Marking them <code>[[nodiscard]]</code> forces the compiler to flag ignored return values as errors.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Enforcing error code checking with [[nodiscard]]:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+enum class SpiStatus : uint8_t { Ok = 0, Busy, Timeout, WriteCollision };
+
+[[nodiscard]] SpiStatus transmitByte(uint8_t byte) noexcept {
+    // Write to SPI Data Register...
+    return SpiStatus::Ok;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is a &#x27;pure function&#x27; in software architecture?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A function whose return value depends solely on its input arguments with zero observable side effects on external state or hardware</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A function written in assembly language</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A function with no return type</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A function that runs in interrupt context</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Pure functions depend only on inputs and cause no side effects (no global writes, no I/O), making them trivial to test and optimize.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What compile-time protection does [[nodiscard]] provide when placed on a function?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It emits a compiler warning/error if the caller calls the function without storing or inspecting its return value</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It prevents the function from returning null</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It makes the function execute faster</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It moves the function to Flash memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>[[nodiscard]]</code> alerts the developer if a return value (like a status code) is discarded, preventing unhandled error bugs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why is managing function side effects critical in concurrent RTOS tasks?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Uncontrolled side effects on shared global variables create race conditions and data corruption without mutex protection</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Side effects delete task stacks</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Side effects lower microcontroller clock speeds</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Side effects disable compiler optimizations</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Modifying shared global variables across tasks without synchronization causes race conditions and memory corruption.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Can the compiler optimize away repeated calls to a pure function with identical arguments?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Yes, the compiler can memoize or evaluate pure functions at compile time (Common Subexpression Elimination)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> No, every call must execute at runtime</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Only if written in C</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Only on 64-bit systems</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because pure functions have no side effects, compilers can optimize redundant calls through Common Subexpression Elimination.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="product_array_object.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="scope_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

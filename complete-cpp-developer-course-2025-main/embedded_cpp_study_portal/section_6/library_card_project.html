@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Validation, Class Invariants &amp; String References - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 6</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 6</a>
+      <span class="sep">/</span>
+      <span class="current">LibraryCardProject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-6">Section 6</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Invariants</span> <span class="tag">Validation</span> <span class="tag">OOP</span> <span class="tag">Encapsulation</span> <span class="tag">State Management</span>
+      </div>
+      <h1 class="project-title">Class Invariant Preservation, Setter Input Validation &amp; Small Object Design</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Designing classes that enforce strict data validation rules through encapsulation. We analyze invariant preservation in setter methods and modern techniques for managing identity and credentials in embedded IoT devices.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">LibraryCard.h</button>
+            <button class="code-tab" data-target="file-tab-2">LibraryCard.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;LibraryCard.h&quot;
+using namespace std;
+
+void printLibraryCardDetails(const LibraryCard&amp; card);
+
+int main() {
+	LibraryCard aliceCard(&quot;Alice Johnson&quot;);
+	LibraryCard bobCard(&quot;Bob Smith&quot;);
+
+	aliceCard.checkoutBook();
+	aliceCard.checkoutBook();
+	bobCard.checkoutBook();
+
+	printLibraryCardDetails(aliceCard);
+	printLibraryCardDetails(bobCard);
+
+	cout &lt;&lt; &quot;Alice returns a book... &quot; &lt;&lt; endl;
+	aliceCard.returnBook();
+	printLibraryCardDetails(aliceCard);
+
+	bobCard.returnBook();
+	bobCard.returnBook();  //should trigger a warning!
+
+	return 0;
+}
+
+void printLibraryCardDetails(const LibraryCard&amp; card) {
+	cout &lt;&lt; card.getCardholderName() &lt;&lt; &quot; has &quot;
+		 &lt;&lt; card.getBooksCheckedOut() &lt;&lt; &quot; books checked out.&quot; 
+		 &lt;&lt; endl;
+}
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef LIBRARY_CARD_H
+#define LIBRARY_CARD_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class LibraryCard {
+
+	public:
+		LibraryCard(string cardholderName);
+		void checkoutBook();
+		void returnBook();
+		string getCardholderName() const;
+		int getBooksCheckedOut() const;
+
+	private:
+		string cardholderName;
+		int booksCheckedOut;
+};
+
+#endif</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;LibraryCard.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+LibraryCard::LibraryCard(string cardholderName) {
+	this-&gt;cardholderName = cardholderName;
+	booksCheckedOut = 0;
+}
+
+void LibraryCard::checkoutBook() {
+	booksCheckedOut++;
+}
+
+void LibraryCard::returnBook() {
+	if (booksCheckedOut &gt; 0) {
+		booksCheckedOut--;
+	}
+	else {
+		cout &lt;&lt; &quot;No books to return!&quot; &lt;&lt; endl;
+	}
+}
+
+string LibraryCard::getCardholderName() const {
+	return cardholderName;
+}
+
+int LibraryCard::getBooksCheckedOut() const {
+	return booksCheckedOut;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Setter Validation</h3>
+        <p>Setters act as gatekeepers, verifying input ranges before mutating private member variables to guarantee the object never enters an invalid state.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Secure Device Identity Storage</h3>
+        <p>In IoT edge devices, credentials (e.g. device serial numbers, cryptographic MAC addresses) are validated during provisioning and stored in secure write-once Flash sectors.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Type-safe validated identity class:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+
+class DeviceAuthToken {
+private:
+    uint32_t device_uid_{0};
+    uint16_t security_pin_{0};
+    bool     is_valid_{false};
+
+public:
+    constexpr bool provision(uint32_t uid, uint16_t pin) noexcept {
+        if (uid == 0 || pin &lt; 1000 || pin &gt; 9999) {
+            return false; // Invariant violation: PIN must be 4 digits
+        }
+        device_uid_ = uid;
+        security_pin_ = pin;
+        is_valid_ = true;
+        return true;
+    }
+
+    constexpr bool is_authenticated() const noexcept { return is_valid_; }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is an &#x27;object invariant&#x27; in class design?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A condition or rule that must always hold true for an object to remain in a valid, functional state throughout its lifetime</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A variable marked const that cannot be changed</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A function that runs in constant time</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A class with no private members</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            An invariant is a fundamental truth about an object's state (e.g., speed $\ge 0$, pointer $\ne$ null) that constructors establish and methods maintain.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why should member variables generally be kept private with public getters/setters instead of being made public?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To prevent external code from setting members to invalid/corrupt values, preserving class invariants</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To make the binary file smaller</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To enable multithreading automatically</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To force variables into Flash memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Private fields force all modifications to pass through validator methods, preventing external corruption of object state.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What should a setter function do if passed an invalid argument in an embedded system compiled with -fno-exceptions?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Reject the mutation and return a boolean false or error status code without changing state</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Execute a busy loop forever</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Overwrite the variable with zero silently</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Restart the CPU</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When exceptions are disabled, setters should return a boolean or status code indicating rejection, preserving the existing valid state.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is the benefit of making accessor (getter) methods inline?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The compiler replaces the function call with direct memory access in assembly, eliminating function call overhead completely</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It converts the getter into a macro</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It allocates getters on the heap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It allows getters to mutate private members</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Inline getters eliminate function call branches (<code>BL</code>/<code>BX LR</code>) in assembly, executing as fast as raw field access while preserving encapsulation.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="houses.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="sundae_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

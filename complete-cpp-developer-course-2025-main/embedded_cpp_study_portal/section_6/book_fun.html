@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Encapsulation, Getters/Setters &amp; Struct Memory Layout - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 6</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 6</a>
+      <span class="sep">/</span>
+      <span class="current">BookFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-6">Section 6</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Classes vs Structs</span> <span class="tag">Encapsulation</span> <span class="tag">Struct Padding</span> <span class="tag">Memory Alignment</span> <span class="tag">alignas</span>
+      </div>
+      <h1 class="project-title">Classes vs Structs, Encapsulation &amp; Member Variable Memory Alignment in RAM</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring foundational C++ classes: access specifiers (public vs private), member functions, constructors, and encapsulation. We examine the exact memory layout of class instances in SRAM, how compiler alignment rules insert hidden padding bytes, and how to reorder member variables to minimize RAM consumption.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Book.h</button>
+            <button class="code-tab" data-target="file-tab-2">Book.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Book.h&quot;
+using namespace std;
+
+//void printBookDetails(const Book&amp; book);
+
+int main() {
+	Book gameOfThrones(&quot;George Martin&quot;, &quot;Game of Thrones&quot;,
+		&quot;Fantasy&quot;, 864);
+	Book mathBook(&quot;James Stewart&quot;, &quot;Calculus&quot;, &quot;Math&quot;, 1392);
+	Book cppBook(&quot;Bjarne Stroustrup&quot;, &quot;The C++ Programming Language&quot;, &quot;Programming&quot;, 1376);
+
+	/*printBookDetails(gameOfThrones);
+	printBookDetails(mathBook);
+	printBookDetails(cppBook);*/
+
+	gameOfThrones.printBookDetails();
+	mathBook.printBookDetails();
+	cppBook.printBookDetails();
+
+	return 0;
+}
+
+//void printBookDetails(const Book&amp; book) {
+//	cout &lt;&lt; book.getTitle() &lt;&lt; &quot; by &quot; &lt;&lt; book.getAuthor()
+//		&lt;&lt; &quot; has &quot; &lt;&lt; book.getNumPages() &lt;&lt; &quot; pages, &quot;
+//		&lt;&lt; &quot;and its genre is &quot; &lt;&lt; book.getGenre() &lt;&lt; endl;
+//}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef BOOK_H
+#define BOOK_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class Book {
+	public:
+		Book(string author, string title,
+			string genre, int numPages);
+		string getAuthor() const;
+		string getTitle() const;
+		string getGenre() const;
+		int getNumPages() const;
+		void printBookDetails() const;
+
+	private:
+		string author;
+		string title;
+		string genre;
+		int numPages;
+
+};
+
+#endif</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Book.h&quot;
+
+#include &lt;iostream&gt;
+using namespace std;
+
+Book::Book(string author, string title,
+	string genre, int numPages) {
+
+	this-&gt;author = author;
+	this-&gt;title = title;
+	this-&gt;genre = genre;
+	this-&gt;numPages = numPages;
+}//end ctor
+
+string Book::getAuthor() const {
+	return author;
+}
+
+string Book::getTitle() const {
+	return title;
+}
+
+string Book::getGenre() const {
+	return genre;
+}
+
+int Book::getNumPages() const {
+	return numPages;
+}
+
+void Book::printBookDetails() const {
+	cout &lt;&lt; title &lt;&lt; &quot; by &quot; &lt;&lt; author
+		&lt;&lt; &quot; has &quot; &lt;&lt; numPages &lt;&lt; &quot; pages, &quot;
+		&lt;&lt; &quot;and its genre is &quot; &lt;&lt;  genre&lt;&lt; endl;
+}
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Classes vs Structs in C++</h3>
+        <p>In C++, the only difference between <code>class</code> and <code>struct</code> is the default access level: members and base classes default to <strong>private</strong> in a class, and <strong>public</strong> in a struct.</p>
+
+        <h3>2. Encapsulation & Invariants</h3>
+        <p>Private member variables enforce data hiding; public member functions validate inputs and preserve object invariants.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Struct Padding & Hidden RAM Waste</h3>
+        <p>On 32-bit microcontrollers, variables are aligned to their natural boundaries (4 bytes for <code>uint32_t</code>, 2 bytes for <code>uint16_t</code>). Declaring members in suboptimal order forces the compiler to insert <strong>padding bytes</strong>:</p>
+        <pre class="code-block" style="background:#0d1117; padding:12px; border-radius:6px;">struct BadOrder {
+    uint8_t  flag1;    // 1 byte + 3 PADDING bytes!
+    uint32_t address;  // 4 bytes
+    uint8_t  flag2;    // 1 byte + 3 PADDING bytes!
+}; // Total size: 12 bytes (6 bytes wasted on padding!)
+
+struct GoodOrder {
+    uint32_t address;  // 4 bytes
+    uint8_t  flag1;    // 1 byte
+    uint8_t  flag2;    // 1 byte + 2 PADDING bytes
+}; // Total size: 8 bytes (33% RAM savings!)</pre>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Optimized, compact embedded device metadata class:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+#include &lt;array&gt;
+
+class EmbeddedBookRecord {
+private:
+    // Arranged from largest to smallest type to eliminate internal padding
+    uint32_t page_count_{0};
+    uint16_t publication_year_{0};
+    uint8_t  edition_{1};
+    uint8_t  is_checked_out_{0};
+    std::array&lt;char, 24&gt; title_{};
+
+public:
+    constexpr EmbeddedBookRecord(uint32_t pages, uint16_t year, std::string_view title) noexcept
+        : page_count_(pages), publication_year_(year) {
+        size_t len = title.size() &lt; 23 ? title.size() : 23;
+        for (size_t i = 0; i &lt; len; ++i) title_[i] = title[i];
+        title_[len] = '\0';
+    }
+
+    constexpr uint32_t pages() const noexcept { return page_count_; }
+    constexpr std::string_view title() const noexcept { return title_.data(); }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the ONLY difference between &#x27;class&#x27; and &#x27;struct&#x27; in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Members of a struct default to public, while members of a class default to private</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Structs cannot have member functions</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Classes are stored on the heap while structs are on the stack</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Structs cannot use templates</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            In C++, <code>class</code> and <code>struct</code> are identical except for default member and inheritance access specifiers (private for class, public for struct).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why does the order of member variable declarations in a class matter on 32-bit microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Suboptimal member ordering forces the compiler to insert alignment padding bytes, bloating the object&#x27;s RAM footprint</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Member order changes the clock frequency</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Variables declared first are read-only</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Member order changes function return types</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            CPUs require aligned memory access. Interleaving 1-byte and 4-byte members creates wasted padding holes. Ordering by descending size minimizes padding.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> On a 32-bit ARM processor, what is the sizeof a struct containing: &#x27;uint8_t a; uint32_t b; uint8_t c;&#x27; without packing?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 12 bytes (1 byte + 3 pad + 4 bytes + 1 byte + 3 pad)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 6 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 8 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 4 bytes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Due to 4-byte alignment, 3 padding bytes follow <code>a</code> and 3 padding bytes follow <code>c</code>, yielding $1+3+4+1+3 = 12$ bytes.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What compiler attribute or pragma disables alignment padding entirely for network/telemetry packets?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> #pragma pack(push, 1) or __attribute__((packed))</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> #pragma inline</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> __attribute__((aligned(32)))</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> #pragma optimize</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>__attribute__((packed))</code> or <code>#pragma pack(1)</code> instructs the compiler to omit padding, essential for matching exact binary network wire protocols.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="triangle_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="rectangle_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

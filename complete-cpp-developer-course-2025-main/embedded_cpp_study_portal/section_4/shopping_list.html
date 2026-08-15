@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Vector Modification &amp; Real-Time Queuing - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 4</a>
+      <span class="sep">/</span>
+      <span class="current">ShoppingList</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-4">Section 4</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Vector Modification</span> <span class="tag">FIFO Queue</span> <span class="tag">Circular Buffer</span> <span class="tag">Dynamic Collections</span>
+      </div>
+      <h1 class="project-title">Dynamic Item Insertion, String Vectors &amp; Circular Buffers for Real-Time Streaming</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building dynamic list management with interactive user input. We contrast general-purpose dynamic list manipulation with embedded FIFO circular queues used for sensor message streams and serial packet buffering.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+	vector&lt;string&gt; shoppingList;
+	string item;
+
+	cout &lt;&lt; &quot;Enter items for your shopping list (type &#x27;done&#x27; to finish):&quot;;
+	getline(cin, item);
+
+	while (item != &quot;done&quot;) {
+		shoppingList.push_back(item);
+
+		cout &lt;&lt; &quot;Enter another item (or &#x27;done&#x27; to finish): &quot;;
+		getline(cin, item);
+	}
+
+	cout &lt;&lt; &quot;\nYour shopping list: &quot; &lt;&lt; endl;
+	for (string listItem : shoppingList) {
+		cout &lt;&lt; &quot;- &quot; &lt;&lt; listItem &lt;&lt; endl;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Dynamic Collection Growth</h3>
+        <p>Interactive applications collect unpredictable numbers of items from user input, making resizable containers like <code>std::vector</code> standard in hosted environments.</p>
+
+        <h3>2. String Serialization</h3>
+        <p>Managing collections of text requires handling string copying, delimiters, and terminal character outputs.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Circular FIFO Ring Buffers vs Vectors</h3>
+        <p>In streaming embedded applications (e.g. UART serial input, CAN bus message queues), fixed-size <strong>Circular Ring Buffers</strong> are used instead of vectors. Elements are pushed and popped in $O(1)$ time with zero heap allocation.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Embedded ring buffer for streaming data:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+template &lt;typename T, size_t Capacity&gt;
+class RingBuffer {
+    static_assert((Capacity &amp; (Capacity - 1)) == 0, "Capacity must be power of 2");
+    std::array&lt;T, Capacity&gt; buffer_{};
+    uint32_t head_{0};
+    uint32_t tail_{0};
+
+public:
+    bool push(T item) noexcept {
+        uint32_t next = (head_ + 1) &amp; (Capacity - 1);
+        if (next == tail_) return false; // Full
+        buffer_[head_] = item;
+        head_ = next;
+        return true;
+    }
+
+    bool pop(T&amp; out) noexcept {
+        if (head_ == tail_) return false; // Empty
+        out = buffer_[tail_];
+        tail_ = (tail_ + 1) &amp; (Capacity - 1);
+        return true;
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why are Circular Ring Buffers preferred over std::vector for UART serial receive buffers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Ring buffers provide deterministic O(1) push/pop operations with fixed static memory and zero dynamic allocation</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Ring buffers automatically translate baud rates</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Ring buffers compress ASCII characters</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Ring buffers use double precision floats</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Ring buffers use a fixed array with wrap-around head and tail indices, operating in $O(1)$ deterministic time without allocating memory.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is the capacity of high-speed ring buffers often constrained to powers of two (e.g. 64, 128, 256)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It allows replacing expensive modulo division (%) with a single-cycle bitwise AND (&amp; (Capacity - 1))</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Microcontrollers can only count in powers of two</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It prevents memory from overheating</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It disables the floating point unit</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When $N$ is a power of 2, index wrap-around <code>idx % N</code> can be computed via <code>idx & (N - 1)</code>, which executes in a single clock cycle on all CPUs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens in a circular ring buffer when head == tail?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The buffer is completely empty</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The buffer is 100% full</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A hardware fault is triggered</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The memory is cleared to zero</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When the write index (head) matches the read index (tail), no unread elements remain, indicating an empty buffer.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What happens if an interrupt routine pushes data to a full ring buffer without checking available space?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A buffer overflow occurs, overwriting unread historical data</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The CPU freezes permanently</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The compiler throws an exception</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The data is cached on disk</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Failing to check if the buffer is full causes the head to overwrite unread elements at the tail, corrupting the data stream.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="vector_practice.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="array_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Initialization, Size Computation &amp; Uninitialized Memory - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 4</a>
+      <span class="sep">/</span>
+      <span class="current">ArrayFunTest</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-4">Section 4</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Array Initialization</span> <span class="tag">Value Init {}</span> <span class="tag">Garbage RAM</span> <span class="tag">sizeof</span> <span class="tag">BSS vs Stack</span>
+      </div>
+      <h1 class="project-title">Array Size Calculation, Garbage Stack Data &amp; Value-Initialization ({})</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing array initialization syntax, calculating element counts via sizeof, and the dangers of uninitialized stack variables containing random SRAM power-on garbage.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;array&gt;
+using namespace std;
+
+int main() {
+
+	array&lt;int, 5&gt; myIntArray{1, 2};
+
+	myIntArray[0] = 2;
+	myIntArray[1] = 5;
+	myIntArray[2] = 10;
+	myIntArray[3] = 1;
+	myIntArray[4] = 17;
+
+
+	for (int a : myIntArray) {
+		cout &lt;&lt; a &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; &quot;Size of the array: &quot; &lt;&lt; myIntArray.size() &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Uninitialized Stack Arrays vs Value-Initialization</h3>
+        <p>Declaring <code>int arr[5];</code> leaves memory uninitialized. Reading these elements reads whatever residual charges remained in SRAM silicon (garbage values). Using <code>int arr[5]{};</code> or <code>int arr[5] = {0};</code> value-initializes all elements to zero.</p>
+
+        <h3>2. Element Count Idiom</h3>
+        <p>In C++11 and earlier, array length was computed via <code>sizeof(arr) / sizeof(arr[0])</code>. In C++17+, <code>std::size(arr)</code> provides a type-safe alternative.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Power-On SRAM Residual State</h3>
+        <p>When a microcontroller powers on, SRAM bit cells power up in unpredictable states determined by silicon transistor mismatch. Uninitialized stack variables can cause intermittent, hardware-dependent bugs that disappear during debugging.</p>
+
+        <h3>2. Zero-Cost <code>.bss</code> Initialization</h3>
+        <p>Global/static uninitialized arrays are placed in the <code>.bss</code> section, which the C runtime startup code (<code>Reset_Handler</code>) clears to zero before <code>main()</code> is invoked.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Modern C++ guarantees zero-initialization with clean syntax:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+// Guaranteed zero-initialized on the stack (zero garbage RAM)
+std::array&lt;uint32_t, 16&gt; telemetry_buffer{};
+
+// Compile-time verified size
+constexpr size_t BUFFER_LEN = std::size(telemetry_buffer);</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is stored in an array declared as &#x27;int buffer[10];&#x27; on the stack in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Indeterminate (garbage) values from residual SRAM charges</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> All zeros</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> All negative ones</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Null pointers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Local stack variables without an explicit initializer are default-initialized, which for fundamental types means their memory retains whatever garbage was previously in that stack location.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How does &#x27;int buffer[10]{};&#x27; differ from &#x27;int buffer[10];&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The empty braces {} guarantee that all 10 elements are zero-initialized</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It allocates memory on the heap</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It makes the array read-only</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It converts the array into a pointer</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Value-initialization with <code>{}</code> initializes fundamental numeric types to zero.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which section of microcontroller memory holds global uninitialized variables and is cleared to zero during startup?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> .bss section</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> .text section</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> .rodata section</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> .heap section</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The <code>.bss</code> section contains uninitialized global and static variables. The startup assembly routine (<code>Reset_Handler</code>) zeroes this region before jumping to <code>main()</code>.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is the benefit of std::size(arr) over sizeof(arr)/sizeof(arr[0]) in C++17?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::size will fail to compile if passed a decayed pointer, preventing accidental size bugs</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::size calculates size in megabytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::size executes faster at runtime</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::size works with void pointers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::size()</code> expects a container or fixed array reference. Passing a decayed pointer causes a compilation error rather than silently returning a wrong calculation.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="array_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="more_array_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

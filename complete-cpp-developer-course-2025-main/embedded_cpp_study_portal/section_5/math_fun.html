@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standard Math Library (&lt;cmath&gt;) vs Integer Fast Approximations - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">MathFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">&lt;cmath&gt;</span> <span class="tag">FPU</span> <span class="tag">CORDIC</span> <span class="tag">Fast Integer Math</span> <span class="tag">Lookup Tables</span>
+      </div>
+      <h1 class="project-title">pow, sqrt, sin in &lt;cmath&gt; vs Fast Integer Approximations (Lookup Tables &amp; CORDIC)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring mathematical functions in <cmath> (pow, sqrt, abs). We analyze why generic floating-point math libraries cause Flash bloat and execution delays on microcontrollers, and implement high-speed integer approximations (like integer sqrt and CORDIC trigonometry).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+using namespace std;
+
+int main() {
+
+	int powResult = pow(2, 3);
+	int sqrtResult = sqrt(25);
+	int ceilResult = ceil(4.2);
+	int floorResult = floor(4.2);
+	int logResult = log2(512);
+
+	cout &lt;&lt; &quot;2^3 is &quot; &lt;&lt; powResult &lt;&lt; endl;
+	cout &lt;&lt; &quot;sqrt of 25 is &quot; &lt;&lt; sqrtResult &lt;&lt; endl;
+	cout &lt;&lt; &quot;ceiling of 4.2 is &quot; &lt;&lt; ceilResult &lt;&lt; endl;
+	cout &lt;&lt; &quot;floor of 4.2 is &quot; &lt;&lt; floorResult &lt;&lt; endl;
+	cout &lt;&lt; &quot;log2 of 512 is &quot; &lt;&lt; logResult &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Standard <code>&lt;cmath&gt;</code> Functions</h3>
+        <p>Standard C++ math functions (<code>std::pow</code>, <code>std::sqrt</code>, <code>std::sin</code>) operate on <code>double</code> precision by default. In resource-constrained systems, they add significant library overhead.</p>
+
+        <h3>2. Integer Powers vs <code>std::pow</code></h3>
+        <p>Using <code>std::pow(x, 2)</code> uses transcendental log/exp algorithms taking dozens of cycles. Simple multiplication (<code>x * x</code>) executes in a single cycle.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Hardware CORDIC Co-Processors</h3>
+        <p>Modern microcontrollers (such as STM32G4 / STM32H7) include hardware <strong>CORDIC (Coordinate Rotation Digital Computer)</strong> accelerator peripherals that compute trigonometric, hyperbolic, and square root operations in <strong>sub-microsecond hardware cycles</strong>.</p>
+
+        <h3>2. Fast Integer Square Root</h3>
+        <p>For chips without FPUs, bitwise integer square root algorithms compute exact integer roots using simple bit shifts and subtractions.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Fast bitwise integer square root (0 float overhead):</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Fast integer square root algorithm (Deterministic O(1) loop)
+uint32_t isqrt(uint32_t val) noexcept {
+    uint32_t res = 0;
+    uint32_t bit = 1UL &lt;&lt; 30; // Second-to-top bit set
+
+    while (bit &gt; val) bit &gt;&gt;= 2;
+
+    while (bit != 0) {
+        if (val &gt;= res + bit) {
+            val -= res + bit;
+            res = (res &gt;&gt; 1) + bit;
+        } else {
+            res &gt;&gt;= 1;
+        }
+        bit &gt;&gt;= 2;
+    }
+    return res;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is &#x27;std::pow(x, 2.0)&#x27; an anti-pattern when squaring a number in performance-critical firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::pow uses generic exp(2 * log(x)) algorithms taking dozens of cycles, whereas &#x27;x * x&#x27; compiles to a single-cycle hardware multiplication</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::pow cannot accept numbers greater than 100</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::pow only works on 64-bit Linux systems</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::pow deletes the variable x</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::pow()</code> implements general exponentiation via transcendental algorithms; simple squaring should always be written as <code>x * x</code>.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is a CORDIC hardware accelerator on microcontrollers like STM32G4?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A dedicated hardware co-processor that computes trigonometric, logarithmic, and square root operations in hardware with zero CPU load</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A tool that monitors battery voltage</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A software compiler optimization</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> An external SPI memory chip</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            CORDIC hardware co-processors perform iterative vector rotation in hardware, delivering fast sine, cosine, and sqrt values for motor control.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What precision does standard &#x27;sqrt(x)&#x27; in &lt;cmath&gt; use when passed a float without the &#x27;f&#x27; suffix in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> double precision (64-bit)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> single precision (32-bit)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 16-bit integer</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> arbitrary precision</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            In standard C/C++, <code>sqrt()</code> evaluates with <code>double</code> precision; single-precision floats require <code>std::sqrt(float)</code> or <code>sqrtf()</code>.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How does integer square root (isqrt) benefit sensor processing on microcontrollers without an FPU?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It computes square roots using simple bit shifts and additions in integer registers with zero software float library bloat</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It converts the sensor to analog mode</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It encrypts sensor telemetry</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It forces the ADC to sample at 100MHz</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Bitwise integer square root algorithms use only integer ALU operations, avoiding slow software floating-point emulation routines.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="factorial_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="count_down.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

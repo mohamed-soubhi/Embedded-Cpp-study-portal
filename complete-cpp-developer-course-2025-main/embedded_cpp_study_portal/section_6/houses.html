@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Object Instances &amp; Memory Stride in SRAM - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 6</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 6</a>
+      <span class="sep">/</span>
+      <span class="current">Houses</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-6">Section 6</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Instances</span> <span class="tag">Memory Stride</span> <span class="tag">Array of Objects</span> <span class="tag">Encapsulation</span> <span class="tag">State</span>
+      </div>
+      <h1 class="project-title">Managing Multiple Class Instances, Memory Arrays &amp; Cache Stride</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Instantiating and managing multiple distinct class objects. We examine memory footprints of multiple instances in SRAM, contiguous array storage, and avoiding duplicate member storage.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">House.h</button>
+            <button class="code-tab" data-target="file-tab-2">House.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &quot;House.h&quot;
+using namespace std;
+
+
+int main() {
+	//House myHouse;
+	House theirHouse(2, 10, &quot;green&quot;);
+
+	theirHouse.print();
+
+	//cout &lt;&lt; &quot;Before calling any setters...&quot; &lt;&lt; endl;
+	//myHouse.print();
+
+	////now call settings
+	//myHouse.setNumStories(2);
+	//myHouse.setNumWindows(6);
+	//myHouse.setColor(&quot;red&quot;);
+
+	//cout &lt;&lt; &quot;\nAfter calling setters...&quot; &lt;&lt; endl;
+	//myHouse.print();
+
+	//House yourHouse;
+	//House myHouse;
+
+	/*myHouse.setNumStories(2);
+	myHouse.setNumWindows(6);
+	myHouse.setColor(&quot;red&quot;);
+
+	yourHouse.setNumStories(3);
+	yourHouse.setNumWindows(10);
+	yourHouse.setColor(&quot;blue&quot;);
+
+	myHouse.print();
+	yourHouse.print();*/
+
+
+
+	return 0;
+}
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef HOUSE_H
+#define HOUSE_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class House {
+	public:
+		House();
+		House(int numStories, int numWindows, string color);
+		virtual ~House();
+		void setNumStories(int numStories);
+		void setNumWindows(int numWindows);
+		void setColor(string color);
+		int getNumStories() const;
+		int getNumWindows() const;
+		string getColor() const;
+		void print() const;
+
+	private:
+		int numStories;
+		int numWindows;
+		string color;
+};
+
+
+#endif</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;House.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+
+House::House() {
+	this-&gt;numStories = 1;
+	this-&gt;numWindows = 4;
+	this-&gt;color = &quot;white&quot;;
+}//end no-arg ctor
+
+House::House(int numStories, int numWindows, string color) {
+	this-&gt;numStories = numStories;
+	this-&gt;numWindows = numWindows;
+	this-&gt;color = color;
+}//end parameterized ctor
+
+
+House::~House() {
+	cout &lt;&lt; &quot;The &quot; &lt;&lt; color &lt;&lt; &quot; house with &quot; &lt;&lt; numStories &lt;&lt; &quot; stories&quot;
+		&lt;&lt; &quot; and &quot; &lt;&lt; numWindows &lt;&lt; &quot; windows is being destroyed!&quot; &lt;&lt; endl;
+}
+
+void House::setNumStories(int numStories) {
+	this-&gt;numStories = numStories;
+}
+
+void House::setNumWindows(int numWindows) {
+	this-&gt;numWindows = numWindows;
+}
+
+void House::setColor(string color) {
+	this-&gt;color = color;
+}
+
+int House::getNumStories() const {
+	return numStories;
+}
+
+int House::getNumWindows() const {
+	return numWindows;
+}
+
+string House::getColor() const {
+	return color;
+}
+
+void House::print() const {
+	cout &lt;&lt; &quot;The house is &quot; &lt;&lt; color
+		&lt;&lt; &quot; and has &quot; &lt;&lt; numStories
+		&lt;&lt; &quot; stories and &quot; &lt;&lt; numWindows
+		&lt;&lt; &quot; windows.&quot; &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Object Independence</h3>
+        <p>Each instantiated object owns its distinct set of non-static member variables in memory. Member functions are shared across all instances in Flash (<code>.text</code>), receiving a hidden <code>this</code> pointer to the target object.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The <code>this</code> Pointer in Assembly</h3>
+        <p>Under the ARM AAPCS, calling a member function (<code>house.print()</code>) automatically passes the object's memory address as the first argument in <strong>register R0</strong> (the <code>this</code> pointer).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Compact building telemetry node array:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+struct RoomNode {
+    uint8_t  room_id;
+    int16_t  temp_centi_celsius; // e.g. 2150 = 21.50 C
+    uint16_t light_lux;
+};
+
+class SmartBuilding {
+private:
+    std::array&lt;RoomNode, 8&gt; rooms_{};
+
+public:
+    void update_sensor(uint8_t room_idx, int16_t temp, uint16_t lux) noexcept {
+        if (room_idx &lt; rooms_.size()) {
+            rooms_[room_idx].temp_centi_celsius = temp;
+            rooms_[room_idx].light_lux = lux;
+        }
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Where is the machine code for a class&#x27;s non-virtual member functions stored in an embedded system?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> In Flash ROM (.text section), shared once by all instances of that class</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Duplicated in SRAM for each created object instance</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> On the CPU stack frame</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> In battery-backed RTC memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Function machine code is stored once in Flash ROM (<code>.text</code>). Objects in RAM contain only their member variables.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How is the &#x27;this&#x27; pointer passed to member functions in ARM Cortex-M machine code?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Passed as the implicit first argument in hardware register R0</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Pushed to the bottom of the stack</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Stored in the Program Counter</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Transmitted over the CAN bus</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Member functions receive the instance address (<code>this</code>) as an implicit first parameter in register R0.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> If a class has 3 integer members (12 bytes total) and 10 member functions, what is the sizeof an object instance of this class on a 32-bit MCU?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 12 bytes (member functions add zero bytes to object size)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 52 bytes (12 bytes data + 40 bytes for 10 function pointers)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 4 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 120 bytes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Non-virtual member functions add zero size overhead to object instances. The instance size is strictly the sum of its member variables plus any alignment padding.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is the memory overhead of having 50 instances of the same C++ class in SRAM?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 50 * sizeof(member variables + padding) in SRAM</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 50 * sizeof(code + variables)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Zero bytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 100 kilobytes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Each instance allocates only its private member variable data in SRAM.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="rectangle_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="library_card_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

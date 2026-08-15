@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>std::vector Dynamic Growth &amp; Heap Reallocation Penalties - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 4</a>
+      <span class="sep">/</span>
+      <span class="current">VectorFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-4">Section 4</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">std::vector</span> <span class="tag">push_back</span> <span class="tag">Capacity vs Size</span> <span class="tag">Heap Reallocation</span> <span class="tag">Real-Time Jitter</span>
+      </div>
+      <h1 class="project-title">Capacity vs Size, Geometric Growth Reallocation &amp; Real-Time Heap Hazards</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring dynamic arrays via std::vector. We analyze capacity vs size, geometric heap reallocation mechanics, pointer invalidation risks during push_back(), and why dynamic vectors are replaced by static bounded vectors in real-time firmware.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+	vector&lt;int&gt; someVec;
+	vector&lt;string&gt; anotherVec(3);
+
+	someVec.push_back(1);
+	someVec.push_back(2);
+	someVec.push_back(3);
+
+	cout &lt;&lt; &quot;someVec size: &quot; &lt;&lt; someVec.size() &lt;&lt; endl;
+
+	anotherVec[0] = &quot;John&quot;;
+	anotherVec[1] = &quot;Bob&quot;;
+	anotherVec[2] = &quot;Sally&quot;;
+
+	anotherVec.push_back(&quot;Shannon&quot;);
+
+	for (int val : someVec) {
+		cout &lt;&lt; val &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; endl;
+
+	for (string name : anotherVec) {
+		cout &lt;&lt; name &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; endl;
+	cout &lt;&lt; &quot;Front and back of anotherVec:&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;front: &quot; &lt;&lt; anotherVec.front() &lt;&lt; endl;
+	cout &lt;&lt; &quot;back: &quot; &lt;&lt; anotherVec.back() &lt;&lt; endl;
+
+	anotherVec.pop_back();
+	anotherVec.insert(anotherVec.begin(), &quot;Don&quot;);
+
+	cout &lt;&lt; &quot;\nAfter modification: &quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;front: &quot; &lt;&lt; anotherVec.front() &lt;&lt; endl;
+	cout &lt;&lt; &quot;back: &quot; &lt;&lt; anotherVec.back() &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Size vs Capacity</h3>
+        <ul>
+          <li><strong>Size:</strong> The number of active elements currently in the vector (<code>.size()</code>).</li>
+          <li><strong>Capacity:</strong> The total number of elements allocated in heap memory before reallocation is needed (<code>.capacity()</code>).</li>
+        </ul>
+
+        <h3>2. Geometric Growth & Iterator Invalidation</h3>
+        <p>When <code>push_back()</code> exceeds current capacity, <code>std::vector</code> allocates a new heap buffer (typically $1.5\times$ or $2\times$ larger), copies/moves all existing elements, and frees the old buffer. <strong>All existing pointers and iterators to elements are invalidated!</strong></p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Real-Time Latency Spikes during Vector Growth</h3>
+        <p>A <code>push_back()</code> is usually $O(1)$ amortized, but when reallocation occurs, it spikes to $O(N)$ with dynamic heap allocation latency, causing missed real-time deadlines in motor control or audio processing loops.</p>
+
+        <h3>2. Memory Fragmentation</h3>
+        <p>Repeated vector expansion allocates and frees progressively larger blocks, causing severe heap fragmentation on constrained SRAM microcontrollers.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Pre-reserving capacity or using fixed-capacity bounded vectors:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;vector&gt;
+
+// If std::vector MUST be used, reserve capacity upfront at boot
+std::vector&lt;int&gt; createTelemetryVector(size_t expected_items) {
+    std::vector&lt;int&gt; vec;
+    vec.reserve(expected_items); // Allocates ONCE; eliminates dynamic reallocations
+    return vec;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What occurs internally when push_back() is called on a std::vector whose size() equals its capacity()?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A new larger heap buffer is allocated, all existing elements are copied/moved, the old buffer is deleted, and existing pointers/iterators are invalidated</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The newest element is silently dropped</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The vector throws a std::out_of_range exception</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The microcontroller restarts</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When capacity is exhausted, <code>std::vector</code> reallocates a larger memory block on the heap, moves existing elements, and frees the old block, invalidating all existing references/iterators.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the time complexity of vector::push_back() when a reallocation is triggered?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> O(N) linear time (proportional to element count)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> O(1) constant time</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> O(log N) logarithmic time</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> O(1/N) inverse time</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Reallocation requires allocating new memory and copying/moving all $N$ existing elements, taking $O(N)$ time.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> How does vector::reserve(N) protect embedded applications from reallocation jitter?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It pre-allocates heap memory for N elements upfront, guaranteeing zero reallocations for insertions up to size N</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It limits the vector to N bytes in ROM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It converts the vector to a stack array</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It enables multithreading synchronization</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>reserve()</code> allocates the requested capacity in a single initial allocation, ensuring subsequent <code>push_back()</code> operations run in deterministic $O(1)$ time without reallocation.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why is storing raw pointers to std::vector elements dangerous?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Any subsequent push_back() that triggers a reallocation will invalidate the pointer, creating a hazardous dangling pointer</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Vectors encrypt pointer addresses</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Pointers cannot address heap memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Vectors delete elements after 1 second</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            If a vector reallocates its internal buffer, existing elements move to a new memory address, leaving stored pointers pointing to freed memory (use-after-free bug).
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="move_ratings.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="vector_practice.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

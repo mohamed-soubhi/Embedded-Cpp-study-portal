@@ -2,6 +2,9 @@
 import os
 import sys
 from builder import generate_page, ROOT_DIR, PORTAL_DIR
+from section_4_data import SECTION_4_PROJECTS
+from section_5_data import SECTION_5_PROJECTS
+from section_6_data import SECTION_6_PROJECTS
 from section_7_data import SECTION_7_PROJECTS
 from section_8_data import SECTION_8_PROJECTS
 
@@ -1289,6 +1292,54 @@ private:
 def build_index():
     all_projects = []
 
+    # Section 4 Projects
+    for p in SECTION_4_PROJECTS:
+        rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
+        all_projects.append({
+            "sec": "4",
+            "id": p['id'],
+            "name": p['name'],
+            "title": p['title'],
+            "desc": p['summary'][:130] + "...",
+            "tags": p['tags'][:3],
+            "rel": "high" if rel == "high" else "core",
+            "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
+            "rel_cls": p['emb_class'],
+            "link": f"section_4/{p['id']}.html"
+        })
+
+    # Section 5 Projects
+    for p in SECTION_5_PROJECTS:
+        rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
+        all_projects.append({
+            "sec": "5",
+            "id": p['id'],
+            "name": p['name'],
+            "title": p['title'],
+            "desc": p['summary'][:130] + "...",
+            "tags": p['tags'][:3],
+            "rel": "high" if rel == "high" else "core",
+            "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
+            "rel_cls": p['emb_class'],
+            "link": f"section_5/{p['id']}.html"
+        })
+
+    # Section 6 Projects
+    for p in SECTION_6_PROJECTS:
+        rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
+        all_projects.append({
+            "sec": "6",
+            "id": p['id'],
+            "name": p['name'],
+            "title": p['title'],
+            "desc": p['summary'][:130] + "...",
+            "tags": p['tags'][:3],
+            "rel": "high" if rel == "high" else "core",
+            "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
+            "rel_cls": p['emb_class'],
+            "link": f"section_6/{p['id']}.html"
+        })
+
     # Section 7 Projects
     for p in SECTION_7_PROJECTS:
         rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
@@ -1391,10 +1442,13 @@ def build_index():
     <div class="container nav-bar">
       <a href="index.html" class="nav-brand">
         ⚡ C++ & Embedded Systems Deep-Dive Portal
-        <span class="badge-tag">Sections 7, 8, 10, 11, 12 (48 Projects)</span>
+        <span class="badge-tag">Sections 4–12 (80 Projects)</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">🏠 Home</a></li>
+        <li><a href="section_4/array_fun.html">Section 4</a></li>
+        <li><a href="section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="section_6/book_fun.html">Section 6</a></li>
         <li><a href="section_7/bug_fun.html">Section 7</a></li>
         <li><a href="section_8/pointer_fun.html">Section 8</a></li>
         <li><a href="section_10/enum_fun.html">Section 10</a></li>
@@ -1408,7 +1462,7 @@ def build_index():
   <main class="container">
     <section class="hero">
       <h1>Modern C++ &amp; Embedded Systems Portal</h1>
-      <p>Comprehensive, deep-dive architectural analysis of 48 course projects across Sections 7, 8, 10, 11, and 12. Complete with fully annotated source code, embedded hardware considerations, zero-cost refactors, and interactive self-checking quizzes.</p>
+      <p>Comprehensive, deep-dive architectural analysis of 80 course projects across Sections 4, 5, 6, 7, 8, 10, 11, and 12. Complete with fully annotated source code, ARM Cortex-M hardware realities, zero-overhead refactors, and interactive self-checking quizzes.</p>
       
       <!-- Upstream Curriculum & Repository Attribution Card -->
       <div class="reference-banner">
@@ -1433,11 +1487,14 @@ def build_index():
     <section class="filter-panel">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="projectSearch" class="search-input" placeholder="Search by project name, concept (e.g. vtable, MMIO, heap fragmentation), or tag...">
+        <input type="text" id="projectSearch" class="search-input" placeholder="Search 80 projects by concept (e.g. AAPCS, vtable, MMIO, DMA, heap, alignas), name, or tag...">
       </div>
       <div class="filter-chips">
         <span class="filter-label">Filter:</span>
-        <button class="chip active" data-filter="all">All Projects (48)</button>
+        <button class="chip active" data-filter="all">All Projects (80)</button>
+        <button class="chip" data-filter="sec-4">Section 4: Arrays &amp; Locality (11)</button>
+        <button class="chip" data-filter="sec-5">Section 5: Functions &amp; Scope (15)</button>
+        <button class="chip" data-filter="sec-6">Section 6: OOP Foundations (6)</button>
         <button class="chip" data-filter="sec-7">Section 7: Exceptions &amp; Faults (9)</button>
         <button class="chip" data-filter="sec-8">Section 8: Pointers &amp; Memory (7)</button>
         <button class="chip" data-filter="sec-10">Section 10: OOP &amp; Enums (3)</button>
@@ -1463,6 +1520,9 @@ def build_index():
         <div class="footer-col">
           <h5>Course Curriculum</h5>
           <ul>
+            <li><a href="section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="section_6/book_fun.html">Section 6: OOP Foundations</a></li>
             <li><a href="section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
             <li><a href="section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
             <li><a href="section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
@@ -1497,6 +1557,48 @@ def build_index():
 # MAIN GENERATION RUNNER
 # ==============================================================================
 def main():
+    print("Generating Section 4 HTML pages...")
+    for idx, p in enumerate(SECTION_4_PROJECTS):
+        prev_p = SECTION_4_PROJECTS[idx - 1] if idx > 0 else SECTION_4_PROJECTS[-1]
+        next_p = SECTION_4_PROJECTS[idx + 1] if idx < len(SECTION_4_PROJECTS) - 1 else SECTION_4_PROJECTS[0]
+        
+        prev_link = f"{prev_p['id']}.html"
+        next_link = f"{next_p['id']}.html"
+        
+        html_out = generate_page(p, prev_link, next_link, section_num=4)
+        out_path = os.path.join(PORTAL_DIR, "section_4", f"{p['id']}.html")
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(html_out)
+        print(f"  ✓ [{idx+1}/11] section_4/{p['id']}.html")
+
+    print("Generating Section 5 HTML pages...")
+    for idx, p in enumerate(SECTION_5_PROJECTS):
+        prev_p = SECTION_5_PROJECTS[idx - 1] if idx > 0 else SECTION_5_PROJECTS[-1]
+        next_p = SECTION_5_PROJECTS[idx + 1] if idx < len(SECTION_5_PROJECTS) - 1 else SECTION_5_PROJECTS[0]
+        
+        prev_link = f"{prev_p['id']}.html"
+        next_link = f"{next_p['id']}.html"
+        
+        html_out = generate_page(p, prev_link, next_link, section_num=5)
+        out_path = os.path.join(PORTAL_DIR, "section_5", f"{p['id']}.html")
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(html_out)
+        print(f"  ✓ [{idx+1}/15] section_5/{p['id']}.html")
+
+    print("Generating Section 6 HTML pages...")
+    for idx, p in enumerate(SECTION_6_PROJECTS):
+        prev_p = SECTION_6_PROJECTS[idx - 1] if idx > 0 else SECTION_6_PROJECTS[-1]
+        next_p = SECTION_6_PROJECTS[idx + 1] if idx < len(SECTION_6_PROJECTS) - 1 else SECTION_6_PROJECTS[0]
+        
+        prev_link = f"{prev_p['id']}.html"
+        next_link = f"{next_p['id']}.html"
+        
+        html_out = generate_page(p, prev_link, next_link, section_num=6)
+        out_path = os.path.join(PORTAL_DIR, "section_6", f"{p['id']}.html")
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(html_out)
+        print(f"  ✓ [{idx+1}/6] section_6/{p['id']}.html")
+
     print("Generating Section 7 HTML pages...")
     for idx, p in enumerate(SECTION_7_PROJECTS):
         prev_p = SECTION_7_PROJECTS[idx - 1] if idx > 0 else SECTION_7_PROJECTS[-1]

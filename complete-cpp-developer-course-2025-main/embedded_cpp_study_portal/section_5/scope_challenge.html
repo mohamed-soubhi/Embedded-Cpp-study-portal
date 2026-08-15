@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variable Shadowing, Namespace Pollution &amp; Static Encapsulation - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">ScopeChallenge</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Variable Shadowing</span> <span class="tag">Anonymous Namespaces</span> <span class="tag">static linkage</span> <span class="tag">MISRA C++</span>
+      </div>
+      <h1 class="project-title">Shadowing Pitfalls, Anonymous Namespaces vs C static &amp; MISRA Scope Rules</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Practicing scope resolution and diagnosing variable shadowing bugs. We explore anonymous namespaces in C++ vs static file linkage in C, and analyze MISRA C++ guidelines for restricting variable scope to the narrowest possible block.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int counter = 0;
+
+void modifyGlobal();
+
+int main() {
+	cout &lt;&lt; &quot;Counter before: &quot; &lt;&lt; counter &lt;&lt; endl;
+	for (int i = 0; i &lt; 100; i++) {
+		modifyGlobal();
+	}
+	cout &lt;&lt; &quot;Counter after: &quot; &lt;&lt; counter &lt;&lt; endl;
+
+	return 0;
+}
+
+void modifyGlobal() {
+	counter++;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Variable Shadowing</h3>
+        <p>Shadowing occurs when an inner block declares a variable with the same name as an outer block variable. The inner variable hides the outer one, causing logic errors where developers assume they are modifying the outer variable.</p>
+
+        <h3>2. Anonymous Namespaces vs <code>static</code> Linkage</h3>
+        <p>In modern C++, anonymous namespaces (<code>namespace { ... }</code>) replace C-style <code>static</code> functions/variables, providing internal linkage with full type safety.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. MISRA C++:2008 Rule 2-10-2</h3>
+        <p>Identifiers declared in an inner scope shall not hide an identifier declared in an outer scope. Compilers should enforce <code>-Wshadow</code> to eliminate shadowing bugs at compile time.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Internal linkage with anonymous namespaces:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+namespace {
+    // Internal linkage: Invisible to other translation units (Zero symbol collisions)
+    constexpr uint32_t INTERNAL_TIMEOUT_MS = 500;
+    
+    void configureHardwarePll() noexcept {
+        // Driver internal initialization...
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;variable shadowing&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Declaring a variable in an inner block that has the exact same name as a variable in an enclosing outer block, hiding the outer variable</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Allocating variables in dark theme IDEs</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Copying variables into Flash ROM</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Deleting a pointer twice</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Shadowing hides outer variables with an identically named local variable, leading to subtle modification bugs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Which compiler warning flag catches variable shadowing bugs during compilation?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> -Wshadow</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> -Werror</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> -Wall</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> -O3</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>-Wshadow</code> instructs the compiler to emit a warning whenever an inner variable shadows an outer identifier.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the purpose of an anonymous namespace (namespace { ... }) in a C++ source file?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It grants internal linkage to enclosed variables and functions, restricting their visibility to that single translation unit</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It makes variables public to all files</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It encrypts variable names in memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It creates a dynamic heap pool</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Anonymous namespaces give symbols internal linkage, preventing naming collisions across different <code>.cpp</code> files.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What does MISRA C++ recommend regarding variable scope?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Variables should be declared in the narrowest possible scope closest to their point of use</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> All variables must be global</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Variables must be at least 100 lines long</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Variables can only be declared in header files</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Declaring variables in the smallest feasible scope minimizes lifetime, reduces stack usage, and prevents accidental cross-block mutations.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="scope_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="tic_tac_toe.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

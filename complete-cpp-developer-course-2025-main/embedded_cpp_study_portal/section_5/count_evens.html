@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitwise Parity, Modulo Division &amp; Branchless Algorithms - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">CountEvens</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Bitwise &amp;</span> <span class="tag">Modulo %</span> <span class="tag">Branchless</span> <span class="tag">Condition Codes</span> <span class="tag">Optimization</span>
+      </div>
+      <h1 class="project-title">Modulo (%) vs Bitwise AND (&amp; 1) &amp; Branchless Counting in Assembly</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing parity checks and filtering in arrays. We contrast expensive hardware division (num % 2) with single-cycle bitwise operations (num & 1) and demonstrate branchless arithmetic algorithms that eliminate pipeline flushes.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int countEvens(int arr[], int size);
+
+int main() {
+
+	int myArray[] = { 12, 7, 4, 19, 22, 3, 8, 10 };
+
+	int numEvens = countEvens(myArray, 8);
+
+	cout &lt;&lt; &quot;Number of even elements: &quot; &lt;&lt; numEvens &lt;&lt; endl;
+
+	return 0;
+}
+
+int countEvens(int arr[], int size) {
+	int count = 0;
+
+	for (int i = 0; i &lt; size; i++) {
+		if (arr[i] % 2 == 0) {
+			count++;
+		}
+	}
+
+	return count;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Parity Checking: Modulo vs Bitwise</h3>
+        <p>In standard arithmetic, even numbers satisfy <code>num % 2 == 0</code>. In binary representations, the Least Significant Bit (LSB) determines parity: <code>(num &amp; 1) == 0</code>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Hardware Division vs Bitwise Masking</h3>
+        <p>On microcontrollers lacking hardware division (e.g. ARM Cortex-M0), modulo division (<code>%</code>) calls software division routines (<code>__aeabi_idivmod</code>) taking 20-50 cycles. Bitwise AND (<code>&amp; 1</code>) executes in <strong>1 clock cycle</strong>.</p>
+
+        <h3>2. Branchless Counting</h3>
+        <p>By computing <code>count += (val &amp; 1) ^ 1</code>, code runs without <code>if</code> statements, eliminating CPU pipeline branch stalls.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Branchless even-number counter:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+
+size_t countEvensBranchless(const uint32_t* data, size_t len) noexcept {
+    size_t count = 0;
+    for (size_t i = 0; i &lt; len; ++i) {
+        // Branchless: (data[i] & 1) is 0 for even, 1 for odd
+        count += (data[i] &amp; 1) ^ 1;
+    }
+    return count;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is &#x27;(num &amp; 1) == 0&#x27; preferred over &#x27;num % 2 == 0&#x27; on low-power microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Bitwise AND is a single-cycle ALU instruction, whereas modulo may require expensive hardware or software division</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Modulo only works with positive floating-point numbers</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Bitwise AND prevents memory leaks</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Modulo requires heap memory allocation</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Bitwise masking checks the least significant bit in 1 clock cycle, avoiding costly division instructions.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the advantage of &#x27;branchless programming&#x27; in high-speed firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It replaces conditional jump branches with arithmetic instructions, preventing CPU pipeline stalls and branch misprediction penalties</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It makes C++ code look shorter</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It removes the need for functions</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It runs without a power supply</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Branchless code eliminates <code>if</code> branches, ensuring the CPU pipeline flows smoothly without stalls caused by branch mispredictions.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What does &#x27;(val &amp; 1) ^ 1&#x27; evaluate to when val is an even integer (e.g. 4)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 1 (true)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 0 (false)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 4</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 2</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            For even numbers: <code>val & 1 = 0</code>. Then <code>0 ^ 1 = 1</code>.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Which ARM Cortex-M core lacks a hardware integer divide instruction (SDIV/UDIV)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> ARM Cortex-M0 / Cortex-M0+</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> ARM Cortex-M3</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> ARM Cortex-M4</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> ARM Cortex-M7</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            ARM Cortex-M0 and M0+ cores omit hardware division hardware to minimize silicon area and power consumption.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="count_down.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="average_of_three.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

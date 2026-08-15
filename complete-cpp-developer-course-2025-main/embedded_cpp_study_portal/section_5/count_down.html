@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loop Timing, Delay Loops vs Hardware Timers &amp; RTOS Delays - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">CountDown</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Hardware Timers</span> <span class="tag">SysTick</span> <span class="tag">vTaskDelay</span> <span class="tag">Busy-Wait</span> <span class="tag">Low Power WFI</span>
+      </div>
+      <h1 class="project-title">Software Busy-Wait Delays vs Hardware SysTick Timers &amp; RTOS vTaskDelay</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring loop countdowns and delays. We demonstrate why software busy-wait loops (for(volatile int i=0...)) waste battery power and jitter across compiler optimization levels, and replace them with hardware SysTick timers and RTOS sleep delays (WFI).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+void countDownFrom(int num);
+int sumValues(int num);
+
+int main() {
+
+	//countDownFrom(10);
+
+	//for (int i = 10; i &gt;= 0; i--) {
+	//	cout &lt;&lt; i &lt;&lt; endl;
+	//}
+
+	int totalSum = sumValues(10);
+	cout &lt;&lt; &quot;The sum is &quot; &lt;&lt; totalSum &lt;&lt; endl;
+
+	return 0;
+}
+
+void countDownFrom(int num) {
+	if (num &gt;= 0) {
+		cout &lt;&lt; num &lt;&lt; endl;
+		countDownFrom(num - 1);
+	}
+}//end countDownFrom
+
+int sumValues(int num) {
+	if (num &gt; 1) {
+		return num + sumValues(num - 1);
+	}
+	return num;   //base case
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Count-Down Loop Structures</h3>
+        <p>Loops counting down to zero (<code>while (n &gt; 0) --n;</code>) often generate more efficient assembly on ARM processors because comparing against zero is handled automatically by CPU condition flags (<code>SUBS</code> instruction).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Evils of Software Busy-Wait Loops</h3>
+        <p>Software spin loops (<code>for (int i=0; i&lt;100000; ++i);</code>):</p>
+        <ul>
+          <li><strong>Are Optimized Away:</strong> Without <code>volatile</code>, the compiler deletes empty loops entirely under <code>-O2</code> or <code>-O3</code>.</li>
+          <li><strong>Waste Battery:</strong> The CPU burns maximum active current (e.g. 20mA) instead of sleeping.</li>
+          <li><strong>Are Non-Deterministic:</strong> Delay duration changes drastically if CPU clock frequency or compiler flags change.</li>
+        </ul>
+
+        <h3>2. Hardware SysTick & RTOS <code>vTaskDelay()</code></h3>
+        <p>Production firmware uses hardware timer interrupts (SysTick) and puts the CPU to sleep using <strong>Wait For Interrupt (<code>WFI</code>)</strong>, reducing current draw by 99%.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Non-blocking hardware timer delay:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+extern volatile uint32_t g_system_ticks_ms; // Incremented by SysTick_Handler
+
+void delay_ms(uint32_t ms) noexcept {
+    uint32_t start = g_system_ticks_ms;
+    while ((g_system_ticks_ms - start) &lt; ms) {
+        __asm volatile("wfi"); // Wait For Interrupt: Sleep CPU until next timer tick!
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is an empty software delay loop (for(int i=0; i&lt;10000; i++)) dangerous in production code?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The optimizing compiler will delete the loop entirely, resulting in zero delay</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It causes an immediate memory leak</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It permanently disables interrupts</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It reboots the microcontroller</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because the loop has no observable side effects, modern optimizing compilers (<code>-O2</code>/<code>-O3</code>) completely remove empty loops.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What does the ARM assembly instruction &#x27;WFI&#x27; (Wait For Interrupt) do?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Puts the CPU core into a low-power sleep state until the next hardware interrupt fires, drastically reducing current draw</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Resets the CPU stack pointer</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Waits for a serial character from UART</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Disables all hardware timers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>WFI</code> suspends CPU execution and clocks until an interrupt arrives, dropping current consumption to microamps.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why does counting down to zero (while(n-- &gt; 0)) often produce smaller assembly code on ARM processors than counting up?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> ARM arithmetic instructions (SUBS) update the zero flag (Z) automatically, eliminating separate comparison (CMP) instructions</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> ARM cannot count upwards</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The stack only allows decrements</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Down loops use 16-bit registers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The <code>SUBS</code> instruction subtracts and sets condition flags simultaneously; a branch instruction (<code>BNE</code>) can immediately test the zero flag without an extra <code>CMP</code> instruction.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> In FreeRTOS, what is the advantage of vTaskDelay(pdMS_TO_TICKS(100)) over a busy loop?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It yields the CPU to lower-priority tasks and puts the current task into the Blocked state until the delay expires</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It overclock the CPU</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It disables task scheduling</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It formats the heap</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>vTaskDelay</code> blocks the calling task, allowing other application tasks to execute while consuming zero CPU cycles.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="math_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="count_evens.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

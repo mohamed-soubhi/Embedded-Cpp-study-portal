@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Composition, Destructors &amp; Embedded Resource Lifecycles - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 6</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 6</a>
+      <span class="sep">/</span>
+      <span class="current">SundaeProject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-6">Section 6</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Composition</span> <span class="tag">HAS-A</span> <span class="tag">Destructors</span> <span class="tag">RAII</span> <span class="tag">Hardware Cleanup</span>
+      </div>
+      <h1 class="project-title">Object Composition (HAS-A), Destructor Chains &amp; Deterministic Hardware Teardown</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building composite objects through composition (HAS-A relationships). We examine constructor and destructor execution chains, and demonstrate how composite RAII classes automatically power down peripherals in reverse order of initialization upon scope exit.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">IceCreamSundae.h</button>
+            <button class="code-tab" data-target="file-tab-2">IceCreamSundae.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;IceCreamSundae.h&quot;
+using namespace std;
+
+int main() {
+
+	IceCreamSundae basicVanilla(&quot;Vanilla&quot;);
+	basicVanilla.printSundae();
+
+	IceCreamSundae deluxeChocolate(&quot;Chocolate&quot;);
+	deluxeChocolate.addTopping(&quot;Whipped Cream&quot;);
+	deluxeChocolate.addTopping(&quot;Sprinkles&quot;);
+	deluxeChocolate.addTopping(&quot;Cherries&quot;);
+
+	cout &lt;&lt; endl;
+	deluxeChocolate.printSundae();
+
+	return 0;
+}
+
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef ICE_CREAM_SUNDAE_H
+#define ICE_CREAM_SUNDAE_H
+
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+class IceCreamSundae {
+	public:
+		IceCreamSundae(string flavor);
+		void addTopping(string topping);
+		string getFlavor() const;
+		vector&lt;string&gt; getToppings() const;
+		void printSundae() const;
+
+	private:
+		string flavor;
+		vector&lt;string&gt; toppings;
+};
+
+#endif</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;IceCreamSundae.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+IceCreamSundae::IceCreamSundae(string flavor) {
+	this-&gt;flavor = flavor;
+}
+
+void IceCreamSundae::addTopping(string topping) {
+	toppings.push_back(topping);
+}
+
+string IceCreamSundae::getFlavor() const {
+	return flavor;
+}
+
+vector&lt;string&gt; IceCreamSundae::getToppings() const {
+	return toppings;
+}
+
+void IceCreamSundae::printSundae() const {
+	cout &lt;&lt; &quot;Sundae flavor: &quot; &lt;&lt; flavor &lt;&lt; endl;
+	cout &lt;&lt; &quot;Toppings: &quot; &lt;&lt; endl;
+	if (toppings.empty()) {
+		cout &lt;&lt; &quot;None&quot;;
+	}
+	else {
+		for (string topping : toppings) {
+			cout &lt;&lt; topping &lt;&lt; &quot;, &quot;;
+		}
+	}
+
+	cout &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Object Composition (HAS-A)</h3>
+        <p>Composition embeds one class instance inside another as a member variable. The composite object controls the lifetime of its member sub-objects.</p>
+
+        <h3>2. Constructor & Destructor Execution Order</h3>
+        <ul>
+          <li><strong>Construction:</strong> Member objects are constructed first (in declaration order), followed by the enclosing class constructor body.</li>
+          <li><strong>Destruction:</strong> The enclosing class destructor executes first, followed by member destructors in <strong>reverse order</strong> of declaration.</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Safe Hardware Peripheral Teardown Chains</h3>
+        <p>In power-sensitive embedded systems, RAII composite drivers leverage reverse-order destruction to power down sub-peripherals in strictly safe sequences (e.g. disabling DMA $\rightarrow$ disabling SPI $\rightarrow$ gating peripheral clock).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>RAII composite sensor subsystem with automatic hardware teardown:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+struct SpiClockGate {
+    SpiClockGate() noexcept { /* RCC-&gt;APB2ENR |= SPI1_EN; */ }
+    ~SpiClockGate() noexcept { /* RCC-&gt;APB2ENR &amp;= ~SPI1_EN; Disable clock on exit! */ }
+};
+
+struct GpioChipSelect {
+    GpioChipSelect() noexcept { /* Set CS Pin LOW (Active) */ }
+    ~GpioChipSelect() noexcept { /* Set CS Pin HIGH (Idle) */ }
+};
+
+class SpiTransactionScope {
+private:
+    SpiClockGate clock_gate_;      // Constructed 1st; Destroyed 2nd
+    GpioChipSelect chip_select_;    // Constructed 2nd; Destroyed 1st
+public:
+    void write_data(uint8_t byte) noexcept { /* SPI1-&gt;DR = byte; */ }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> In what order are member sub-objects destroyed when an enclosing class instance goes out of scope?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> In the exact reverse order of their declaration in the class definition</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> In the exact order of declaration</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Alphabetical order</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Simultaneously in 1 clock cycle</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            C++ guarantees that destructors are invoked in reverse order of member declaration, ensuring proper symmetric teardown of dependent resources.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What relationship does &#x27;composition&#x27; represent in Object-Oriented Design?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A &#x27;HAS-A&#x27; relationship where one class contains instances of other classes as member components</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> An &#x27;IS-A&#x27; inheritance relationship</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A dynamic link relationship</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A friend class relationship</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Composition represents a 'HAS-A' relationship (e.g., a Car HAS-A Engine), where the outer class owns and manages the lifecycle of the inner component.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> How does RAII (Resource Acquisition Is Initialization) prevent peripheral power drain in battery devices?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Peripheral clocks and GPIOs are acquired in constructors and automatically powered down in destructors when leaving scope</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It turns off the microcontroller battery</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It decreases the baud rate</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It converts integers to floating point</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            RAII ties hardware peripheral power states to object lifetimes, guaranteeing that peripherals are safely disabled as soon as their enclosing scope exits.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> If class A contains member class B, when is B&#x27;s constructor executed relative to A&#x27;s constructor body?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> B&#x27;s constructor is fully executed BEFORE A&#x27;s constructor body begins</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> B&#x27;s constructor is executed after A&#x27;s constructor body finishes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> B&#x27;s constructor is ignored</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Only when explicitly called</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            All member sub-objects are fully constructed before the body of the enclosing class constructor starts execution.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="library_card_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="triangle_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

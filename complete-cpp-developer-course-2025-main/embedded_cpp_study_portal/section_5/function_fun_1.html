@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Function Declarations, Prototypes &amp; AAPCS Calling Conventions - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">FunctionFun1</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Prototypes</span> <span class="tag">AAPCS</span> <span class="tag">Stack Frames</span> <span class="tag">Calling Convention</span> <span class="tag">Registers R0-R3</span>
+      </div>
+      <h1 class="project-title">Function Signatures, Header Prototypes &amp; ARM Register Passing (R0–R3)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring function prototypes, definitions, and execution flow. We analyze the ARM Architecture Procedure Call Standard (AAPCS), demonstrating how the first 4 function arguments are passed in CPU registers (R0-R3) with zero memory latency, while additional arguments spill onto the stack.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+
+using namespace std;
+
+void printSomething();
+void printMyName();
+
+int main() {
+
+	printSomething(); //call or invocation
+	printMyName();
+	return 0;
+}
+
+void printSomething() {
+	cout &lt;&lt; &quot;Hey!  Look, I&#x27;m here!&quot; &lt;&lt; endl;
+}
+
+void printMyName() {
+	cout &lt;&lt; &quot;My name is John Baugh!&quot; &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Forward Declarations & Prototypes</h3>
+        <p>A function prototype informs the compiler of a function's name, return type, and parameter types before its definition, allowing the compiler to perform type verification and code generation across translation units.</p>
+
+        <h3>2. Function Call Overhead</h3>
+        <p>A standard function call executes a branch with link (<code>BL</code>) instruction, saving the return address into the Link Register (<code>LR</code>) and pushing caller-saved registers onto the stack.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The ARM AAPCS Calling Convention</h3>
+        <p>Under the standard ARM 32-bit calling convention (AAPCS):</p>
+        <ul>
+          <li>The first 4 integer/pointer arguments are passed directly in CPU hardware registers: <strong>R0, R1, R2, R3</strong> (zero stack latency!).</li>
+          <li>Return values are passed back in <strong>R0</strong> (or <strong>R0-R1</strong> for 64-bit integers).</li>
+          <li>Arguments beyond the 4th are pushed onto the <strong>CPU stack</strong>, adding memory store and load instructions.</li>
+        </ul>
+
+        <div class="callout callout-tip">
+          <h4>💡 Embedded Optimization Tip: 4-Parameter Rule</h4>
+          <p>Design performance-critical functions to accept <strong>$\le 4$ parameters</strong> so all inputs reside entirely in CPU hardware registers.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Register-friendly driver API design:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Fits perfectly in R0, R1, R2 (Zero stack memory traffic)
+void configureTimer(uint8_t timer_id, uint32_t prescaler, uint32_t auto_reload) noexcept {
+    // Direct MMIO writes using hardware registers...
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Under the ARM AAPCS calling convention, which CPU registers hold the first 4 integer arguments?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> R0, R1, R2, and R3</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> R4, R5, R6, and R7</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Stack Pointer (SP) and Link Register (LR)</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Program Counter (PC) and Status Register (PSR)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            AAPCS assigns registers R0 through R3 for passing the first four 32-bit arguments, executing function calls with zero stack memory overhead.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What happens when a function accepts 6 integer parameters on an ARM Cortex-M processor?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The first 4 are passed in R0-R3, and the remaining 2 are pushed onto the stack frame</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> All 6 parameters are rejected by the compiler</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Parameters 5 and 6 are passed in floating point registers</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The CPU enters sleep mode</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Arguments exceeding the four register slots spill onto the stack, requiring extra <code>STR</code> (store) and <code>LDR</code> (load) memory operations.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which CPU register stores the return address during a standard function call on ARM Cortex-M?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Link Register (LR / R14)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Stack Pointer (SP / R13)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Program Counter (PC / R15)</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Frame Pointer (R11)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The <code>BL</code> (Branch with Link) instruction automatically loads the return address into the Link Register (LR / R14).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why are forward declarations (prototypes) placed in .h header files in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To allow multiple .cpp translation units to call functions with compile-time type verification without duplicating function bodies</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To reduce the clock frequency of the processor</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To compress function code in flash</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To enable dynamic casting</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Header prototypes let other source files verify parameter types and return types during compilation before the linker connects definitions.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="tic_tac_toe.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="passing_schemes.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

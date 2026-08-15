@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Variable Scope, Lifetime &amp; Memory Storage Durations - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">ScopeFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Scope</span> <span class="tag">Lifetime</span> <span class="tag">Static Variables</span> <span class="tag">Reentrancy</span> <span class="tag">.data vs .bss</span>
+      </div>
+      <h1 class="project-title">Local vs Global Scope, Static Variables (.data/.bss) &amp; Reentrancy Hazards</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing variable scope and lifetime: local (automatic stack), global, and local static storage. We analyze the memory map placement of static variables (.data vs .bss) and the severe reentrancy hazards of static variables in multi-threaded RTOS tasks.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+void someFunction(int aParam);
+
+double myGlobalDouble = 3.1415;
+
+int main() {
+
+	int localToMain = 20;
+
+	cout &lt;&lt; &quot;The local to main variable is: &quot; &lt;&lt; localToMain &lt;&lt; endl;
+	cout &lt;&lt; &quot;The global double (in main) is: &quot; &lt;&lt; myGlobalDouble &lt;&lt; endl;
+
+	someFunction(25);
+	someFunction(28);
+	someFunction(32);
+
+	//cout &lt;&lt; myLocalNum &lt;&lt; endl;
+
+	return 0;
+}
+
+void someFunction(int aParam) {
+	int myLocalNum = 100;
+	myLocalNum++;
+
+	static int myStatic = 500;
+	myStatic++;
+
+	myGlobalDouble++;
+
+	cout &lt;&lt; &quot;My local number: &quot; &lt;&lt; myLocalNum &lt;&lt; endl;
+	cout &lt;&lt; &quot;The parameter is: &quot; &lt;&lt; aParam &lt;&lt; endl;
+	cout &lt;&lt; &quot;Global double (in someFunction) is: &quot; &lt;&lt; myGlobalDouble &lt;&lt; endl;
+	cout &lt;&lt; &quot;myStatic: &quot; &lt;&lt; myStatic &lt;&lt; endl;
+
+	//localToMain++;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Storage Duration Categories</h3>
+        <ul>
+          <li><strong>Automatic (Stack):</strong> Created at block entry, destroyed at block exit.</li>
+          <li><strong>Static (RAM):</strong> Allocated once at startup, persists for the entire program execution.</li>
+          <li><strong>Dynamic (Heap):</strong> Allocated via <code>new</code>, persists until <code>delete</code>.</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Reentrancy Hazard of Local Static Variables</h3>
+        <p>A function containing a local static variable (<code>static int counter = 0;</code>) is <strong>NOT reentrant</strong>. If an interrupt routine (ISR) preempts the function and calls it again, or if two RTOS tasks execute it concurrently, the static variable will suffer race conditions.</p>
+
+        <h3>2. Memory Placement: <code>.data</code> vs <code>.bss</code></h3>
+        <p>Initialized static variables live in <code>.data</code> (copied from Flash to RAM at boot). Uninitialized static variables live in <code>.bss</code> (zeroed at boot).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Reentrant task-safe function design:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Reentrant: All state is passed via caller-provided context (Zero static state)
+struct CounterContext {
+    uint32_t count{0};
+};
+
+uint32_t incrementReentrant(CounterContext&amp; ctx) noexcept {
+    return ++ctx.count; // 100% thread-safe across independent tasks
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is a &#x27;reentrant function&#x27; in embedded systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A function that can be safely interrupted and called simultaneously by another task or ISR without corrupting data</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A function that calls itself recursively</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A function stored in ROM</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A function that has no arguments</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Reentrant functions rely only on caller-provided stack data and avoid shared static/global state, allowing safe concurrent execution.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why does a function containing a local &#x27;static int count = 0;&#x27; fail reentrancy checks in an RTOS?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The static variable resides in shared global RAM; concurrent execution by multiple threads or ISRs produces race conditions</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Static variables cannot be modified</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Static variables are erased when an interrupt fires</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Static variables use double precision</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Local static variables share a single global memory location across all invocations, creating race conditions when called concurrently.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Where is an initialized global variable (int sensor_id = 42;) stored in the microcontroller memory map?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> .data section in RAM (initialized from Flash ROM during startup)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> .bss section in RAM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> .text section in ROM</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> .stack section</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Initialized static/global variables reside in <code>.data</code>; their initial values are stored in Flash and copied into RAM by startup code.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is the lifetime of a local variable declared inside a function body?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Automatic lifetime: allocated on the stack when the enclosing block is entered and destroyed upon exit</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Permanent lifetime: exists until power-off</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Exists until explicitly deleted</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Exists for 1 millisecond</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Local variables have automatic storage duration, existing only while execution is inside their enclosing lexical block.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="return_type_parameter_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="scope_challenge.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

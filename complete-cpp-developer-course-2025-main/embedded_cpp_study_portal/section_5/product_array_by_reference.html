@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Parameter Passing, Spans &amp; Contiguous Memory Guarantees - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">ProductArrayByReference</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Array References</span> <span class="tag">std::span</span> <span class="tag">Size Preservation</span> <span class="tag">Bounds Safety</span> <span class="tag">C++20</span>
+      </div>
+      <h1 class="project-title">Passing Arrays by Reference (int(&amp;)[N]) vs C++20 std::span in Embedded APIs</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Passing fixed arrays by reference (int(&)[N]) to prevent pointer decay. We analyze template-based array references and modern C++20 std::span for zero-overhead, non-owning contiguous memory views.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;array&gt;
+using namespace std;
+
+int productArray(array&lt;int, 6&gt; myArray);
+void productArray(array&lt;int, 6&gt; myArray, int&amp; result);
+
+int main() {
+	array&lt;int, 6&gt; numbers{ 1, 2, 3, 4, 5, 6 };
+
+	int finalProduct;
+	productArray(numbers, finalProduct);
+
+	cout &lt;&lt; &quot;The product of the array elements (by reference) is: &quot; &lt;&lt; finalProduct &lt;&lt; endl;
+
+	/*int result = productArray(numbers);
+
+	cout &lt;&lt; &quot;The product of the array elements is: &quot; &lt;&lt; result &lt;&lt; endl;*/
+
+	return 0;
+}
+
+int productArray(array&lt;int, 6&gt; myArray) {
+	int product = 1;
+
+	for (int num : myArray) {
+		product *= num;
+	}
+
+	return product;
+}
+
+void productArray(array&lt;int, 6&gt; myArray, int&amp; result) {
+	result = 1;
+
+	for (int num : myArray) {
+		result *= num;
+	}
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Passing Arrays by Reference Syntax</h3>
+        <p>Writing <code>void compute(int (&amp;arr)[5])</code> passes the array by reference without decay. The compiler strictly enforces that only arrays of exactly length 5 can be passed.</p>
+
+        <h3>2. C++20 <code>std::span</code></h3>
+        <p><code>std::span&lt;T&gt;</code> is a lightweight non-owning view over any contiguous sequence of elements (pointer + size, 8 bytes total on 32-bit MCU).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Unified Buffer Passing with <code>std::span</code></h3>
+        <p>In driver development, <code>std::span&lt;const uint8_t&gt;</code> can accept a C array, a <code>std::array</code>, or an RTOS buffer seamlessly with zero copying.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Clean driver buffer API using <code>std::span</code>:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;numeric&gt;
+
+// Non-decaying template array reference
+template &lt;typename T, size_t N&gt;
+T computeProduct(const T (&amp;arr)[N]) noexcept {
+    T product = 1;
+    for (size_t i = 0; i &lt; N; ++i) {
+        product *= arr[i];
+    }
+    return product;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the key advantage of passing an array by reference using &#x27;void func(int (&amp;arr)[10])&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It prevents array-to-pointer decay, preserving compile-time size and preventing incorrect array sizes from being passed</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It makes the array dynamic</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It copies the array to the heap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It doubles the array capacity</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Array references (<code>(&amp;arr)[N]</code>) retain full array size metadata and cause compilation to fail if an array with different bounds is passed.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is C++20 std::span?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A lightweight, non-owning view over contiguous memory storing a pointer and element count (8 bytes on 32-bit MCU)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A dynamic heap container that resizes automatically</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A thread synchronization primitive</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A hardware timer driver</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::span</code> represents a contiguous sequence of objects without owning the memory, encapsulating a pointer and length in a compact 8-byte structure.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Does passing a std::span&lt;uint8_t&gt; copy the underlying array buffer?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> No, std::span is a non-owning view; only the pointer and size are passed</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Yes, it creates a deep copy in SRAM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Yes, it copies data to Flash</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It moves data to the heap</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::span</code> is a non-owning view; passing it passes only the pointer and length, performing zero buffer copying.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Can std::span prevent buffer overflows in embedded drivers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Yes, std::span tracks buffer size, allowing range-based iteration and bounds-checked .subspan() operations</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> No, spans disable bounds checking</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Only on 64-bit systems</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Only if memory is allocated on the heap</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::span</code> retains element counts, enabling safe range-based iteration and bounded slicing.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="parameter_challenge.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="product_array_object.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

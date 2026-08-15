@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>std::array Container Passing &amp; Zero-Overhead Abstractions - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">ProductArrayObject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">std::array</span> <span class="tag">Zero-Cost Abstraction</span> <span class="tag">Iterators</span> <span class="tag">Const Reference</span> <span class="tag">Clean Code</span>
+      </div>
+      <h1 class="project-title">std::array Member Encapsulation, Iterators &amp; Zero-Overhead C++ Idioms</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Using std::array as an object container. We demonstrate how std::array provides STL iterator compatibility (begin/end) and value-type semantics while generating assembly identical to raw C arrays.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;array&gt;
+using namespace std;
+
+int productArray(array&lt;int, 6&gt; myArray);
+
+int main() {
+	array&lt;int, 6&gt; numbers{ 1, 2, 3, 4, 5, 6 };
+
+	int result = productArray(numbers);
+
+	cout &lt;&lt; &quot;The product of the array elements is: &quot; &lt;&lt; result &lt;&lt; endl;
+
+	return 0;
+}
+
+int productArray(array&lt;int, 6&gt; myArray) {
+	int product = 1;
+
+	for (int num : myArray) {
+		product *= num;
+	}
+
+	return product;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. <code>std::array</code> as a First-Class Object</h3>
+        <p>Unlike raw C arrays, <code>std::array</code> behaves as a first-class C++ object: it can be assigned (<code>=</code>), passed by value/reference, returned from functions, and queried for size (<code>.size()</code>).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Zero-Cost Abstraction Verification</h3>
+        <p>Disassembling <code>std::array</code> member access in GCC/Clang reveals that <code>arr[i]</code> compiles to the exact same single-instruction memory load (<code>LDR</code>) as a raw C array, incurring <strong>zero performance or memory penalty</strong>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Functional array multiplication using standard algorithms:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+#include &lt;numeric&gt;
+
+template &lt;size_t N&gt;
+uint32_t computeArrayProduct(const std::array&lt;uint32_t, N&gt;&amp; arr) noexcept {
+    return std::accumulate(arr.begin(), arr.end(), 1UL, std::multiplies&lt;uint32_t&gt;());
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is std::array considered a &#x27;zero-cost abstraction&#x27; in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It wraps a raw C array with modern container interfaces without adding any memory overhead or runtime instruction penalties</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It is free to download from GitHub</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It uses 0 bytes of Flash memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It requires no CPU power</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::array</code> contains only the underlying array; all member functions are inline and compile to identical assembly as raw C arrays.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Can std::array be returned by value from a function without dynamic memory allocation?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Yes, std::array is a value type that resides on the stack and is returned via Return Value Optimization (RVO)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> No, it requires malloc</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Only in C++23</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Only if size is 1</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::array</code> is a standard value struct stored on the stack; modern compilers return it with zero heap allocation using RVO.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens if you assign one std::array to another of the same type and size (arr1 = arr2)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A member-wise copy of all elements from arr2 to arr1 is performed</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Only the pointer address is copied</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A compiler error occurs</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Memory is allocated on the heap</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::array</code> defines value copy assignment, copying all elements directly.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Which method on std::array returns a raw pointer to the underlying contiguous C array?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> .data()</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> .raw()</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> .get_ptr()</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> .pointer()</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>arr.data()</code> returns a direct pointer (<code>T*</code>) to the underlying contiguous buffer for C API compatibility.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="product_array_by_reference.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="return_type_parameter_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

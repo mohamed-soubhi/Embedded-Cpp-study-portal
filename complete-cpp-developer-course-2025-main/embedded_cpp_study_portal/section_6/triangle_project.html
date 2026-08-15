@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometry Encapsulation &amp; The Static Initialization Fiasco - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 6</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 6</a>
+      <span class="sep">/</span>
+      <span class="current">TriangleProject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-6">Section 6</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Triangle Inequality</span> <span class="tag">Invariants</span> <span class="tag">Static Initialization Fiasco</span> <span class="tag">Construct on First Use</span> <span class="tag">Bootloader</span>
+      </div>
+      <h1 class="project-title">Class Invariant Enforcement &amp; Preventing the Static Initialization Order Fiasco</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building validated geometric triangle classes enforcing the Triangle Inequality Theorem. We explore how global object constructors execute during microcontroller startup, and how to prevent the dreaded Static Initialization Order Fiasco using the Construct-On-First-Use idiom.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Triangle.h</button>
+            <button class="code-tab" data-target="file-tab-2">Triangle.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Triangle.h&quot;
+using namespace std;
+
+void printTriangleData(const Triangle&amp; t);
+
+int main() {
+
+	Triangle t1;
+	Triangle t2(3, 4, 5);
+	Triangle t3(1, 2, 3);
+
+	printTriangleData(t1);
+	printTriangleData(t2);
+	printTriangleData(t3);
+
+
+	return 0;
+}
+
+void printTriangleData(const Triangle&amp; t) {
+	cout &lt;&lt; &quot;Sides:&quot;
+		&lt;&lt; t.getSideA() &lt;&lt; &quot;, &quot;
+		&lt;&lt; t.getSideB() &lt;&lt; &quot;, &quot;
+		&lt;&lt; t.getSideC() &lt;&lt; endl;
+
+	if (t.isValid()) {
+		cout &lt;&lt; &quot;\tPerimeter: &quot; &lt;&lt; t.perimeter() &lt;&lt; endl;
+		cout &lt;&lt; &quot;\tArea: &quot; &lt;&lt; t.perimeter() &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;\tThis is not a valid triangle&quot; &lt;&lt; endl;
+	}
+	cout &lt;&lt; endl;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef TRIANGLE_H
+#define TRIANGLE_H
+
+class Triangle {
+	public:
+		Triangle();
+		Triangle(double sideA, double sideB, double sideC);
+
+		double getSideA() const;
+		double getSideB() const;
+		double getSideC() const;
+
+		void setSideA(double sideA);
+		void setSideB(double sideB);
+		void setSideC(double sideC);
+
+		bool isValid() const;
+		double perimeter() const;
+		double area() const;
+
+	private:
+		double sideA;
+		double sideB;
+		double sideC;
+};
+
+#endif
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Triangle.h&quot;
+#include &lt;cmath&gt;   //sqrt
+#include &lt;iostream&gt;
+using namespace std;
+
+
+Triangle::Triangle() {
+	sideA = 1;
+	sideB = 1;
+	sideC = 1;
+}
+
+Triangle::Triangle(double sideA, double sideB, double sideC) {
+	this-&gt;sideA = sideA;
+	this-&gt;sideB = sideB;
+	this-&gt;sideC = sideC;
+}
+
+double Triangle::getSideA() const {
+	return sideA;
+}
+
+double Triangle::getSideB() const {
+	return sideB;
+}
+
+double Triangle::getSideC() const {
+	return sideC;
+}
+
+void Triangle::setSideA(double sideA) {
+	this-&gt;sideA = sideA;
+}
+
+void Triangle::setSideB(double sideB) {
+	this-&gt;sideB = sideB;
+}
+
+void Triangle::setSideC(double sideC) {
+	this-&gt;sideC = sideC;
+}
+
+bool Triangle::isValid() const {
+	return (sideA + sideB &gt; sideC) &amp;&amp;
+		(sideA + sideC &gt; sideB) &amp;&amp;
+		(sideB + sideC &gt; sideA);
+}
+
+double Triangle::perimeter() const {
+	return sideA + sideB + sideC;
+}
+
+double Triangle::area() const {
+	if (!isValid()) {
+		cout &lt;&lt; &quot;Cannot compute area: triangle is invalid.&quot; &lt;&lt; endl;
+		return 0;
+	}
+
+	double s = perimeter() / 2.0;
+
+	return sqrt(s * (s - sideA) * (s - sideB) * (s - sideC));
+
+
+}
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Multi-Field Invariant Enforcement</h3>
+        <p>A valid triangle must satisfy the <strong>Triangle Inequality Theorem</strong>: the sum of the lengths of any two sides must be strictly greater than the length of the remaining side ($a + b &gt; c$, $a + c &gt; b$, and $b + c &gt; a$).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Static Initialization Order Fiasco</h3>
+        <p>When multiple global C++ objects exist across different <code>.cpp</code> files, the order in which their constructors execute before <code>main()</code> is <strong>undefined by the C++ standard</strong>.</p>
+        <p>If global object <code>A</code> (e.g. <code>DisplayDriver</code>) accesses global object <code>B</code> (e.g. <code>SpiBusDriver</code>) inside its constructor, and <code>B</code> has not yet initialized its hardware registers, the microcontroller will crash with a <strong>fatal HardFault before reaching <code>main()</code>!</strong></p>
+
+        <h3>2. The Construct-On-First-Use Idiom (Meyers Singleton)</h3>
+        <p>Wrapping static instances inside a function returning a reference guarantees the object is constructed upon its first call, completely eliminating initialization order bugs.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Construct-On-First-Use idiom preventing bootloader crashes:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+class SpiBusManager {
+private:
+    SpiBusManager() noexcept {
+        // Initialize SPI hardware registers safely...
+    }
+public:
+    // Guaranteed to initialize safely on first call!
+    static SpiBusManager&amp; instance() noexcept {
+        static SpiBusManager bus; // Meyers' Singleton
+        return bus;
+    }
+
+    void write(uint8_t byte) noexcept { /* ... */ }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the &#x27;Static Initialization Order Fiasco&#x27; in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The undefined order in which global/static object constructors across different .cpp translation units execute before main(), causing crashes if one uninitialized global accesses another</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A failure in the compiler&#x27;s syntax analyzer</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A bug in static casting</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> An error when compiling without optimization</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            C++ does not define constructor execution order for global objects across different translation units, leading to crashes if one global constructor depends on another unconstructed global.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How does the &#x27;Construct-On-First-Use&#x27; idiom (Meyers Singleton) solve global initialization order bugs?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> By placing the static instance inside a function; the object is initialized on its first invocation with thread-safe guarantees</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> By moving all objects into the heap</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> By declaring all variables const</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> By compiling with -O0</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Local static variables inside a function are initialized only when control first passes through their declaration, guaranteeing initialization before use.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What does the Triangle Inequality Theorem state for sides a, b, and c?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> a + b &gt; c AND a + c &gt; b AND b + c &gt; a (sum of any two sides must exceed the third)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> a^2 + b^2 = c^2</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> a * b = c</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> a + b + c = 180</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            For any non-degenerate triangle, the sum of any two side lengths must strictly exceed the length of the third side.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> When are global C++ object constructors executed in an embedded microcontroller application?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> During the C++ runtime startup routine (__libc_init_array / static constructors) before main() is called</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> When the first interrupt fires</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> After main() returns</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> When the user presses a button</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Microcontroller startup assembly (after copying <code>.data</code> and zeroing <code>.bss</code>) calls <code>__libc_init_array</code> to invoke all global C++ constructors before branching to <code>main()</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="sundae_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="book_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

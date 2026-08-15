@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D Arrays, Row-Major Layout &amp; DMA Burst Transfers - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 4</a>
+      <span class="sep">/</span>
+      <span class="current">2DArrayFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-4">Section 4</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">2D Arrays</span> <span class="tag">Row-Major</span> <span class="tag">DMA Transfers</span> <span class="tag">Stride</span> <span class="tag">Display Buffers</span>
+      </div>
+      <h1 class="project-title">Row-Major Memory Contiguity, Nested Loops &amp; Direct Memory Access (DMA)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Deep dive into two-dimensional arrays in C++. We examine row-major contiguous memory layouts, why row-first iteration maximizes CPU cache hits, and how hardware Direct Memory Access (DMA) controllers stream 2D display and sensor buffers without CPU intervention.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	int myNums[2][3] = {
+		{1, 2, 3},
+		{4, 5, 6}
+	};
+
+	cout &lt;&lt; myNums[0][2] &lt;&lt; endl;
+
+	myNums[1][0] = 14;
+
+	cout &lt;&lt; myNums[1][0] &lt;&lt; endl;
+
+	//for (int row = 0; row &lt; 2; row++) {
+	//	for (int col = 0; col &lt; 3; col++) {
+	//		cout &lt;&lt; myNums[row][col] &lt;&lt; &quot; &quot;;
+	//	}//end inner for
+	//	cout &lt;&lt; endl;
+	//}//end outer for
+
+	for (int row = 1; row &gt;= 0; row--) {
+		for (int col = 2; col &gt;= 0; col--) {
+			cout &lt;&lt; myNums[row][col] &lt;&lt; &quot; &quot;;
+		}
+		cout &lt;&lt; endl;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Row-Major Contiguous Memory Layout</h3>
+        <p>In C and C++, multidimensional arrays are laid out in <strong>row-major order</strong>: the second index changes fastest. In memory, <code>grid[2][3]</code> is stored as a single contiguous 1D block of 6 elements.</p>
+
+        <h3>2. Address Calculation Formula</h3>
+        <p>The memory address of element <code>grid[row][col]</code> is calculated as:</p>
+        <p>$$\text{Address} = \text{Base} + ((\text{row} \times \text{COLS}) + \text{col}) \times \text{sizeof}(T)$$</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Cache Line Thrashing from Column-Major Access</h3>
+        <p>Iterating column-first (<code>grid[col][row]</code>) strides through memory by <code>COLS * sizeof(T)</code> bytes on every step. This causes a <strong>cache miss on every single access</strong>. Always iterate row-first!</p>
+
+        <h3>2. Direct Memory Access (DMA) Framebuffers</h3>
+        <p>Because 2D arrays are contiguous in SRAM, a microcontroller DMA controller (e.g. STM32 DMA2D / Chrom-ART) can stream full display frames directly from SRAM to an SPI/I2C TFT display with <strong>0% CPU utilization</strong>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Type-safe flat 2D display framebuffer wrapper with DMA compatibility:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+template &lt;size_t Rows, size_t Cols&gt;
+class Framebuffer2D {
+private:
+    // Contiguous in memory; 100% DMA transfer compatible
+    std::array&lt;uint16_t, Rows * Cols&gt; pixels_{};
+
+public:
+    constexpr void set_pixel(size_t r, size_t c, uint16_t rgb565) noexcept {
+        if (r &lt; Rows &amp;&amp; c &lt; Cols) {
+            pixels_[r * Cols + c] = rgb565;
+        }
+    }
+
+    const uint16_t* dma_buffer() const noexcept { return pixels_.data(); }
+    constexpr size_t byte_size() const noexcept { return pixels_.size() * sizeof(uint16_t); }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> How are 2D arrays organized in C and C++ memory?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Row-Major order: elements of the first row are stored contiguously, followed by elements of the second row</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Column-Major order: columns are stored sequentially</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Fragmented linked blocks across the heap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Randomly distributed by the linker</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            C and C++ use row-major ordering where consecutive elements of a row occupy adjacent memory addresses.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why does column-major iteration over a large 2D array degrade CPU performance?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It accesses memory with large address strides, causing frequent CPU data cache misses and memory stalls</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It triggers compiler syntax errors</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It forces the array to reallocate on the heap</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It changes the values of adjacent elements</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Striding across rows skips memory lines, causing cache misses on every access rather than reusing loaded cache lines.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the primary role of a Direct Memory Access (DMA) controller when managing 2D graphics buffers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It transfers pixel data from SRAM to peripheral hardware (e.g. SPI display) in the background without CPU intervention</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It compiles graphics shaders at runtime</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It formats the SD card file system</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It increases the microcontroller crystal clock speed</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            DMA controllers transfer memory blocks directly between SRAM and peripheral hardware asynchronously, freeing the CPU to execute application logic.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> For an array int grid[4][8] on a 32-bit MCU, what is the byte offset of grid[2][3] from the array base address?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 76 bytes ( (2 * 8 + 3) * 4 bytes )</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 19 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 48 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 96 bytes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Linear index $= (2 \times 8) + 3 = 19$. Byte offset $= 19 \times 4\text{ bytes} = 76\text{ bytes}$.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="temperature_converter.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="move_ratings.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

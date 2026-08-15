@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Machine Architecture &amp; Modular Function Decomposition - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 5</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 5</a>
+      <span class="sep">/</span>
+      <span class="current">TicTacToe</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-5">Section 5</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">State Machines</span> <span class="tag">Modularity</span> <span class="tag">Matrix Grid</span> <span class="tag">Input Debouncing</span> <span class="tag">Embedded Architecture</span>
+      </div>
+      <h1 class="project-title">Modular Function Decomposition, Game State Machines &amp; Embedded UI Input Scanning</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building a full interactive Tic-Tac-Toe system. We analyze functional modular decomposition, separation of display rendering from game logic state machines, and translating matrix grid games into embedded button matrix keypad scanning algorithms.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+const int ROWS = 3;
+const int COLS = 3;
+
+void runGame();
+void initializeGameBoard(string gameBoard[ROWS][COLS]);
+void printCurrentBoard(string gameBoard[ROWS][COLS]);
+void getUserInput(bool xTurn, string gameBoard[ROWS][COLS]);
+bool cellAlreadyOccupied(int row, int col, string gameBoard[ROWS][COLS]);
+string getWinner(string gameBoard[ROWS][COLS]);
+bool isBoardFull(string gameBoard[ROWS][COLS]);
+
+int main()
+{
+	runGame();
+	return 0;
+}//end main
+
+//-------------------------------------------------//
+//----------| the game loop - runGame |------------//
+//-------------------------------------------------//
+void runGame()
+{
+	string winner = &quot;&quot;;
+	bool xTurn = true; //start with X&#x27;s turn
+	int theRow = 0;
+	int theCol = 0;
+	string gameBoard[ROWS][COLS];
+
+	initializeGameBoard(gameBoard);
+
+	//initial print
+	printCurrentBoard(gameBoard);
+
+	while (winner == &quot;&quot;)
+	{
+		if (xTurn)
+		{
+			cout &lt;&lt; &quot;It is X&#x27;s turn&quot; &lt;&lt; endl;
+		}
+		else
+		{
+			cout &lt;&lt; &quot;It is O&#x27;s turn&quot; &lt;&lt; endl;
+		}
+		getUserInput(xTurn, gameBoard);
+		cout &lt;&lt; endl;  //extra spacing
+		printCurrentBoard(gameBoard); //reprint the board
+		winner = getWinner(gameBoard);  //check for a winner
+		xTurn = !xTurn;  //flip it
+
+		if (winner == &quot;&quot; &amp;&amp; isBoardFull(gameBoard))
+		{
+			winner = &quot;C&quot;;  //Cat&#x27;s game... no winner!
+		}
+	}//end while
+
+	//cat&#x27;s game?
+	cout &lt;&lt; endl;  //extra space before
+	if (winner == &quot;C&quot;)
+	{
+		cout &lt;&lt; &quot;It was the Cat&#x27;s game!  NO WINNER!&quot; &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;The winner is &quot; &lt;&lt; winner &lt;&lt; endl;  //print&#x27;s X or O
+	}
+	cout &lt;&lt; endl;  //extra space
+}
+
+//-------------------------------------------------//
+//------------| initialize the board |-------------//
+//-------------------------------------------------//
+void initializeGameBoard(string gameBoard[ROWS][COLS])
+{
+	for (int i = 0; i &lt; ROWS; i++)
+	{
+		for (int j = 0; j &lt; COLS; j++)
+		{
+			gameBoard[i][j] = &quot; &quot;; //empty space
+		}
+	}
+}//end initialize game board
+
+//-------------------------------------------------//
+//----------| print the current board |------------//
+//-------------------------------------------------//
+void printCurrentBoard(string gameBoard[ROWS][COLS])
+{
+	for (int i = 0; i &lt; ROWS; i++)
+	{
+		for (int j = 0; j &lt; COLS; j++)
+		{
+			cout &lt;&lt; gameBoard[i][j];
+			if (j &lt; 2)
+			{
+				cout &lt;&lt; &quot; | &quot;;
+			}
+		}
+		cout &lt;&lt; endl;
+		if (i &lt; 2)
+		{
+			cout &lt;&lt; &quot;- - - - -&quot; &lt;&lt; endl;
+		}
+	}
+	cout &lt;&lt; endl;  //extra spacing
+}//end print the current board
+
+//-------------------------------------------------//
+//------| get user input and place symbol |--------//
+//-------------------------------------------------//
+void getUserInput(bool xTurn, string gameBoard[ROWS][COLS])
+{
+	int row = -1;
+	int col = -1;
+	bool keepAsking = true;
+	while (keepAsking)
+	{
+		//keep asking until you get a valid answer
+		cout &lt;&lt; &quot;Please enter the row THEN the column, each from 0, 1, or 2, separated by a space&quot; &lt;&lt; endl;
+		cin &gt;&gt; row;
+		cin &gt;&gt; col;
+		if (row &gt;= 0 &amp;&amp; col &gt;= 0 &amp;&amp; row &lt;= 2 &amp;&amp; col &lt;= 2)
+		{
+			//valid/in-range selection
+			//but it STILL could be occupied by an X or O already...
+			if (!cellAlreadyOccupied(row, col, gameBoard))
+			{
+				//only set the cell if the row/col is valid AND not occupied
+				keepAsking = false;
+			}
+			else
+			{
+				cout &lt;&lt; &quot;That cell is already occupied!&quot; &lt;&lt; endl;
+			}
+		}
+	}//end while
+
+	//by the time it gets here, we know it&#x27;s a VALID row and col,
+	//in range, and not already occupied!
+	if (xTurn)  //must be an X
+	{
+		gameBoard[row][col] = &quot;X&quot;;
+	}
+	else  //must be an O
+	{
+		gameBoard[row][col] = &quot;O&quot;;
+	}
+}//end getUserInput
+
+//-------------------------------------------------//
+//------| test if cell is already occupied |-------//
+//-------------------------------------------------//
+bool cellAlreadyOccupied(int row, int col, string gameBoard[ROWS][COLS])
+{
+	return gameBoard[row][col] != &quot; &quot;;  //if not a space, then it&#x27;s occupied
+}//end cellAlreadyOccupied
+
+//-------------------------------------------------//
+//-----------------| get winner |------------------//
+//-------------------------------------------------//
+string getWinner(string gameBoard[ROWS][COLS])
+{
+	//check rows
+	for (int i = 0; i &lt; ROWS; i++)
+	{
+		if (gameBoard[i][0] != &quot; &quot; &amp;&amp; gameBoard[i][0] == gameBoard[i][1] &amp;&amp; gameBoard[i][1] == gameBoard[i][2])
+		{
+			return gameBoard[i][0];  //we have a match (horizontal)!
+		}
+	}//end for
+
+	//check columns
+	for (int i = 0; i &lt; COLS; i++)
+	{
+		if (gameBoard[0][i] != &quot; &quot; &amp;&amp; gameBoard[0][i] == gameBoard[1][i] &amp;&amp; gameBoard[1][i] == gameBoard[2][i])
+		{
+			return gameBoard[0][i];  //we have a match (vertical)!
+		}
+	}//end for
+
+	//check diagonals
+	//upper-left to bottom right diagonal
+	if (gameBoard[0][0] != &quot; &quot; &amp;&amp; gameBoard[0][0] == gameBoard[1][1] &amp;&amp; gameBoard[1][1] == gameBoard[2][2])
+	{
+		return gameBoard[0][0];  //we have a diagonal match!
+	}
+
+	//lower-left to upper right diagonal
+	if (gameBoard[2][0] != &quot; &quot; &amp;&amp; gameBoard[2][0] == gameBoard[1][1] &amp;&amp; gameBoard[1][1] == gameBoard[0][2])
+	{
+		return gameBoard[2][0];  //we have a diagonal match!
+	}
+
+	return &quot;&quot;;  //no winner yet!
+}//end getWinner
+
+//-------------------------------------------------//
+//-----------------| board full? |-----------------//
+//-------------------------------------------------//
+bool isBoardFull(string gameBoard[ROWS][COLS])
+{
+	int countFill = 0;
+	for (int i = 0; i &lt; ROWS; i++)
+	{
+		for (int j = 0; j &lt; COLS; j++)
+		{
+			if (gameBoard[i][j] != &quot; &quot;)
+			{
+				countFill++;
+			}
+		}
+	}
+	return countFill == 9;  //all 9 cells are full, then board is full
+}
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Functional Decomposition</h3>
+        <p>Breaking a complex system into focused, single-responsibility functions (<code>drawBoard</code>, <code>getUserInput</code>, <code>checkWinCondition</code>, <code>switchPlayer</code>) maximizes testability and maintainability.</p>
+
+        <h3>2. State Machine Logic</h3>
+        <p>Managing turns, victory checks, and cat's game (draw) conditions using an explicit state machine model.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Matrix Keypad Scanning</h3>
+        <p>In embedded hardware, a $3\times 3$ grid is physically wired as a <strong>Matrix Keypad</strong> (3 row GPIOs, 3 column GPIOs). The microcontroller drives rows low sequentially and reads column inputs to detect button presses with hardware debounce filtering.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Embedded matrix keypad scanner state machine:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+enum class GridCell : uint8_t { Empty = 0, PlayerX, PlayerO };
+enum class GameState : uint8_t { InProgress = 0, X_Won, O_Won, Draw };
+
+class TicTacToeEngine {
+private:
+    std::array&lt;GridCell, 9&gt; board_{};
+    GridCell current_player_{GridCell::PlayerX};
+
+public:
+    bool place_move(uint8_t cell_index) noexcept {
+        if (cell_index &gt;= 9 || board_[cell_index] != GridCell::Empty) return false;
+        board_[cell_index] = current_player_;
+        current_player_ = (current_player_ == GridCell::PlayerX) ? GridCell::PlayerO : GridCell::PlayerX;
+        return true;
+    }
+
+    const std::array&lt;GridCell, 9&gt;&amp; board() const noexcept { return board_; }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> How does a microcontroller scan a 3x3 matrix button keypad using only 6 GPIO pins?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It sequentially drives each row pin LOW and reads the 3 column pins to detect intersections</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It uses 9 separate analog-to-digital converters</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It connects all buttons to a single ground wire</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It uses WiFi telemetry</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Matrix scanning drives one row active at a time and reads column pins, detecting 9 buttons with only 3 rows + 3 cols = 6 pins.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is &#x27;button debouncing&#x27; required when reading physical button matrix inputs?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Mechanical switch contacts bounce physically for 5-20 milliseconds upon closing, creating rapid false transition pulses</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Buttons generate AC mains voltage</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To prevent the CPU clock from freezing</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To calibrate temperature drift</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Mechanical contacts bounce when pressed; debouncing (software delay or timer filtering) ensures only a single stable transition is registered.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the primary architectural advantage of decoupling game state logic from display rendering functions?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The core state logic can be unit-tested on a PC without requiring physical LCD hardware or console I/O</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It makes the game run in 3D</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It compresses source code into binary</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It allows multiple players on CAN bus</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Separating state logic from I/O allows running automated unit tests on host machines without hardware dependencies.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How many total win combinations exist on a 3x3 Tic-Tac-Toe grid?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 8 combinations (3 horizontal rows, 3 vertical columns, 2 diagonals)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 9 combinations</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 6 combinations</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 12 combinations</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            There are 3 horizontal rows + 3 vertical columns + 2 diagonals = 8 possible winning lines.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="scope_challenge.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="function_fun_1.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

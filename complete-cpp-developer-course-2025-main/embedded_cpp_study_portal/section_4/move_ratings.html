@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nested Array Iteration, Matrix Math &amp; Boundary Invariants - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 4</a>
+      <span class="sep">/</span>
+      <span class="current">MoveRatings</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-4">Section 4</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Matrix Math</span> <span class="tag">Nested Loops</span> <span class="tag">Cache Lines</span> <span class="tag">DSP</span> <span class="tag">Bounds Safety</span>
+      </div>
+      <h1 class="project-title">Matrix Transformation, Cache Warmth &amp; Memory Strides in Embedded DSP</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Manipulating 2D data grids with nested loops. We explore matrix processing patterns, row vs column accumulation, and memory alignment rules for high-speed embedded DSP filters.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+
+	const int NUM_MOVIES = 5;
+
+	vector&lt;string&gt; movies;
+	vector&lt;int&gt; ratings;
+
+	string tempTitle;
+	int tempRating;
+
+	for (int i = 0; i &lt; NUM_MOVIES; i++) {
+		cout &lt;&lt; &quot;Enter the title of movie #&quot; &lt;&lt; (i + 1) &lt;&lt; &quot;: &quot;;
+		getline(cin, tempTitle);
+
+		cout &lt;&lt; &quot;Enter the rating for \&quot;&quot; &lt;&lt; tempTitle &lt;&lt; &quot;\&quot; (1-10): &quot;;
+		cin &gt;&gt; tempRating;
+		cin.get();
+
+		movies.push_back(tempTitle);
+		ratings.push_back(tempRating);
+	}//end for
+
+	cout &lt;&lt; &quot;\nHere are your movie ratings:\n&quot;;
+
+	for (int i = 0; i &lt; NUM_MOVIES; i++) {
+		cout &lt;&lt; &quot;You rated \&quot;&quot; &lt;&lt; movies[i] &lt;&lt; &quot;\&quot; a &quot;
+			&lt;&lt; ratings[i] &lt;&lt; &quot;/10.&quot; &lt;&lt; endl;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Nested Loop Iteration Order</h3>
+        <p>Nested loops iterating over 2D data structures must match the memory layout: outer loop for rows, inner loop for columns.</p>
+
+        <h3>2. Aggregation & Accumulation</h3>
+        <p>Computing row/column averages requires accumulator registers. Using fixed-width integer accumulators prevents overflow bugs.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Cache Warmth & Burst Transfers</h3>
+        <p>In DSP systems, reading contiguous array elements triggers hardware burst read cycles on external SDRAM/Quad-SPI Flash, doubling memory throughput compared to single random reads.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Cache-friendly matrix row accumulator:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;array&gt;
+
+template &lt;size_t Rows, size_t Cols&gt;
+void computeRowSums(const std::array&lt;std::array&lt;uint16_t, Cols&gt;, Rows&gt;&amp; matrix,
+                    std::array&lt;uint32_t, Rows&gt;&amp; out_sums) noexcept {
+    for (size_t r = 0; r &lt; Rows; ++r) {
+        uint32_t sum = 0;
+        for (size_t c = 0; c &lt; Cols; ++c) {
+            sum += matrix[r][c]; // Optimal sequential memory access
+        }
+        out_sums[r] = sum;
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Which loop nesting order provides the highest memory throughput when iterating over a 2D array grid[ROWS][COLS]?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Outer loop: rows (0 to ROWS-1), Inner loop: columns (0 to COLS-1)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Outer loop: columns (0 to COLS-1), Inner loop: rows (0 to ROWS-1)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Diagonal iteration</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Random index iteration</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Iterating rows in the outer loop and columns in the inner loop traverses memory sequentially, maximizing CPU cache line hits.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why should a 32-bit integer accumulator (uint32_t) be used when summing an array of 16-bit integers (uint16_t)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To prevent integer arithmetic overflow when the cumulative sum exceeds 65,535</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Because 16-bit integers cannot be added in C++</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To force the compiler to use double precision</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To reduce RAM consumption</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Summing multiple 16-bit values (max 65,535) can easily overflow a 16-bit variable. A 32-bit accumulator safely accommodates sums up to 4,294,967,295.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is a memory &#x27;burst read&#x27; in microcontroller external memory interfaces (FMC / FSMC)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A hardware transaction where a continuous stream of consecutive data words is transferred following a single address setup</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> An intentional hardware short-circuit</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A memory wipe cycle</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> An interrupt storm</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Burst transfers send a starting address and read multiple sequential words over consecutive clock cycles, dramatically increasing bus bandwidth.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What happens if loop termination conditions read beyond the row bound of a 2D stack array?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The loop reads into adjacent stack frames or local variables, producing corrupted data or HardFault crashes</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler wraps the index to 0 safely</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The array automatically resizes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The program pauses for 10ms</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            C++ does not perform automatic bounds checks; overflowing 2D array bounds reads adjacent memory addresses on the stack.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="2d_array_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="vector_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

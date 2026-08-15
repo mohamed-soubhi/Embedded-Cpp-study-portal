@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Arrays, Dynamic Heap Overhead &amp; Flash String Pools - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 4</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_4/array_fun.html">Section 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Section 5</a></li>
+        <li><a href="../section_6/book_fun.html">Section 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 4</a>
+      <span class="sep">/</span>
+      <span class="current">NamesArray</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-4">Section 4</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">std::string</span> <span class="tag">std::string_view</span> <span class="tag">Heap Overhead</span> <span class="tag">Small String Optimization</span> <span class="tag">.rodata</span>
+      </div>
+      <h1 class="project-title">std::string Array Heap Overhead vs string_view Flash String Literals</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Comparing arrays of std::string objects with lightweight string_view arrays. We reveal how an array of std::string objects triggers hidden heap allocations and RAM bloat, and demonstrate how to store string tables entirely in Flash ROM.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+	string names[4] = { &quot;Bob&quot;, &quot;Sally&quot;, &quot;John&quot;, &quot;Ed&quot; };
+
+	//for (int i = 0; i &lt; 4; i++) {
+	//	cout &lt;&lt; names[i] &lt;&lt; endl;
+	//}
+
+	//for (string name : names) {
+	//	cout &lt;&lt; name &lt;&lt; endl;
+	//}
+
+	for (auto name : names) {
+		cout &lt;&lt; name &lt;&lt; endl;
+	}
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Memory Layout of <code>std::string</code></h3>
+        <p>In standard C++ implementations (like GCC libstdc++), a <code>std::string</code> object occupies <strong>24 to 32 bytes</strong> of stack space even when empty, containing pointer, size, and capacity fields.</p>
+
+        <h3>2. Small String Optimization (SSO)</h3>
+        <p>Short strings ($\le 15$ characters) are stored inside the string object's internal stack buffer. Strings exceeding 15 characters trigger a dynamic heap allocation (<code>malloc</code>).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The RAM Cost of <code>std::string[]</code> in Microcontrollers</h3>
+        <p>An array of 10 <code>std::string</code> objects consumes <strong>320 bytes of SRAM</strong> just for object headers, plus extra heap memory for long strings. In a 16KB RAM microcontroller, this wastes significant memory.</p>
+
+        <h3>2. Flash String Pools with <code>std::string_view</code></h3>
+        <p>By declaring arrays as <code>constexpr std::string_view[]</code>, string characters and pointers are placed 100% in <strong>Flash ROM (<code>.rodata</code>)</strong> with <strong>0 bytes of SRAM overhead</strong>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Zero-SRAM Flash string table:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;string_view&gt;
+#include &lt;array&gt;
+
+// Stored 100% in Flash ROM (.rodata); Zero SRAM consumed
+static constexpr std::array&lt;std::string_view, 4&gt; DEVICE_NAMES = {
+    "Telemetry_Sensor",
+    "Imu_Accelerometer",
+    "Gps_Receiver",
+    "Can_Transceiver"
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;Small String Optimization&#x27; (SSO) in std::string?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> An optimization where short strings (typically &lt;= 15 chars) are stored directly inside the string&#x27;s stack buffer without heap allocation</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A compression algorithm that reduces ASCII text size by 50%</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A feature that converts all strings to uppercase</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> An optimization that places strings in CPU registers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            SSO uses the internal pointer/capacity member space to store small string payloads directly on the stack, avoiding heap allocation.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How much SRAM does &#x27;static constexpr std::string_view names[]&#x27; consume when placed in Flash memory?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 0 bytes of SRAM (it resides completely in Flash ROM .rodata)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 320 bytes of SRAM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 1024 bytes of SRAM</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 4 bytes per character in SRAM</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>static constexpr</code> tables are placed by the linker into the read-only data section in Flash ROM, allocating 0 bytes in SRAM.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the size of a std::string_view object on a 32-bit architecture?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 8 bytes (4-byte pointer + 4-byte length)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 32 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 1 byte</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Variable size based on text length</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::string_view</code> consists of exactly one pointer to the character buffer (4 bytes) and one size integer (4 bytes), totaling 8 bytes.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why can using std::string in deeply nested microcontroller functions cause stack overflow?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Each std::string instance consumes 24-32 bytes of stack frame space, quickly exhausting small 1KB-2KB microcontroller stacks</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::string disables the CPU stack pointer</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::string forces memory alignment to 4KB</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::string executes in interrupt mode</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because <code>sizeof(std::string)</code> is 24-32 bytes, creating multiple strings inside recursive or deeply nested function calls rapidly exhausts small microcontroller stack spaces.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="twice_numbers.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="temperature_converter.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_4/array_fun.html">Section 4: Arrays &amp; Locality</a></li>
+            <li><a href="../section_5/function_fun_1.html">Section 5: Functions &amp; Scope</a></li>
+            <li><a href="../section_6/book_fun.html">Section 6: OOP Foundations</a></li>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>
