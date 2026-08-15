@@ -90,40 +90,82 @@ function initQuiz() {
   });
 }
 
-// Index Search and Filtering
+// Index Search, Category Tracks, and Filtering
 function initSearchAndFilters() {
   const searchInput = document.getElementById('projectSearch');
+  const trackBtns = document.querySelectorAll('.track-btn');
   const chips = document.querySelectorAll('.filter-chips .chip');
   const cards = document.querySelectorAll('.project-card');
+  const resultsCounter = document.getElementById('resultsCounter');
+  const headerFoundations = document.getElementById('header-foundations');
+  const headerAdvanced = document.getElementById('header-advanced');
+  const gridFoundations = document.getElementById('grid-foundations');
+  const gridAdvanced = document.getElementById('grid-advanced');
 
   if (!cards.length) return;
 
-  let activeFilter = 'all';
+  let activeTrack = 'all'; // 'all', 'foundations', 'advanced', 'emb-high'
+  let activeSection = 'all'; // 'all', '1', '2', ..., '12'
   let searchTerm = '';
 
   function filterCards() {
+    let totalVisible = 0;
+    let foundationsVisible = 0;
+    let advancedVisible = 0;
+
     cards.forEach(card => {
       const title = card.querySelector('.card-title')?.innerText.toLowerCase() || '';
       const desc = card.querySelector('.card-desc')?.innerText.toLowerCase() || '';
       const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.innerText.toLowerCase()).join(' ');
       const section = card.getAttribute('data-section') || '';
+      const track = card.getAttribute('data-track') || '';
       const relevance = card.getAttribute('data-relevance') || '';
 
       const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm) || tags.includes(searchTerm);
       
-      let matchesFilter = true;
-      if (activeFilter.startsWith('sec-')) {
-        matchesFilter = (section === activeFilter.replace('sec-', ''));
-      } else if (activeFilter === 'emb-high') {
-        matchesFilter = (relevance === 'high');
+      let matchesTrack = true;
+      if (activeTrack === 'foundations') {
+        matchesTrack = (track === 'foundations');
+      } else if (activeTrack === 'advanced') {
+        matchesTrack = (track === 'advanced');
+      } else if (activeTrack === 'emb-high') {
+        matchesTrack = (relevance === 'high');
       }
 
-      if (matchesSearch && matchesFilter) {
+      let matchesSection = true;
+      if (activeSection !== 'all') {
+        matchesSection = (section === activeSection);
+      }
+
+      if (matchesSearch && matchesTrack && matchesSection) {
         card.style.display = 'flex';
+        totalVisible++;
+        if (track === 'foundations') foundationsVisible++;
+        if (track === 'advanced') advancedVisible++;
       } else {
         card.style.display = 'none';
       }
     });
+
+    // Update Track Header Visibility
+    if (headerFoundations) {
+      headerFoundations.style.display = (foundationsVisible > 0) ? 'flex' : 'none';
+    }
+    if (gridFoundations) {
+      gridFoundations.style.display = (foundationsVisible > 0) ? 'grid' : 'none';
+    }
+
+    if (headerAdvanced) {
+      headerAdvanced.style.display = (advancedVisible > 0) ? 'flex' : 'none';
+    }
+    if (gridAdvanced) {
+      gridAdvanced.style.display = (advancedVisible > 0) ? 'grid' : 'none';
+    }
+
+    // Update Results Counter
+    if (resultsCounter) {
+      resultsCounter.innerHTML = `Showing <strong>${totalVisible}</strong> of <strong>${cards.length}</strong> Projects`;
+    }
   }
 
   if (searchInput) {
@@ -133,12 +175,45 @@ function initSearchAndFilters() {
     });
   }
 
+  // Track buttons (All, Foundations, Advanced, Embedded High)
+  trackBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      trackBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTrack = btn.getAttribute('data-track') || 'all';
+
+      // Reset section chips to all
+      chips.forEach(c => c.classList.remove('active'));
+      const allChip = document.querySelector('.filter-chips .chip[data-filter="all"]');
+      if (allChip) allChip.classList.add('active');
+      activeSection = 'all';
+
+      filterCards();
+    });
+  });
+
+  // Section Chips
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
       chips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      activeFilter = chip.getAttribute('data-filter') || 'all';
+      const filterVal = chip.getAttribute('data-filter') || 'all';
+
+      if (filterVal === 'all') {
+        activeSection = 'all';
+      } else if (filterVal.startsWith('sec-')) {
+        activeSection = filterVal.replace('sec-', '');
+      } else if (filterVal === 'emb-high') {
+        activeTrack = 'emb-high';
+        activeSection = 'all';
+        trackBtns.forEach(b => b.classList.remove('active'));
+        const embBtn = document.querySelector('.track-btn[data-track="emb-high"]');
+        if (embBtn) embBtn.classList.add('active');
+      }
+
       filterCards();
     });
   });
+
+  filterCards();
 }

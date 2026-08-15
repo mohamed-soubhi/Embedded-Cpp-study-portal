@@ -1312,12 +1312,14 @@ def build_index():
     for sec_num, proj_list in sections_data:
         for p in proj_list:
             rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
+            track = "foundations" if int(sec_num) <= 6 else "advanced"
             all_projects.append({
                 "sec": sec_num,
+                "track": track,
                 "id": p['id'],
                 "name": p['name'],
                 "title": p['title'],
-                "desc": p['summary'][:130] + "...",
+                "desc": p['summary'][:125] + "...",
                 "tags": p['tags'][:3],
                 "rel": "high" if rel == "high" else "core",
                 "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
@@ -1327,9 +1329,9 @@ def build_index():
 
     # Section 10 Projects
     all_projects.extend([
-        {"sec": "10", "id": "enum_fun", "name": "EnumFun", "title": "Enumerations & Scoped Enum Classes", "desc": "Unscoped vs scoped enums, explicit uint8_t types, bitmasks, and switch jump tables.", "tags": ["Scoped Enums", "uint8_t", "Jump Tables"], "rel": "high", "rel_text": "High ⚡", "rel_cls": "emb-high", "link": "section_10/enum_fun.html"},
-        {"sec": "10", "id": "animal_fun", "name": "AnimalFun", "title": "Polymorphism & VTable Mechanics", "desc": "Abstract classes, vtable/vptr RAM overhead, RTTI disablement, and the CRTP alternative.", "tags": ["VTable", "VPtr", "CRTP", "RTTI"], "rel": "high", "rel_text": "Critical ⚡", "rel_cls": "emb-high", "link": "section_10/animal_fun.html"},
-        {"sec": "10", "id": "rpg_project", "name": "RPGProject", "title": "Class Hierarchies & Memory Safety", "desc": "Member initializers, virtual destructors, and static object pooling vs heap allocation.", "tags": ["OOP", "Virtual Destructor", "Object Pool"], "rel": "high", "rel_text": "High ⚡", "rel_cls": "emb-high", "link": "section_10/rpg_project.html"},
+        {"sec": "10", "track": "advanced", "id": "enum_fun", "name": "EnumFun", "title": "Enumerations & Scoped Enum Classes", "desc": "Unscoped vs scoped enums, explicit uint8_t types, bitmasks, and switch jump tables.", "tags": ["Scoped Enums", "uint8_t", "Jump Tables"], "rel": "high", "rel_text": "High ⚡", "rel_cls": "emb-high", "link": "section_10/enum_fun.html"},
+        {"sec": "10", "track": "advanced", "id": "animal_fun", "name": "AnimalFun", "title": "Polymorphism & VTable Mechanics", "desc": "Abstract classes, vtable/vptr RAM overhead, RTTI disablement, and the CRTP alternative.", "tags": ["VTable", "VPtr", "CRTP"], "rel": "high", "rel_text": "Critical ⚡", "rel_cls": "emb-high", "link": "section_10/animal_fun.html"},
+        {"sec": "10", "track": "advanced", "id": "rpg_project", "name": "RPGProject", "title": "Class Hierarchies & Memory Safety", "desc": "Member initializers, virtual destructors, and static object pooling vs heap allocation.", "tags": ["OOP", "Virtual Destructors", "Pools"], "rel": "high", "rel_text": "High ⚡", "rel_cls": "emb-high", "link": "section_10/rpg_project.html"},
     ])
 
     # Section 11 Projects
@@ -1337,10 +1339,11 @@ def build_index():
         rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
         all_projects.append({
             "sec": "11",
+            "track": "advanced",
             "id": p['id'],
             "name": p['name'],
             "title": p['title'],
-            "desc": p['summary'][:130] + "...",
+            "desc": p['summary'][:125] + "...",
             "tags": p['tags'][:3],
             "rel": "high" if rel == "high" else "core",
             "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
@@ -1353,10 +1356,11 @@ def build_index():
         rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
         all_projects.append({
             "sec": "12",
+            "track": "advanced",
             "id": p['id'],
             "name": p['name'],
             "title": p['title'],
-            "desc": p['summary'][:130] + "...",
+            "desc": p['summary'][:125] + "...",
             "tags": p['tags'][:3],
             "rel": "high" if rel == "high" else "core",
             "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
@@ -1364,11 +1368,13 @@ def build_index():
             "link": f"section_12/{p['id']}.html"
         })
 
-    cards_html = []
+    foundations_cards = []
+    advanced_cards = []
+
     for p in all_projects:
         tags_rendered = " ".join([f'<span class="tag">{t}</span>' for t in p['tags']])
-        cards_html.append(f'''
-        <a href="{p['link']}" class="project-card" data-section="{p['sec']}" data-relevance="{p['rel']}">
+        card_html = f'''
+        <a href="{p['link']}" class="project-card" data-section="{p['sec']}" data-track="{p['track']}" data-relevance="{p['rel']}">
           <div class="card-top">
             <span class="section-pill section-{p['sec']}">Section {p['sec']}</span>
             <span class="embedded-badge {p['rel_cls']}">⚡ {p['rel_text']}</span>
@@ -1378,9 +1384,14 @@ def build_index():
           <div class="card-tags">
             {tags_rendered}
           </div>
-        </a>''')
+        </a>'''
+        if p['track'] == "foundations":
+            foundations_cards.append(card_html)
+        else:
+            advanced_cards.append(card_html)
 
-    cards_grid_rendered = "\n".join(cards_html)
+    foundations_grid_rendered = "\n".join(foundations_cards)
+    advanced_grid_rendered = "\n".join(advanced_cards)
 
     index_content = f'''<!DOCTYPE html>
 <html lang="en">
@@ -1440,34 +1451,85 @@ def build_index():
       </div>
     </section>
 
-    <!-- Search and Filters -->
+    <!-- Category Tracks Navigation Switcher -->
+    <div class="track-switcher">
+      <button class="track-btn active" data-track="all">
+        <span>🌟 All Curriculum</span>
+        <span class="track-badge">116 Projects</span>
+      </button>
+      <button class="track-btn" data-track="foundations">
+        <span>📘 Foundations Track (Sec 1–6)</span>
+        <span class="track-badge">61 Projects</span>
+      </button>
+      <button class="track-btn" data-track="advanced">
+        <span>🚀 Advanced Systems Track (Sec 7–12)</span>
+        <span class="track-badge">55 Projects</span>
+      </button>
+      <button class="track-btn" data-track="emb-high">
+        <span>⚡ High / Critical Relevance</span>
+        <span class="track-badge">50+ Projects</span>
+      </button>
+    </div>
+
+    <!-- Search and Filters Panel -->
     <section class="filter-panel">
       <div class="search-box">
         <span class="search-icon">🔍</span>
         <input type="text" id="projectSearch" class="search-input" placeholder="Search 116 projects by concept (e.g. AAPCS, vtable, MMIO, DMA, LittleFS, heap, alignas), name, or tag...">
       </div>
       <div class="filter-chips">
-        <span class="filter-label">Filter:</span>
-        <button class="chip active" data-filter="all">All Projects (116)</button>
-        <button class="chip" data-filter="sec-1">Section 1: Toolchains &amp; Linkers (2)</button>
-        <button class="chip" data-filter="sec-2">Section 2: Types &amp; Variables (14)</button>
-        <button class="chip" data-filter="sec-3">Section 3: Control Flow (13)</button>
-        <button class="chip" data-filter="sec-4">Section 4: Arrays &amp; Locality (11)</button>
-        <button class="chip" data-filter="sec-5">Section 5: Functions &amp; Scope (15)</button>
-        <button class="chip" data-filter="sec-6">Section 6: OOP Foundations (6)</button>
-        <button class="chip" data-filter="sec-7">Section 7: Exceptions &amp; Faults (9)</button>
-        <button class="chip" data-filter="sec-8">Section 8: Pointers &amp; Memory (7)</button>
-        <button class="chip" data-filter="sec-9">Section 9: Streams &amp; Flash FS (7)</button>
-        <button class="chip" data-filter="sec-10">Section 10: OOP &amp; Enums (3)</button>
-        <button class="chip" data-filter="sec-11">Section 11: Templates &amp; STL (19)</button>
-        <button class="chip" data-filter="sec-12">Section 12: Data Structures (10)</button>
-        <button class="chip" data-filter="emb-high">⚡ Critical / High Embedded Relevance</button>
+        <span class="filter-label">Filter by Section:</span>
+        <button class="chip active" data-filter="all">All Sections (116)</button>
+        <button class="chip" data-filter="sec-1">Sec 1: Toolchains (2)</button>
+        <button class="chip" data-filter="sec-2">Sec 2: Types &amp; Vars (14)</button>
+        <button class="chip" data-filter="sec-3">Sec 3: Control Flow (13)</button>
+        <button class="chip" data-filter="sec-4">Sec 4: Arrays &amp; Locality (11)</button>
+        <button class="chip" data-filter="sec-5">Sec 5: Functions &amp; AAPCS (15)</button>
+        <button class="chip" data-filter="sec-6">Sec 6: OOP Foundations (6)</button>
+        <button class="chip" data-filter="sec-7">Sec 7: Exceptions &amp; Faults (9)</button>
+        <button class="chip" data-filter="sec-8">Sec 8: Pointers &amp; Memory (7)</button>
+        <button class="chip" data-filter="sec-9">Sec 9: Streams &amp; Flash FS (7)</button>
+        <button class="chip" data-filter="sec-10">Sec 10: OOP &amp; Enums (3)</button>
+        <button class="chip" data-filter="sec-11">Sec 11: Templates &amp; STL (19)</button>
+        <button class="chip" data-filter="sec-12">Sec 12: Data Structures (10)</button>
       </div>
     </section>
 
-    <!-- Cards Grid -->
-    <section class="cards-grid">
-      {cards_grid_rendered}
+    <!-- Dynamic Live Result Counter -->
+    <div class="results-counter" id="resultsCounter">
+      Showing <strong>116</strong> of <strong>116</strong> Projects
+    </div>
+
+    <!-- Track 1: Foundations & Core Language Architecture (Sections 1-6) -->
+    <div class="track-header" id="header-foundations" data-track-header="foundations">
+      <div class="track-title-wrap">
+        <span class="track-icon">📘</span>
+        <div>
+          <h2>Track 1: Foundations &amp; Core Language Architecture</h2>
+          <p>Sections 1 through 6 &bull; Cross-Compilers, Data Types, Control Flow, Memory Locality, Calling Conventions &amp; OOP Foundations</p>
+        </div>
+      </div>
+      <span class="track-count-badge">61 Projects</span>
+    </div>
+
+    <section class="cards-grid" id="grid-foundations">
+      {foundations_grid_rendered}
+    </section>
+
+    <!-- Track 2: Advanced Systems, Real-Time Hardware & Memory (Sections 7-12) -->
+    <div class="track-header advanced-header" id="header-advanced" data-track-header="advanced">
+      <div class="track-title-wrap">
+        <span class="track-icon">🚀</span>
+        <div>
+          <h2>Track 2: Advanced Systems, Real-Time Hardware &amp; Memory</h2>
+          <p>Sections 7 through 12 &bull; Fault Handlers, Memory-Mapped I/O, Flash File Systems, Polymorphism &amp; CRTP, Modern STL &amp; Data Structures</p>
+        </div>
+      </div>
+      <span class="track-count-badge">55 Projects</span>
+    </div>
+
+    <section class="cards-grid" id="grid-advanced">
+      {advanced_grid_rendered}
     </section>
   </main>
 
