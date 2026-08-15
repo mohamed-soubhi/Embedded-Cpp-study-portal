@@ -115,7 +115,7 @@ extern "C" void HardFault_Handler_C(FaultFrame* frame) {
         "emb_class": "emb-high",
         "emb_badge": "⚡ Embedded Relevance: High",
         "tags": ["std::exception", "what()", "Object Slicing", "Code Bloat", "enum class", "AUTOSAR C++14"],
-        "summary": "Building domain-specific exception hierarchies by inheriting from <code>std::runtime_error</code> and <code>std::exception</code>. We analyze how exception unwinding tables (<code>.eh_frame</code> / DWARF) add 15-40KB of Flash overhead, why dynamic exception allocation is hazardous in constrained SRAM, and how to refactor with zero-cost tagged error codes.",
+        "summary": "Building domain-specific exception hierarchies by inheriting from std::runtime_error and std::exception. We analyze how exception unwinding tables (.eh_frame / DWARF) add 15-40KB of Flash overhead, why dynamic exception allocation is hazardous in constrained SRAM, and how to refactor with zero-cost tagged error codes.",
         "files": [
             "section_7/CustomExceptions/CustomExceptions/main.cpp",
             "section_7/CustomExceptions/CustomExceptions/AngryCatException.h"

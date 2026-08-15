@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os
 import sys
+import html
+import re
 from builder import generate_page, ROOT_DIR, PORTAL_DIR
 from section_1_data import SECTION_1_PROJECTS
 from section_2_data import SECTION_2_PROJECTS
@@ -11,6 +13,14 @@ from section_6_data import SECTION_6_PROJECTS
 from section_7_data import SECTION_7_PROJECTS
 from section_8_data import SECTION_8_PROJECTS
 from section_9_data import SECTION_9_PROJECTS
+
+def sanitize_card_desc(text, max_len=120):
+    # Strip any HTML tags (e.g. <code>, <strong>, etc.)
+    plain = re.sub(r'<[^>]+>', '', text)
+    plain = plain.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&').replace('&quot;', '"')
+    if len(plain) > max_len:
+        plain = plain[:max_len].rsplit(' ', 1)[0] + '...'
+    return html.escape(plain)
 
 # ==============================================================================
 # SECTION 11 PROJECT DEFINITIONS
@@ -1319,7 +1329,7 @@ def build_index():
                 "id": p['id'],
                 "name": p['name'],
                 "title": p['title'],
-                "desc": p['summary'][:125] + "...",
+                "desc": sanitize_card_desc(p['summary']),
                 "tags": p['tags'][:3],
                 "rel": "high" if rel == "high" else "core",
                 "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
@@ -1343,7 +1353,7 @@ def build_index():
             "id": p['id'],
             "name": p['name'],
             "title": p['title'],
-            "desc": p['summary'][:125] + "...",
+            "desc": sanitize_card_desc(p['summary']),
             "tags": p['tags'][:3],
             "rel": "high" if rel == "high" else "core",
             "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
@@ -1360,7 +1370,7 @@ def build_index():
             "id": p['id'],
             "name": p['name'],
             "title": p['title'],
-            "desc": p['summary'][:125] + "...",
+            "desc": sanitize_card_desc(p['summary']),
             "tags": p['tags'][:3],
             "rel": "high" if rel == "high" else "core",
             "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
