@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Remove-Erase Idiom and Memory Compaction - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">RemoveEraseIdiomApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-med">⚡ Embedded Relevance: High</span>
+        <span class="tag">Erase-Remove</span> <span class="tag">std::remove</span> <span class="tag">Iterator Invalidation</span> <span class="tag">C++20 std::erase</span> <span class="tag">Memory Compaction</span>
+      </div>
+      <h1 class="project-title">In-Place Vector Compaction, Iterator Invalidation, and C++20 std::erase</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Understanding the separation of algorithms from containers in C++. We dissect why <code>std::remove</code> does not alter container size, analyze iterator invalidation hazards during array filtering, and review C++20 <code>std::erase</code>.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+void printVector(const vector&lt;int&gt;&amp; vec);
+
+int main() {
+	vector&lt;int&gt; numbers = { 1, 2, 3, 2, 4, 2, 5, 2 };
+
+	cout &lt;&lt; &quot;Original vector: &quot;;
+	printVector(numbers);
+
+	//step 1: use remove
+	auto newEnd = remove(numbers.begin(), numbers.end(), 2);
+
+	//step 2: erase them from container
+	numbers.erase(newEnd, numbers.end());
+
+	cout &lt;&lt; &quot;Vector after removing all 2s: &quot;;
+	printVector(numbers);
+
+	return 0;
+}
+
+void printVector(const vector&lt;int&gt;&amp; vec) {
+	for (int value : vec) {
+		cout &lt;&lt; value &lt;&lt; &quot; &quot;;
+	}
+	cout &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Two-Step Remove-Erase Idiom</h3>
+        <p>In standard C++, <code>std::remove</code> only shifts non-matching elements to the front of the range and returns a past-the-end iterator. It cannot alter the container's <code>size()</code> because generic algorithms operate only on iterators without knowledge of container topology. The container's <code>erase()</code> method must be called to truncate the tail.</p>
+        <pre class="code-block" style="background:#161b22; padding:10px; border-radius:6px;">vec.erase(std::remove(vec.begin(), vec.end(), targetValue), vec.end());</pre>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Deterministic In-Place Compaction</h3>
+        <p>The remove-erase idiom operates strictly <strong>in-place with $O(N)$ linear time and $O(1)$ auxiliary space</strong>. In embedded sensor filtering (e.g. stripping corrupted checksum packets from an acquisition buffer), in-place compaction avoids allocating secondary temporary buffers.</p>
+
+        <div class="callout callout-warning">
+          <h4>⚠️ Iterator Invalidation Hazards</h4>
+          <p>Calling <code>erase()</code> invalidates iterators pointing to deleted and subsequent elements. Performing manual loops with <code>vec.erase(it)</code> without updating <code>it = vec.erase(it)</code> results in undefined memory dereferences.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>In modern C++20, the verbose two-step idiom is replaced with uniform, clear <code>std::erase</code>:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    std::vector&lt;int&gt; sensorReadings = {10, -999, 25, -999, 32};
+
+    // Modern C++20: Single expressive call
+    std::erase(sensorReadings, -999);
+
+    for (int val : sensorReadings) {
+        std::cout &lt;&lt; val &lt;&lt; ' '; // Prints: 10 25 32
+    }
+    return 0;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why does std::remove(vec.begin(), vec.end(), val) not change the size of the vector by itself?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It is a bug in the standard library.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::remove operates solely on iterators and has no member access to the underlying container&#x27;s size or memory allocator.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It only marks elements as invisible.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It converts elements to nullptrs.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            STL algorithms are decoupled from containers. <code>std::remove</code> moves valid elements to the front and returns an iterator to the new logical end, requiring <code>vec.erase()</code> to deallocate the remaining tail.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the time complexity of the Erase-Remove idiom on a contiguous array of N elements?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> O(1)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> O(N) linear time with O(1) extra memory</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> O(N^2) quadratic time</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> O(log N)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The algorithm makes a single pass over the elements ($O(N)$ comparisons and moves) and shifts elements in-place with zero additional memory allocation.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="queue_projects.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="templates.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

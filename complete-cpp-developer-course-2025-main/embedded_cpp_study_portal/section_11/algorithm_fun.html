@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STL Algorithms, Lambdas, and Zero-Cost Inlining - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">AlgorithmFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">&lt;algorithm&gt;</span> <span class="tag">std::sort</span> <span class="tag">std::count_if</span> <span class="tag">Lambdas</span> <span class="tag">Zero-Cost Abstractions</span>
+      </div>
+      <h1 class="project-title">std::sort, std::count_if, and Lambda Inlining vs C qsort Function Pointers</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring the standard algorithm library. We demonstrate why C++ templates and lambdas outperform traditional C <code>qsort()</code> by enabling complete compiler inlining, and examine stack consumption during recursive algorithms.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+void fillVector(vector&lt;int&gt;&amp; myVector);
+void printVector(const vector&lt;int&gt;&amp; myVector);
+void countFives(const vector&lt;int&gt;&amp; myVector);
+
+int main() {
+
+	vector&lt;int&gt; myVector;
+
+	fillVector(myVector);
+	printVector(myVector);
+
+	countFives(myVector);
+
+	cout &lt;&lt; &quot;\nReplacing 5s with 99s&quot; &lt;&lt; endl;
+	replace(myVector.begin(), myVector.end(), 5, 99);
+
+	countFives(myVector);
+	printVector(myVector);
+
+	cout &lt;&lt; &quot;\nNow sorting vector...&quot; &lt;&lt; endl;
+	sort(myVector.begin(), myVector.end());
+	printVector(myVector);
+
+
+	return 0;
+}
+
+void fillVector(vector&lt;int&gt;&amp; myVector) {
+	srand(time(nullptr));
+	for (int i = 0; i &lt; 20; ++i) {
+		myVector.push_back(rand() % 5 + 1);  // 1 to 5
+	}
+}
+
+void printVector(const vector&lt;int&gt;&amp; myVector) {
+	for (int value : myVector) {
+		cout &lt;&lt; value &lt;&lt; &quot; &quot;;
+	}
+}
+
+void countFives(const vector&lt;int&gt;&amp; myVector) {
+	int countOfFives = count(myVector.begin(), myVector.end(), 5);
+	cout &lt;&lt; &quot;Number of 5s: &quot; &lt;&lt; countOfFives &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Decoupled Iterators and Generic Predicates</h3>
+        <p>STL algorithms in <code>&lt;algorithm&gt;</code> operate uniformly on iterator ranges <code>[begin, end)</code> and accept stateless or capturing lambdas as evaluation predicates.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Zero-Cost Abstraction: Lambdas vs C Function Pointers</h3>
+        <p>In C, <code>qsort()</code> requires a function pointer callback, forcing an indirect call for every comparison. In C++, <code>std::sort</code> accepts a lambda whose type is known at compile time, allowing the compiler to <strong>inline the comparison directly into the sort loop</strong> for maximum throughput.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;algorithm&gt;
+#include &lt;array&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    std::array&lt;int, 5&gt; telemetry = {45, 12, 85, 32, 89};
+    
+    // Fully inlined at -O2: Zero function pointer overhead
+    std::sort(telemetry.begin(), telemetry.end(), [](int a, int b) {
+        return a &lt; b;
+    });
+
+    for (int val : telemetry) std::cout &lt;&lt; val &lt;&lt; ' ';
+    return 0;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is std::sort typically significantly faster than C qsort() on ARM microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::sort uses hardware floating-point acceleration.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::sort is templated on the comparator type, enabling the compiler to inline comparisons and eliminate indirect function calls.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> qsort() allocates memory on the heap.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::sort runs in parallel on all cores.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because <code>std::sort</code> knows the exact comparator type at compile-time, it inlines the predicate directly, avoiding indirect function pointer jumps.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="rules_challenge.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="stl_fun1.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedStack: Dynamic Node-Based LIFO - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 12</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 12</a>
+      <span class="sep">/</span>
+      <span class="current">LinkedStackApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-12">Section 12</span>
+        <span class="embedded-badge emb-med">⚡ Embedded Relevance: Medium</span>
+        <span class="tag">LinkedStack</span> <span class="tag">LIFO</span> <span class="tag">Dynamic Nodes</span>
+      </div>
+      <h1 class="project-title">Dynamic Node Allocation in Stack Implementations</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Implementing a node-based dynamic stack, analyzing push/pop pointer manipulation and cleanup.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Stack.h</button>
+            <button class="code-tab" data-target="file-tab-1">LinkedStack.h</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef STACK_H
+#define STACK_H
+
+class Stack {
+public:
+	virtual void push(int newEntry) = 0;
+	virtual int pop() = 0;
+	virtual int peek() const = 0;
+	virtual bool isEmpty() const = 0;
+	virtual void makeEmpty() = 0;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &quot;Stack.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+//------------------- Node ------------------------//
+class Node {
+	public:
+		Node(int data, Node* next) : data(data), next(next) {}
+
+		int getData() const {
+			return data;
+		}
+
+		void setData(int data) {
+			this-&gt;data = data;
+		}
+
+		Node* getNext() const {
+			return next;
+		}
+
+		void setNext(Node* next) {
+			this-&gt;next = next;
+		}
+
+	private:
+		int data;
+		Node* next;
+};
+
+//------------------ LinkedStack ------------------------//
+class LinkedStack : public Stack {
+	public:
+		LinkedStack() : top(nullptr) {}
+		//end ctor
+
+		virtual ~LinkedStack() {
+			makeEmpty();
+		}//end dtor
+
+		void push(int newEntry) override {
+			Node* newNode = new Node(newEntry, top);
+			top = newNode;
+		}//end push
+
+		int pop() override {
+			if (isEmpty()) {
+				cout &lt;&lt; &quot;You cannot pop on an empty stack!&quot; &lt;&lt; endl;
+				return 0;
+			}
+
+			Node* temp = top;
+			int data = temp-&gt;getData();
+			top = top-&gt;getNext();
+			delete temp;
+			temp = nullptr;
+			return data;
+		}//end pop
+
+		int peek() const override {
+			if (isEmpty()) {
+				cout &lt;&lt; &quot;You cannot peek on an empty stack!&quot; &lt;&lt; endl;
+				return 0;
+			}
+
+			return top-&gt;getData();
+		}//end peek
+
+		bool isEmpty() const override {
+			return top == nullptr;
+		}//end isEmpty
+
+		void makeEmpty() override {
+			while (top != nullptr) {
+				Node* temp = top;
+				top = top-&gt;getNext();
+				delete temp;
+			}
+		}//end makeEmpty
+
+	private:
+		Node* top;
+};
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;LinkedStack.h&quot;
+using namespace std;
+
+void printStack(LinkedStack&amp; stack);
+
+int main() {
+	LinkedStack stack;
+
+	stack.push(100);
+	stack.push(150);
+	stack.push(222);
+	stack.push(71);
+	stack.push(53);
+	stack.push(125);
+
+	printStack(stack);
+	cout &lt;&lt; &quot;Again to verify it&#x27;s intact:&quot; &lt;&lt; endl;
+	printStack(stack);
+
+	//cout &lt;&lt; &quot;Top of stack is: &quot; &lt;&lt; stack.peek() &lt;&lt; endl;
+
+	//while (!stack.isEmpty()) {
+	//	cout &lt;&lt; stack.pop() &lt;&lt; endl;
+	//}
+	return 0;
+}
+
+void printStack(LinkedStack&amp; stack) {
+	LinkedStack temp;
+	int data;
+
+	while (!stack.isEmpty()) {
+		data = stack.pop();
+		cout &lt;&lt; data &lt;&lt; endl;
+		temp.push(data);
+	}//end while
+
+	while (!temp.isEmpty()) {
+		stack.push(temp.pop());
+	}
+
+}//end printStack</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Node Stack Mechanics</h3><p>Pushing creates a node and prepends it to the top pointer; popping frees the head node.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Memory Comparison</h3><p>Array stacks use contiguous static memory and outperform linked stacks across all embedded metrics.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">// Static array stack is universally preferred in microcontrollers</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What operation is required on every pop() in a LinkedStack?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Deallocating the popped node to prevent memory leaks.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Rehashing the table.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Disabling interrupts.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Reallocating the array.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Popping removes the head node, requiring explicit deallocation to avoid memory leakage.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="linked_queue_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="list_stack_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

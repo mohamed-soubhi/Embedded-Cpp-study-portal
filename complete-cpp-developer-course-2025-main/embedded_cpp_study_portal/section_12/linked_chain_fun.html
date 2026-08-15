@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linked Node Chaining &amp; Pointer Traversal - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 12</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 12</a>
+      <span class="sep">/</span>
+      <span class="current">LinkedChainFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-12">Section 12</span>
+        <span class="embedded-badge emb-med">⚡ Embedded Relevance: Medium</span>
+        <span class="tag">Node</span> <span class="tag">Pointers</span> <span class="tag">Memory Layout</span> <span class="tag">Heap</span>
+      </div>
+      <h1 class="project-title">Manual Node Linking, Memory Layout, and Pointer Overhead</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring explicit node pointer linking and traversing heap-allocated structures.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Node.h</button>
+            <button class="code-tab" data-target="file-tab-1">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef NODE_H
+#define NODE_H
+
+class Node {
+	public:
+		Node(int data, Node* next) : data(data), next(next) {
+		}
+		
+		void setData(int data) {
+			this-&gt;data = data;
+		}
+
+		void setNext(Node* next) {
+			this-&gt;next = next;
+		}
+
+		int getData() const {
+			return data;
+		}
+
+		Node* getNext() const {
+			return next;
+		}
+
+	private:
+		int data;
+		Node* next;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Node.h&quot;
+
+using namespace std;
+
+Node* createChain();
+void printChain(Node* const head);
+void deleteChain(Node*&amp; head);
+
+int main() {
+
+	Node* theHead = createChain();
+
+	printChain(theHead);
+	deleteChain(theHead);
+}
+
+
+Node* createChain() {
+	Node* head = nullptr;
+
+	for (int i = 0; i &lt; 25; i++) {
+		head = new Node(i, head);
+	}
+
+	return head;
+}
+
+void printChain(Node* const head) {
+	Node* walker = head;  
+	int count = 0;
+
+	while (walker != nullptr) {
+		cout &lt;&lt; walker-&gt;getData() &lt;&lt; endl;
+		walker = walker-&gt;getNext();
+		count++;
+	}
+
+	cout &lt;&lt; &quot;Number of elements: &quot; &lt;&lt; count &lt;&lt; endl;
+
+}
+
+void deleteChain(Node*&amp; head) {
+	Node* nodeToDelete;
+
+	while (head != nullptr) {
+		nodeToDelete = head;
+		head = head-&gt;getNext();
+		delete nodeToDelete;
+	}
+}
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Node Anatomy</h3><p>Each node encapsulates a data payload and a pointer to the next node.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Pointer Memory Tax</h3><p>On 64-bit systems, storing a 4-byte <code>int</code> with an 8-byte <code>next</code> pointer incurs 200% memory overhead plus allocator metadata.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">// Intrusive Node pattern to save memory
+struct IntrusiveNode { IntrusiveNode* next = nullptr; };</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is a major downside of singly linked chains on memory-constrained systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Pointer overhead per node and heap fragmentation from individual node allocations.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> They cannot store characters.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Traversal is O(1).</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They require an FPU.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Every node incurs pointer storage overhead and separate heap allocation metadata.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="array_stack_app.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="linked_list_app.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

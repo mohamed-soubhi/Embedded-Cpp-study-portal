@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced STL Container Operations - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">AdvancedSTLChallengeApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-med">⚡ Embedded Relevance: Medium</span>
+        <span class="tag">STL Containers</span> <span class="tag">Container Selection</span> <span class="tag">Performance</span>
+      </div>
+      <h1 class="project-title">Container Selection Trade-Offs in Embedded Design</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Hands-on challenge manipulating STL containers, demonstrating selection guidelines based on insertion patterns, search frequencies, and memory limits.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+#include &lt;unordered_map&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+void printVector(const vector&lt;string&gt;&amp; vec);
+
+int main() {
+
+	vector &lt;string&gt; words;
+
+	words.push_back(&quot;hi&quot;);
+	words.emplace_back(&quot;hello&quot;);
+	words.push_back(&quot;cat&quot;);
+	words.emplace_back(&quot;world&quot;);
+	words.push_back(&quot;test&quot;);
+
+	cout &lt;&lt; &quot;Original vector:&quot; &lt;&lt; endl;
+	printVector(words);
+
+	for (auto it = words.begin(); it != words.end();) {
+		if (it-&gt;length() &lt;= 3) {
+			it = words.erase(it);
+		}
+		else {
+			++it;
+		}
+	}//end for
+
+	cout &lt;&lt; &quot;\nAfter removing short strings (length &lt;= 3):&quot; &lt;&lt; endl;
+	printVector(words);
+
+	words.erase(remove(words.begin(), words.end(), &quot;test&quot;), words.end());
+
+	cout &lt;&lt; &quot;\nAfter removing &#x27;test&#x27; using remove-erase idiom:&quot; &lt;&lt; endl;
+	printVector(words);
+
+	map&lt;string, int&gt; wordLengthsOrdered;
+	unordered_map&lt;string, int&gt; wordLengthsUnordered;
+
+	for (const auto&amp; word : words) {
+		wordLengthsOrdered[word] = word.length();
+		wordLengthsUnordered[word] = word.length();
+	}
+
+	cout &lt;&lt; &quot;\nContents of map (ordered):&quot; &lt;&lt; endl;
+	
+	for (const auto&amp; pair : wordLengthsOrdered) {
+		cout &lt;&lt; pair.first &lt;&lt; &quot; -&gt; &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	}
+
+	//lookup
+	string query = &quot;world&quot;;
+	cout &lt;&lt; &quot;\nLooking up &#x27;&quot; &lt;&lt; query &lt;&lt; &quot;&#x27; in both maps:&quot; &lt;&lt; endl;
+
+	if (wordLengthsOrdered.find(query) != wordLengthsOrdered.end()) {
+		cout &lt;&lt; &quot;map: found -&gt; &quot; &lt;&lt; wordLengthsOrdered[query] &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;map: not found&quot; &lt;&lt; endl;
+	}
+
+	//unordered map lookup
+	if(wordLengthsUnordered.find(query) != wordLengthsUnordered.end()) {
+		cout &lt;&lt; &quot;unordered map: found -&gt; &quot; &lt;&lt; wordLengthsUnordered[query] &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;unordered map: not found&quot; &lt;&lt; endl;
+	}
+
+
+	return 0;
+}
+
+void printVector(const vector&lt;string&gt;&amp; vec) {
+	for (const auto&amp; item : vec) {
+		cout &lt;&lt; item &lt;&lt; &quot; &quot;;
+	}
+	cout &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Container Selection Rules</h3><p>Select containers based on algorithmic complexity and memory topology.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Embedded Guidelines</h3><p>Default to contiguous containers unless non-relocating element requirements mandate node containers.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">// Always prefer contiguous bounded memory
+#include &lt;array&gt;
+std::array&lt;int, 10&gt; fixedContainer;</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Which container should be the default choice for sequential collections in modern C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::list</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::vector (or std::array if size is fixed)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::deque</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::forward_list</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::vector</code> and <code>std::array</code> provide optimal cache performance and lowest per-element overhead.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="advanced_stl_app.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="car_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

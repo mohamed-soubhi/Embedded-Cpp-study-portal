@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedQueue: Pointer-Based FIFO Queues - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 12</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 12</a>
+      <span class="sep">/</span>
+      <span class="current">LinkedQueueProject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-12">Section 12</span>
+        <span class="embedded-badge emb-med">⚡ Embedded Relevance: Medium</span>
+        <span class="tag">LinkedQueue</span> <span class="tag">FIFO</span> <span class="tag">Pointer Chasing</span>
+      </div>
+      <h1 class="project-title">Front &amp; Rear Pointer Manipulation vs Cache Inefficiencies</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Implementing a node-based FIFO queue with front and rear pointers, contrasting its memory footprint with array ring buffers.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Queue.h</button>
+            <button class="code-tab" data-target="file-tab-1">LinkedQueue.h</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef QUEUE_H
+#define QUEUE_H
+
+class Queue {
+	public:
+		virtual void enqueue(int newEntry) = 0;
+		virtual int dequeue() = 0;
+		virtual int peekFront() const = 0;
+		virtual bool isEmpty() const = 0;
+		virtual void makeEmpty() = 0;
+
+		virtual ~Queue() = default;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef LINKED_QUEUE_H
+#define LINKED_QUEUE_H
+
+#include &quot;Queue.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+// Doubly linked Node
+class Node {
+public:
+    Node(int data, Node* next = nullptr, Node* prev = nullptr)
+        : data(data), next(next), previous(prev) {
+    }
+
+    int getData() const { return data; }
+    void setData(int val) { data = val; }
+
+    Node* getNext() const { return next; }
+    void setNext(Node* n) { next = n; }
+
+    Node* getPrevious() const { return previous; }
+    void setPrevious(Node* p) { previous = p; }
+
+private:
+    int data;
+    Node* next;
+    Node* previous;
+};
+
+class LinkedQueue : public Queue {
+
+
+    public:
+        LinkedQueue() : front(nullptr), back(nullptr) {}
+        //end ctor
+
+        virtual ~LinkedQueue() {
+            makeEmpty();
+        }//end dtor
+
+        void enqueue(int newEntry) override {
+            Node* newNode = new Node(newEntry);
+            
+            if (isEmpty()) {
+                front = back = newNode;
+            }
+            else {
+                back-&gt;setNext(newNode);
+                newNode-&gt;setPrevious(back);
+                back = newNode;
+            }
+        }//end enqueue
+
+        int dequeue() override {
+            if (isEmpty()) {
+                cout &lt;&lt; &quot;You cannot dequeue from an empty queue.&quot; &lt;&lt; endl;
+                return 0;
+            }
+
+            Node* temp = front;
+            int data = temp-&gt;getData();
+            front = front-&gt;getNext();
+
+            if (front == nullptr) {
+                back = nullptr;  //queue is now empty
+            }
+            else {
+                front-&gt;setPrevious(nullptr);
+            }
+
+            delete temp;
+            return data;
+        }//end dequeue
+
+        int peekFront() const override {
+            if (!isEmpty()) {
+                return front-&gt;getData();
+            }
+            else {
+                cout &lt;&lt; &quot;You cannot peek the front of an empty queue!&quot; &lt;&lt; endl;
+                return 0;
+            }
+        }//end peekFront
+
+        bool isEmpty() const override {
+            return front == nullptr;
+        }//end isEmpty
+
+        void makeEmpty() override {
+            while (!isEmpty()) {
+                dequeue();
+            }
+        }//end makeEmpty
+
+    private:
+        Node* front;
+        Node* back;
+
+};
+
+
+#endif </pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;LinkedQueue.h&quot;
+using namespace std;
+
+int main() {
+	LinkedQueue queue;
+
+	cout &lt;&lt; &quot;Enqueuing values...&quot; &lt;&lt; endl;
+	for (int i = 1; i &lt;= 10; i++) {
+		cout &lt;&lt; &quot;Enqueueing &quot; &lt;&lt; (i * 100) &lt;&lt; endl;
+		queue.enqueue(i * 100);
+	}//end for
+
+	queue.enqueue(1234);
+
+	cout &lt;&lt; &quot;Dequeuing values...&quot; &lt;&lt; endl;
+	while (!queue.isEmpty()) {
+		cout &lt;&lt; queue.dequeue() &lt;&lt; endl;
+	}
+
+	queue.dequeue();
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Two-Pointer Queue Mechanics</h3><p>Maintains head and tail pointers for $O(1)$ push and pop.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Heap Allocation Overhead</h3><p>Every enqueue calls <code>new Node</code>, creating dynamic allocation jitter in embedded environments.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">// Prefer ArrayQueue / RingBuffer for embedded queues</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the main drawback of LinkedQueue in interrupt handlers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Enqueuing requires dynamic memory allocation (new), which is unsafe in ISRs.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It is too fast.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It cannot store structures.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It uses too few registers.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Dynamic memory allocation inside an interrupt service routine is non-reentrant and causes system crashes.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="linked_list_app.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="linked_stack_app.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

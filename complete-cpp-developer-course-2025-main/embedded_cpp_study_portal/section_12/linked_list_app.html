@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedList: Dynamic Insertion vs Memory Fragmentation - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 12</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 12</a>
+      <span class="sep">/</span>
+      <span class="current">LinkedListApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-12">Section 12</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">LinkedList</span> <span class="tag">Dynamic Allocation</span> <span class="tag">Heap Fragmentation</span> <span class="tag">Intrusive List</span>
+      </div>
+      <h1 class="project-title">Implementing Singly Linked Lists &amp; Evaluating Intrusive Alternatives</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building a full linked list data structure implementing <code>List&lt;T&gt;</code>. We examine insertion/deletion at arbitrary positions, pointer manipulation, and intrusive list alternatives.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">List.h</button>
+            <button class="code-tab" data-target="file-tab-1">LinkedList.h</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef LIST_H
+#define LIST_H
+
+class List {
+public:
+	virtual void add(int newEntry) = 0;
+	virtual void add(int newEntry, int position) = 0;
+	virtual void set(int newEntry, int position) = 0;
+
+	virtual bool contains(int entry) const = 0;
+	virtual int find(int entry) const = 0;
+	virtual int remove(int position) = 0;
+	virtual void makeEmpty() = 0;
+
+	virtual int size() const = 0;
+	virtual bool isEmpty() const = 0;
+	virtual void printList() const = 0;
+
+};
+
+#endif
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef LINKED_LIST_H
+#define LINKED_LIST_H
+
+#include &lt;iostream&gt;
+#include &quot;List.h&quot;
+using namespace std;
+
+// ---------------- Node -------------------- //
+class Node {
+	public:
+		Node(int data, Node* next) {
+			this-&gt;data = data;
+			this-&gt;next = next;
+		}//end ctor
+
+		int getData() const {
+			return data;
+		}
+
+		void setData(int data) {
+			this-&gt;data = data;
+		}
+
+		Node* getNext() const {
+			return next;
+		}
+
+		void setNext(Node* next) {
+			this-&gt;next = next;
+		}
+
+	private:
+		int data;
+		Node* next;
+};
+
+// --------------- Linked List ---------------------//
+class LinkedList : public List {
+	public:
+		LinkedList() {
+			mHead = nullptr;
+			mNumElements = 0;
+		}//end ctor
+
+		virtual ~LinkedList() {
+			makeEmpty();  //clean up the nodes
+		}//end dtor
+
+		void add(int newEntry) override {
+			Node* newNode = new Node(newEntry, nullptr);
+
+			if (mHead == nullptr) {
+				mHead = newNode;
+			}
+			else {
+				Node* walker = mHead;                        
+				while (walker-&gt;getNext() != nullptr) {
+					walker = walker-&gt;getNext();
+				}//end while
+
+				walker-&gt;setNext(newNode);
+			}
+			mNumElements++;
+		}//end add
+
+
+		void add(int newEntry, int position) override {
+			if (position &lt; 0 || position &gt; mNumElements) {
+				cout &lt;&lt; &quot;Error: Cannot add at specified position.&quot; &lt;&lt; endl;
+				return;
+			}
+
+			Node* newNode = new Node(newEntry, nullptr);
+
+			if (position == 0) {
+				newNode-&gt;setNext(mHead);
+				mHead = newNode;
+			}
+			else {
+				Node* nodeBefore = mHead;
+
+				for (int i = 0; i &lt; position - 1; i++) {
+					nodeBefore = nodeBefore-&gt;getNext();
+				}//end for 
+				                                                         
+				newNode-&gt;setNext(nodeBefore-&gt;getNext());     
+				nodeBefore-&gt;setNext(newNode);
+			}
+
+			mNumElements++;
+		}//end add
+
+		void set(int newEntry, int position) override {
+			if (position &lt; 0 || position &gt; mNumElements) {
+				cout &lt;&lt; &quot;Error:  Invalid position.&quot; &lt;&lt; endl;
+				return;
+			}
+
+			Node* walker = mHead;
+
+			for (int i = 0; i &lt; position; i++) {
+				walker = walker-&gt;getNext();
+			}//end for 
+
+			walker-&gt;setData(newEntry);
+		}//end set
+
+		bool contains(int entry) const override {
+			return find(entry) != -1;
+		}//end contains
+
+		int find(int entry) const override {
+			Node* walker = mHead;
+			int index = 0;
+
+			while (walker != nullptr) {
+				if (walker-&gt;getData() == entry) {
+					return index;
+				}
+				walker = walker-&gt;getNext();
+				index++;
+			}//end while
+
+			return -1;
+
+		}//end find
+
+		int remove(int position) override {
+			if (position &lt; 0 || position &gt;= mNumElements) {
+				cout &lt;&lt; &quot;Error:  Cannot remove at specified position.&quot; &lt;&lt; endl;
+				return 0;
+			}
+
+			int dataToReturn = 0;
+
+			if (position == 0) {
+				Node* temp = mHead;
+				dataToReturn = temp-&gt;getData();
+				mHead = mHead-&gt;getNext();
+				delete temp;
+			}
+			else {
+				Node* nodeBefore = mHead;
+				for (int i = 0; i &lt; position - 1; i++) {
+					nodeBefore = nodeBefore-&gt;getNext();
+				}//end for
+
+				Node* nodeToRemove = nodeBefore-&gt;getNext();
+				Node* nodeAfter = nodeToRemove-&gt;getNext();
+				dataToReturn = nodeToRemove-&gt;getData();
+
+				nodeBefore-&gt;setNext(nodeAfter);
+				delete nodeToRemove;
+			}
+
+			mNumElements--;
+			return dataToReturn;
+		}//end remove 
+
+		void makeEmpty() override {
+			Node* temp;
+			while (mHead != nullptr) {
+				temp = mHead;
+				mHead = mHead-&gt;getNext();
+				delete temp;
+			}
+		}//end makeEmpty
+
+		int size() const override {
+			return mNumElements;
+		}//end size
+
+		bool isEmpty() const override {
+			return mNumElements == 0;
+		}//end isEmpty
+
+		void printList() const override {
+			Node* walker = mHead;
+			while (walker != nullptr) {
+				cout &lt;&lt; walker-&gt;getData() &lt;&lt; endl;
+				walker = walker-&gt;getNext();
+			}//end while
+		}
+
+	private:
+		Node* mHead;
+		int mNumElements;
+};
+
+
+
+#endif </pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;LinkedList.h&quot;
+using namespace std;
+
+int main() {
+	LinkedList myList;
+	int data;
+
+	myList.add(15);
+	myList.add(22);
+	myList.add(100);
+	myList.add(44);
+	myList.add(500);
+	myList.add(444);
+	myList.add(505);
+	myList.add(22);
+
+	myList.set(1515, 0);
+	myList.set(2222, 7);
+
+	myList.printList();
+
+	myList.add(1500, 89);
+
+	cout &lt;&lt; endl;
+	myList.printList();
+
+	cout &lt;&lt; endl;
+
+	int lastIndex = myList.size() - 1;
+	int removed = myList.remove(lastIndex);
+
+	cout &lt;&lt; &quot;Just removed &quot; &lt;&lt; removed &lt;&lt; &quot; from the END of the list.&quot; &lt;&lt; endl;
+
+
+	while (!myList.isEmpty()) {
+		data = myList.remove(0);
+		cout &lt;&lt; &quot;Just removed: &quot; &lt;&lt; data &lt;&lt; endl;
+	}//end while
+
+	cout &lt;&lt; endl &lt;&lt; &quot;Final contents (should be empty):&quot; &lt;&lt; endl;
+	myList.printList();
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>List Traversal and Modification</h3><p>Inserting at the head is $O(1)$, while arbitrary index access requires $O(N)$ linear traversal.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Intrusive Linked Lists (Embedded Gold Standard)</h3><p>In operating systems (FreeRTOS, Linux Kernel), nodes are embedded directly inside existing structures (intrusive lists), eliminating extra heap allocations entirely!</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct TaskControlBlock {
+    TaskControlBlock* nextReadyTask;
+    uint32_t taskId;
+}; // Zero heap overhead intrusive node!</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why do embedded kernels (like FreeRTOS) use intrusive linked lists instead of standard std::list?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Intrusive lists embed links directly into objects, eliminating separate heap allocations for node wrappers.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Standard lists do not work in C++.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Intrusive lists are sorted automatically.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They require more RAM.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Intrusive lists avoid dynamic node wrapper allocation by placing pointer hooks inside the data structure itself.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="linked_chain_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="linked_queue_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

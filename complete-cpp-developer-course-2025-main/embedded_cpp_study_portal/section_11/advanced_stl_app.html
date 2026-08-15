@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>std::deque &amp; std::list: Cache Locality &amp; Memory Layout - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">AdvancedSTLApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">std::deque</span> <span class="tag">std::list</span> <span class="tag">Cache Locality</span> <span class="tag">Pointer Chasing</span> <span class="tag">L1 Data Cache</span>
+      </div>
+      <h1 class="project-title">Contiguous Memory vs Pointer Chasing and Node Allocation Overhead</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Comparing non-contiguous containers (<code>std::deque</code>, <code>std::list</code>) against contiguous arrays. We examine CPU cache lines, L1 cache misses from pointer chasing, and node memory overhead in embedded architectures.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class Person {
+	public:
+		string name;
+		int age;
+
+		Person(string name, int age) : name(name), age(age) {
+			cout &lt;&lt; &quot;Constructed: &quot; &lt;&lt; name &lt;&lt; endl;
+		}
+
+		Person(const Person&amp; other) {
+			name = other.name;
+			age = other.age;
+			cout &lt;&lt; &quot;Copied: &quot; &lt;&lt; name &lt;&lt; endl;
+		}
+};
+
+
+int main() {
+	vector&lt;Person&gt; people;
+
+	cout &lt;&lt; &quot;\nUsing push back:&quot; &lt;&lt; endl;
+	Person p1(&quot;Alice&quot;, 30);
+	people.push_back(p1);
+
+	cout &lt;&lt; &quot;\nUsing emplace back:&quot; &lt;&lt; endl;
+	people.emplace_back(&quot;Bob&quot;, 40);
+
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Linked Lists vs Double-Ended Queues</h3>
+        <p><code>std::list</code> is a doubly linked list where each node contains pointers to next and previous nodes. <code>std::deque</code> is a map of fixed-size chunks.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Cache Line Penalties and Memory Overhead</h3>
+        <p>On modern MCUs with caches (e.g. ARM Cortex-M7), iterating through contiguous arrays (<code>std::vector</code> / <code>std::array</code>) triggers pre-fetching. In contrast, <code>std::list</code> causes constant L1 cache misses due to scattered heap node addresses (pointer chasing).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">// Prefer contiguous std::array for maximum CPU cache throughput
+#include &lt;array&gt;
+#include &lt;iostream&gt;
+
+void processSensorArray() {
+    std::array&lt;int, 64&gt; fastData;
+    // Sequential memory access maximizes cache line utilization
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why does std::vector almost always outperform std::list for sequential iteration on modern microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::vector utilizes CPU register caches.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Contiguous memory layout provides optimal CPU cache locality and spatial prefetching, avoiding pointer chasing.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::list cannot store integers.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::vector uses assembly language.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Contiguous storage means adjacent elements reside in the same CPU cache line, whereas linked list nodes are scattered across RAM, causing pipeline stalls on cache misses.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="stl_fun1.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="advanced_stl_challenge_app.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

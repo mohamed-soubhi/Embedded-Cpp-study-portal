@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circular Array Queue: The Core Embedded Ring Buffer - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 12</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 12</a>
+      <span class="sep">/</span>
+      <span class="current">ArrayQueueApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-12">Section 12</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">ArrayQueue</span> <span class="tag">Ring Buffer</span> <span class="tag">Modulo Arithmetic</span> <span class="tag">Bounded Memory</span> <span class="tag">ISR Safety</span>
+      </div>
+      <h1 class="project-title">Implementing Bounded FIFO Queues with Modulo Arithmetic for Non-Blocking ISRs</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Deep dive into circular array queue data structures. We examine index wrapping using modulo arithmetic, full/empty state disambiguation, and why array-backed ring buffers are the foundational communication pipeline for embedded UART, CAN, and SPI drivers.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Queue.h</button>
+            <button class="code-tab" data-target="file-tab-1">ArrayQueue.h</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef QUEUE_H
+#define QUEUE_H
+
+class Queue {
+	virtual void enqueue(int newEntry) = 0;
+	virtual int dequeue() = 0;
+	virtual int peekFront() const = 0;
+	virtual bool isEmpty() const = 0;
+	virtual void makeEmpty() = 0;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef ARRAY_QUEUE_H
+#define ARRAY_QUEUE_H
+
+#include &lt;iostream&gt;
+#include &quot;Queue.h&quot;
+using namespace std;
+
+class ArrayQueue : public Queue {
+	public:
+
+		ArrayQueue(int s = 16) : MAX_SIZE(s) {
+			front = 0;
+			back = 0;
+			numElements = 0;
+			mArray = new int[MAX_SIZE];
+		}//end ctor
+
+		virtual ~ArrayQueue() {
+			delete[] mArray;
+		}//end dtor
+
+		void enqueue(int newEntry) override {
+			if (numElements &lt; MAX_SIZE - 1) {
+				mArray[back] = newEntry;
+				back = (back + 1) % MAX_SIZE;
+				numElements++;
+			}
+			else {
+				cout &lt;&lt; &quot;You cannot enqueue onto a full queue&quot; &lt;&lt; endl;
+			}
+		}//end enqueue
+
+		int dequeue() override {
+			if (!isEmpty()) {
+				int data = mArray[front];
+				front = (front + 1) % MAX_SIZE;
+				numElements--;
+				return data;
+			}
+			else {
+				cout &lt;&lt; &quot;You cannot dequeueon an empty queue.&quot; &lt;&lt; endl;
+				return 0;
+			}
+		}//end dequeue
+
+		int peekFront() const override {
+			if (!isEmpty()) {
+				return mArray[front];
+			}
+			else {
+				cout &lt;&lt; &quot;Queue is empty.  You cannot peek the front.&quot; &lt;&lt; endl;
+				return 0;
+			}
+		}//end peekFront
+
+
+		bool isEmpty() const override {
+			return numElements == 0;
+		}//end isEmpty
+
+		void makeEmpty() override {
+			front = 0;
+			back = 0;
+			numElements = 0;
+		}//end makeEmpty
+
+
+	private:
+		int* mArray;
+		const int MAX_SIZE;
+		int front;
+		int back;
+		int numElements;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;ArrayQueue.h&quot;
+using namespace std;
+
+int main() {
+	ArrayQueue queue;
+
+	for (int i = 1; i &lt;= 16; i++) {
+		queue.enqueue(i * 100);
+	}//end for
+
+	queue.enqueue(1234);  //should trigger an error
+
+	while (!queue.isEmpty()) {
+		cout &lt;&lt; queue.dequeue() &lt;&lt; endl;
+	}//end while
+
+	queue.dequeue();  //should trigger an error
+
+	for (int i = 0; i &lt; 20; i++) {
+		cout &lt;&lt; &quot;Just enqueued &quot; &lt;&lt; (i * 10) &lt;&lt; endl;
+		queue.enqueue(i * 10);
+
+		if (i % 3 == 0) {
+			cout &lt;&lt; &quot;Just dequeued &quot; &lt;&lt; queue.dequeue() &lt;&lt; endl;
+		}
+	}
+
+	queue.enqueue(123);
+	queue.enqueue(234);
+	queue.enqueue(345);
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Abstract Interface & Array Implementation</h3>
+        <p>The <code>Queue&lt;T&gt;</code> interface defines <code>enqueue</code>, <code>dequeue</code>, <code>peek</code>, and <code>isEmpty</code>. <code>ArrayQueue&lt;T&gt;</code> implements these operations in fixed contiguous memory using circular indexing.</p>
+
+        <h3>2. Modulo Arithmetic Index Wrapping</h3>
+        <p>Instead of shifting elements on dequeue ($O(N)$), the queue simply advances its <code>front</code> and <code>rear</code> indices using modulo arithmetic: <code>(rear + 1) % capacity</code>, achieving constant $O(1)$ enqueue and dequeue.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Power-of-Two Bitmask Optimization</h3>
+        <p>In high-frequency ISRs, the hardware division instruction (or software division routine on Cortex-M0) required for <code>% capacity</code> takes multiple clock cycles. Embedded engineers dimension ring buffers to powers of two (e.g. 64, 128, 256), replacing expensive modulo with a single-cycle bitwise AND: <code>(index + 1) &amp; (CAPACITY - 1)</code>!</p>
+
+        <div class="callout callout-embedded">
+          <h4>⚡ Hard Real-Time Advantage</h4>
+          <p>Zero dynamic memory allocation, zero pointer chasing, and bounded memory consumption ensure predictable WCET (Worst-Case Execution Time).</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
+#include &lt;cstdint&gt;
+
+template &lt;typename T, size_t PowerOfTwoCap = 64&gt;
+class FastRingBuffer {
+    static_assert((PowerOfTwoCap &amp; (PowerOfTwoCap - 1)) == 0, "Capacity must be power of 2!");
+public:
+    bool enqueue(T val) {
+        size_t nextHead = (head_ + 1) &amp; MASK;
+        if (nextHead == tail_) return false; // Full
+        buffer_[head_] = val;
+        head_ = nextHead;
+        return true;
+    }
+    bool dequeue(T&amp; out) {
+        if (head_ == tail_) return false; // Empty
+        out = buffer_[tail_];
+        tail_ = (tail_ + 1) &amp; MASK;
+        return true;
+    }
+private:
+    static constexpr size_t MASK = PowerOfTwoCap - 1;
+    std::array&lt;T, PowerOfTwoCap&gt; buffer_;
+    size_t head_ = 0, tail_ = 0;
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is the modulo operation `% capacity` often replaced with `&amp; (capacity - 1)` in high-speed embedded ring buffers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Bitwise AND executes in a single clock cycle, whereas integer division/modulo takes significantly more CPU cycles.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Bitwise AND automatically detects hardware parity errors.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Modulo cannot be compiled on ARM Cortex microcontrollers.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Bitwise AND converts numbers to floating point.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When capacity is a power of 2, <code>index & (capacity - 1)</code> produces identical results to <code>index % capacity</code> in a single fast clock cycle.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the algorithmic time complexity of enqueue and dequeue in an ArrayQueue?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> O(1) constant time</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> O(N) linear time</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> O(log N)</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> O(N^2)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Circular array queues achieve true $O(1)$ constant time for both enqueue and dequeue because no element shifting is performed.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="for_proj12_2_files.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="array_list_app.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

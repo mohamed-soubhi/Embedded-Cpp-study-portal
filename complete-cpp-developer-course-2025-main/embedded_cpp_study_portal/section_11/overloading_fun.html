@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator Overloading &amp; Fixed-Point Arithmetic - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">OverloadingFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Operator Overloading</span> <span class="tag">Fixed-Point</span> <span class="tag">Type Safety</span> <span class="tag">Physical Units</span>
+      </div>
+      <h1 class="project-title">Creating Type-Safe Physical Units &amp; Fixed-Point Math Wrappers</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring operator overloading (<code>+</code>, <code>==</code>, <code>&lt;&lt;</code>). We show how embedded systems use operator overloading to build type-safe physical unit types (Volts, Amperes) and fixed-point math wrappers avoiding FPU overhead.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Rectangle.h</button>
+            <button class="code-tab" data-target="file-tab-1">Rectangle.cpp</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
+class Rectangle {
+	public:
+		Rectangle();
+		Rectangle(double length, double width);
+		double getLength() const;
+		double getWidth() const;
+		void setLength(double length);
+		void setWidth(double width);
+		double area() const;
+		double perimeter() const;
+
+		//overloaded operators
+
+		bool operator==(const Rectangle&amp; other) const;
+		bool operator!=(const Rectangle&amp; other) const;
+		bool operator&lt;(const Rectangle&amp; other) const;
+
+		Rectangle operator+(const Rectangle&amp; other) const;
+		void operator=(const Rectangle&amp; other);
+
+
+
+	private:
+		double length;
+		double width;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &quot;Rectangle.h&quot;
+
+Rectangle::Rectangle() {
+	length = 1;
+	width = 1;
+}
+
+Rectangle::Rectangle(double length, double width) {
+	this-&gt;length = length;
+	this-&gt;width = width;
+}
+
+double Rectangle::getLength() const {
+	return length;
+}
+
+double Rectangle::getWidth() const {
+	return width;
+}
+
+void Rectangle::setLength(double length) {
+	this-&gt;length = length;
+}
+
+void Rectangle::setWidth(double width) {
+	this-&gt;width = width;
+}
+
+double Rectangle::area() const {
+	return length * width;
+}
+
+double Rectangle::perimeter() const {
+	return 2 * (length + width);
+}
+
+bool Rectangle::operator==(const Rectangle&amp; other) const {
+	return length == other.length &amp;&amp; width == other.width;
+}
+
+bool Rectangle::operator!=(const Rectangle&amp; other) const {
+	return !(*this == other);
+}
+
+bool Rectangle::operator&lt;(const Rectangle &amp; other) const {
+	return this-&gt;area() &lt; other.area();
+}
+
+Rectangle Rectangle::operator+(const Rectangle&amp; other) const {
+	return Rectangle(length + other.length, width + other.width);
+}
+
+void Rectangle::operator=(const Rectangle&amp; other) {
+	length = other.length;
+	width = other.width;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Rectangle.h&quot;
+using namespace std;
+
+int main() {
+	Rectangle rect1(10, 20);
+	Rectangle rect2(50, 100);
+	Rectangle rect3(10, 20);
+	Rectangle resultRect;
+
+	resultRect = rect1 + rect2;   //rect1.operator+(rect2);
+
+	cout &lt;&lt; &quot;rect1 == rect3? &quot; &lt;&lt; boolalpha &lt;&lt; (rect1 == rect3) &lt;&lt; endl;
+	cout &lt;&lt; &quot;rect1 != rect2? &quot; &lt;&lt; boolalpha &lt;&lt; (rect1 != rect2) &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;resultRect: &quot;
+		&lt;&lt; resultRect.getLength() &lt;&lt; &quot; * &quot;
+		&lt;&lt; resultRect.getWidth() &lt;&lt; &quot; = &quot;
+		&lt;&lt; resultRect.area() &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;rect1 &lt; rect2? &quot; &lt;&lt; boolalpha &lt;&lt; (rect1 &lt; rect2) &lt;&lt; endl;
+
+	return 0;
+
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Operator Overloading Syntax</h3><p>Custom classes can overload arithmetic and comparison operators to act like fundamental types.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Fixed-Point Math for Cortex-M0/M3 (No FPU)</h3><p>Microcontrollers without hardware Floating Point Units emulate floats in software, taking dozens of cycles. Overloading operators on fixed-point integer types enables fast arithmetic with clean mathematical syntax.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct Millivolts {
+    int32_t val;
+    constexpr Millivolts operator+(Millivolts o) const { return {val + o.val}; }
+    constexpr bool operator==(Millivolts o) const { return val == o.val; }
+};</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is operator overloading beneficial for physical units in embedded systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It guarantees unit compatibility at compile-time (e.g. preventing adding Volts to Amperes) with zero runtime cost.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It automatically converts floats to doubles.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It allocates units on the heap.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It bypasses the compiler.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Type-safe unit wrappers catch physical calculation mistakes at compile time with zero runtime overhead.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="language_translator_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="stack_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

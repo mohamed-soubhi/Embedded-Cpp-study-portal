@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>std::vector Memory Growth &amp; Allocation Hazards - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">STLFun1</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">std::vector</span> <span class="tag">push_back</span> <span class="tag">Capacity Growth</span> <span class="tag">reserve()</span> <span class="tag">Reallocation Latency</span>
+      </div>
+      <h1 class="project-title">Capacity Doubling, Reallocation Overhead, and reserve() Optimization</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Dissecting <code>std::vector</code> mechanics. We explore geometric capacity doubling, sudden heap reallocations during <code>push_back()</code>, pointer invalidation, and how <code>reserve()</code> guarantees deterministic performance.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;deque&gt;
+using namespace std;
+
+void printDeque(const deque&lt;int&gt;&amp; deck);
+
+int main() {
+	deque&lt;int&gt; myDeck;
+
+	myDeck.push_back(1);
+	myDeck.push_back(5);
+	myDeck.push_back(10);
+
+	cout &lt;&lt; &quot;First print:&quot; &lt;&lt; endl;
+	printDeque(myDeck);
+
+	myDeck.push_front(20);
+	myDeck.push_front(30);
+
+	cout &lt;&lt; &quot;Next print:&quot; &lt;&lt; endl;
+	printDeque(myDeck);
+
+	return 0;
+}
+
+void printDeque(const deque&lt;int&gt;&amp; deck) {
+	for (int num : deck) {
+		cout &lt;&lt; num &lt;&lt; endl;
+	}
+	cout &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Size vs Capacity and Geometric Growth</h3>
+        <p>A vector maintains <code>size()</code> (active elements) and <code>capacity()</code> (allocated slots). When <code>size() == capacity()</code>, the next <code>push_back()</code> allocates a new block (typically $1.5	imes$ or $2	imes$ size), copies/moves existing elements, and frees the old block.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Reallocation Latency Spike in Microcontrollers</h3>
+        <p>A single <code>push_back()</code> can unexpectedly trigger a heavy memory reallocation, copying hundreds of elements and causing non-deterministic execution spikes.</p>
+
+        <div class="callout callout-tip">
+          <h4>💡 Mandatory Best Practice: Always Use reserve()</h4>
+          <p>If maximum capacity is known in advance, call <code>vec.reserve(MAX_SIZE)</code> during initialization to eliminate all runtime reallocations.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;vector&gt;
+#include &lt;iostream&gt;
+
+void initAdcTelemetry() {
+    std::vector&lt;uint16_t&gt; adcSamples;
+    adcSamples.reserve(256); // Pre-allocate: ZERO reallocations during sampling!
+
+    for (int i = 0; i &lt; 256; ++i) {
+        adcSamples.push_back(i * 4); // Deterministic O(1) insertion
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What happens when push_back() is called on a std::vector whose size() is equal to its capacity()?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The element is silently discarded.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A new larger heap memory block is allocated, all existing elements are copied or moved, the old block is freed, and existing iterators/pointers are invalidated.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A compile-time error occurs.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The vector size becomes 0.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            When capacity is exceeded, the vector must allocate a new larger memory block, move all elements over, and release the old memory, invalidating all iterators and pointers to its elements.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="algorithm_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="advanced_stl_app.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Pointers &amp; Memory Ownership in Embedded Systems - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">SmartPointerFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">std::unique_ptr</span> <span class="tag">std::make_unique</span> <span class="tag">Move Semantics</span> <span class="tag">Custom Deleters</span> <span class="tag">MMIO</span> <span class="tag">AUTOSAR A18-5-8</span>
+      </div>
+      <h1 class="project-title">std::unique_ptr, Ownership Transfer (std::move), and Custom Deleters for Hardware Registers</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Deep dive into deterministic memory ownership via <code>std::unique_ptr</code>. Explores move semantics, zero-overhead memory guarantees, why <code>std::shared_ptr</code> is avoided in microcontrollers due to control block RAM overhead and atomic ref-counting, and how custom deleters enable RAII over hardware peripherals.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;memory&gt;
+#include &lt;utility&gt;
+using namespace std;
+
+int main() {
+	const int ARR_SIZE = 5;
+
+	//unique_ptr&lt;double&gt; myDubPtr(new double);
+	unique_ptr&lt;double&gt; myDubPtr = make_unique&lt;double&gt;();
+	//auto myArray = make_unique&lt;int[]&gt;(ARR_SIZE);
+
+	*myDubPtr = 3.14;
+	cout &lt;&lt; &quot;Pointer value: &quot; &lt;&lt; *myDubPtr &lt;&lt; endl;
+
+	unique_ptr&lt;double&gt; otherPtr = move(myDubPtr);
+	cout &lt;&lt; &quot;otherPtr: &quot; &lt;&lt; *otherPtr &lt;&lt; endl;
+
+	//for (int i = 0; i &lt; ARR_SIZE; i++) {
+	//	myArray[i] = i * 2;
+	//}
+
+	//for (int i = 0; i &lt; ARR_SIZE; i++) {
+	//	cout &lt;&lt; myArray[i] &lt;&lt; endl;
+	//}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Exclusive Ownership & Zero-Cost Abstraction</h3>
+        <p><code>std::unique_ptr&lt;T&gt;</code> represents exclusive ownership of a resource. Unlike raw pointers, it automatically calls <code>delete</code> when exiting scope (RAII). Because <code>std::unique_ptr</code> stores only the raw pointer (with default deleter), it has <strong>zero memory overhead</strong> compared to a raw C pointer (<code>sizeof(unique_ptr&lt;T&gt;) == sizeof(T*)</code>).</p>
+
+        <h3>2. Move Semantics (Ownership Transfer)</h3>
+        <p>Because ownership must be exclusive, <code>std::unique_ptr</code> has its copy constructor deleted. Transferring ownership requires explicit move semantics via <code>std::move()</code>, which resets the source pointer to <code>nullptr</code>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Why std::shared_ptr is Often Banned in Bare-Metal Systems</h3>
+        <ul>
+          <li><strong>RAM Overhead:</strong> <code>std::shared_ptr</code> allocates a 16-to-24-byte control block on the heap containing two reference counters, a custom deleter, and an allocator pointer. On a 16KB SRAM microcontroller, this memory bloat is unacceptable.</li>
+          <li><strong>Thread-Safety Atomic Latency:</strong> Incrementing and decrementing reference counters requires atomic instructions (e.g., <code>LDREX/STREX</code> on ARM Cortex-M), which disable compiler optimizations and increase instruction cycles.</li>
+        </ul>
+
+        <h3>2. Custom Deleters for Hardware Peripherals (RAII for MMIO)</h3>
+        <p><code>std::unique_ptr</code> can manage non-heap hardware resources—such as hardware mutexes, DMA channels, or power rails—by supplying a custom deleter that turns off clocks or releases locks automatically on scope exit.</p>
+
+        <div class="callout callout-warning">
+          <h4>⚠️ AUTOSAR C++14 Rule A18-5-8</h4>
+          <p>Objects shall not be created using raw <code>new</code> or <code>delete</code>. All dynamic allocation (if permitted during bootup) must be immediately wrapped in <code>std::unique_ptr</code> or <code>std::make_unique</code>.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how embedded engineers use <code>std::unique_ptr</code> with a custom lambda deleter to automatically power-down an SPI peripheral when done:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;memory&gt;
+#include &lt;iostream&gt;
+
+struct SpiPeripheral {
+    void write(uint8_t data) { std::cout &lt;&lt; "SPI Tx: " &lt;&lt; int(data) &lt;&lt; '\n'; }
+};
+
+// Custom deleter that disables the hardware clock
+struct SpiDeleter {
+    void operator()(SpiPeripheral* spi) const {
+        std::cout &lt;&lt; "Hardware Clock Disabled (Safe RAII State)\n";
+        // e.g., RCC-&gt;APB2ENR &amp;= ~SPI1_EN;
+    }
+};
+
+using SpiHandle = std::unique_ptr&lt;SpiPeripheral, SpiDeleter&gt;;
+
+void transmitSensorPacket() {
+    SpiPeripheral hwSpi;
+    SpiHandle handle(&amp;hwSpi); // Automatically unlocks on function exit!
+    handle-&gt;write(0xAA);
+} // &lt;-- SpiDeleter runs automatically here!</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the memory size of a std::unique_ptr&lt;int&gt; with the default deleter on a 32-bit ARM Cortex-M architecture?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 4 bytes (identical to a raw pointer)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 8 bytes (pointer + reference count)</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 16 bytes (control block overhead)</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 0 bytes (fully optimized away)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            With the default stateless deleter, <code>std::unique_ptr</code> incurs zero space overhead and occupies exactly 4 bytes on a 32-bit CPU, perfectly mirroring a raw pointer while providing RAII safety.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is std::make_unique&lt;T&gt;() preferred over std::unique_ptr&lt;T&gt;(new T()) in modern C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It automatically creates a thread for the pointer.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It guarantees exception safety and prevents resource leaks during multi-argument sub-expression evaluation.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It converts the pointer into a shared pointer.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It stores the object in Flash ROM instead of RAM.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::make_unique</code> prevents potential memory leaks when initializing multiple parameters in a function call where one constructor might throw before the pointer is assigned.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="2">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens to the source pointer after executing: std::unique_ptr&lt;int&gt; p2 = std::move(p1);?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> p1 continues to point to the same address.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> p1 is immediately deleted.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> p1 is set to nullptr, relinquishing ownership.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A compile-time error occurs.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::move()</code> transfers ownership from <code>p1</code> to <code>p2</code>, resetting <code>p1</code> to <code>nullptr</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="swapper_test.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="rule_of_three_five_zero.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

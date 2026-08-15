@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern C++ & Embedded Systems Deep-Dive Study Portal</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="index.html" class="nav-brand">
+        ⚡ C++ & Embedded Systems Deep-Dive Portal
+        <span class="badge-tag">Sections 10, 11, 12</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">🏠 Home</a></li>
+        <li><a href="section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Modern C++ & Embedded Systems Portal</h1>
+      <p>Comprehensive, deep-dive architectural analysis of 32 course projects across Sections 10, 11, and 12. Complete with fully annotated source code, embedded hardware considerations, zero-cost refactors, and interactive self-checking quizzes.</p>
+    </section>
+
+    <!-- Search and Filters -->
+    <section class="filter-panel">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="projectSearch" class="search-input" placeholder="Search by project name, concept (e.g. vtable, RAII, ring buffer), or tag...">
+      </div>
+      <div class="filter-chips">
+        <span class="filter-label">Filter:</span>
+        <button class="chip active" data-filter="all">All Projects (32)</button>
+        <button class="chip" data-filter="sec-10">Section 10: OOP & Enums (3)</button>
+        <button class="chip" data-filter="sec-11">Section 11: Templates & STL (19)</button>
+        <button class="chip" data-filter="sec-12">Section 12: Data Structures (10)</button>
+        <button class="chip" data-filter="emb-high">⚡ Critical / High Embedded Relevance</button>
+      </div>
+    </section>
+
+    <!-- Cards Grid -->
+    <section class="cards-grid">
+      
+        <a href="section_10/enum_fun.html" class="project-card" data-section="10" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-10">Section 10</span>
+            <span class="embedded-badge emb-high">⚡ High ⚡</span>
+          </div>
+          <h3 class="card-title">EnumFun</h3>
+          <p class="card-desc">Unscoped vs scoped enums, explicit uint8_t types, bitmasks, and switch jump tables.</p>
+          <div class="card-tags">
+            <span class="tag">Scoped Enums</span> <span class="tag">uint8_t</span> <span class="tag">Jump Tables</span>
+          </div>
+        </a>
+
+        <a href="section_10/animal_fun.html" class="project-card" data-section="10" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-10">Section 10</span>
+            <span class="embedded-badge emb-high">⚡ Critical ⚡</span>
+          </div>
+          <h3 class="card-title">AnimalFun</h3>
+          <p class="card-desc">Abstract classes, vtable/vptr RAM overhead, RTTI disablement, and the CRTP alternative.</p>
+          <div class="card-tags">
+            <span class="tag">VTable</span> <span class="tag">VPtr</span> <span class="tag">CRTP</span> <span class="tag">RTTI</span>
+          </div>
+        </a>
+
+        <a href="section_10/rpg_project.html" class="project-card" data-section="10" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-10">Section 10</span>
+            <span class="embedded-badge emb-high">⚡ High ⚡</span>
+          </div>
+          <h3 class="card-title">RPGProject</h3>
+          <p class="card-desc">Member initializers, virtual destructors, and static object pooling vs heap allocation.</p>
+          <div class="card-tags">
+            <span class="tag">OOP</span> <span class="tag">Virtual Destructor</span> <span class="tag">Object Pool</span>
+          </div>
+        </a>
+
+        <a href="section_11/smart_pointer_fun.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">SmartPointerFun</h3>
+          <p class="card-desc">Deep dive into deterministic memory ownership via <code>std::unique_ptr</code>. Explores move semantics, zero-overhead memory guar...</p>
+          <div class="card-tags">
+            <span class="tag">std::unique_ptr</span> <span class="tag">std::make_unique</span> <span class="tag">Move Semantics</span>
+          </div>
+        </a>
+
+        <a href="section_11/rule_of_three_five_zero.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">RuleOfThreeFiveZeroApp</h3>
+          <p class="card-desc">Mastering resource management under C++11/14. We analyze the Rule of Three, the Rule of Five (move semantics), and the Rule of Zer...</p>
+          <div class="card-tags">
+            <span class="tag">Rule of 3/5/0</span> <span class="tag">Copy Ctor</span> <span class="tag">Move Ctor</span>
+          </div>
+        </a>
+
+        <a href="section_11/map_vs_unordered_map.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">MapVsUnorderedMappApp</h3>
+          <p class="card-desc">Comparing ordered Red-Black Trees (<code>std::map</code>) against bucket-based Hash Tables (<code>std::unordered_map</code>). We e...</p>
+          <div class="card-tags">
+            <span class="tag">std::map</span> <span class="tag">std::unordered_map</span> <span class="tag">Red-Black Trees</span>
+          </div>
+        </a>
+
+        <a href="section_11/queue_projects.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">QueueProjects</h3>
+          <p class="card-desc">Exploring FIFO queue operations and why <code>std::queue</code> (backed by <code>std::deque</code>) is replaced in embedded firmwa...</p>
+          <div class="card-tags">
+            <span class="tag">std::queue</span> <span class="tag">FIFO</span> <span class="tag">Circular Ring Buffer</span>
+          </div>
+        </a>
+
+        <a href="section_11/remove_erase_idiom.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-med">⚡ High</span>
+          </div>
+          <h3 class="card-title">RemoveEraseIdiomApp</h3>
+          <p class="card-desc">Understanding the separation of algorithms from containers in C++. We dissect why <code>std::remove</code> does not alter containe...</p>
+          <div class="card-tags">
+            <span class="tag">Erase-Remove</span> <span class="tag">std::remove</span> <span class="tag">Iterator Invalidation</span>
+          </div>
+        </a>
+
+        <a href="section_11/templates.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">Templates</h3>
+          <p class="card-desc">Exploring generic function and class templates. We examine compile-time monomorphization, compare zero-overhead inlining against F...</p>
+          <div class="card-tags">
+            <span class="tag">Templates</span> <span class="tag">Generic Code</span> <span class="tag">Code Bloat</span>
+          </div>
+        </a>
+
+        <a href="section_11/rules_challenge.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">RulesChallenge</h3>
+          <p class="card-desc">Hands-on implementation of a custom dynamic buffer class adhering to the Rule of Three. We inspect deep copy allocation, memory le...</p>
+          <div class="card-tags">
+            <span class="tag">Buffer Management</span> <span class="tag">Deep Copy</span> <span class="tag">Rule of Three</span>
+          </div>
+        </a>
+
+        <a href="section_11/algorithm_fun.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">AlgorithmFun</h3>
+          <p class="card-desc">Exploring the standard algorithm library. We demonstrate why C++ templates and lambdas outperform traditional C <code>qsort()</cod...</p>
+          <div class="card-tags">
+            <span class="tag"><algorithm></span> <span class="tag">std::sort</span> <span class="tag">std::count_if</span>
+          </div>
+        </a>
+
+        <a href="section_11/stl_fun1.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">STLFun1</h3>
+          <p class="card-desc">Dissecting <code>std::vector</code> mechanics. We explore geometric capacity doubling, sudden heap reallocations during <code>push...</p>
+          <div class="card-tags">
+            <span class="tag">std::vector</span> <span class="tag">push_back</span> <span class="tag">Capacity Growth</span>
+          </div>
+        </a>
+
+        <a href="section_11/advanced_stl_app.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">AdvancedSTLApp</h3>
+          <p class="card-desc">Comparing non-contiguous containers (<code>std::deque</code>, <code>std::list</code>) against contiguous arrays. We examine CPU ca...</p>
+          <div class="card-tags">
+            <span class="tag">std::deque</span> <span class="tag">std::list</span> <span class="tag">Cache Locality</span>
+          </div>
+        </a>
+
+        <a href="section_11/advanced_stl_challenge_app.html" class="project-card" data-section="11" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-med">⚡ Medium</span>
+          </div>
+          <h3 class="card-title">AdvancedSTLChallengeApp</h3>
+          <p class="card-desc">Hands-on challenge manipulating STL containers, demonstrating selection guidelines based on insertion patterns, search frequencies...</p>
+          <div class="card-tags">
+            <span class="tag">STL Containers</span> <span class="tag">Container Selection</span> <span class="tag">Performance</span>
+          </div>
+        </a>
+
+        <a href="section_11/car_project.html" class="project-card" data-section="11" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">CarProject</h3>
+          <p class="card-desc">Demonstrating class encapsulation, private data invariants, and composition to model automotive subsystems....</p>
+          <div class="card-tags">
+            <span class="tag">Encapsulation</span> <span class="tag">Composition</span> <span class="tag">Object Design</span>
+          </div>
+        </a>
+
+        <a href="section_11/contacts_fun.html" class="project-card" data-section="11" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-med">⚡ Medium</span>
+          </div>
+          <h3 class="card-title">ContactsFun</h3>
+          <p class="card-desc">Using associative mappings for key-value pair storage, with focus on lookup mechanics and embedded ROM alternative tables....</p>
+          <div class="card-tags">
+            <span class="tag">std::map</span> <span class="tag">Key-Value</span> <span class="tag">Associative Lookup</span>
+          </div>
+        </a>
+
+        <a href="section_11/crop_hybridization_simulator.html" class="project-card" data-section="11" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">CropHybridizationSimulator</h3>
+          <p class="card-desc">Exploring value types and operator overloading in simulation modeling....</p>
+          <div class="card-tags">
+            <span class="tag">Value Semantics</span> <span class="tag">Operator Overloading</span> <span class="tag">Copying</span>
+          </div>
+        </a>
+
+        <a href="section_11/friend_fun.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">FriendFun</h3>
+          <p class="card-desc">Understanding the <code>friend</code> keyword to grant privileged internal access to helper classes without exposing raw registers...</p>
+          <div class="card-tags">
+            <span class="tag">friend</span> <span class="tag">Encapsulation</span> <span class="tag">Hardware Drivers</span>
+          </div>
+        </a>
+
+        <a href="section_11/language_translator_project.html" class="project-card" data-section="11" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-med">⚡ Medium</span>
+          </div>
+          <h3 class="card-title">LanguageTranslatorProject</h3>
+          <p class="card-desc">Building dictionary lookups and evaluating Flash ROM <code>constexpr</code> lookup tables for embedded systems....</p>
+          <div class="card-tags">
+            <span class="tag">Dictionary</span> <span class="tag">std::map</span> <span class="tag">Flash ROM</span>
+          </div>
+        </a>
+
+        <a href="section_11/overloading_fun.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">OverloadingFun</h3>
+          <p class="card-desc">Exploring operator overloading (<code>+</code>, <code>==</code>, <code>&lt;&lt;</code>). We show how embedded systems use operator...</p>
+          <div class="card-tags">
+            <span class="tag">Operator Overloading</span> <span class="tag">Fixed-Point</span> <span class="tag">Type Safety</span>
+          </div>
+        </a>
+
+        <a href="section_11/stack_fun.html" class="project-card" data-section="11" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">StackFun</h3>
+          <p class="card-desc">Understanding LIFO stack adapters. We compare data structure stacks with the hardware MCU execution stack, explore stack overflow ...</p>
+          <div class="card-tags">
+            <span class="tag">std::stack</span> <span class="tag">LIFO</span> <span class="tag">Call Stack</span>
+          </div>
+        </a>
+
+        <a href="section_11/swapper_test.html" class="project-card" data-section="11" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-11">Section 11</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">SwapperTest</h3>
+          <p class="card-desc">Implementing generic swap templates using reference passing without heap allocations....</p>
+          <div class="card-tags">
+            <span class="tag">Templates</span> <span class="tag">std::swap</span> <span class="tag">Pass-by-Reference</span>
+          </div>
+        </a>
+
+        <a href="section_12/array_queue_app.html" class="project-card" data-section="12" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">ArrayQueueApp</h3>
+          <p class="card-desc">Deep dive into circular array queue data structures. We examine index wrapping using modulo arithmetic, full/empty state disambigu...</p>
+          <div class="card-tags">
+            <span class="tag">ArrayQueue</span> <span class="tag">Ring Buffer</span> <span class="tag">Modulo Arithmetic</span>
+          </div>
+        </a>
+
+        <a href="section_12/array_list_app.html" class="project-card" data-section="12" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">ArrayListApp</h3>
+          <p class="card-desc">Building a custom dynamic array list implementing an abstract <code>List&lt;T&gt;</code> interface. We analyze growth factors, amo...</p>
+          <div class="card-tags">
+            <span class="tag">ArrayList</span> <span class="tag">Dynamic Array</span> <span class="tag">Amortized O(1)</span>
+          </div>
+        </a>
+
+        <a href="section_12/array_stack_app.html" class="project-card" data-section="12" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">ArrayStackApp</h3>
+          <p class="card-desc">Implementing a bounded array stack. We explore top index manipulation, push/pop mechanics, and deterministic execution....</p>
+          <div class="card-tags">
+            <span class="tag">ArrayStack</span> <span class="tag">LIFO</span> <span class="tag">Bounded Memory</span>
+          </div>
+        </a>
+
+        <a href="section_12/linked_chain_fun.html" class="project-card" data-section="12" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-med">⚡ Medium</span>
+          </div>
+          <h3 class="card-title">LinkedChainFun</h3>
+          <p class="card-desc">Exploring explicit node pointer linking and traversing heap-allocated structures....</p>
+          <div class="card-tags">
+            <span class="tag">Node</span> <span class="tag">Pointers</span> <span class="tag">Memory Layout</span>
+          </div>
+        </a>
+
+        <a href="section_12/linked_list_app.html" class="project-card" data-section="12" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">LinkedListApp</h3>
+          <p class="card-desc">Building a full linked list data structure implementing <code>List&lt;T&gt;</code>. We examine insertion/deletion at arbitrary pos...</p>
+          <div class="card-tags">
+            <span class="tag">LinkedList</span> <span class="tag">Dynamic Allocation</span> <span class="tag">Heap Fragmentation</span>
+          </div>
+        </a>
+
+        <a href="section_12/linked_queue_project.html" class="project-card" data-section="12" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-med">⚡ Medium</span>
+          </div>
+          <h3 class="card-title">LinkedQueueProject</h3>
+          <p class="card-desc">Implementing a node-based FIFO queue with front and rear pointers, contrasting its memory footprint with array ring buffers....</p>
+          <div class="card-tags">
+            <span class="tag">LinkedQueue</span> <span class="tag">FIFO</span> <span class="tag">Pointer Chasing</span>
+          </div>
+        </a>
+
+        <a href="section_12/linked_stack_app.html" class="project-card" data-section="12" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-med">⚡ Medium</span>
+          </div>
+          <h3 class="card-title">LinkedStackApp</h3>
+          <p class="card-desc">Implementing a node-based dynamic stack, analyzing push/pop pointer manipulation and cleanup....</p>
+          <div class="card-tags">
+            <span class="tag">LinkedStack</span> <span class="tag">LIFO</span> <span class="tag">Dynamic Nodes</span>
+          </div>
+        </a>
+
+        <a href="section_12/list_stack_project.html" class="project-card" data-section="12" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">ListStackProject</h3>
+          <p class="card-desc">Demonstrating the Adapter design pattern by implementing a <code>Stack</code> interface over an underlying <code>LinkedList</code>...</p>
+          <div class="card-tags">
+            <span class="tag">Adapter Pattern</span> <span class="tag">Composition</span> <span class="tag">ListStack</span>
+          </div>
+        </a>
+
+        <a href="section_12/templated_array_stack_app.html" class="project-card" data-section="12" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">TemplatedArrayStackApp</h3>
+          <p class="card-desc">Implementing a generic templated array stack. We explore type-safe compile-time instantiations, bounded memory guarantees, and why...</p>
+          <div class="card-tags">
+            <span class="tag">Templates</span> <span class="tag">ArrayStack</span> <span class="tag">Zero-Heap</span>
+          </div>
+        </a>
+
+        <a href="section_12/for_proj12_2_files.html" class="project-card" data-section="12" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-12">Section 12</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">_for-proj12-2-files</h3>
+          <p class="card-desc">Comparative architectural review of custom data structure implementations across performance, footprint, and deterministic timing ...</p>
+          <div class="card-tags">
+            <span class="tag">Reference Architecture</span> <span class="tag">Data Structures</span> <span class="tag">Comparative Analysis</span>
+          </div>
+        </a>
+    </section>
+  </main>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

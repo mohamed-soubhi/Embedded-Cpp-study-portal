@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C++ Templates &amp; Flash ROM Code Bloat Management - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">Templates</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Templates</span> <span class="tag">Generic Code</span> <span class="tag">Code Bloat</span> <span class="tag">Flash ROM</span> <span class="tag">Zero-Cost Inlining</span> <span class="tag">C++17 if constexpr</span>
+      </div>
+      <h1 class="project-title">Generic Programming vs Flash Memory Overhead in Embedded Microcontrollers</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring generic function and class templates. We examine compile-time monomorphization, compare zero-overhead inlining against Flash ROM binary expansion (template code bloat), and demonstrate techniques to share implementation code across instantiations.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+//double getBigger(double a, double b);
+//int getBigger(int a, int b);
+//string getBigger(string a, string b);
+
+template &lt;class T&gt;
+T getBigger(T a, T b) {
+	return (a &gt; b) ? a : b;
+}
+
+template &lt;class T&gt;
+T getSmaller(T a, T b) {
+	return (a &lt; b) ? a : b;
+}
+
+int main() {
+
+	double d1 = 3.14;
+	double d2 = 5.55;
+	int i1 = 11;
+	int i2 = 9;
+	string s1 = &quot;Alice&quot;;
+	string s2 = &quot;John&quot;;
+
+
+	double biggerDub = getBigger(d1, d2);
+	int biggerInt = getBigger(i1, i2);
+	string biggerStr = getBigger(s1, s2);
+
+	double smallerDub = getSmaller(d1, d2);
+	int smallerInt = getSmaller(i1, i2);
+	string smallerString = getSmaller(s1, s2);
+
+
+	cout &lt;&lt; &quot;Bigger items:&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; biggerDub &lt;&lt; &quot;\n\t&quot; &lt;&lt; biggerInt &lt;&lt; &quot;\n\t&quot; &lt;&lt; biggerStr &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;Smaller items:&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; smallerDub &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; smallerInt &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; smallerString &lt;&lt; endl;
+
+	return 0;
+}
+
+//double getBigger(double a, double b) {
+//	return (a &gt; b) ? a : b;
+//}
+//
+//int getBigger(int a, int b) {
+//	return (a &gt; b) ? a : b;
+//}
+//
+//string getBigger(string a, string b) {
+//	return (a &gt; b) ? a : b;
+//}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Compile-Time Monomorphization</h3>
+        <p>Unlike Java or C# generics (which use type erasure at runtime), C++ templates are instantiated at compile-time. The compiler generates an entirely dedicated copy of the machine code for each unique type (<code>print&lt;int&gt;</code>, <code>print&lt;double&gt;</code>, <code>print&lt;string&gt;</code>).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Flash ROM Code Bloat Hazard</h3>
+        <p>If a large template class is instantiated with 10 different types on a 64KB Flash microcontroller, the compiler will emit 10 distinct copies of the class binary, easily overflowing available Flash ROM.</p>
+
+        <div class="callout callout-tip">
+          <h4>💡 Embedded Optimization: Template Hoisting (Common Base Idiom)</h4>
+          <p>Extract all type-independent code into a non-templated base class. The templated derived class only implements thin inline type-casts, sharing a single binary implementation in Flash ROM!</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Template hoisting pattern reducing Flash ROM consumption:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">// Non-templated base: Single copy in Flash ROM (.text)
+class CircularBufferBase {
+protected:
+    void* buffer_;
+    size_t head_ = 0, tail_ = 0, capacity_;
+    void advanceTail() { tail_ = (tail_ + 1) % capacity_; }
+};
+
+// Thin templated wrapper: Inlined with ZERO extra Flash code
+template &lt;typename T, size_t N&gt;
+class CircularBuffer : public CircularBufferBase {
+public:
+    CircularBuffer() { buffer_ = storage_; capacity_ = N; }
+    void push(T val) { storage_[head_] = val; head_ = (head_ + 1) % N; }
+private:
+    T storage_[N];
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;template code bloat&#x27; in embedded microcontroller firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A compiler warning when template parameters are too long.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The generation of multiple redundant machine-code copies in Flash ROM for every unique template type instantiation.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> An error caused by insufficient stack memory.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A runtime exception thrown when templates exceed 1KB.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because C++ instantiates dedicated machine code for every type passed to a template, instantiating templates with numerous types can rapidly exhaust MCU Flash ROM.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="remove_erase_idiom.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="rules_challenge.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

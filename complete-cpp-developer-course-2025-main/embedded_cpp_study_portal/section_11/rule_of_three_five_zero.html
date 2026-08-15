@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rule of Three, Five, and Zero in Embedded C++ - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">RuleOfThreeFiveZeroApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Rule of 3/5/0</span> <span class="tag">Copy Ctor</span> <span class="tag">Move Ctor</span> <span class="tag">RAII</span> <span class="tag">Double Free</span> <span class="tag">DMA Buffers</span>
+      </div>
+      <h1 class="project-title">Managing Deep Resource Copies, Move Semantics, and Zero-Overhead Lifetime Guarantees</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Mastering resource management under C++11/14. We analyze the Rule of Three, the Rule of Five (move semantics), and the Rule of Zero. We investigate double-free hazards, DMA buffer ownership transfers without SRAM copying, and MISRA C++:2008 Rule 12-8-1 compliance.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">RulesDemo.h</button>
+            <button class="code-tab" data-target="file-tab-1">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef RULES_DEMO_H
+#define RULES_DEMO_H
+
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;memory&gt;
+
+using namespace std;
+
+class RuleOfThree {
+	public:
+		RuleOfThree(const char* text = &quot;default&quot;) {
+			data = new char[strlen(text) + 1];
+			strcpy_s(data, strlen(text) + 1, text);
+			cout &lt;&lt; &quot;[Three] Constructed with: &quot; &lt;&lt; data &lt;&lt; endl;
+		}
+
+		RuleOfThree(const RuleOfThree&amp; other) {
+			data = new char[strlen(other.data) + 1];
+			strcpy_s(data, strlen(other.data) + 1, other.data);
+			cout &lt;&lt; &quot;[Three] Copied: &quot; &lt;&lt; data &lt;&lt; endl;
+		}
+
+		RuleOfThree&amp; operator=(const RuleOfThree&amp; other) {
+			if (this != &amp;other) {
+				delete[] data;
+				data = new char[strlen(other.data) + 1];
+				strcpy_s(data, strlen(other.data) + 1, other.data);
+			}
+			cout &lt;&lt; &quot;[Three] Assigned: &quot; &lt;&lt; data &lt;&lt; endl;
+			return *this;
+		}
+
+		~RuleOfThree() {
+			cout &lt;&lt; &quot;[Three] Destroyed: &quot; &lt;&lt; data &lt;&lt; endl;
+			delete[] data;
+		}
+
+	private:
+		char* data;
+};
+
+class RuleOfFive {
+
+    public:
+        RuleOfFive(const char* text = &quot;default&quot;) {
+            data = new char[strlen(text) + 1];
+            strcpy_s(data, strlen(text) + 1, text);
+            cout &lt;&lt; &quot;[Five] Constructed with: &quot; &lt;&lt; data &lt;&lt; endl;
+        }
+
+        RuleOfFive(const RuleOfFive&amp; other) {
+            data = new char[strlen(other.data) + 1];
+            strcpy_s(data, strlen(other.data) + 1, other.data);
+            cout &lt;&lt; &quot;[Five] Copied: &quot; &lt;&lt; data &lt;&lt; endl;
+        }
+
+        RuleOfFive&amp; operator=(const RuleOfFive&amp; other) {
+            if (this != &amp;other) {
+                delete[] data;
+                data = new char[strlen(other.data) + 1];
+                strcpy_s(data, strlen(other.data) + 1, other.data);
+            }
+            cout &lt;&lt; &quot;[Five] Copy-assigned: &quot; &lt;&lt; data &lt;&lt; endl;
+            return *this;
+        }
+
+        RuleOfFive(RuleOfFive&amp;&amp; other) noexcept {
+            data = other.data;
+            other.data = nullptr;
+            cout &lt;&lt; &quot;[Five] Moved!&quot; &lt;&lt; endl;
+        }
+
+        RuleOfFive&amp; operator=(RuleOfFive&amp;&amp; other) noexcept {
+            if (this != &amp;other) {
+                delete[] data;
+                data = other.data;
+                other.data = nullptr;
+            }
+            cout &lt;&lt; &quot;[Five] Move-assigned!&quot; &lt;&lt; endl;
+            return *this;
+        }
+
+        ~RuleOfFive() {
+            cout &lt;&lt; &quot;[Five] Destroyed: &quot; &lt;&lt; (data ? data : &quot;null&quot;) &lt;&lt; endl;
+            delete[] data;
+        }
+
+    private:
+        char* data;
+};
+
+
+class RuleOfZero {
+    public:
+        RuleOfZero(const char* text = &quot;default&quot;) {
+            data = make_unique&lt;char[]&gt;(strlen(text) + 1);
+            strcpy_s(data.get(), strlen(text) + 1, text);
+            cout &lt;&lt; &quot;[Zero] Constructed with: &quot; &lt;&lt; data.get() &lt;&lt; endl;
+        }
+
+        void print() const {
+            cout &lt;&lt; &quot;[Zero] Content: &quot; &lt;&lt; data.get() &lt;&lt; endl;
+        }
+
+    private:
+        unique_ptr&lt;char[]&gt; data;
+};
+
+#endif </pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;RulesDemo.h&quot;
+
+int main() {
+
+	cout &lt;&lt; &quot;\n--- Rule of Three ---&quot; &lt;&lt; endl;
+	RuleOfThree a(&quot;Alpha&quot;);
+	RuleOfThree b = a;
+	b = a;
+
+	cout &lt;&lt; &quot;\n--- Rule of Five ---&quot; &lt;&lt; endl;
+	RuleOfFive c(&quot;Beta&quot;);
+	RuleOfFive d = move(c);
+	RuleOfFive e;
+	e = move(d);
+
+	cout &lt;&lt; &quot;\n--- Rule of Zero ---&quot; &lt;&lt; endl;
+	RuleOfZero f(&quot;Gamma&quot;);
+	f.print();
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Rule of Three (C++98)</h3>
+        <p>If a class manages a raw resource and defines any of: <strong>Destructor</strong>, <strong>Copy Constructor</strong>, or <strong>Copy Assignment Operator</strong>, it must explicitly implement all three to avoid shallow copy double-free corruption.</p>
+
+        <h3>2. The Rule of Five (C++11)</h3>
+        <p>With modern move semantics, classes managing resources should also implement the <strong>Move Constructor</strong> and <strong>Move Assignment Operator</strong> (or mark them <code>= delete</code>). Move operations transfer raw pointer ownership in $O(1)$ time without re-allocating memory.</p>
+
+        <h3>3. The Rule of Zero</h3>
+        <p>Design classes that do not directly manage raw resources; use standard RAII wrappers (e.g. <code>std::unique_ptr</code>, <code>std::array</code>). The compiler will automatically generate correct lifetime operations.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Move Semantics for DMA and Sensor Buffers</h3>
+        <p>In high-speed data acquisition (e.g. 1 MSPS ADC sampling), transferring 1024-byte buffers between an ISR queue and a processing task via copy constructor wastes CPU cycles and SRAM. Implementing move constructors allows instantaneous $O(1)$ pointer swaps with zero buffer copying.</p>
+
+        <div class="callout callout-warning">
+          <h4>⚠️ MISRA C++:2008 Rule 12-8-1 & AUTOSAR A12-8-1</h4>
+          <p>A copy constructor and copy assignment operator shall be declared for any class that handles dynamic resources or hardware locks. If copying is nonsensical (e.g. a hardware UART peripheral), both copy operations MUST be explicitly deleted (<code>= delete</code>).</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded non-copyable, move-only DMA packet buffer compliant with AUTOSAR A12-8-1:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;utility&gt;
+
+class DmaBuffer {
+public:
+    explicit DmaBuffer(size_t size) : size_(size), data_(new uint8_t[size]) {}
+    ~DmaBuffer() { delete[] data_; }
+
+    // Disable dangerous copying (Prevents double-free of DMA buffer)
+    DmaBuffer(const DmaBuffer&amp;) = delete;
+    DmaBuffer&amp; operator=(const DmaBuffer&amp;) = delete;
+
+    // Enable fast zero-copy move operations
+    DmaBuffer(DmaBuffer&amp;&amp; other) noexcept : size_(other.size_), data_(other.data_) {
+        other.size_ = 0;
+        other.data_ = nullptr;
+    }
+
+    DmaBuffer&amp; operator=(DmaBuffer&amp;&amp; other) noexcept {
+        if (this != &amp;other) {
+            delete[] data_;
+            data_ = other.data_;
+            size_ = other.size_;
+            other.data_ = nullptr;
+            other.size_ = 0;
+        }
+        return *this;
+    }
+
+private:
+    size_t size_;
+    uint8_t* data_;
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What catastrophic failure occurs if a class allocating dynamic memory relies on the default compiler-generated copy constructor?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A compile-time template error.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A shallow copy is made, causing both objects to share the same pointer and triggering a fatal double-free crash upon destruction.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The object is automatically converted to an rvalue reference.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The heap memory is converted to static flash memory.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Default copy constructors perform a member-wise shallow copy. Both instances will point to the same memory block, and when both destructors run, the second will attempt to delete already-freed memory (double-free vulnerability).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why should move constructors and move assignment operators always be marked `noexcept` in embedded C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To allow standard containers like std::vector to use move operations instead of falling back to expensive copy operations during reallocation.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To disable compiler optimization.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Because embedded microcontrollers do not support exceptions in any form.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To force the object to be placed in ROM.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Containers like <code>std::vector</code> verify if a type's move constructor is <code>noexcept</code>. If it is not, the container falls back to copying elements during reallocation to preserve the strong exception guarantee.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the &#x27;Rule of Zero&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Never write classes with more than zero member variables.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Classes should rely on RAII member types (like smart pointers) so they do not need custom copy/move/destructor functions.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> All member pointers must be initialized to 0 (NULL).</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A function must take zero arguments to be real-time safe.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The Rule of Zero states that if a class is composed of types that already manage their own resources cleanly (e.g. smart pointers, standard containers), the class itself does not need custom special member functions.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="smart_pointer_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="map_vs_unordered_map.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

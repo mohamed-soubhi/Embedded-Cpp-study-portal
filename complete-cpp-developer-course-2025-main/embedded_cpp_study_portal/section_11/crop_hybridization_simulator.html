@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Value Types &amp; Operator Overloading in Simulations - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">CropHybridizationSimulator</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Value Semantics</span> <span class="tag">Operator Overloading</span> <span class="tag">Copying</span>
+      </div>
+      <h1 class="project-title">Modeling Value Semantics without Pointer Overhead</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring value types and operator overloading in simulation modeling.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Crop.h</button>
+            <button class="code-tab" data-target="file-tab-1">Crop.cpp</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef CROP_H
+#define CROP_H
+
+class Crop {
+	public:
+		Crop(int height, int yield, int droughtResistance);
+		int getHeight() const;
+		int getYield() const;
+		int getDroughtResistance() const;
+		int getScore() const;
+
+		bool operator==(const Crop&amp; other) const;
+		bool operator!=(const Crop&amp; other) const;
+		bool operator&lt;(const Crop&amp; other) const;
+		bool operator&gt;(const Crop&amp; other) const;
+		bool operator&lt;=(const Crop&amp; other) const;
+		bool operator&gt;=(const Crop&amp; other) const;
+		Crop operator+(const Crop&amp; other) const;
+		void operator=(const Crop&amp; other);
+
+	private:
+		int height;
+		int yield;
+		int droughtResistance;
+};
+#endif
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &quot;Crop.h&quot;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+
+using namespace std;
+
+Crop::Crop(int height, int yield, int droughtResistance) : height(height), yield(yield), 
+droughtResistance(droughtResistance) {
+}
+
+int Crop::getHeight() const {
+	return height;
+}
+
+int Crop::getYield() const {
+	return yield;
+}
+
+int Crop::getDroughtResistance() const {
+	return droughtResistance;
+}
+
+int Crop::getScore() const {
+	return (height * 2) + (yield * 3) + (droughtResistance * 4);
+}
+
+bool Crop::operator==(const Crop&amp; other) const {
+	return getScore() == other.getScore();
+}
+
+bool Crop::operator!=(const Crop&amp; other) const {
+	return !(*this == other);
+}
+
+bool Crop::operator&lt;(const Crop&amp; other) const {
+	return getScore() &lt; other.getScore();
+}
+
+bool Crop::operator&gt;(const Crop&amp; other) const {
+	return getScore() &gt; other.getScore();
+}
+
+bool Crop::operator&lt;=(const Crop&amp; other) const {
+	return getScore() &lt;= other.getScore();
+}
+
+bool Crop::operator&gt;=(const Crop&amp; other) const {
+	return getScore() &gt;= other.getScore();
+}
+
+Crop Crop::operator+(const Crop&amp; other) const {
+	srand(time(nullptr));
+	auto randomize = [](int value) {
+		int variation = (rand() % 3) - 1;   // -1, 0, or +1
+			return value + variation;
+	};
+
+	int newHeight = randomize((height + other.height) / 2);
+	int newYield = randomize((yield + other.yield) / 2);
+	int newDrought = randomize((droughtResistance + other.droughtResistance) / 2);
+
+	return Crop(newHeight, newYield, newDrought);
+}
+
+void Crop::operator=(const Crop&amp; other) {
+	height = other.height;
+	yield = other.yield;
+	droughtResistance = other.droughtResistance;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+#include &quot;Crop.h&quot;
+using namespace std;
+
+void printCrop(const Crop&amp; crop);
+
+int main() {
+	vector&lt;unique_ptr&lt;Crop&gt;&gt; crops;
+
+	crops.push_back(make_unique&lt;Crop&gt;(30, 40, 20));
+	crops.push_back(make_unique&lt;Crop&gt;(25, 50, 15));
+	crops.push_back(make_unique&lt;Crop&gt;(32, 38, 22));
+
+	Crop hybrid = *crops[0] + *crops[1];
+
+	cout &lt;&lt; &quot;Crop 1:&quot; &lt;&lt; endl;
+	printCrop(*crops[0]);
+
+	cout &lt;&lt; &quot;Crop 2:&quot; &lt;&lt; endl;
+	printCrop(*crops[1]);
+
+	cout &lt;&lt; &quot;Crop 3:&quot; &lt;&lt; endl;
+	printCrop(*crops[2]);
+
+	cout &lt;&lt; &quot;Hybrid crop:&quot; &lt;&lt; endl;
+	printCrop(hybrid);
+
+	cout &lt;&lt; boolalpha;
+	cout &lt;&lt; &quot;Hybrid == Crop 3?&quot; &lt;&lt; (hybrid == *crops[2]) &lt;&lt; endl;
+	cout &lt;&lt; &quot;Hybrid &gt; Crop 3?&quot; &lt;&lt; (hybrid &gt; *crops[2]) &lt;&lt; endl;
+
+	return 0;
+}
+
+void printCrop(const Crop&amp; crop) {
+	cout &lt;&lt; &quot;Height: &quot; &lt;&lt; crop.getHeight()
+		&lt;&lt; &quot;, Yield: &quot; &lt;&lt; crop.getYield()
+		&lt;&lt; &quot;, Drought Resistance: &quot; &lt;&lt; crop.getDroughtResistance()
+		&lt;&lt; &quot;, Score: &quot; &lt;&lt; crop.getScore() &lt;&lt; endl &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Value Semantics</h3><p>Value types manage their own state cleanly without requiring pointer indirection.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Stack-Based Physics & Control</h3><p>Value objects are placed on the stack or in static arrays with zero dynamic allocation.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct Vector3D { float x, y, z; Vector3D operator+(const Vector3D&amp; o) const { return {x+o.x, y+o.y, z+o.z}; } };</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is an advantage of value types in embedded systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> They reside on the stack or in static memory with zero heap allocation.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> They require heap allocation.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> They must use virtual functions.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They cannot be copied.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Value types avoid pointer dereferencing and heap allocation overhead.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="contacts_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="friend_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

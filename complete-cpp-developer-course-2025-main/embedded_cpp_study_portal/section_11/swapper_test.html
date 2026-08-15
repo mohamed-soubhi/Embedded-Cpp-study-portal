@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generic Template Swapping - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">SwapperTest</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Templates</span> <span class="tag">std::swap</span> <span class="tag">Pass-by-Reference</span>
+      </div>
+      <h1 class="project-title">Pass-by-Reference &amp; Zero-Copy Value Exchanges</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Implementing generic swap templates using reference passing without heap allocations.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">Swapper.h</button>
+            <button class="code-tab" data-target="file-tab-1">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef SWAPPER_H
+#define SWAPPER_H
+
+template &lt;class T&gt;
+class Swapper {
+	public:
+		Swapper(T first, T second);
+		void swap();
+		T getFirst() const;
+		T getSecond() const; 
+
+	private:
+		T first;
+		T second;
+};
+
+
+template &lt;class T&gt;
+Swapper&lt;T&gt;::Swapper(T first, T second) : first(first), second(second) {}
+
+template &lt;class T&gt;
+void Swapper&lt;T&gt;::swap() {
+	T temp = first;
+	first = second;
+	second = temp;
+}
+
+template &lt;class T&gt;
+T Swapper&lt;T&gt;::getFirst() const {
+	return first;
+}
+
+template &lt;class T&gt;
+T Swapper&lt;T&gt;::getSecond() const {
+	return second;
+}
+
+#endif </pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &quot;Swapper.h&quot;
+using namespace std;
+
+int main() {
+	Swapper&lt;int&gt; intSwapper(5, 10);
+	Swapper&lt;string&gt; stringSwapper(&quot;John&quot;, &quot;Bob&quot;);
+
+	cout &lt;&lt; &quot;Before swap:&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; intSwapper.getFirst() &lt;&lt; &quot;, &quot;
+		&lt;&lt; intSwapper.getSecond() &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; stringSwapper.getFirst() &lt;&lt; &quot;, &quot;
+		&lt;&lt; stringSwapper.getSecond() &lt;&lt; endl;
+
+
+	intSwapper.swap();
+	stringSwapper.swap();
+
+	cout &lt;&lt; &quot;\nAfter swap:&quot; &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; intSwapper.getFirst() &lt;&lt; &quot;, &quot;
+		&lt;&lt; intSwapper.getSecond() &lt;&lt; endl;
+	cout &lt;&lt; &quot;\t&quot; &lt;&lt; stringSwapper.getFirst() &lt;&lt; &quot;, &quot;
+		&lt;&lt; stringSwapper.getSecond() &lt;&lt; endl;
+
+
+	return 0;
+}
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Generic Reference Swapping</h3><p>Using template references <code>T&amp;</code> allows modifying caller variables directly without copies.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Register Swaps</h3><p>Compilers optimize reference swaps directly into CPU register instructions (e.g. <code>MOV</code>/<code>REV</code>).</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">template &lt;typename T&gt;
+void fastSwap(T&amp; a, T&amp; b) noexcept {
+    T tmp = std::move(a); a = std::move(b); b = std::move(tmp);
+}</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is pass-by-reference essential in template swap functions?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To avoid expensive copies and modify the original variables in-place.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To allocate pointers dynamically.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To enable runtime polymorphism.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To store values in ROM.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Pass-by-reference enables in-place modification and avoids copying large payloads.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="stack_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="smart_pointer_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

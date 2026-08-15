@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPGProject - C++ OOP Hierarchies & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 10</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="enum_fun.html">EnumFun</a></li>
+        <li><a href="animal_fun.html">AnimalFun</a></li>
+        <li><a href="rpg_project.html" class="active">RPGProject</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 10 (OOP & Enums)</a>
+      <span class="sep">/</span>
+      <span class="current">RPGProject</span>
+    </div>
+
+    <!-- Project Header -->
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-10">Section 10</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Class Hierarchies</span>
+        <span class="tag">Factory Pattern</span>
+        <span class="tag">Virtual Destructors</span>
+        <span class="tag">Memory Leaks & Cleanup</span>
+        <span class="tag">Static Object Pools</span>
+      </div>
+      <h1 class="project-title">OOP Class Hierarchies, Factory Pattern, and Safe Embedded Memory Management</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> A complete multi-class RPG character architecture demonstrating member initializer lists, virtual destructors, factory instantiation, and container ownership. We analyze the risks of raw pointer collections (<code>std::vector&lt;Player*&gt;</code>) in safety-critical systems and demonstrate zero-heap static object pooling compliant with AUTOSAR A18-5-2.
+      </div>
+    </header>
+
+    <!-- Source Code Section with Multi-File Tabs -->
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Multi-File Source Code
+      </h2>
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-main">main.cpp</button>
+            <button class="code-tab" data-target="file-player-h">Player.h</button>
+            <button class="code-tab" data-target="file-player-cpp">Player.cpp</button>
+            <button class="code-tab" data-target="file-warrior-h">Warrior.h</button>
+            <button class="code-tab" data-target="file-priest-h">Priest.h</button>
+            <button class="code-tab" data-target="file-mage-h">Mage.h</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+
+        <!-- main.cpp -->
+        <div class="code-panel active" id="file-main">
+          <pre class="code-block"><span class="tok-pre">#include</span> <span class="tok-str">&lt;iostream&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;string&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;vector&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">"Player.h"</span>
+<span class="tok-pre">#include</span> <span class="tok-str">"Warrior.h"</span>
+<span class="tok-pre">#include</span> <span class="tok-str">"Priest.h"</span>
+<span class="tok-pre">#include</span> <span class="tok-str">"Mage.h"</span>
+<span class="tok-kw">using namespace</span> std;
+
+<span class="tok-com">// Function Declarations</span>
+<span class="tok-type">void</span> <span class="tok-fn">printMainMenu</span>();
+<span class="tok-type">void</span> <span class="tok-fn">printRaceMenu</span>();
+<span class="tok-type">Race</span> <span class="tok-fn">getRace</span>(<span class="tok-type">int</span> raceNum);
+<span class="tok-type">Player</span>* <span class="tok-fn">createPlayer</span>(string name, <span class="tok-type">int</span> typeNum, <span class="tok-type">int</span> raceNum);
+<span class="tok-type">void</span> <span class="tok-fn">printAll</span>(<span class="tok-kw">const</span> vector&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList);
+<span class="tok-type">void</span> <span class="tok-fn">doCleanup</span>(vector&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList);
+
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+    <span class="tok-type">int</span> choice;
+    <span class="tok-type">int</span> raceNum;
+    string playerName;
+    
+    <span class="tok-com">// Vector of raw owning pointers</span>
+    <span class="tok-com">// ⚠️ EMBEDDED CONCERN: Raw pointer vectors require manual lifecycle management.</span>
+    <span class="tok-com">// In C++11/14, `vector&lt;unique_ptr&lt;Player&gt;&gt;` or static object pool is mandatory.</span>
+    vector&lt;<span class="tok-type">Player</span>*&gt; playerList;
+
+    <span class="tok-fn">printMainMenu</span>();
+    cin &gt;&gt; choice; 
+    cin.<span class="tok-fn">get</span>(); <span class="tok-com">// Consume trailing newline</span>
+
+    <span class="tok-kw">while</span> (choice != <span class="tok-num">0</span>) {
+        cout &lt;&lt; <span class="tok-str">"What would you like to name your character?"</span> &lt;&lt; endl;
+        <span class="tok-fn">getline</span>(cin, playerName);
+
+        <span class="tok-fn">printRaceMenu</span>();
+        cin &gt;&gt; raceNum;
+        cin.<span class="tok-fn">get</span>();
+
+        <span class="tok-com">// Factory instantiation returning raw heap pointer</span>
+        <span class="tok-type">Player</span>* tempPlayer = <span class="tok-fn">createPlayer</span>(playerName, choice, raceNum);
+        <span class="tok-kw">if</span> (tempPlayer != <span class="tok-kw">nullptr</span>) {
+            playerList.<span class="tok-fn">push_back</span>(tempPlayer);
+        }
+
+        <span class="tok-fn">printMainMenu</span>();
+        cin &gt;&gt; choice;
+        cin.<span class="tok-fn">get</span>();
+    }
+
+    <span class="tok-fn">printAll</span>(playerList);
+    
+    <span class="tok-com">// Explicit manual deallocation</span>
+    <span class="tok-fn">doCleanup</span>(playerList);
+
+    cout &lt;&lt; <span class="tok-str">"Program done!"</span> &lt;&lt; endl;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}
+
+<span class="tok-type">void</span> <span class="tok-fn">printMainMenu</span>() {
+    cout &lt;&lt; <span class="tok-str">"\nChoose a class:\n\t1 - Warrior\n\t2 - Priest\n\t3 - Mage\n\t0 - Finish\n"</span>;
+}
+
+<span class="tok-type">void</span> <span class="tok-fn">printRaceMenu</span>() {
+    cout &lt;&lt; <span class="tok-str">"Choose a race:\n\t1 - Human\n\t2 - Elf\n\t3 - Dwarf\n\t4 - Orc\n\t5 - Troll\n"</span>;
+}
+
+<span class="tok-type">Race</span> <span class="tok-fn">getRace</span>(<span class="tok-type">int</span> raceNum) {
+    <span class="tok-kw">switch</span> (raceNum) {
+        <span class="tok-kw">case</span> <span class="tok-num">1</span>: <span class="tok-kw">return</span> <span class="tok-type">Race</span>::HUMAN;
+        <span class="tok-kw">case</span> <span class="tok-num">2</span>: <span class="tok-kw">return</span> <span class="tok-type">Race</span>::ELF;
+        <span class="tok-kw">case</span> <span class="tok-num">3</span>: <span class="tok-kw">return</span> <span class="tok-type">Race</span>::DWARF;
+        <span class="tok-kw">case</span> <span class="tok-num">4</span>: <span class="tok-kw">return</span> <span class="tok-type">Race</span>::ORC;
+        <span class="tok-kw">case</span> <span class="tok-num">5</span>: <span class="tok-kw">return</span> <span class="tok-type">Race</span>::TROLL;
+        <span class="tok-kw">default</span>: <span class="tok-kw">return</span> <span class="tok-type">Race</span>::HUMAN;
+    }
+}
+
+<span class="tok-com">// Factory Function: Centralizes object construction</span>
+<span class="tok-type">Player</span>* <span class="tok-fn">createPlayer</span>(string name, <span class="tok-type">int</span> typeNum, <span class="tok-type">int</span> raceNum) {
+    <span class="tok-type">Race</span> race = <span class="tok-fn">getRace</span>(raceNum);
+    <span class="tok-kw">switch</span> (typeNum) {
+        <span class="tok-kw">case</span> <span class="tok-num">1</span>: <span class="tok-kw">return new</span> <span class="tok-type">Warrior</span>(name, race);
+        <span class="tok-kw">case</span> <span class="tok-num">2</span>: <span class="tok-kw">return new</span> <span class="tok-type">Priest</span>(name, race);
+        <span class="tok-kw">case</span> <span class="tok-num">3</span>: <span class="tok-kw">return new</span> <span class="tok-type">Mage</span>(name, race);
+        <span class="tok-kw">default</span>: <span class="tok-kw">return nullptr</span>;
+    }
+}
+
+<span class="tok-com">// Polymorphic output loop passing container by const-reference</span>
+<span class="tok-type">void</span> <span class="tok-fn">printAll</span>(<span class="tok-kw">const</span> vector&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-type">Player</span>* player : playerList) {
+        cout &lt;&lt; <span class="tok-str">"My name is "</span> &lt;&lt; player-&gt;<span class="tok-fn">getName</span>()
+             &lt;&lt; <span class="tok-str">". I'm a "</span> &lt;&lt; player-&gt;<span class="tok-fn">whatRace</span>()
+             &lt;&lt; <span class="tok-str">" and my attack is: "</span> &lt;&lt; player-&gt;<span class="tok-fn">attack</span>() &lt;&lt; endl;
+    }
+}
+
+<span class="tok-com">// Manual memory reclamation</span>
+<span class="tok-type">void</span> <span class="tok-fn">doCleanup</span>(vector&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList) {
+    <span class="tok-kw">for</span> (<span class="tok-type">Player</span>* player : playerList) {
+        <span class="tok-kw">delete</span> player; <span class="tok-com">// Calls virtual destructor safely</span>
+    }
+    playerList.<span class="tok-fn">clear</span>();
+}</pre>
+        </div>
+
+        <!-- Player.h -->
+        <div class="code-panel" id="file-player-h">
+          <pre class="code-block"><span class="tok-pre">#ifndef</span> PLAYER_H
+<span class="tok-pre">#define</span> PLAYER_H
+
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;string&gt;</span>
+<span class="tok-kw">using namespace</span> std;
+
+<span class="tok-com">// Scoped Enum for character race</span>
+<span class="tok-kw">enum class</span> <span class="tok-type">Race</span> { HUMAN, ELF, DWARF, ORC, TROLL };
+
+<span class="tok-kw">class</span> <span class="tok-type">Player</span> {
+<span class="tok-kw">public</span>:
+    <span class="tok-fn">Player</span>(string name, <span class="tok-type">Race</span> race, <span class="tok-type">int</span> hitPoints, <span class="tok-type">int</span> magicPoints);
+    
+    <span class="tok-com">// ✅ GOOD PRACTICE: Virtual destructor ensures proper derived cleanup</span>
+    <span class="tok-kw">virtual</span> ~<span class="tok-fn">Player</span>() = <span class="tok-kw">default</span>;
+
+    string <span class="tok-fn">getName</span>() <span class="tok-kw">const</span>;
+    <span class="tok-type">Race</span> <span class="tok-fn">getRace</span>() <span class="tok-kw">const</span>;
+    string <span class="tok-fn">whatRace</span>() <span class="tok-kw">const</span>;
+    <span class="tok-type">int</span> <span class="tok-fn">getHitPoints</span>() <span class="tok-kw">const</span>;
+    <span class="tok-type">int</span> <span class="tok-fn">getMagicPointers</span>() <span class="tok-kw">const</span>;
+
+    <span class="tok-type">void</span> <span class="tok-fn">setName</span>(string name);
+    <span class="tok-type">void</span> <span class="tok-fn">setRace</span>(<span class="tok-type">Race</span> race);
+    <span class="tok-type">void</span> <span class="tok-fn">setHitPoints</span>(<span class="tok-type">int</span> hitPoints);
+    <span class="tok-type">void</span> <span class="tok-fn">setMagicPoints</span>(<span class="tok-type">int</span> magicPoints);
+
+    <span class="tok-com">// Pure virtual attack method</span>
+    <span class="tok-kw">virtual</span> string <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+
+<span class="tok-kw">private</span>:
+    string name;
+    <span class="tok-type">Race</span> race;
+    <span class="tok-type">int</span> hitPoints;
+    <span class="tok-type">int</span> magicPoints;
+};
+
+<span class="tok-pre">#endif</span></pre>
+        </div>
+
+        <!-- Player.cpp -->
+        <div class="code-panel" id="file-player-cpp">
+          <pre class="code-block"><span class="tok-pre">#include</span> <span class="tok-str">"Player.h"</span>
+
+<span class="tok-com">// Member Initializer List: Initializes fields directly in place</span>
+<span class="tok-type">Player</span>::<span class="tok-fn">Player</span>(string name, <span class="tok-type">Race</span> race, <span class="tok-type">int</span> hitPoints, <span class="tok-type">int</span> magicPoints) 
+    : name(name), race(race), hitPoints(hitPoints), magicPoints(magicPoints) {
+}
+
+string <span class="tok-type">Player</span>::<span class="tok-fn">getName</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> name; }
+<span class="tok-type">Race</span> <span class="tok-type">Player</span>::<span class="tok-fn">getRace</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> race; }
+
+string <span class="tok-type">Player</span>::<span class="tok-fn">whatRace</span>() <span class="tok-kw">const</span> {
+    <span class="tok-kw">switch</span>(race) {
+        <span class="tok-kw">case</span> <span class="tok-type">Race</span>::HUMAN: <span class="tok-kw">return</span> <span class="tok-str">"Human"</span>;
+        <span class="tok-kw">case</span> <span class="tok-type">Race</span>::ELF:   <span class="tok-kw">return</span> <span class="tok-str">"Elf"</span>;
+        <span class="tok-kw">case</span> <span class="tok-type">Race</span>::DWARF: <span class="tok-kw">return</span> <span class="tok-str">"Dwarf"</span>;
+        <span class="tok-kw">case</span> <span class="tok-type">Race</span>::ORC:   <span class="tok-kw">return</span> <span class="tok-str">"Orc"</span>;
+        <span class="tok-kw">case</span> <span class="tok-type">Race</span>::TROLL: <span class="tok-kw">return</span> <span class="tok-str">"Troll"</span>;
+        <span class="tok-kw">default</span>:          <span class="tok-kw">return</span> <span class="tok-str">"Unknown"</span>;
+    }
+}
+
+<span class="tok-type">int</span> <span class="tok-type">Player</span>::<span class="tok-fn">getHitPoints</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> hitPoints; }
+<span class="tok-type">int</span> <span class="tok-type">Player</span>::<span class="tok-fn">getMagicPointers</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> magicPoints; }
+
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setName</span>(string name) { <span class="tok-kw">this</span>-&gt;name = name; }
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setRace</span>(<span class="tok-type">Race</span> race) { <span class="tok-kw">this</span>-&gt;race = race; }
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setHitPoints</span>(<span class="tok-type">int</span> hitPoints) { <span class="tok-kw">this</span>-&gt;hitPoints = hitPoints; }
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setMagicPoints</span>(<span class="tok-type">int</span> magicPoints) { <span class="tok-kw">this</span>-&gt;magicPoints = magicPoints; }</pre>
+        </div>
+
+        <!-- Warrior.h -->
+        <div class="code-panel" id="file-warrior-h">
+          <pre class="code-block"><span class="tok-pre">#ifndef</span> WARRIOR_H
+<span class="tok-pre">#define</span> WARRIOR_H
+<span class="tok-pre">#include</span> <span class="tok-str">"Player.h"</span>
+
+<span class="tok-kw">class</span> <span class="tok-type">Warrior</span> : <span class="tok-kw">public</span> <span class="tok-type">Player</span> {
+<span class="tok-kw">public</span>:
+    <span class="tok-fn">Warrior</span>(string name, <span class="tok-type">Race</span> race) : <span class="tok-type">Player</span>(name, race, <span class="tok-num">200</span>, <span class="tok-num">0</span>) {}
+
+    string <span class="tok-fn">attack</span>() <span class="tok-kw">const override</span> {
+        <span class="tok-kw">return</span> <span class="tok-str">"I will destroy you with my sword, foul demon!"</span>;
+    }
+};
+
+<span class="tok-pre">#endif</span></pre>
+        </div>
+
+        <!-- Priest.h -->
+        <div class="code-panel" id="file-priest-h">
+          <pre class="code-block"><span class="tok-pre">#ifndef</span> PRIEST_H
+<span class="tok-pre">#define</span> PRIEST_H
+<span class="tok-pre">#include</span> <span class="tok-str">"Player.h"</span>
+
+<span class="tok-kw">class</span> <span class="tok-type">Priest</span> : <span class="tok-kw">public</span> <span class="tok-type">Player</span> {
+<span class="tok-kw">public</span>:
+    <span class="tok-fn">Priest</span>(string name, <span class="tok-type">Race</span> race) : <span class="tok-type">Player</span>(name, race, <span class="tok-num">100</span>, <span class="tok-num">200</span>) {}
+
+    string <span class="tok-fn">attack</span>() <span class="tok-kw">const override</span> {
+        <span class="tok-kw">return</span> <span class="tok-str">"I will assault you with Holy Wrath!"</span>;
+    }
+};
+
+<span class="tok-pre">#endif</span></pre>
+        </div>
+
+        <!-- Mage.h -->
+        <div class="code-panel" id="file-mage-h">
+          <pre class="code-block"><span class="tok-pre">#ifndef</span> MAGE_H
+<span class="tok-pre">#define</span> MAGE_H
+<span class="tok-pre">#include</span> <span class="tok-str">"Player.h"</span>
+
+<span class="tok-kw">class</span> <span class="tok-type">Mage</span> : <span class="tok-kw">public</span> <span class="tok-type">Player</span> {
+<span class="tok-kw">public</span>:
+    <span class="tok-fn">Mage</span>(string name, <span class="tok-type">Race</span> race) : <span class="tok-type">Player</span>(name, race, <span class="tok-num">150</span>, <span class="tok-num">150</span>) {}
+
+    string <span class="tok-fn">attack</span>() <span class="tok-kw">const override</span> {
+        <span class="tok-kw">return</span> <span class="tok-str">"I will crush you with the power of my arcane missiles!"</span>;
+    }
+};
+
+<span class="tok-pre">#endif</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deep-Dive Conceptual Breakdown -->
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>1. Member Initializer Lists vs Body Assignment</h3>
+        <p>In <code>Player.cpp</code>, the constructor uses a <strong>Member Initializer List</strong>:</p>
+        <pre class="code-block" style="background:#161b22; padding:10px; border-radius:6px;"><span class="tok-type">Player</span>::<span class="tok-fn">Player</span>(string name, <span class="tok-type">Race</span> race, <span class="tok-type">int</span> hp, <span class="tok-type">int</span> mp) 
+    : name(name), race(race), hitPoints(hp), magicPoints(mp) {}</pre>
+        <p>This avoids default-constructing the member variables first and then re-assigning them in the constructor body, saving redundant destructor and assignment operations.</p>
+
+        <h3>2. Proper Virtual Destructor Idiom</h3>
+        <p>Because <code>Player</code> defines <code>virtual ~Player() = default;</code>, calling <code>delete player;</code> in <code>doCleanup()</code> accurately invokes the specialized destructor of <code>Warrior</code>, <code>Priest</code>, or <code>Mage</code> before reclaiming base storage.</p>
+      </div>
+    </section>
+
+    <!-- Embedded C++ Systems & Hardware Reality -->
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>1. The Danger of Dynamic Heap Operations in Safety-Critical Firmware</h3>
+        <ul>
+          <li><strong>Heap Fragmentation:</strong> Repeated <code>new</code> and <code>delete</code> cycles inside dynamic menus create memory "holes" in embedded SRAM. Eventually, a future allocation fails even though total free memory appears sufficient.</li>
+          <li><strong>AUTOSAR A18-5-2 Violation:</strong> In automotive ECUs (ISO 26262 ASIL D), dynamic memory allocation is strictly prohibited after the initial startup boot phase.</li>
+        </ul>
+
+        <h3>2. Static Object Pooling (Zero-Heap Embedded Alternative)</h3>
+        <p>Instead of heap-allocating players dynamically, embedded developers use <strong>Pre-Allocated Static Pools</strong> or <code>std::variant</code> arrays bounded at compile time.</p>
+      </div>
+    </section>
+
+    <!-- Embedded Refactor Example -->
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Embedded Refactoring: Static Object Pool with `std::variant`
+      </h2>
+      <div class="content-card">
+        <p>Here is an embedded refactoring using <code>std::variant</code> and <code>std::array</code> that requires <strong>ZERO heap allocations and ZERO vtable overhead</strong>:</p>
+        
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;"><span class="tok-pre">#include</span> <span class="tok-str">&lt;iostream&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;array&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;variant&gt;</span>
+<span class="tok-pre">#include</span> <span class="tok-str">&lt;string_view&gt;</span>
+
+<span class="tok-kw">struct</span> <span class="tok-type">Warrior</span> {
+    std::string_view name;
+    <span class="tok-kw">constexpr</span> std::string_view <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> <span class="tok-str">"Sword Strike!"</span>; }
+};
+
+<span class="tok-kw">struct</span> <span class="tok-type">Mage</span> {
+    std::string_view name;
+    <span class="tok-kw">constexpr</span> std::string_view <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> <span class="tok-str">"Arcane Blast!"</span>; }
+};
+
+<span class="tok-com">// Type-safe zero-heap polymorphic union</span>
+<span class="tok-kw">using</span> <span class="tok-type">PlayerEntity</span> = std::variant&lt;<span class="tok-type">Warrior</span>, <span class="tok-type">Mage</span>&gt;;
+
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+    <span class="tok-com">// Fixed compile-time bounded buffer in SRAM</span>
+    <span class="tok-kw">constexpr</span> <span class="tok-type">size_t</span> MAX_ENTITIES = <span class="tok-num">2</span>;
+    std::array&lt;<span class="tok-type">PlayerEntity</span>, MAX_ENTITIES&gt; staticWorld = {
+        <span class="tok-type">Warrior</span>{<span class="tok-str">"Thor"</span>},
+        <span class="tok-type">Mage</span>{<span class="tok-str">"Gandalf"</span>}
+    };
+
+    <span class="tok-com">// Pattern matching visitor dispatch</span>
+    <span class="tok-kw">for</span> (<span class="tok-kw">const auto</span>&amp; entity : staticWorld) {
+        std::visit([](<span class="tok-kw">const auto</span>&amp; player) {
+            std::cout &lt;&lt; player.name &lt;&lt; <span class="tok-str">": "</span> &lt;&lt; player.<span class="tok-fn">attack</span>() &lt;&lt; <span class="tok-str">'\n'</span>;
+        }, entity);
+    }
+
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}</pre>
+      </div>
+    </section>
+
+    <!-- Interactive MCQ Quiz Section -->
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your knowledge on OOP ownership, destructors, and embedded memory constraints.</p>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is <code>virtual ~Player() = default;</code> critical when managing <code>std::vector&lt;Player*&gt;</code>?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It forces the vector to pre-allocate capacity automatically.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It ensures that executing <code>delete player</code> calls the derived class destructor (e.g. <code>~Warrior</code>) to clean up all derived resources.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It prevents the object from being copied by value.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It moves the object storage to Flash ROM.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Option B is correct. When an object is deleted via a base pointer (<code>Player*</code>), a virtual destructor guarantees runtime polymorphic dispatch to the actual derived destructor, preventing memory leaks and resource corruption.
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="quiz-card" data-correct="2">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> According to safety standards like AUTOSAR and MISRA C++, why is dynamic allocation (<code>new</code>/<code>delete</code>) inside cyclic loops prohibited in automotive ECUs?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The CPU halts permanently whenever <code>new</code> is invoked.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> C++ compilers do not support pointers on ARM Cortex microcontrollers.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Dynamic heap allocation leads to SRAM fragmentation and non-deterministic execution timing, risking deadline misses.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Vectors cannot store pointers to derived classes.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Option C is correct. The heap allocator (<code>malloc</code>/<code>free</code>) has non-deterministic runtime latency and causes heap fragmentation over long operational lifespans, which can trigger catastrophic Out-Of-Memory (OOM) faults.
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> In modern C++ (C++17), what zero-heap abstraction replaces polymorphic base class pointers without dynamic memory?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> <code>std::variant</code> combined with <code>std::visit</code> stored in a fixed <code>std::array</code>.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> <code>std::shared_ptr</code>.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> <code>malloc</code> with <code>void*</code> casts.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Global raw pointers.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Option A is correct. <code>std::variant</code> implements a type-safe tagged union stored directly on the stack or in static memory. When combined with <code>std::visit</code>, it provides polymorphic behavior with zero dynamic allocation.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Page Navigation Footer -->
+    <footer class="page-nav-footer">
+      <a href="animal_fun.html" class="btn-nav">← Previous: AnimalFun</a>
+      <a href="../index.html" class="btn-nav">Portal Home →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

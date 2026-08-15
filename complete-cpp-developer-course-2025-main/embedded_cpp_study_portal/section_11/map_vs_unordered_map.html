@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>std::map vs std::unordered_map in Real-Time Embedded Systems - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">MapVsUnorderedMappApp</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">std::map</span> <span class="tag">std::unordered_map</span> <span class="tag">Red-Black Trees</span> <span class="tag">Hash Tables</span> <span class="tag">Real-Time Determinism</span> <span class="tag">Flat Maps</span>
+      </div>
+      <h1 class="project-title">Red-Black Trees vs Hash Tables: Deterministic O(log N) vs Unpredictable O(1) Rehash Latency</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Comparing ordered Red-Black Trees (<code>std::map</code>) against bucket-based Hash Tables (<code>std::unordered_map</code>). We explore time complexity determinism, catastrophic rehash latency spikes, dynamic node allocation heap fragmentation, and why static flat maps are the standard embedded choice.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;unordered_map&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+	cout &lt;&lt; &quot;=== std::map ===&quot; &lt;&lt; endl;
+
+	map&lt;string, int&gt; orderedMap;
+	orderedMap[&quot;banana&quot;] = 3;
+	orderedMap[&quot;apple&quot;] = 5;
+	orderedMap[&quot;cherry&quot;] = 2;
+
+	cout &lt;&lt; &quot;Contents of ordered map (keys will be sorted):&quot; &lt;&lt; endl;
+	for (const auto&amp; pair : orderedMap) {
+		cout &lt;&lt; pair.first&lt;&lt;&quot;: &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; &quot;\nLooking up &#x27;apple&#x27; in orderedMap: &quot;;
+	auto it1 = orderedMap.find(&quot;apple&quot;);
+	if (it1 != orderedMap.end()) {
+		cout &lt;&lt; &quot;Found, value = &quot; &lt;&lt; it1-&gt;second &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;Not found!&quot; &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; endl &lt;&lt; endl;
+	cout &lt;&lt; &quot;=== std::unordered_map ===&quot; &lt;&lt; endl;
+
+	unordered_map&lt;string, int&gt; unorderedMap;
+	unorderedMap[&quot;banana&quot;] = 3;
+	unorderedMap[&quot;apple&quot;] = 5;
+	unorderedMap[&quot;cherry&quot;] = 2;
+
+	cout &lt;&lt; &quot;Contents of unordered map (no guaranteed order):&quot; &lt;&lt; endl;
+	for (const auto&amp; pair : unorderedMap) {
+		cout &lt;&lt; pair.first &lt;&lt; &quot;: &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	}
+
+	cout &lt;&lt; &quot;\nLooking up &#x27;apple&#x27; in unorderedMap: &quot;;
+	auto it2 = unorderedMap.find(&quot;apple&quot;);
+
+	if (it2 != unorderedMap.end()) {
+		cout &lt;&lt; &quot;Found, value = &quot; &lt;&lt; it2-&gt;second &lt;&lt; endl;
+	}
+	else {
+		cout &lt;&lt; &quot;Not found.&quot; &lt;&lt; endl;
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Data Structure Architecture</h3>
+        <p><code>std::map</code> is implemented as a <strong>Self-Balancing Red-Black Tree</strong> with strictly ordered keys. Search, insertion, and deletion are guaranteed $O(\log N)$ time.</p>
+        <p><code>std::unordered_map</code> is implemented as a <strong>Hash Table with Chaining</strong>. Average lookup is $O(1)$, but worst-case lookup is $O(N)$ when hash collisions occur or when the table triggers a dynamic rehashing re-allocation.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Real-Time Determinism: The Rehash Latency Spike Hazard</h3>
+        <p>In hard real-time systems (e.g. braking systems, avionics), an operation must NEVER exceed its worst-case execution time (WCET). While <code>std::unordered_map</code> is fast on average, inserting an element that triggers a bucket table resize reallocates memory and re-hashes every existing entry—causing latency spikes of several milliseconds!</p>
+
+        <h3>2. Heap Fragmentation: 24 to 32 Bytes per Node</h3>
+        <p>Both standard containers dynamically allocate individual heap nodes for every stored element (storing tree pointers: parent, left, right, color, or hash buckets). On microcontrollers with limited SRAM, this causes extreme memory fragmentation.</p>
+
+        <div class="callout callout-tip">
+          <h4>💡 The Embedded Solution: Flat Maps (Sorted Arrays)</h4>
+          <p>For small, fixed sets of keys (e.g. CAN message IDs, sensor calibration tables), use a contiguous sorted <code>std::array&lt;std::pair&lt;K, V&gt;, N&gt;</code> with <code>std::lower_bound</code> for $O(\log N)$ binary search, <strong>zero heap allocations, and 100% L1 cache locality</strong>!</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded compile-time Flash ROM lookup table using binary search on sorted array:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;string_view&gt;
+
+struct CanMessageDescriptor {
+    uint32_t canId;
+    std::string_view name;
+};
+
+// Stored directly in Flash ROM (.rodata) - ZERO RAM overhead!
+constexpr std::array&lt;CanMessageDescriptor, 4&gt; CAN_LUT = {{
+    {0x100, "Engine RPM"},
+    {0x101, "Vehicle Speed"},
+    {0x200, "Brake Pressure"},
+    {0x305, "Battery Voltage"}
+}};
+
+std::string_view lookupCanName(uint32_t id) {
+    auto it = std::lower_bound(CAN_LUT.begin(), CAN_LUT.end(), id,
+        [](const CanMessageDescriptor&amp; item, uint32_t target) {
+            return item.canId &lt; target;
+        });
+
+    if (it != CAN_LUT.end() &amp;&amp; it-&gt;canId == id) {
+        return it-&gt;name;
+    }
+    return "Unknown ID";
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Why is std::map often favored over std::unordered_map in hard real-time mission-critical systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::map is faster in average lookup than std::unordered_map.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> std::map provides guaranteed, predictable O(log N) worst-case timing without sudden rehashing pauses.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> std::map stores all elements in CPU registers.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> std::unordered_map does not support string keys.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::map</code> guarantees $O(\log N)$ worst-case time complexity, whereas <code>std::unordered_map</code> can spike to $O(N)$ during hash collisions and bucket table reallocations, violating real-time deadlines.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the primary memory drawback of both std::map and std::unordered_map on memory-constrained microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> They store all data in non-volatile ROM.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> They allocate separate heap nodes for each inserted element, leading to severe RAM fragmentation.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> They cannot store more than 16 elements.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They disable compiler inlining.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Both node-based containers invoke <code>malloc</code> for each element to allocate tree nodes or linked list collision nodes, causing severe SRAM fragmentation and pointer overhead.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What embedded idiom offers O(log N) lookup with zero dynamic allocation and maximum cache locality?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A sorted `std::array` or `etl::vector` queried via `std::lower_bound` (Flat Map).</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A circular singly linked list.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A global raw `void*` array.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A recursive switch statement.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            A Flat Map (contiguous array sorted by key) performs binary search in $O(\log N)$ time, requires zero dynamic allocation, and delivers optimal CPU cache locality.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="rule_of_three_five_zero.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="queue_projects.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

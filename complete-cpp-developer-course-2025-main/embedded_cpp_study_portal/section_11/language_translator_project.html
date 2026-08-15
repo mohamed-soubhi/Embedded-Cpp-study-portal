@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Key Lookup &amp; Static Flash Tables - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">LanguageTranslatorProject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-med">⚡ Embedded Relevance: Medium</span>
+        <span class="tag">Dictionary</span> <span class="tag">std::map</span> <span class="tag">Flash ROM</span> <span class="tag">constexpr</span>
+      </div>
+      <h1 class="project-title">Dictionary Lookups: Heap Maps vs Compile-Time Flash Tables</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building dictionary lookups and evaluating Flash ROM <code>constexpr</code> lookup tables for embedded systems.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">LanguageTranslator.h</button>
+            <button class="code-tab" data-target="file-tab-1">LanguageTranslator.cpp</button>
+            <button class="code-tab" data-target="file-tab-2">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#ifndef LANGUAGE_TRANSLATOR_H
+#define LANGUAGE_TRANSLATOR_H
+
+#include &lt;string&gt;
+#include &lt;map&gt;
+using namespace std;
+
+class LanguageTranslator {
+	public:
+		void addTranslation(const string&amp; englishWord, const string&amp; translatedWord);
+		string getTranslation(const string&amp; englishWord) const;
+		void printAll() const;
+	private:
+		map&lt;string, string&gt; translations;
+};
+
+#endif </pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#include &quot;LanguageTranslator.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+void LanguageTranslator::addTranslation(const string&amp; englishWord, const string&amp; translatedWord) {
+	translations[englishWord] = translatedWord;
+}
+
+string LanguageTranslator::getTranslation(const string&amp; englishWord) const {
+	auto it = translations.find(englishWord);
+	if (it != translations.end()) {
+		return it-&gt;second;
+	}
+	else {
+		return &quot;NOT FOUND&quot;;
+	}
+}
+
+void LanguageTranslator::printAll() const {
+	for (const auto&amp; pair : translations) {
+		cout &lt;&lt; pair.first &lt;&lt; &quot; -&gt; &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	}
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &quot;LanguageTranslator.h&quot;
+using namespace std;
+
+void printMenu();
+void handleAdd(LanguageTranslator&amp; translator);
+void handleLookup(const LanguageTranslator&amp; translator);
+
+int main() {
+    LanguageTranslator translator;
+    int choice;
+
+    printMenu();
+    cin &gt;&gt; choice; 
+    cin.ignore();
+
+    while (choice != 0) {
+        if (choice == 1) {
+            handleAdd(translator);
+        }
+        else if (choice == 2) {
+            handleLookup(translator);
+        }
+        else if (choice == 3) {
+            cout &lt;&lt; &quot;All translations:&quot; &lt;&lt; endl;
+            translator.printAll();
+        }
+        else {
+            cout &lt;&lt; &quot;Invalid choice&quot; &lt;&lt; endl;
+        }
+
+        cout &lt;&lt; endl;
+        printMenu();
+        cin &gt;&gt; choice;
+        cin.ignore();
+    }
+
+	return 0;
+}
+
+void printMenu() {
+    cout &lt;&lt; &quot;Select an option:&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;1 - Add or update a translation&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;2 - Look up a translation&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;3 - Print all translations&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;0 - Exit&quot; &lt;&lt; endl;
+}
+
+void handleAdd(LanguageTranslator&amp; translator) {
+    string englishWord;
+    string translatedWord;
+
+    cout &lt;&lt; &quot;Enter the English word: &quot;;
+    getline(cin, englishWord);
+
+    cout &lt;&lt; &quot;Enter the translation: &quot;;
+    getline(cin, translatedWord);
+
+    translator.addTranslation(englishWord, translatedWord);
+}
+
+void handleLookup(const LanguageTranslator&amp; translator) {
+    string word;
+    cout &lt;&lt; &quot;Enter the English word to translate: &quot;;
+    getline(cin, word);
+    cout &lt;&lt; &quot;Translation: &quot; &lt;&lt; translator.getTranslation(word) &lt;&lt; endl;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        <h3>Multi-Element Map Queries</h3><p>Managing string-to-string associations and handling missing key lookups.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        <h3>Diagnostic Trouble Codes (DTC)</h3><p>In automotive firmware, fault code string tables are stored entirely in Flash ROM to save SRAM.</p>
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">constexpr const char* getDtcDescription(uint16_t code) {
+    return (code == 0x0100) ? "Mass Air Flow Fault" : "Unknown";
+}</pre>
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Where should static lookup tables be stored in embedded systems to conserve SRAM?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> On the heap via malloc.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> In Flash ROM using `constexpr` or `const` in `.rodata` section.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> On the stack.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> In the CPU interrupt vector table.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Marking tables <code>constexpr</code> places them in read-only Flash ROM (.rodata), consuming 0 bytes of SRAM.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="friend_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="overloading_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

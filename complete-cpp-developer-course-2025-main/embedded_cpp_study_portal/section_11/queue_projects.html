@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Containers &amp; Hardware Ring Buffers - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 11</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 11</a>
+      <span class="sep">/</span>
+      <span class="current">QueueProjects</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-11">Section 11</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">std::queue</span> <span class="tag">FIFO</span> <span class="tag">Circular Ring Buffer</span> <span class="tag">Lock-Free SPSC</span> <span class="tag">UART ISR</span> <span class="tag">DMA</span>
+      </div>
+      <h1 class="project-title">FIFO Queue Mechanics vs Lock-Free Circular Buffers for Real-Time ISRs</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring FIFO queue operations and why <code>std::queue</code> (backed by <code>std::deque</code>) is replaced in embedded firmware by bounded, lock-free circular ring buffers for interrupt service routines (UART, SPI, CAN).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+	queue&lt;string&gt; names;
+	names.push(&quot;John&quot;);
+	names.push(&quot;Sally&quot;);
+	names.push(&quot;Bob&quot;);
+	names.push(&quot;Sam&quot;);
+	names.push(&quot;Ali&quot;);
+	names.push(&quot;Karen&quot;);
+
+	while (!names.empty()) {
+		cout &lt;&lt; names.front() &lt;&lt; endl;
+		names.pop();
+	}
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. FIFO Queue Concept</h3>
+        <p>A Queue is a First-In-First-Out (FIFO) container adapter providing <code>push()</code> at the back, <code>pop()</code> at the front, and <code>front()</code> element inspection. In standard C++, <code>std::queue</code> wraps an underlying container (defaulting to <code>std::deque</code>).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Why std::queue Cannot Be Used in Interrupt Service Routines (ISRs)</h3>
+        <ul>
+          <li><strong>Dynamic Chunk Allocation:</strong> <code>std::deque</code> dynamically allocates blocks of memory on the heap. Calling <code>push()</code> inside an ISR can invoke <code>malloc()</code>, which is not interrupt-safe (non-reentrant and non-deterministic).</li>
+          <li><strong>Thread Safety:</strong> <code>std::queue</code> is not thread-safe or ISR-safe without mutex locks, which cannot be acquired inside interrupt contexts.</li>
+        </ul>
+
+        <div class="callout callout-embedded">
+          <h4>💡 The Embedded Gold Standard: Single-Producer Single-Consumer (SPSC) Ring Buffer</h4>
+          <p>By using a fixed-capacity circular buffer with atomic head/tail indices, an ISR can push incoming UART bytes while the main task pops them—<strong>with zero mutexes, zero dynamic memory, and zero blocking</strong>!</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded lock-free SPSC circular ring buffer for microcontroller communication:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
+#include &lt;atomic&gt;
+#include &lt;optional&gt;
+#include &lt;cstdint&gt;
+
+template &lt;typename T, size_t Capacity&gt;
+class RingBuffer {
+public:
+    // Called from ISR (Producer)
+    bool push(T item) noexcept {
+        size_t head = head_.load(std::memory_order_relaxed);
+        size_t nextHead = (head + 1) % Capacity;
+        if (nextHead == tail_.load(std::memory_order_acquire)) {
+            return false; // Buffer Full! (Drop or flag error)
+        }
+        buffer_[head] = item;
+        head_.store(nextHead, std::memory_order_release);
+        return true;
+    }
+
+    // Called from Main Thread (Consumer)
+    std::optional&lt;T&gt; pop() noexcept {
+        size_t tail = tail_.load(std::memory_order_relaxed);
+        if (tail == head_.load(std::memory_order_acquire)) {
+            return std::nullopt; // Buffer Empty!
+        }
+        T item = buffer_[tail];
+        tail_.store((tail + 1) % Capacity, std::memory_order_release);
+        return item;
+    }
+
+private:
+    std::array&lt;T, Capacity&gt; buffer_;
+    std::atomic&lt;size_t&gt; head_{0};
+    std::atomic&lt;size_t&gt; tail_{0};
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the primary danger of pushing elements to a default std::queue inside an embedded Interrupt Handler (ISR)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The queue automatically deletes all elements.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Underlying std::deque memory allocation invokes non-reentrant malloc(), causing deadlocks or crashes.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The CPU clock frequency drops.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The queue reverses element order.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::queue</code> backed by <code>std::deque</code> dynamically allocates memory chunks on the heap. Heap allocators are non-reentrant and must never be called from ISR context.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="1">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> In a circular ring buffer of capacity N using modulo arithmetic, how is the &#x27;buffer full&#x27; condition detected?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> When head == tail.</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> When (head + 1) % N == tail.</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> When head == N.</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> When memory is exhausted.</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            In standard circular buffer design, when incrementing the head index lands on the current tail index, the buffer is full.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="map_vs_unordered_map.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="remove_erase_idiom.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>
