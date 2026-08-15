@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EnumFun - C++ & Embedded Systems Study Guide</title>
+  <title>Enumerations &amp; Scoped Enum Classes - C++ & Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -15,111 +15,101 @@
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
-        <li><a href="enum_fun.html" class="active">EnumFun</a></li>
-        <li><a href="animal_fun.html">AnimalFun</a></li>
-        <li><a href="rpg_project.html">RPGProject</a></li>
-        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+        <li><a href="../section_1/hello.html">Sec 1</a></li>
+        <li><a href="../section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="../section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="../section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="../section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="../section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="../section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
   </header>
 
   <main class="container">
-    <!-- Breadcrumbs -->
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 10 (OOP & Enums)</a>
+      <a href="../index.html">Section 10</a>
       <span class="sep">/</span>
       <span class="current">EnumFun</span>
     </div>
 
-    <!-- Project Header -->
     <header class="project-header">
       <div class="project-meta">
         <span class="section-pill section-10">Section 10</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
-        <span class="tag">C++11 Scoped Enums</span>
-        <span class="tag">Memory Alignment</span>
-        <span class="tag">Hardware Registers</span>
-        <span class="tag">Jump Tables</span>
+        <span class="tag">Scoped Enums</span> <span class="tag">uint8_t</span> <span class="tag">Jump Tables</span> <span class="tag">Memory Alignment</span> <span class="tag">Hardware Registers</span>
       </div>
       <h1 class="project-title">Enumerations: Unscoped vs Scoped Enum Classes in Embedded Systems</h1>
       <div class="project-summary-box">
-        <strong>Executive Summary:</strong> Explores the transition from legacy C-style unscoped <code>enum</code> to modern C++11 <code>enum class</code>. Examines type safety, namespace pollution, explicit underlying fixed-width storage (<code>uint8_t</code>), bitmask register definitions, and compiler branch generation (Jump Tables vs Branch Cascades) in microcontroller environments.
+        <strong>Executive Summary:</strong> Explores the transition from legacy C-style unscoped enum to modern C++11 enum class. Examines type safety, namespace pollution, explicit underlying fixed-width storage (uint8_t), bitmask register definitions, and compiler branch generation (Jump Tables vs Branch Cascades) in microcontroller environments.
       </div>
     </header>
 
-    <!-- Source Code Section -->
     <section class="study-section">
       <h2 class="section-heading">
         <span class="icon">💻</span> 1. Annotated Source Code
       </h2>
+      
       <div class="code-viewer">
         <div class="code-header">
           <div class="code-tabs">
-            <button class="code-tab active" data-target="file-main">main.cpp</button>
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
           </div>
           <div class="code-actions">
-            <button class="btn-copy">📋 Copy Code</button>
+            <button class="btn-copy">📋 Copy Active File</button>
           </div>
         </div>
-        <div class="code-panel active" id="file-main">
-          <pre class="code-block"><span class="tok-pre">#include</span> <span class="tok-str">&lt;iostream&gt;</span>
-<span class="tok-kw">using namespace</span> std;
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
 
-<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
-    <span class="tok-com">// =========================================================================</span>
-    <span class="tok-com">// 1. LEGACY C-STYLE UNSCOPED ENUM DECLARATION</span>
-    <span class="tok-com">// =========================================================================</span>
-    <span class="tok-com">// ISSUES IN EMBEDDED C++:</span>
-    <span class="tok-com">//  a) Namespace Pollution: UP, DOWN, etc. exist in the enclosing scope.</span>
-    <span class="tok-com">//  b) Implicit Integer Conversion: Can accidentally be compared with raw ints or floats.</span>
-    <span class="tok-com">//  c) Implementation-Defined Underlying Type: Usually defaults to 32-bit `int`,</span>
-    <span class="tok-com">//     wasting RAM/ROM if packed in structures on 8/16-bit MCUs.</span>
-    <span class="tok-kw">enum</span> <span class="tok-type">Direction</span> { UP, DOWN, LEFT, RIGHT, STANDING };
+int main() {
+	enum Direction { UP, DOWN, LEFT, RIGHT, STANDING };
 
-    <span class="tok-com">// Enumerator initialization (implicit value of STANDING = 4)</span>
-    <span class="tok-type">Direction</span> myDirection = STANDING;
+	Direction myDirection = STANDING;
 
-    <span class="tok-com">// Implicitly converts to int when passed to std::cout (prints 4)</span>
-    cout &lt;&lt; myDirection &lt;&lt; endl;
+	cout &lt;&lt; myDirection &lt;&lt; endl;
 
-    <span class="tok-com">// =========================================================================</span>
-    <span class="tok-com">// 2. CONDITIONAL BRANCHING (IF-ELSE CASCADE)</span>
-    <span class="tok-com">// =========================================================================</span>
-    <span class="tok-com">// NOTE FOR EMBEDDED: An if-else chain generates sequential comparison</span>
-    <span class="tok-com">// instructions (CMP/BEQ). In critical ISRs or state machines, a `switch`</span>
-    <span class="tok-com">// statement allows the compiler to generate an efficient Jump Table (TBB/TBH).</span>
-    <span class="tok-kw">if</span> (myDirection == UP) {
-        cout &lt;&lt; <span class="tok-str">"up!"</span> &lt;&lt; endl;
-    }
-    <span class="tok-kw">else if</span> (myDirection == DOWN) {
-        cout &lt;&lt; <span class="tok-str">"down!"</span> &lt;&lt; endl;
-    }
-    <span class="tok-kw">else if</span> (myDirection == LEFT) {
-        cout &lt;&lt; <span class="tok-str">"left!"</span> &lt;&lt; endl;
-    }
-    <span class="tok-kw">else if</span> (myDirection == RIGHT) {
-        cout &lt;&lt; <span class="tok-str">"right"</span> &lt;&lt; endl;
-    }
-    <span class="tok-kw">else if</span> (myDirection == STANDING) {
-        cout &lt;&lt; <span class="tok-str">"standing"</span> &lt;&lt; endl;
-    }
+	if (myDirection == UP) {
+		cout &lt;&lt; &quot;up!&quot; &lt;&lt; endl;
+	}
+	else if (myDirection == DOWN) {
+		cout &lt;&lt; &quot;down!&quot; &lt;&lt; endl;
+	}
+	else if (myDirection == LEFT) {
+		cout &lt;&lt; &quot;left!&quot; &lt;&lt; endl;
+	}
+	else if (myDirection == RIGHT) {
+		cout &lt;&lt; &quot;right&quot; &lt;&lt; endl;
+	}
+	else if (myDirection == STANDING) {
+		cout &lt;&lt; &quot;standing&quot; &lt;&lt; endl;
+	}
 
-    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+	return 0;
 }</pre>
         </div>
       </div>
+    
     </section>
 
-    <!-- Deep-Dive Conceptual Breakdown -->
     <section class="study-section">
       <h2 class="section-heading">
         <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
+        
         <h3>Unscoped Enums vs C++11 Scoped Enums (<code>enum class</code>)</h3>
-        <p>In classical C and pre-C++11, an <code>enum</code> exports its enumerators directly into the enclosing lexical scope. This creates severe identifier collisions (e.g., having <code>enum State { IDLE, RUNNING }</code> and <code>enum MotorState { IDLE, ACCELERATING }</code> in the same file will trigger a redefinition error).</p>
+        <p>In classical C and pre-C++11, an <code>enum</code> exports its enumerators directly into the enclosing lexical scope. This creates severe identifier collisions (e.g., having <code>enum State { IDLE, RUNNING }</code> and <code>enum MotorState { IDLE, ACCELERATING }</code> in the same file triggers a redefinition error).</p>
         
         <div class="table-container">
           <table class="comp-table">
@@ -148,157 +138,149 @@
               </tr>
               <tr>
                 <td><strong>Forward Declaration</strong></td>
-                <td>Not allowed in C++98 (allowed only if underlying type fixed in C++11)</td>
+                <td>Not allowed in C++98</td>
                 <td>Always allowed (improves header build times)</td>
               </tr>
             </tbody>
           </table>
         </div>
+        
       </div>
     </section>
 
-    <!-- Embedded C++ Systems & Hardware Reality -->
     <section class="study-section">
       <h2 class="section-heading">
         <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
       </h2>
-      
       <div class="content-card">
+        
         <h3>1. Memory Footprint & Structure Packing (RAM Conservation)</h3>
         <p>When an enum is a member of a communication protocol frame or peripheral register struct, unspecified enum types default to 4 bytes on 32-bit architectures (ARM Cortex-M). Specifying an underlying type of <code>uint8_t</code> saves 3 bytes per field and prevents padding alignment overhead.</p>
 
-        <div class="callout callout-embedded">
+        <div class="callout callout-tip">
           <h4>💡 Embedded Hardware Tip: Specifying Underlying Types</h4>
           <p>Always specify the underlying fixed-width integer type matching the physical register width:</p>
-          <pre class="code-block" style="background:#161b22; padding:10px; border-radius:6px;"><span class="tok-kw">enum class</span> <span class="tok-type">UartBaud</span> : <span class="tok-type">uint8_t</span> {
+          <pre class="code-block" style="background:#0d1117; padding:10px; border-radius:6px;">enum class UartBaud : uint8_t {
     B9600   = 0x01,
     B19200  = 0x02,
     B115200 = 0x03
-}; <span class="tok-com">// Guaranteed exactly 1 byte in SRAM/Flash!</span></pre>
+}; // Guaranteed exactly 1 byte in SRAM/Flash!</pre>
         </div>
 
         <h3>2. Microcontroller Branching: If-Else Cascades vs Jump Tables</h3>
-        <p>In the original code, 5 sequential <code>if-else</code> comparisons execute in $O(N)$ time. In an interrupt handler (ISR) or high-frequency motor control loop, this introduces non-deterministic latency.</p>
-        <p>By switching to a <code>switch (myDirection)</code> statement, the compiler analyzes the contiguous integer values (0, 1, 2, 3, 4) and generates a single <strong>Jump Table</strong> using ARM instructions (e.g., <code>TBB</code> / <code>TBH</code>). This achieves $O(1)$ deterministic branch execution in single-digit clock cycles.</p>
-
-        <div class="callout callout-warning">
-          <h4>⚠️ MISRA C++:2008 & AUTOSAR Compliance</h4>
-          <ul>
-            <li><strong>MISRA C++:2008 Rule 7-2-1:</strong> A value of an expression of enum type shall be an explicit enumerator value.</li>
-            <li><strong>AUTOSAR C++14 Rule A7-2-3:</strong> Enumerations shall be declared as scoped enum classes.</li>
-            <li><strong>AUTOSAR C++14 Rule A7-2-2:</strong> Enumeration underlying base types shall be explicitly defined.</li>
-          </ul>
-        </div>
+        <p>Sequential <code>if-else</code> chains evaluate conditions linearly ($O(N)$ execution time). When switching over a dense <code>enum class</code>, optimizing compilers emit an ARM <strong>Table Branch Byte (TBB)</strong> instruction, yielding an $O(1)$ Jump Table that executes in constant clock cycles regardless of case count.</p>
+        
       </div>
     </section>
 
-    <!-- Embedded Refactor Example -->
     <section class="study-section">
       <h2 class="section-heading">
         <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <p>Here is how modern embedded firmware (e.g., STM32 / Automotive ECU) refactors this pattern using <code>enum class : uint8_t</code>, <code>std::string_view</code> (zero heap allocation), and a deterministic <code>switch</code>:</p>
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;"><span class="tok-pre">#include</span> <span class="tok-str">&lt;iostream&gt;</span>
-<span class="tok-pre">#include</span> <span class="tok-str">&lt;cstdint&gt;</span>
-<span class="tok-pre">#include</span> <span class="tok-str">&lt;string_view&gt;</span>
+        <p>Production-grade scoped enum with type-safe bitmask operators for peripheral control:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;type_traits&gt;
 
-<span class="tok-com">// 1. Explicit 1-byte storage, zero namespace collision</span>
-<span class="tok-kw">enum class</span> <span class="tok-type">Direction</span> : <span class="tok-type">uint8_t</span> {
-    Up = 0,
-    Down,
-    Left,
-    Right,
-    Standing
+// Scoped Enum with explicit 1-byte storage
+enum class GpioPin : uint8_t {
+    Pin0 = 1 &lt;&lt; 0,
+    Pin1 = 1 &lt;&lt; 1,
+    Pin2 = 1 &lt;&lt; 2,
+    Pin3 = 1 &lt;&lt; 3
 };
 
-<span class="tok-com">// 2. Pure constexpr lookup function: Zero runtime RAM allocation</span>
-<span class="tok-kw">constexpr</span> std::string_view <span class="tok-fn">directionToString</span>(<span class="tok-type">Direction</span> dir) <span class="tok-kw">noexcept</span> {
-    <span class="tok-kw">switch</span> (dir) {
-        <span class="tok-kw">case</span> <span class="tok-type">Direction</span>::Up:       <span class="tok-kw">return</span> <span class="tok-str">"up!"</span>;
-        <span class="tok-kw">case</span> <span class="tok-type">Direction</span>::Down:     <span class="tok-kw">return</span> <span class="tok-str">"down!"</span>;
-        <span class="tok-kw">case</span> <span class="tok-type">Direction</span>::Left:     <span class="tok-kw">return</span> <span class="tok-str">"left!"</span>;
-        <span class="tok-kw">case</span> <span class="tok-type">Direction</span>::Right:    <span class="tok-kw">return</span> <span class="tok-str">"right"</span>;
-        <span class="tok-kw">case</span> <span class="tok-type">Direction</span>::Standing: <span class="tok-kw">return</span> <span class="tok-str">"standing"</span>;
-        <span class="tok-kw">default</span>:                  <span class="tok-kw">return</span> <span class="tok-str">"unknown"</span>;
-    }
-}
-
-<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
-    <span class="tok-kw">constexpr</span> <span class="tok-type">Direction</span> myDirection = <span class="tok-type">Direction</span>::Standing;
-    std::cout &lt;&lt; <span class="tok-fn">directionToString</span>(myDirection) &lt;&lt; <span class="tok-str">'\n'</span>;
-    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
+// Enable bitwise OR operator for type-safe pin masking
+constexpr GpioPin operator|(GpioPin a, GpioPin b) noexcept {
+    return static_cast&lt;GpioPin&gt;(
+        static_cast&lt;std::underlying_type_t&lt;GpioPin&gt;&gt;(a) |
+        static_cast&lt;std::underlying_type_t&lt;GpioPin&gt;&gt;(b)
+    );
 }</pre>
+        
       </div>
     </section>
 
-    <!-- Interactive MCQ Quiz Section -->
+    
     <section class="study-section">
       <div class="quiz-container">
         <div class="quiz-header">
           <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
-          <p>Test your grasp of C++ enumerations and embedded microcontroller trade-offs. Click your answer for instant verification.</p>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
         </div>
-
-        <!-- Question 1 -->
-        <div class="quiz-card" data-correct="1">
-          <div class="quiz-question">
-            <span class="q-num">Q1.</span> Why is <code>enum class Direction : uint8_t</code> strongly preferred over a traditional C-style <code>enum Direction</code> in safety-critical embedded systems?
-          </div>
-          <div class="quiz-options">
-            <div class="quiz-option"><span class="opt-letter">A</span> It allows enumerators to implicitly convert to integers for easy pointer arithmetic.</div>
-            <div class="quiz-option"><span class="opt-letter">B</span> It prevents namespace collisions, disables dangerous implicit conversions to arithmetic types, and bounds memory size to exactly 1 byte.</div>
-            <div class="quiz-option"><span class="opt-letter">C</span> It automatically allocates memory on the MCU heap dynamically.</div>
-            <div class="quiz-option"><span class="opt-letter">D</span> It enables runtime reflection so that enum names can be printed without switch statements.</div>
-          </div>
-          <div class="quiz-explanation">
-            <strong>Detailed Explanation:</strong>
-            Option B is correct. <code>enum class</code> enforces scoped naming (requiring <code>Direction::Up</code>), forbids accidental implicit conversions to numbers, and explicitly specifying <code>: uint8_t</code> guarantees a 1-byte footprint in ROM/RAM, strictly complying with AUTOSAR Rule A7-2-3 and A7-2-2.
-          </div>
-        </div>
-
-        <!-- Question 2 -->
-        <div class="quiz-card" data-correct="2">
-          <div class="quiz-question">
-            <span class="q-num">Q2.</span> In an ARM Cortex-M interrupt handler, why is a <code>switch</code> statement on a contiguous enum preferred over a chained <code>if-else</code>?
-          </div>
-          <div class="quiz-options">
-            <div class="quiz-option"><span class="opt-letter">A</span> <code>if-else</code> chains consume more Flash ROM table space than switch statements.</div>
-            <div class="quiz-option"><span class="opt-letter">B</span> <code>if-else</code> statements cannot compare enumeration values.</div>
-            <div class="quiz-option"><span class="opt-letter">C</span> A <code>switch</code> allows the compiler to generate a jump table (e.g. <code>TBB/TBH</code>) providing deterministic O(1) branch timing.</div>
-            <div class="quiz-option"><span class="opt-letter">D</span> The switch statement disables interrupts automatically during execution.</div>
-          </div>
-          <div class="quiz-explanation">
-            <strong>Detailed Explanation:</strong>
-            Option C is correct. Chained <code>if-else</code> statements generate sequential condition branches ($O(N)$ complexity), causing variable execution time depending on which condition matches. A contiguous <code>switch</code> generates a jump table executed in constant $O(1)$ cycles, critical for deterministic hard real-time deadlines.
-          </div>
-        </div>
-
-        <!-- Question 3 -->
+        
         <div class="quiz-card" data-correct="0">
           <div class="quiz-question">
-            <span class="q-num">Q3.</span> Given <code>enum class State : uint8_t { Idle = 0, Running = 1 };</code>, what happens if you attempt: <code>int x = State::Idle;</code>?
+            <span class="q-num">Q1.</span> What is the primary safety advantage of C++11 &#x27;enum class&#x27; over traditional C-style &#x27;enum&#x27;?
           </div>
           <div class="quiz-options">
-            <div class="quiz-option"><span class="opt-letter">A</span> Compile-time error: Cannot convert 'State' to 'int' without an explicit <code>static_cast&lt;int&gt;</code>.</div>
-            <div class="quiz-option"><span class="opt-letter">B</span> <code>x</code> is assigned 0 smoothly without warnings.</div>
-            <div class="quiz-option"><span class="opt-letter">C</span> Runtime exception <code>std::bad_cast</code> is thrown.</div>
-            <div class="quiz-option"><span class="opt-letter">D</span> A warning is generated and <code>x</code> is initialized to garbage memory.</div>
+            <div class="quiz-option"><span class="opt-letter">A</span> Scoped enums prevent implicit conversion to integer types and avoid namespace collisions</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Scoped enums automatically execute in separate CPU threads</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Scoped enums allow floating-point values as enumerators</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Scoped enums eliminate the need for switch statements</div>
           </div>
           <div class="quiz-explanation">
             <strong>Detailed Explanation:</strong>
-            Option A is correct. Scoped enumerations (<code>enum class</code>) are strongly typed. Implicit conversion to integer types is prohibited by the C++ compiler, preventing subtle assignment and arithmetic bugs.
+            Scoped enumerations (<code>enum class</code>) are strongly typed. Implicit conversion to integer types is prohibited by the C++ compiler, preventing subtle assignment and arithmetic bugs.
           </div>
         </div>
 
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why should embedded software developers explicitly define the underlying type of an enum (e.g. enum class State : uint8_t)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To guarantee a deterministic 1-byte memory footprint and prevent struct padding bloat in RAM</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To allow the compiler to overclock the microcontroller</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To enable runtime reflection without RTTI</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To convert the enum into a hardware interrupt handler</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            By default, an enum may occupy 4 bytes (32-bit int). Specifying <code>uint8_t</code> reduces memory footprint by 75% per instance and ensures protocol serialization compatibility.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> How does an optimizing compiler execute a &#x27;switch&#x27; over dense enum values compared to an &#x27;if-else&#x27; cascade on ARM Cortex-M?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It generates a Jump Table (using TBB/TBH instructions) providing deterministic O(1) execution time</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It calls an operating system API to evaluate conditions</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It converts the switch into an infinite while loop</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It executes all cases simultaneously using SIMD instructions</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            A dense switch is compiled into an indexed jump table (e.g. <code>TBB [PC, R0]</code> on ARM Thumb-2), achieving single-cycle constant time dispatch rather than sequential comparisons.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Can an &#x27;enum class&#x27; be forward-declared in a C++ header file?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Yes, because its underlying size is known at declaration time (default int or explicitly specified)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> No, C++ strictly prohibits forward-declaring any enum type</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Only if the header file includes &lt;iostream&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Only when compiling with the -O3 optimization flag</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because scoped enums have fixed underlying types (defaulting to <code>int</code> if unspecified), the compiler knows their memory size and permits forward declarations.
+          </div>
+        </div>
       </div>
     </section>
+    
 
-    <!-- Page Navigation Footer -->
     <footer class="page-nav-footer">
-      <a href="../index.html" class="btn-nav">← Back to Portal Home</a>
-      <a href="animal_fun.html" class="btn-nav">Next: AnimalFun (Polymorphism & Vtables) →</a>
+      <a href="rpg_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="animal_fun.html" class="btn-nav">Next Project →</a>
     </footer>
   </main>
 
@@ -326,7 +308,7 @@
             <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
             <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
             <li><a href="../section_9/file_input_fun.html">Section 9: Streams &amp; Flash FS</a></li>
-            <li><a href="enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
             <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
             <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
           </ul>

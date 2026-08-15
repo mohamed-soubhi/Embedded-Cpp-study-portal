@@ -13,6 +13,7 @@ from section_6_data import SECTION_6_PROJECTS
 from section_7_data import SECTION_7_PROJECTS
 from section_8_data import SECTION_8_PROJECTS
 from section_9_data import SECTION_9_PROJECTS
+from section_10_data import SECTION_10_PROJECTS
 
 def sanitize_card_desc(text, max_len=120):
     # Strip any HTML tags (e.g. <code>, <strong>, etc.)
@@ -1317,6 +1318,7 @@ def build_index():
         ("7", SECTION_7_PROJECTS),
         ("8", SECTION_8_PROJECTS),
         ("9", SECTION_9_PROJECTS),
+        ("10", SECTION_10_PROJECTS),
     ]
 
     for sec_num, proj_list in sections_data:
@@ -1336,13 +1338,6 @@ def build_index():
                 "rel_cls": p['emb_class'],
                 "link": f"section_{sec_num}/{p['id']}.html"
             })
-
-    # Section 10 Projects
-    all_projects.extend([
-        {"sec": "10", "track": "advanced", "id": "enum_fun", "name": "EnumFun", "title": "Enumerations & Scoped Enum Classes", "desc": "Unscoped vs scoped enums, explicit uint8_t types, bitmasks, and switch jump tables.", "tags": ["Scoped Enums", "uint8_t", "Jump Tables"], "rel": "high", "rel_text": "High ⚡", "rel_cls": "emb-high", "link": "section_10/enum_fun.html"},
-        {"sec": "10", "track": "advanced", "id": "animal_fun", "name": "AnimalFun", "title": "Polymorphism & VTable Mechanics", "desc": "Abstract classes, vtable/vptr RAM overhead, RTTI disablement, and the CRTP alternative.", "tags": ["VTable", "VPtr", "CRTP"], "rel": "high", "rel_text": "Critical ⚡", "rel_cls": "emb-high", "link": "section_10/animal_fun.html"},
-        {"sec": "10", "track": "advanced", "id": "rpg_project", "name": "RPGProject", "title": "Class Hierarchies & Memory Safety", "desc": "Member initializers, virtual destructors, and static object pooling vs heap allocation.", "tags": ["OOP", "Virtual Destructors", "Pools"], "rel": "high", "rel_text": "High ⚡", "rel_cls": "emb-high", "link": "section_10/rpg_project.html"},
-    ])
 
     # Section 11 Projects
     for p in SECTION_11_PROJECTS:
@@ -1609,6 +1604,7 @@ def main():
         (7, SECTION_7_PROJECTS),
         (8, SECTION_8_PROJECTS),
         (9, SECTION_9_PROJECTS),
+        (10, SECTION_10_PROJECTS),
         (11, SECTION_11_PROJECTS),
         (12, SECTION_12_PROJECTS),
     ]
