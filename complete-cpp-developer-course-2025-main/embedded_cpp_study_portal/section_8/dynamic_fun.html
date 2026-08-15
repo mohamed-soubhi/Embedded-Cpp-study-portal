@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heap Allocation Mechanics &amp; The Hazards of Dynamic Memory in MCU - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 8</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 8</a>
+      <span class="sep">/</span>
+      <span class="current">DynamicFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-8">Section 8</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">new</span> <span class="tag">delete</span> <span class="tag">Heap Fragmentation</span> <span class="tag">Memory Leaks</span> <span class="tag">nullptr</span> <span class="tag">MISRA C++</span>
+      </div>
+      <h1 class="project-title">new / delete Lifecycles, Dangling Pointers &amp; Heap Fragmentation in Microcontrollers</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing dynamic memory allocation via new and delete, pointer resets to nullptr, and dangling pointer hazards. We explore why dynamic heap allocation is prohibited in high-reliability embedded systems (AUTOSAR / MISRA) due to heap fragmentation, non-deterministic latency, and catastrophic stack-heap collisions.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	//int* myIntPtr = new int(123);
+	int* myIntPtr = new int;
+	bool* myBoolPtr = new bool;
+
+	*myBoolPtr = true;
+
+	*myIntPtr = 123;
+
+	cout &lt;&lt; *myIntPtr &lt;&lt; endl;
+
+	cout &lt;&lt; boolalpha;
+
+	cout &lt;&lt; *myBoolPtr &lt;&lt; endl;
+
+	delete myIntPtr;
+	delete myBoolPtr;
+
+	myIntPtr = nullptr;
+	myBoolPtr = nullptr;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Heap Allocation with <code>new</code> and <code>delete</code></h3>
+        <p>The <code>new</code> operator requests memory from the free store (heap), invokes the object's constructor, and returns a pointer. The <code>delete</code> operator invokes the destructor and releases the memory back to the heap.</p>
+
+        <h3>2. Dangling Pointers and Double-Free Bugs</h3>
+        <p>After calling <code>delete ptr;</code>, the pointer variable still holds the original address (a <em>dangling pointer</em>). Dereferencing it is Undefined Behavior. Calling <code>delete</code> twice on the same pointer corrupts the heap metadata. Always set <code>ptr = nullptr;</code> immediately after deletion.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Why Dynamic Heap Allocation is Banned in Embedded Safety Systems</h3>
+        <ul>
+          <li><strong>Heap Fragmentation:</strong> Repeated allocations and deallocations of varying sizes create tiny free holes across SRAM. Eventually, a small allocation request fails (<code>std::bad_alloc</code>) even if total free RAM exceeds the requested size.</li>
+          <li><strong>Non-Deterministic Latency:</strong> Heap allocators (<code>malloc</code>) search free lists. The time required varies wildly based on fragmentation state, violating real-time deadlines.</li>
+          <li><strong>Stack-Heap Collision:</strong> In bare-metal linker scripts, the stack grows downwards while the heap grows upwards. A heap overflow silently overwrites the active stack, corrupting return addresses.</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <h4>🚫 MISRA C++:2008 Rule 18-0-1 & NASA C Style Guide</h4>
+          <p>Dynamic memory allocation shall not be used after firmware startup initialization. All buffers and objects must be statically or stack allocated.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how embedded engineers replace heap <code>new</code> with static storage buffers (zero heap allocation):</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+#include &lt;new&gt;
+
+// Statically allocated memory slot (Zero Heap Overhead)
+template &lt;typename T&gt;
+class StaticSlot {
+    alignas(T) std::byte storage_[sizeof(T)];
+    bool occupied_{false};
+
+public:
+    template &lt;typename... Args&gt;
+    T* construct(Args&amp;&amp;... args) noexcept {
+        if (occupied_) return nullptr;
+        T* obj = new (storage_) T(std::forward&lt;Args&gt;(args)...); // Placement new
+        occupied_ = true;
+        return obj;
+    }
+
+    void destroy() noexcept {
+        if (occupied_) {
+            reinterpret_cast&lt;T*&gt;(storage_)-&gt;~T(); // Explicit destructor call
+            occupied_ = false;
+        }
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;heap fragmentation&#x27; and why is it fatal in long-running embedded devices?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Interspersed allocations and deallocations leave unusable gaps in SRAM, eventually causing allocation failure despite sufficient total free memory</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The CPU hardware clock frequency degrades over time</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The Flash ROM sectors wear out after 1000 writes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The linker script fails to locate main()</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Heap fragmentation breaks contiguous free memory into small disjoint chunks. Over weeks or months of operation, memory requests fail because no single contiguous block is large enough.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is a &#x27;dangling pointer&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A pointer that still holds the memory address of an object that has already been deallocated/deleted</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A pointer that points to address 0x00000000</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A pointer stored inside an interrupt vector table</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A pointer passed to a function by reference</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            A dangling pointer references memory that has been freed. Dereferencing or accessing a dangling pointer causes undefined behavior and data corruption.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens during a Stack-Heap collision in microcontroller SRAM?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The downward-growing CPU stack and upward-growing heap overlap, causing silent data and return address corruption</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler throws a std::stack_overflow exception</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The microcontroller enters low-power sleep mode</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The memory bus automatically expands into external flash</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            In microcontrollers without an MMU/MPU guard band, the stack and heap grow toward each other. An overflow overwrites stack frames, causing unpredictable crashes.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Why is setting a pointer to nullptr after calling delete recommended?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It prevents accidental use-after-free bugs and makes subsequent delete calls harmless (deleting nullptr is a safe no-op in C++)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It physically erases the SRAM silicon cells</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It forces the compiler to inline the destructor</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It returns memory directly to the bootloader</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Deleting <code>nullptr</code> is guaranteed to be a safe no-op in C++, and setting freed pointers to <code>nullptr</code> prevents accidental double-free and use-after-free bugs.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="const_correctness.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="dynamic_dogs.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

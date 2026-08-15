@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>std::logic_error, Preconditions &amp; Array Bounds Safety - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">LogicErrorFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">std::logic_error</span> <span class="tag">std::out_of_range</span> <span class="tag">Bounds Checking</span> <span class="tag">Buffer Overflow</span> <span class="tag">static_assert</span>
+      </div>
+      <h1 class="project-title">std::out_of_range vs Compile-Time Bounded Ranges in Memory-Constrained Systems</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing std::logic_error and std::out_of_range exceptions in C++. We explore how out-of-bounds memory accesses corrupt adjacent variables or trigger MPU faults in bare-metal systems, and design zero-overhead compile-time bounded types.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;stdexcept&gt; 
+
+using namespace std;
+
+int main() {
+
+	vector&lt;int&gt; myNums;
+
+	try {
+		myNums.resize(myNums.max_size() + 1);
+	}
+	catch (const length_error&amp; err) {
+		cerr &lt;&lt; &quot;Caught a length_error: &quot; &lt;&lt; err.what() &lt;&lt; endl;
+	}
+
+
+	cout &lt;&lt; &quot;Yay it&#x27;s a big vector!&quot; &lt;&lt; endl;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Logic Errors vs Runtime Errors</h3>
+        <p><code>std::logic_error</code> indicates violations of logical preconditions that could theoretically be detected by examining the program source code (e.g. passing an index $\ge$ size to <code>std::vector::at()</code>).</p>
+
+        <h3>2. Subclasses of <code>std::logic_error</code></h3>
+        <ul>
+          <li><code>std::out_of_range</code>: Accessing elements outside valid container boundaries.</li>
+          <li><code>std::invalid_argument</code>: Passing an improper argument to a function.</li>
+          <li><code>std::length_error</code>: Attempting to create an object exceeding <code>max_size</code>.</li>
+        </ul>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Out-of-Bounds Memory Corruption in Bare-Metal Systems</h3>
+        <p>In standard C/C++, raw arrays (<code>arr[i]</code>) do not perform bounds checking. Writing past an array in embedded SRAM typically clobbers:</p>
+        <ul>
+          <li>Adjacent global or local variables.</li>
+          <li>The function's Return Address on the stack, causing unpredictable jumps and HardFaults.</li>
+          <li>Interrupt Vector Tables in SRAM (triggering catastrophic execution hijacking).</li>
+        </ul>
+
+        <h3>2. Bounded Index Types (Zero-Cost Safety)</h3>
+        <p>Instead of throwing <code>std::out_of_range</code> at runtime, embedded engineers use clamped/saturating integer arithmetic or strongly-typed bounded index wrappers.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is a compile-time bounded array index that prevents out-of-bounds bugs at compile time:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+#include &lt;array&gt;
+
+template &lt;typename T, size_t N&gt;
+class SafeArray {
+    std::array&lt;T, N&gt; data_{};
+
+public:
+    // 1. Clamped access: Guarantees no out-of-bounds without throwing
+    constexpr const T&amp; at_clamped(size_t index) const noexcept {
+        if (index &gt;= N) index = N - 1;
+        return data_[index];
+    }
+
+    // 2. Compile-time checked access for constant indices
+    template &lt;size_t Index&gt;
+    constexpr const T&amp; get() const noexcept {
+        static_assert(Index &lt; N, "Array index is out of compile-time bounds!");
+        return data_[Index];
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the key conceptual difference between std::logic_error and std::runtime_error?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> logic_error represents preventable design bugs in code logic, while runtime_error represents unpredictable external failures</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> logic_error only works with integers</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> runtime_error is evaluated at compile time</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> logic_error cannot be caught by a base class reference</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::logic_error</code> reflects flaws in the program's internal reasoning (like violating function preconditions), whereas <code>std::runtime_error</code> reflects environment/hardware conditions outside the program's control.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What happens in C++ if you access an invalid index using the subscript operator (arr[index]) on a raw array?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Undefined Behavior (UB) occurs; memory is read or overwritten without any bounds check</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A std::out_of_range exception is automatically thrown</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The program safely returns null</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The array dynamically expands to fit the index</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Raw array subscripting (<code>[]</code>) in C and C++ performs direct pointer arithmetic with zero bounds checking. Accessing invalid indices causes undefined behavior and potential memory corruption.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which method on std::vector performs bounds checking and throws std::out_of_range on invalid access?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> .at(index)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> [index]</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> .front()</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> .data()</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::vector::at()</code> checks whether the index is within the container bounds and throws <code>std::out_of_range</code> if it is not.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How does saturating/clamping arithmetic protect embedded sensor arrays from crashing?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It clamps out-of-range index values to the nearest valid min/max boundary instead of overflowing</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It deletes corrupted elements from flash</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It restarts the microcontroller on every access</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It encrypts the index in CPU registers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Clamping ensures that invalid indices or arithmetic results saturate at the nearest valid boundary (e.g. <code>max_index</code>), preventing out-of-bounds buffer corruptions.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="fuel_monitor_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="month_name_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Exception Hierarchies vs Lightweight Tagged Enums - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">CustomExceptions</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">std::exception</span> <span class="tag">what()</span> <span class="tag">Object Slicing</span> <span class="tag">Code Bloat</span> <span class="tag">enum class</span> <span class="tag">AUTOSAR C++14</span>
+      </div>
+      <h1 class="project-title">std::exception Subclassing, Object Slicing Pitfalls &amp; ROM Bloat in Embedded Firmware</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building domain-specific exception hierarchies by inheriting from <code>std::runtime_error</code> and <code>std::exception</code>. We analyze how exception unwinding tables (<code>.eh_frame</code> / DWARF) add 15-40KB of Flash overhead, why dynamic exception allocation is hazardous in constrained SRAM, and how to refactor with zero-cost tagged error codes.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">AngryCatException.h</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;AngryCatException.h&quot;
+using namespace std;
+
+void feedKitty(int numTreats);
+
+int main() {
+	int numTreats = 0;
+
+	cout &lt;&lt; &quot;How many treats do you want to feed kitty?&quot; &lt;&lt; endl;
+	cin &gt;&gt; numTreats;
+
+	try {
+		feedKitty(numTreats);
+	}
+	catch (const AngryCatException&amp; err) {
+		cout &lt;&lt; err.what() &lt;&lt; endl;
+	}
+
+	return 0;
+}
+
+void feedKitty(int numTreats) {
+	if (numTreats &lt; 3) {
+		throw AngryCatException();
+	}
+	else if (numTreats &lt; 6) {
+		throw AngryCatException(&quot;I&#x27;m still not happy!&quot;);  //not angry, just disappointed
+	}
+
+	cout &lt;&lt; &quot;Kitty is happy with &quot; &lt;&lt; numTreats &lt;&lt; &quot; treats.&quot; &lt;&lt; endl;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef ANGRY_CAT_EXCEPTION_H
+#define ANGRY_CAT_EXCEPTION_H
+
+#include &lt;stdexcept&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class AngryCatException : public runtime_error {
+	public:
+		AngryCatException() : runtime_error(&quot;Made kitty angry!&quot;) {
+		}
+
+		AngryCatException(const string&amp; err) : runtime_error(err) {
+		}
+};
+
+#endif
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Creating Custom Domain Exceptions</h3>
+        <p>In standard C++, custom exception classes inherit from <code>std::runtime_error</code> (for runtime issues) or <code>std::logic_error</code> (for precondition violations), overriding the virtual <code>const char* what() const noexcept</code> method.</p>
+
+        <h3>2. Object Slicing in Catch Handlers</h3>
+        <p>Always catch exceptions by <strong>const reference</strong> (<code>catch (const std::exception& e)</code>). Catching by value (<code>catch (std::exception e)</code>) slices derived member variables away and destroys polymorphic <code>what()</code> dispatch.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The 15KB - 40KB Flash Penalty of C++ Exceptions</h3>
+        <p>Enabling C++ exceptions (<code>-fexceptions</code>) forces GCC/Clang to emit:</p>
+        <ul>
+          <li><strong><code>.eh_frame</code> DWARF Unwind Tables:</strong> Metadata mapping instruction addresses to catch blocks.</li>
+          <li><strong><code>__cxa_throw</code> & <code>__cxa_allocate_exception</code>:</strong> Runtime support code that dynamically allocates memory on an internal emergency heap when throwing.</li>
+        </ul>
+        <p>On a 32KB or 64KB Flash microcontroller (e.g. STM32F103, ATmega328P), exception runtime support can consume over <strong>50% of total available ROM</strong>.</p>
+
+        <h3>2. Non-Deterministic Stack Unwinding in Real-Time ISRs</h3>
+        <p>When an exception is thrown, the runtime traverses stack frames looking for a matching handler. The time required depends on call depth and active local objects, destroying deterministic hard real-time latency guarantees.</p>
+
+        <div class="callout callout-danger">
+          <h4>🚫 AUTOSAR Rule A15-0-1 & MISRA C++:2023 Rule 18.0.1</h4>
+          <p>Exceptions shall not be used in safety-critical systems unless an upper bound on execution time can be strictly proven. In bare-metal and RTOS firmware, compile with <code>-fno-exceptions</code>.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how modern embedded C++ implements zero-overhead, strongly typed error reporting without heap allocation or unwind tables:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+
+// 1. Strongly-typed 1-byte error code (Zero RAM overhead)
+enum class [[nodiscard]] SensorStatus : uint8_t {
+    Ok = 0,
+    Timeout,
+    BusCollision,
+    ChecksumMismatch,
+    CriticalThresholdExceeded
+};
+
+// 2. Pure compile-time string converter (Stored in Flash ROM .rodata)
+constexpr std::string_view to_string(SensorStatus status) noexcept {
+    switch (status) {
+        case SensorStatus::Ok:                        return "OK";
+        case SensorStatus::Timeout:                   return "I2C Bus Timeout";
+        case SensorStatus::BusCollision:              return "Arbitration Lost";
+        case SensorStatus::ChecksumMismatch:          return "CRC8 Checksum Failure";
+        case SensorStatus::CriticalThresholdExceeded: return "Critical Temperature Threshold Exceeded";
+    }
+    return "Unknown Error";
+}
+
+// 3. Deterministic return with [[nodiscard]] preventing unhandled errors
+[[nodiscard]] SensorStatus readTemperature(int16_t& out_temp_celsius) noexcept {
+    // Hardware reading logic...
+    if (/* hardware timeout */ false) {
+        return SensorStatus::Timeout;
+    }
+    out_temp_celsius = 42;
+    return SensorStatus::Ok;
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;object slicing&#x27; when handling C++ exceptions?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Catching a derived exception class by value instead of const reference, copying only the base class slice and losing derived data</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Allocating exceptions on the heap with new</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Dividing an exception object into multiple threads</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Splitting an exception across two catch blocks</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Catching by value (<code>catch (std::exception e)</code>) invokes the copy constructor of the base class, discarding (slicing off) all derived class members and overriding behavior.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is the C++ exception runtime support library (__cxa_throw) hazardous on small microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It adds 15KB-40KB of Flash code bloat and relies on an internal heap allocation for exception objects</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It permanently disables CPU interrupts</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It alters the crystal oscillator clock frequency</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It prevents C++ classes from having member functions</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>__cxa_throw</code> requires extensive DWARF stack-unwinding tables and dynamically allocates memory for the exception payload, posing severe ROM/RAM bloat risks.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What does the C++ [[nodiscard]] attribute accomplish when applied to an error-returning function or enum?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Causes the compiler to emit a warning/error if the caller ignores the returned status code</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Automatically throws a std::runtime_error on failure</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Forces the return value into the CPU cache line</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Allocates the return value in static BSS memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>[[nodiscard]]</code> enforces that callers inspect the returned error status, preventing silent failures and unhandled error states at compile time.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Which compiler flag disables C++ exception generation and stack unwinding tables entirely?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> -fno-exceptions</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> -O2 -g</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> -fno-rtti</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> -nostdlib</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The <code>-fno-exceptions</code> flag tells the compiler not to generate exception frames or unwinding support, drastically shrinking code size.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="bug_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="dog_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Invariant Validation &amp; Constructor Failure Patterns - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">DogFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-core">⚡ Embedded Relevance: Core</span>
+        <span class="tag">Invariants</span> <span class="tag">Constructor Failure</span> <span class="tag">Two-Phase Init</span> <span class="tag">noexcept</span> <span class="tag">RAII</span>
+      </div>
+      <h1 class="project-title">Constructor Invariant Enforcement vs Two-Phase Initialization in Microcontrollers</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Enforcing domain invariants through constructor validation and member validation methods. We examine the classic C++ dilemma of constructor failure (destructors do not run for incomplete objects) and contrast exception-based validation with deterministic Two-Phase Initialization (init()) and static factory methods.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Dog.h</button>
+            <button class="code-tab" data-target="file-tab-2">Dog.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Dog.h&quot;
+using namespace std;
+
+int main() {
+
+	try {
+		Dog myDog(&quot;German Shepherd&quot;);
+		Dog yourDog(&quot;Golden Retriever&quot;);
+		//Dog theirDog(&quot;Poodle&quot;);
+
+		cout &lt;&lt; myDog.getBreed() &lt;&lt; endl;
+		cout &lt;&lt; yourDog.getBreed() &lt;&lt; endl;
+		//cout &lt;&lt; theirDog.getBreed() &lt;&lt; endl;
+	}
+	catch (const runtime_error&amp; err) {
+		cout &lt;&lt; err.what() &lt;&lt; endl;
+	}
+	return 0;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef DOG_H
+#define DOG_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class Dog {
+	public:
+		Dog(string breed);
+		string getBreed() const;
+	private:
+		string breed;
+};
+
+#endif </pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Dog.h&quot;
+#include &lt;stdexcept&gt;
+using namespace std;
+
+Dog::Dog(string breed) {
+	if (breed != &quot;poodle&quot; &amp;&amp; breed != &quot;Poodle&quot;) {
+		this-&gt;breed = breed;
+	}
+	else {
+		throw runtime_error(&quot;Poodle?  That&#x27;s not a real dog!&quot;);
+	}
+}
+
+string Dog::getBreed() const {
+	return breed;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Object Invariants and Encapsulation</h3>
+        <p>An invariant is a condition that must always be true for an object to be in a valid, functional state. Constructors establish invariants, and public mutator methods maintain them.</p>
+
+        <h3>2. Constructor Failure Mechanics</h3>
+        <p>In standard C++, if a constructor throws an exception, the object is considered <strong>never created</strong>. Crucially, the class destructor will <em>not</em> run. Any sub-objects already initialized will be destroyed in reverse order of declaration, but raw resource pointers owned directly by the class may leak.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Two-Phase Initialization Pattern</h3>
+        <p>In embedded systems compiled with <code>-fno-exceptions</code>, constructors cannot throw to report initialization failures (e.g. peripheral hardware unresponsive, DMA channel busy). Firmware designs use <strong>Two-Phase Initialization</strong>:</p>
+        <ul>
+          <li><strong>Phase 1 (Constructor):</strong> Lightweight construction; sets member variables to safe default/inert states (no hardware I/O).</li>
+          <li><strong>Phase 2 (<code>init()</code> or <code>begin()</code>):</strong> Configures hardware registers, verifies I2C/SPI ACK, and returns a boolean or status code.</li>
+        </ul>
+
+        <h3>2. Static Factory Methods with <code>std::optional</code></h3>
+        <p>Modern C++17 provides static factory creation methods that validate parameters and return <code>std::optional&lt;T&gt;</code> by value with zero heap allocation.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how embedded engineers design robust classes with deterministic factory initialization:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;optional&gt;
+#include &lt;string_view&gt;
+
+class UartDriver {
+private:
+    uint32_t baud_rate_;
+    uint8_t  port_id_;
+    bool     is_initialized_{false};
+
+    // Private constructor enforces creation through verified factory method
+    constexpr UartDriver(uint8_t port, uint32_t baud) noexcept
+        : baud_rate_(baud), port_id_(port) {}
+
+public:
+    // Factory method validating invariants before creating the object
+    static std::optional&lt;UartDriver&gt; create(uint8_t port, uint32_t baud) noexcept {
+        if (port &gt; 3) return std::nullopt; // Microcontroller has only UART 0-3
+        if (baud &lt; 9600 || baud &gt; 921600) return std::nullopt; // Unsupported baud rate
+        
+        return UartDriver(port, baud);
+    }
+
+    [[nodiscard]] bool init_hardware() noexcept {
+        // Configure MMIO registers (e.g., USART-&gt;BRR = ...)...
+        is_initialized_ = true;
+        return true;
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> If a C++ constructor throws an exception before completing, what happens to the class destructor?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The destructor is NOT called for the throwing object</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The destructor is immediately executed</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The destructor is deferred until program termination</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The destructor runs twice</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            In C++, an object is only considered fully constructed when its constructor finishes execution without throwing. If an exception occurs inside the constructor, the destructor will not execute.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is the Two-Phase Initialization (init()) pattern widely used in embedded microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Because hardware peripheral initialization can fail, and microcontrollers often compile with -fno-exceptions</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Because it enables multiple inheritance</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Because C++ constructors cannot accept arguments</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Because it increases compilation speed by 50%</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            In embedded systems where exceptions are disabled, constructors cannot fail safely. An explicit <code>init()</code> method allows returning a status code if hardware peripherals do not respond.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens if a static global object&#x27;s constructor attempts to write to peripheral registers before microcontroller clock tree initialization?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A BusFault or HardFault occurs because peripheral bus clocks have not yet been enabled in Reset_Handler</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler automatically fixes the clock tree</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The data is cached until bootup completes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The CPU ignores the register writes safely</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Attempting to access peripheral registers before enabling their respective APB/AHB bus clocks in the clock distribution tree generates a fatal hardware BusFault.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> How does returning std::optional&lt;T&gt; from a static factory method achieve zero-overhead object creation?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It uses Return Value Optimization (RVO / copy elision) to construct the object directly into the caller&#x27;s stack frame without heap allocations</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It allocates memory in the global BSS section</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It uses dynamic heap memory pools</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It converts objects into raw void pointers</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Guaranteed copy elision (C++17) ensures that the factory method constructs <code>std::optional&lt;T&gt;</code> directly in the caller's stack location without any heap allocation or copy overhead.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="custom_exceptions.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="exception_fun_1.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

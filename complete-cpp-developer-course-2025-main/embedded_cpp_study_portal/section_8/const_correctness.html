@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Const Pointers, ROM-ability &amp; Flash Memory (.rodata) - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 8</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 8</a>
+      <span class="sep">/</span>
+      <span class="current">ConstCorrectness</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-8">Section 8</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">const</span> <span class="tag">ROM-ability</span> <span class="tag">.rodata</span> <span class="tag">Pointer to Const</span> <span class="tag">Const Pointer</span> <span class="tag">MISRA C++</span>
+      </div>
+      <h1 class="project-title">Pointer to Const vs Const Pointer &amp; Placing Lookups in Microcontroller Flash ROM</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Mastering the four permutations of const with pointers: mutable pointer to mutable data, pointer to const data, const pointer to mutable data, and const pointer to const data. We analyze how const enables ROM-ability, placing lookup tables and calibration data into Flash ROM (.rodata) to save precious SRAM.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+void noChange(const double* const someValue);
+
+void noConst();
+void cp2ncd();
+void ncp2cd();
+void cp2cd();
+
+
+
+int main() {
+
+	double* myDubz = new double(5.25);
+
+	noConst();
+	cout &lt;&lt; endl;
+
+	cp2ncd();
+	cout &lt;&lt; endl;
+
+	ncp2cd();
+	cout &lt;&lt; endl;
+
+	cp2cd();
+	cout &lt;&lt; endl;
+
+	noChange(myDubz);
+
+	delete myDubz;
+	myDubz = nullptr;
+
+	return 0;
+}
+
+void noChange(const double* const someValue) {
+	cout &lt;&lt; *someValue &lt;&lt; endl;
+}
+
+
+//1. non-const pointer to non-const data
+void noConst() {
+	cout &lt;&lt; &quot;In noConst&quot; &lt;&lt; endl;
+
+	int* intPtr = new int(50);
+	cout &lt;&lt; &quot;\toriginal value:&quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	*intPtr = 100;
+	cout &lt;&lt; &quot;\tchanged data: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	delete intPtr;
+
+	intPtr = new int(125);
+	cout &lt;&lt; &quot;\tnew int entirely: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	delete intPtr;
+
+}
+
+// 2. const pointer to non-const data
+void cp2ncd() {
+	cout &lt;&lt; &quot;In cp2ncd&quot; &lt;&lt; endl;
+
+	int* const intPtr = new int(100);
+
+	cout &lt;&lt; &quot;\toriginal value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	*intPtr = 250;
+	cout &lt;&lt; &quot;\tmodified value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	// intPtr = new int(222);   
+	
+	delete intPtr;
+	
+}
+
+// 3. non-const pointer to const data
+void ncp2cd() {
+	cout &lt;&lt; &quot;In ncp2cd&quot; &lt;&lt; endl;
+
+	const int* intPtr = new int(500);
+	cout &lt;&lt; &quot;\toriginal value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	// *intPtr = 600;  
+
+	delete intPtr;
+
+	intPtr = new int(1000);  //pointer can change!
+	cout &lt;&lt; &quot;\tnew value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	delete intPtr;
+}
+
+// 4. const pointer to const data
+void cp2cd() {
+	cout &lt;&lt; &quot;In cp2cd&quot; &lt;&lt; endl;
+
+	const int* const intPtr = new int(5000);
+
+	cout &lt;&lt; &quot;\toriginal value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+
+	//  *intPtr = 6000;    // can&#x27;t do this, the data is constant
+	// intPtr = new int(6000);  //can&#x27;t do this, the pointer is constant
+
+	delete intPtr;
+}
+
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Four Permutations of Pointer Constness</h3>
+        <ul>
+          <li><code>int* ptr</code>: Mutable pointer to mutable data (can reassign pointer, can mutate value).</li>
+          <li><code>const int* ptr</code> (or <code>int const* ptr</code>): <strong>Pointer to const data</strong> (cannot mutate data via pointer; can reassign pointer).</li>
+          <li><code>int* const ptr</code>: <strong>Const pointer to mutable data</strong> (can mutate data; cannot reassign pointer).</li>
+          <li><code>const int* const ptr</code>: <strong>Const pointer to const data</strong> (immutable address, immutable data).</li>
+        </ul>
+
+        <h3>2. Read-Right-to-Left Rule</h3>
+        <p>To decipher complex pointer declarations, read from right to left: <code>const int* const ptr</code> $\rightarrow$ "ptr is a <strong>const pointer</strong> to a <strong>const int</strong>".</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. ROM-ability and the <code>.rodata</code> Section</h3>
+        <p>In microcontrollers with limited SRAM (e.g. 16KB-64KB) and larger Flash (e.g. 128KB-1MB), saving RAM is critical. When data structures, calibration maps, and strings are declared <code>const</code> or <code>constexpr</code>, the linker places them in the <strong><code>.rodata</code> section in Flash ROM</strong>.</p>
+
+        <h3>2. Hardware Peripheral Base Address Safety</h3>
+        <p>Pointers to hardware peripheral register blocks must be declared as <strong>const pointers to volatile data</strong> (<code>volatile RegisterMap* const</code>). This ensures the pointer permanently addresses the peripheral and cannot be accidentally redirected.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how const correctness is applied in production hardware peripheral drivers:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+// Hardware register map structure
+struct UartHardwareMap {
+    volatile uint32_t SR;   // Status Register
+    volatile uint32_t DR;   // Data Register
+    volatile uint32_t BRR;  // Baud Rate Register
+    volatile uint32_t CR1;  // Control Register 1
+};
+
+// 1. Const pointer to volatile hardware register (Permanent MMIO base address)
+UartHardwareMap* const UART1_HW = reinterpret_cast&lt;UartHardwareMap* const&gt;(0x40011000);
+
+// 2. Calibration curve stored 100% in Flash ROM (.rodata section)
+struct AdcCalibrationCurve {
+    const uint16_t raw_counts[5];
+    const float    voltage_volts[5];
+};
+
+static constexpr AdcCalibrationCurve SENSOR_CALIB = {
+    .raw_counts    = {0, 1024, 2048, 3072, 4095},
+    .voltage_volts = {0.0f, 0.825f, 1.65f, 2.475f, 3.3f}
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the meaning of &#x27;const uint8_t* const ptr&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A const (immutable) pointer pointing to const (read-only) data</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A pointer that can be reassigned to any memory address</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A mutable pointer to mutable uint8_t data</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> An array of 8-bit integers on the heap</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Reading right-to-left: <code>ptr</code> is a <code>const</code> pointer (its stored address cannot change) to a <code>const uint8_t</code> (the pointed-to data cannot be modified).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is const-correctness vital for conserving SRAM in embedded firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Data marked const/constexpr is placed by the linker in Flash ROM (.rodata), consuming 0 bytes of SRAM</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It compresses variables using ZIP encoding in RAM</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It makes the CPU run at double clock frequency</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It automatically deletes unused variables during runtime</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Linkers place immutable (<code>const</code> / <code>constexpr</code>) data into Flash memory (<code>.rodata</code>), freeing SRAM for dynamic stack variables and buffers.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which pointer declaration correctly models a permanent hardware peripheral base address whose registers change asynchronously?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> volatile PeripheralRegs* const PERIPHERAL_BASE</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> const PeripheralRegs* PERIPHERAL_BASE</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> PeripheralRegs* volatile PERIPHERAL_BASE</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> const volatile PeripheralRegs* PERIPHERAL_BASE</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>volatile PeripheralRegs* const</code> specifies a <strong>const pointer</strong> (the base memory address is permanent) pointing to <strong>volatile hardware registers</strong> (the register values change in hardware).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What happens if code attempts to write to a variable placed in Flash ROM (.rodata)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A hardware MemManage Fault or BusFault occurs because Flash memory is read-only at runtime</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The Flash controller automatically updates the sector in 1 clock cycle</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The write succeeds without errors</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The CPU ignores the write and resets the stack pointer</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Flash memory cannot be written like RAM at runtime without unlocking the flash controller; writes trigger a hardware fault (BusFault / MemManage Fault).
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="pointer_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="dynamic_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

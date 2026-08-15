@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety-Critical Threshold Monitoring &amp; Fail-Safe Latching - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">FuelMonitorProject</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">Safety Critical</span> <span class="tag">Fail-Safe</span> <span class="tag">Threshold Monitoring</span> <span class="tag">MISRA C++</span> <span class="tag">ADC</span>
+      </div>
+      <h1 class="project-title">Real-Time Sensor Monitoring, Emergency Thresholds &amp; Hardware Fail-Safe States</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Building a safety-critical fuel level monitoring system with custom exception triggers. We analyze how embedded systems implement fail-safe latching, hardware interrupt watchdog trips, and safety state machines (e.g. ISO 26262 ASIL-D and IEC 61508 SIL-3).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">FuelLevelCritical.h</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;stdexcept&gt;
+#include &quot;FuelLevelCritical.h&quot;
+using namespace std;
+
+void checkFuelLevel(int percentage);
+
+int main() {
+
+	cout &lt;&lt; &quot;Fuel Monitor Starting...&quot; &lt;&lt; endl;
+
+	try {
+		for (int i = 100; i &gt;= 0; i -= 10) {
+			checkFuelLevel(i);
+		}
+	}
+	catch (const FuelLevelCritical&amp; err) {
+		cout &lt;&lt; &quot;ALERT: &quot; &lt;&lt; err.what() &lt;&lt; endl;
+	}
+
+	return 0;
+}
+
+void checkFuelLevel(int percentage) {
+	if (percentage &lt; 10) {
+		throw FuelLevelCritical();
+	}
+
+	cout &lt;&lt; &quot;Fuel level at &quot; &lt;&lt; percentage &lt;&lt; &quot;% - within safe operating range.&quot; &lt;&lt; endl;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef FUEL_LEVEL_CRITICAL_H
+#define FUEL_LEVEL_CRITICAL_H
+
+#include &lt;stdexcept&gt;
+using namespace std;
+
+class FuelLevelCritical : public runtime_error {
+
+	public:
+		FuelLevelCritical() : 
+			runtime_error(&quot;Fuel level is critically low! Ship must refuel immediately!&quot;) {
+
+		}
+};
+
+#endif 
+</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Domain-Specific Alert Hierarchies</h3>
+        <p>Critical systems define distinct exception/alert tiers (e.g., <code>FuelWarning</code> vs <code>FuelLevelCritical</code>). Each tier enforces appropriate escalation behavior.</p>
+
+        <h3>2. Exception-Driven Control Flow Hazards</h3>
+        <p>Using exceptions for ordinary control flow (e.g. routine sensor polling) is an anti-pattern. Exceptions should only be reserved for truly exceptional, unrecoverable system faults.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Safety State Machines (ISO 26262 & IEC 61508)</h3>
+        <p>In safety-critical automotive/aerospace firmware, when a sensor reading breaches a critical safety envelope:</p>
+        <ul>
+          <li><strong>Fail-Safe State Transition:</strong> The system immediately switches to a predefined safe state (e.g., cutting fuel pump power, opening safety contactors, engaging mechanical brakes).</li>
+          <li><strong>Fault Latching:</strong> The fault is latched in non-volatile memory and cannot be cleared until a full self-test or authorized service reset.</li>
+        </ul>
+
+        <h3>2. Hardware Analog Watchdog (AWD) in STM32 / NXP</h3>
+        <p>Instead of software polling, modern microcontrollers provide hardware Analog Watchdogs on ADC channels that fire a dedicated hardware interrupt within <strong>sub-microsecond latency</strong> if voltage crosses high/low thresholds.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded safety-critical monitor using a deterministic state machine with hysteresis:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+enum class SafetyState : uint8_t {
+    Nominal = 0,
+    Warning,
+    CriticalShutdown,
+    FaultLatched
+};
+
+class FuelSafetyMonitor {
+private:
+    static constexpr uint16_t CRITICAL_THRESHOLD = 50;  // 5.0 Liters
+    static constexpr uint16_t WARNING_THRESHOLD  = 150; // 15.0 Liters
+    static constexpr uint16_t HYSTERESIS         = 10;  // Prevents state fluttering
+    
+    SafetyState state_{SafetyState::Nominal};
+    bool latch_engaged_{false};
+
+public:
+    SafetyState update(uint16_t raw_sensor_level) noexcept {
+        if (latch_engaged_) return SafetyState::FaultLatched;
+
+        if (raw_sensor_level &lt;= CRITICAL_THRESHOLD) {
+            state_ = SafetyState::CriticalShutdown;
+            latch_engaged_ = true;
+            trigger_hardware_shutdown();
+        } else if (raw_sensor_level &lt;= WARNING_THRESHOLD) {
+            state_ = SafetyState::Warning;
+        } else if (raw_sensor_level &gt; (WARNING_THRESHOLD + HYSTERESIS)) {
+            state_ = SafetyState::Nominal;
+        }
+        return state_;
+    }
+
+private:
+    void trigger_hardware_shutdown() noexcept {
+        // Assert GPIO pin to trip physical safety relay
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;hysteresis&#x27; and why is it essential in embedded threshold monitoring?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A tolerance band that prevents rapid, oscillating state changes when a noisy sensor signal fluctuates near a threshold</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A technique to accelerate floating-point arithmetic</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A method for encrypting sensor telemetry over CAN bus</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A software pattern that forces memory allocation onto the heap</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Hysteresis introduces different switching thresholds for rising vs falling signals, preventing noisy analog sensor inputs from rapidly toggling actuators on and off.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> Why is using C++ exceptions for routine, expected conditions (e.g. low fuel warning) considered bad practice?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Exceptions incur massive performance penalties during unwinding and obscure normal control flow logic</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Exceptions cannot be caught more than once</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Exceptions automatically erase flash memory</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Exceptions disable the microcontroller ADC peripheral</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Exceptions should represent exceptional/catastrophic conditions. Using them for regular state transitions causes high stack unwinding overhead and makes code harder to verify.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What is the purpose of an Analog Watchdog (AWD) peripheral on microcontrollers like STM32?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It continuously monitors ADC conversion values in hardware and triggers an instant interrupt if thresholds are violated</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It resets the microcontroller if the real-time clock loses power</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It prevents battery overcharging through USB</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It simulates analog signals for unit testing</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The hardware Analog Watchdog checks converted ADC values against high/low register limits in hardware, generating an immediate interrupt without CPU polling overhead.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What does a &#x27;fail-safe state&#x27; guarantee according to functional safety standards (ISO 26262)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The system transitions to a predetermined state that minimizes risk of harm upon critical component failure</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The system attempts to reboot continuously until hardware fixes itself</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The system ignores sensor failures and continues full power operation</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The system executes all pending dynamic memory allocations</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            A fail-safe state ensures that when an unrecoverable fault occurs, all actuators and power stages default to their safest possible configuration (e.g. de-energized).
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="exception_fun_1.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="logic_error_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

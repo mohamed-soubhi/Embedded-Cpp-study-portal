@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Static Arrays of Pointers &amp; Fixed-Block Allocators - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 8</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 8</a>
+      <span class="sep">/</span>
+      <span class="current">ExhibitTracker</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-8">Section 8</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Array of Pointers</span> <span class="tag">Fixed-Block Allocator</span> <span class="tag">Intrusive List</span> <span class="tag">Bitmask Pool</span> <span class="tag">Memory Management</span>
+      </div>
+      <h1 class="project-title">Managing Fixed Arrays of Heap Objects vs Intrusive Lists &amp; Bitmask Memory Pools</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Tracking museum exhibits via a fixed array of heap pointers (Exhibit* exhibitPtrs[COUNT]). We explore the cleanup lifecycle of pointer arrays, analyze the fragmentation hazards of out-of-order deallocations in long-running firmware, and build a deterministic bitmask fixed-block memory pool.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Exhibit.h</button>
+            <button class="code-tab" data-target="file-tab-2">Exhibit.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Exhibit.h&quot;
+using namespace std;
+
+
+int main() {
+	const int EXHIBIT_COUNT = 3;
+	Exhibit* exhibitPtrs[EXHIBIT_COUNT];
+
+	exhibitPtrs[0] = new Exhibit(&quot;T-Rex Skeleton&quot;, 101, 350.5);
+	exhibitPtrs[1] = new Exhibit(&quot;Ancient Egypt&quot;, 204, 480.25);
+	exhibitPtrs[2] = new Exhibit(&quot;Space Exploration&quot;, 309, 290.75);
+
+	for (int i = 0; i &lt; EXHIBIT_COUNT; i++) {
+		cout &lt;&lt; &quot;Exhibit: &quot; &lt;&lt; exhibitPtrs[i]-&gt;getName() &lt;&lt; endl;
+		cout &lt;&lt; &quot;\tRoom: &quot; &lt;&lt; exhibitPtrs[i]-&gt;getRoomNumber() &lt;&lt; endl;
+		cout &lt;&lt; &quot;\tDisplay Size (sq ft): &quot; &lt;&lt; exhibitPtrs[i]-&gt;getDisplaySize() &lt;&lt; endl;
+		cout &lt;&lt; endl;
+	}//end for
+
+	for (int i = 0; i &lt; EXHIBIT_COUNT; i++) {
+		delete exhibitPtrs[i];
+		exhibitPtrs[i] = nullptr;
+	}
+
+	return 0;
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef EXHIBIT_H
+#define EXHIBIT_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class Exhibit {
+	public:
+		Exhibit(string name, int roomNumber, double displaySize);
+		string getName() const;
+		int getRoomNumber() const;
+		double getDisplaySize() const;
+
+	private:
+		string name;
+		int roomNumber;
+		double displaySize;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Exhibit.h&quot;
+
+Exhibit::Exhibit(string name, int roomNumber, double displaySize) {
+	this-&gt;name = name;
+	this-&gt;roomNumber = roomNumber;
+	this-&gt;displaySize = displaySize;
+}
+
+string Exhibit::getName() const {
+	return name;
+}
+
+int Exhibit::getRoomNumber() const {
+	return roomNumber;
+}
+
+double Exhibit::getDisplaySize() const {
+	return displaySize;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Fixed Arrays of Pointers</h3>
+        <p>A static array of pointers (<code>Exhibit* exhibits[3]</code>) holds pointers to individually allocated heap objects. While the array container is statically sized on the stack or in BSS, the individual objects reside on the dynamic heap.</p>
+
+        <h3>2. Multi-Object Deallocation Lifecycle</h3>
+        <p>To prevent memory leaks, every element in the pointer array must be explicitly deleted and reset to <code>nullptr</code> when its lifecycle ends.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Out-of-Order Deallocation Fragmentation</h3>
+        <p>If exhibits (or network packets, sensor readings) are allocated and freed in random order, general-purpose heap allocators create fragmented memory holes that cannot be coalesced, eventually causing allocation failure.</p>
+
+        <h3>2. Fixed-Block Allocator with Bitmask Free-List</h3>
+        <p>A Fixed-Block Allocator pre-allocates $N$ memory blocks of identical size in static SRAM. A single integer bitmask tracks which blocks are free. Allocation and deallocation are <strong>$O(1)$ constant time operations</strong> with zero fragmentation.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is a deterministic, zero-fragmentation Fixed-Block Pool Allocator using a bitmask:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+#include &lt;new&gt;
+
+template &lt;typename T, size_t BlockCount = 32&gt;
+class FixedBlockPool {
+    static_assert(BlockCount &lt;= 32, "Bitmask supports up to 32 blocks");
+
+    alignas(alignof(T)) std::byte memory_[BlockCount][sizeof(T)];
+    uint32_t allocation_mask_{0}; // Bit = 1 (Used), Bit = 0 (Free)
+
+public:
+    template &lt;typename... Args&gt;
+    T* allocate(Args&amp;&amp;... args) noexcept {
+        for (size_t i = 0; i &lt; BlockCount; ++i) {
+            if (!(allocation_mask_ &amp; (1UL &lt;&lt; i))) {
+                allocation_mask_ |= (1UL &lt;&lt; i); // Mark block as used
+                return new (memory_[i]) T(std::forward&lt;Args&gt;(args)...);
+            }
+        }
+        return nullptr; // Out of blocks
+    }
+
+    void free(T* ptr) noexcept {
+        if (!ptr) return;
+        for (size_t i = 0; i &lt; BlockCount; ++i) {
+            if (reinterpret_cast&lt;T*&gt;(memory_[i]) == ptr) {
+                ptr-&gt;~T();
+                allocation_mask_ &amp;= ~(1UL &lt;&lt; i); // Clear bitmask
+                return;
+            }
+        }
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the primary advantage of a Fixed-Block Memory Pool over general-purpose malloc() in embedded firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It guarantees zero memory fragmentation and strictly deterministic O(1) allocation/deallocation time</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It dynamically increases the SRAM capacity of the microcontroller</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It automatically runs garbage collection during interrupt routines</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It encrypts the heap memory</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because all memory blocks are uniform in size, any freed block can satisfy any future allocation request, completely eliminating heap fragmentation and providing guaranteed $O(1)$ latency.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> In a 32-block Fixed-Block Allocator, how much memory is required to track the free/used state of all 32 blocks using a bitmask?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Exactly 4 bytes (a single 32-bit integer)</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 128 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 32 kilobytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 1 byte per object pointer</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            A single 32-bit unsigned integer (<code>uint32_t</code>, 4 bytes) has 32 individual bits, where each bit represents the used/free state of one block.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> What happens if a loop deletes exhibitPtrs[i] but does not set exhibitPtrs[i] = nullptr, and a subsequent function checks &#x27;if (exhibitPtrs[i] != nullptr)&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The condition evaluates to true (because the pointer still holds the old address), leading to a hazardous use-after-free crash</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler converts the pointer to nullptr automatically</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The condition evaluates to false safely</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The microcontroller reboots into DFU bootloader mode</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Calling <code>delete</code> frees the target memory but does not modify the pointer variable itself. Failing to set <code>nullptr</code> causes null checks to pass incorrectly, resulting in use-after-free bugs.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is an &#x27;intrusive data structure&#x27; in low-level systems programming?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> A data structure where linkage pointers (next/prev) are embedded directly inside the payload object itself, requiring zero auxiliary node memory allocation</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A virus that infects microcontroller firmware</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A data structure that only operates inside hardware registers</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A structure that allocates memory on external SPI Flash</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Intrusive containers store node pointers directly inside the managed objects, allowing objects to be linked into queues/lists without requiring separate node memory allocations.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="drone_fleet.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="pointer_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

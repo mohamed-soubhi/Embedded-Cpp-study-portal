@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>try-catch Mechanics &amp; Stack Unwinding Latency - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">ExceptionFun1</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">try-catch</span> <span class="tag">std::runtime_error</span> <span class="tag">Stack Unwinding</span> <span class="tag">std::expected</span> <span class="tag">Real-Time Jitter</span>
+      </div>
+      <h1 class="project-title">Standard try-catch Blocks vs std::expected (C++23) for Predictable Real-Time Execution</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Foundational try, throw, and catch mechanics in C++. We examine standard runtime exceptions (std::runtime_error), how stack unwinding destroys deterministic interrupt response times, and modern C++23 std::expected alternatives for high-reliability systems.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+	vector&lt;string&gt; names(5);
+
+	names.at(0) = &quot;John&quot;;
+	names.at(1) = &quot;Bob&quot;;
+	names.at(2) = &quot;Sally&quot;;
+	names.at(3) = &quot;Karen&quot;;
+	names.at(4) = &quot;Smitty&quot;;
+
+	for (string name : names) {
+		cout &lt;&lt; name &lt;&lt; endl;
+	}
+
+	try {
+		names.at(5) = &quot;Tyler&quot;;
+	}
+	catch (const out_of_range&amp; ex) {
+		cout &lt;&lt; &quot;Caught an out_of_range exception: &quot;
+			&lt;&lt; ex.what() &lt;&lt; endl;
+	}
+
+	//catch(const exception&amp; ex)   &lt;-- would catch ANY exception
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. C++ Exception Flow Control</h3>
+        <p>When an exception is thrown with <code>throw</code>, control immediately transfers out of the current block. The runtime searches backwards through active call frames until it finds an enclosing <code>try</code> block with a matching <code>catch</code> clause.</p>
+
+        <h3>2. Standard Library Exception Hierarchy</h3>
+        <p>All standard exceptions derive from <code>std::exception</code>. Key subclasses include <code>std::runtime_error</code> (unpredictable runtime failures) and <code>std::logic_error</code> (preventable programming bugs like out-of-range indices).</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Real-Time Latency Jitter from Exception Unwinding</h3>
+        <p>In hard real-time control systems (e.g. flight controllers, automotive brake-by-wire, inverter control loops), every cycle counts. An exception throw triggers non-deterministic table lookups across Flash unwind tables, causing latency jitter that can miss microsecond deadlines.</p>
+
+        <h3>2. Modern Alternative: <code>std::expected&lt;T, E&gt;</code> (C++23)</h3>
+        <p><code>std::expected&lt;T, E&gt;</code> represents either an expected value of type <code>T</code> or an error of type <code>E</code>. It provides monadic error chaining (<code>.and_then()</code>, <code>.transform()</code>) with <strong>100% deterministic time complexity and zero heap allocation</strong>.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how modern real-time systems handle operations that may fail using <code>std::expected</code> (or lightweight custom Result types):</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+
+// Embedded Result / Expected Implementation (C++17/20 Compatible)
+template &lt;typename T, typename E&gt;
+class Result {
+    union {
+        T value_;
+        E error_;
+    };
+    bool has_value_;
+
+public:
+    constexpr Result(T val) : value_(val), has_value_(true) {}
+    constexpr Result(E err) : error_(err), has_value_(false) {}
+    ~Result() {}
+
+    constexpr bool has_value() const noexcept { return has_value_; }
+    constexpr const T&amp; value() const noexcept { return value_; }
+    constexpr const E&amp; error() const noexcept { return error_; }
+};
+
+enum class AdcError : uint8_t { Timeout, OutOfRange, ReferenceVoltageLost };
+
+Result&lt;uint16_t, AdcError&gt; readAdcChannel(uint8_t channel) noexcept {
+    if (channel &gt; 15) return AdcError::OutOfRange;
+    // Read hardware ADC register...
+    return uint16_t(2048); // Success: 12-bit ADC mid-scale reading
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What causes execution timing jitter when a C++ exception is thrown?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The runtime must dynamically search stack frames and unwind active local variables across Flash DWARF tables</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The CPU frequency is temporarily throttled by hardware</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The operating system pauses all hardware interrupts</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The exception forces an immediate reboot</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Stack unwinding involves traversing metadata tables in Flash to locate matching catch handlers and invoke destructors for in-scope local objects, introducing unpredictable cycle delays.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the primary benefit of std::expected&lt;T, E&gt; over try-catch in embedded systems?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It provides explicit, deterministic error handling without unwind tables or heap allocations</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It automatically repairs hardware defects</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It converts integers to floating-point numbers</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It allows functions to return multiple different types simultaneously</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::expected</code> packages values and errors into a tagged union on the stack with deterministic $O(1)$ execution time and zero exception metadata bloat.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Which header must be included to use std::runtime_error in standard C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &lt;stdexcept&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> &lt;exception&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &lt;iostream&gt;</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &lt;error&gt;</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>std::runtime_error</code> and <code>std::logic_error</code> are defined in the standard <code>&lt;stdexcept&gt;</code> header.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Can C++ exceptions be safely thrown from an Interrupt Service Routine (ISR)?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> No, throwing across ISR boundaries causes undefined behavior or std::terminate() because interrupt contexts lack user stack unwinding support</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Yes, catch blocks automatically catch ISR exceptions</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Yes, but only if the exception inherits from std::bad_alloc</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Yes, ISR exceptions are queued in the FreeRTOS scheduler</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            ISRs run in privileged handler mode with dedicated interrupt stack pointers (MSP). Throwing an exception from an ISR cannot unwind into thread mode and will trigger <code>std::terminate()</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="dog_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="fuel_monitor_project.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

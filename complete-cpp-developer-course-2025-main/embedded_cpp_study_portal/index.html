@@ -11,10 +11,12 @@
     <div class="container nav-bar">
       <a href="index.html" class="nav-brand">
         ⚡ C++ & Embedded Systems Deep-Dive Portal
-        <span class="badge-tag">Sections 10, 11, 12</span>
+        <span class="badge-tag">Sections 7, 8, 10, 11, 12 (48 Projects)</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">🏠 Home</a></li>
+        <li><a href="section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="section_8/pointer_fun.html">Section 8</a></li>
         <li><a href="section_10/enum_fun.html">Section 10</a></li>
         <li><a href="section_11/smart_pointer_fun.html">Section 11</a></li>
         <li><a href="section_12/array_queue_app.html">Section 12</a></li>
@@ -26,7 +28,7 @@
   <main class="container">
     <section class="hero">
       <h1>Modern C++ &amp; Embedded Systems Portal</h1>
-      <p>Comprehensive, deep-dive architectural analysis of 32 course projects across Sections 10, 11, and 12. Complete with fully annotated source code, embedded hardware considerations, zero-cost refactors, and interactive self-checking quizzes.</p>
+      <p>Comprehensive, deep-dive architectural analysis of 48 course projects across Sections 7, 8, 10, 11, and 12. Complete with fully annotated source code, embedded hardware considerations, zero-cost refactors, and interactive self-checking quizzes.</p>
       
       <!-- Upstream Curriculum & Repository Attribution Card -->
       <div class="reference-banner">
@@ -51,11 +53,13 @@
     <section class="filter-panel">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="projectSearch" class="search-input" placeholder="Search by project name, concept (e.g. vtable, RAII, ring buffer), or tag...">
+        <input type="text" id="projectSearch" class="search-input" placeholder="Search by project name, concept (e.g. vtable, MMIO, heap fragmentation), or tag...">
       </div>
       <div class="filter-chips">
         <span class="filter-label">Filter:</span>
-        <button class="chip active" data-filter="all">All Projects (32)</button>
+        <button class="chip active" data-filter="all">All Projects (48)</button>
+        <button class="chip" data-filter="sec-7">Section 7: Exceptions &amp; Faults (9)</button>
+        <button class="chip" data-filter="sec-8">Section 8: Pointers &amp; Memory (7)</button>
         <button class="chip" data-filter="sec-10">Section 10: OOP &amp; Enums (3)</button>
         <button class="chip" data-filter="sec-11">Section 11: Templates &amp; STL (19)</button>
         <button class="chip" data-filter="sec-12">Section 12: Data Structures (10)</button>
@@ -66,6 +70,198 @@
     <!-- Cards Grid -->
     <section class="cards-grid">
       
+        <a href="section_7/bug_fun.html" class="project-card" data-section="7" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">BugFun</h3>
+          <p class="card-desc">Exploring the taxonomy of bugs: syntax errors, runtime faults, and subtle logic errors. In bare-metal systems, logic errors often ...</p>
+          <div class="card-tags">
+            <span class="tag">HardFault</span> <span class="tag">MemManage</span> <span class="tag">Stack Smashing</span>
+          </div>
+        </a>
+
+        <a href="section_7/custom_exceptions.html" class="project-card" data-section="7" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">CustomExceptions</h3>
+          <p class="card-desc">Building domain-specific exception hierarchies by inheriting from <code>std::runtime_error</code> and <code>std::exception</code>....</p>
+          <div class="card-tags">
+            <span class="tag">std::exception</span> <span class="tag">what()</span> <span class="tag">Object Slicing</span>
+          </div>
+        </a>
+
+        <a href="section_7/dog_fun.html" class="project-card" data-section="7" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">DogFun</h3>
+          <p class="card-desc">Enforcing domain invariants through constructor validation and member validation methods. We examine the classic C++ dilemma of co...</p>
+          <div class="card-tags">
+            <span class="tag">Invariants</span> <span class="tag">Constructor Failure</span> <span class="tag">Two-Phase Init</span>
+          </div>
+        </a>
+
+        <a href="section_7/exception_fun_1.html" class="project-card" data-section="7" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">ExceptionFun1</h3>
+          <p class="card-desc">Foundational try, throw, and catch mechanics in C++. We examine standard runtime exceptions (std::runtime_error), how stack unwind...</p>
+          <div class="card-tags">
+            <span class="tag">try-catch</span> <span class="tag">std::runtime_error</span> <span class="tag">Stack Unwinding</span>
+          </div>
+        </a>
+
+        <a href="section_7/fuel_monitor_project.html" class="project-card" data-section="7" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">FuelMonitorProject</h3>
+          <p class="card-desc">Building a safety-critical fuel level monitoring system with custom exception triggers. We analyze how embedded systems implement ...</p>
+          <div class="card-tags">
+            <span class="tag">Safety Critical</span> <span class="tag">Fail-Safe</span> <span class="tag">Threshold Monitoring</span>
+          </div>
+        </a>
+
+        <a href="section_7/logic_error_fun.html" class="project-card" data-section="7" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">LogicErrorFun</h3>
+          <p class="card-desc">Analyzing std::logic_error and std::out_of_range exceptions in C++. We explore how out-of-bounds memory accesses corrupt adjacent ...</p>
+          <div class="card-tags">
+            <span class="tag">std::logic_error</span> <span class="tag">std::out_of_range</span> <span class="tag">Bounds Checking</span>
+          </div>
+        </a>
+
+        <a href="section_7/month_name_project.html" class="project-card" data-section="7" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">MonthNameProject</h3>
+          <p class="card-desc">Validating user input ranges and mapping integer IDs to string representations. We contrast exception-based validation with high-s...</p>
+          <div class="card-tags">
+            <span class="tag">Lookup Tables</span> <span class="tag">constexpr</span> <span class="tag">ROM Optimization</span>
+          </div>
+        </a>
+
+        <a href="section_7/person_fun.html" class="project-card" data-section="7" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">PersonFun</h3>
+          <p class="card-desc">Deep dive into throwing exceptions from class constructors. We examine the classic C++ memory leak hazard when initializing multip...</p>
+          <div class="card-tags">
+            <span class="tag">Constructor Exceptions</span> <span class="tag">Resource Leak</span> <span class="tag">noexcept</span>
+          </div>
+        </a>
+
+        <a href="section_7/rethrow_fun_1.html" class="project-card" data-section="7" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-7">Section 7</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">RethrowFun1</h3>
+          <p class="card-desc">Examining multi-layered exception handling and exception rethrowing with throw;. We contrast standard C++ exception propagation wi...</p>
+          <div class="card-tags">
+            <span class="tag">throw;</span> <span class="tag">Exception Slicing</span> <span class="tag">RTOS</span>
+          </div>
+        </a>
+
+        <a href="section_8/pointer_fun.html" class="project-card" data-section="8" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">PointerFun</h3>
+          <p class="card-desc">Exploring the fundamentals of pointers: memory addresses, the address-of operator (&), and dereferencing (*). In embedded firmware...</p>
+          <div class="card-tags">
+            <span class="tag">Pointers</span> <span class="tag">Address-of &</span> <span class="tag">Dereference *</span>
+          </div>
+        </a>
+
+        <a href="section_8/const_correctness.html" class="project-card" data-section="8" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">ConstCorrectness</h3>
+          <p class="card-desc">Mastering the four permutations of const with pointers: mutable pointer to mutable data, pointer to const data, const pointer to m...</p>
+          <div class="card-tags">
+            <span class="tag">const</span> <span class="tag">ROM-ability</span> <span class="tag">.rodata</span>
+          </div>
+        </a>
+
+        <a href="section_8/dynamic_fun.html" class="project-card" data-section="8" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-high">⚡ Critical</span>
+          </div>
+          <h3 class="card-title">DynamicFun</h3>
+          <p class="card-desc">Analyzing dynamic memory allocation via new and delete, pointer resets to nullptr, and dangling pointer hazards. We explore why dy...</p>
+          <div class="card-tags">
+            <span class="tag">new</span> <span class="tag">delete</span> <span class="tag">Heap Fragmentation</span>
+          </div>
+        </a>
+
+        <a href="section_8/dynamic_dogs.html" class="project-card" data-section="8" data-relevance="core">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-core">⚡ Core</span>
+          </div>
+          <h3 class="card-title">DynamicDogs</h3>
+          <p class="card-desc">Exploring object member access via pointer: the arrow operator (->) vs explicit dereferencing (*ptr).member. We analyze memory lay...</p>
+          <div class="card-tags">
+            <span class="tag">Arrow Operator -></span> <span class="tag">Dereference Dot (*ptr).</span> <span class="tag">Object Lifecycles</span>
+          </div>
+        </a>
+
+        <a href="section_8/dynamic_array_test.html" class="project-card" data-section="8" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">DynamicArrayTest</h3>
+          <p class="card-desc">Analyzing dynamic array allocation with new[] and deallocation with delete[]. We explain the undefined behavior of mismatched dele...</p>
+          <div class="card-tags">
+            <span class="tag">new[]</span> <span class="tag">delete[]</span> <span class="tag">Bounded Arrays</span>
+          </div>
+        </a>
+
+        <a href="section_8/drone_fleet.html" class="project-card" data-section="8" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">DroneFleet</h3>
+          <p class="card-desc">Analyzing dynamic fleet management using double pointer indirection (Drone**). We contrast pointer-to-pointer architectures with c...</p>
+          <div class="card-tags">
+            <span class="tag">Double Indirection</span> <span class="tag">Pointer to Pointer</span> <span class="tag">Cache Locality</span>
+          </div>
+        </a>
+
+        <a href="section_8/exhibit_tracker.html" class="project-card" data-section="8" data-relevance="high">
+          <div class="card-top">
+            <span class="section-pill section-8">Section 8</span>
+            <span class="embedded-badge emb-high">⚡ High</span>
+          </div>
+          <h3 class="card-title">ExhibitTracker</h3>
+          <p class="card-desc">Tracking museum exhibits via a fixed array of heap pointers (Exhibit* exhibitPtrs[COUNT]). We explore the cleanup lifecycle of poi...</p>
+          <div class="card-tags">
+            <span class="tag">Array of Pointers</span> <span class="tag">Fixed-Block Allocator</span> <span class="tag">Intrusive List</span>
+          </div>
+        </a>
+
         <a href="section_10/enum_fun.html" class="project-card" data-section="10" data-relevance="high">
           <div class="card-top">
             <span class="section-pill section-10">Section 10</span>
@@ -462,6 +658,8 @@
         <div class="footer-col">
           <h5>Course Curriculum</h5>
           <ul>
+            <li><a href="section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
             <li><a href="section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
             <li><a href="section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
             <li><a href="section_12/array_queue_app.html">Section 12: Data Structures</a></li>

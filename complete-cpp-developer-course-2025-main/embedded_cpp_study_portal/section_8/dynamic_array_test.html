@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Array Allocation (new[]) &amp; Fixed-Capacity Bounded Vectors - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 8</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 8</a>
+      <span class="sep">/</span>
+      <span class="current">DynamicArrayTest</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-8">Section 8</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">new[]</span> <span class="tag">delete[]</span> <span class="tag">Bounded Arrays</span> <span class="tag">etl::vector</span> <span class="tag">Heap Corruption</span>
+      </div>
+      <h1 class="project-title">new[] / delete[] Pairing Rules vs Zero-Heap Fixed-Capacity Bounded Vectors</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing dynamic array allocation with new[] and deallocation with delete[]. We explain the undefined behavior of mismatched delete operators (scalar delete on array new), and demonstrate how embedded systems replace dynamic arrays with zero-heap fixed-capacity containers (such as ETL or inplace_vector).
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+	const int ARR_SIZE = 5;
+	int arrSize = 0;
+
+	cout &lt;&lt; &quot;Please enter an array size: &quot;;
+	cin &gt;&gt; arrSize;
+
+	int* myArray = new int[arrSize];
+
+	for (int i = 0; i &lt; arrSize; i++) {
+		myArray[i] = i * 2;
+	}
+
+	for (int i = 0; i &lt; arrSize; i++) {
+		cout &lt;&lt; myArray[i] &lt;&lt; endl;
+	}
+
+	delete[] myArray;
+	myArray = nullptr;
+
+	return 0;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Array Allocation (<code>new[]</code>) vs Scalar Allocation (<code>new</code>)</h3>
+        <p>Allocating an array of $N$ objects requires <code>new Type[N]</code>. The runtime allocates memory for all elements plus internal array-size metadata (often stored in an invisible header prefix).</p>
+
+        <h3>2. The Mismatched Deallocation Trap</h3>
+        <p>Deallocating an array with scalar <code>delete ptr;</code> instead of <code>delete[] ptr;</code> is <strong>Undefined Behavior</strong>. In non-trivial classes, scalar <code>delete</code> calls the destructor of only the first element (<code>ptr[0]</code>) and corrupts the heap metadata manager.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Embedded Solution: Bounded Capacity Containers</h3>
+        <p>Embedded applications need array-like containers with dynamic size (count of active elements) but <strong>bounded maximum capacity</strong> (zero heap allocation). Libraries like <strong>Embedded Template Library (ETL)</strong> provide <code>etl::vector&lt;T, Capacity&gt;</code>:</p>
+        <ul>
+          <li>Storage is allocated directly inside the object (on the stack or in static RAM).</li>
+          <li>Element count can vary from $0$ to $Capacity$.</li>
+          <li>Zero dynamic memory allocations; zero heap fragmentation.</li>
+        </ul>
+
+        <h3>2. C++26 <code>std::inplace_vector&lt;T, N&gt;</code></h3>
+        <p>Standard C++26 standardizes this exact container as <code>std::inplace_vector</code>, bringing zero-heap vector semantics to modern C++ standard libraries.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded fixed-capacity bounded array container with zero dynamic allocation:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;cstddef&gt;
+#include &lt;array&gt;
+
+template &lt;typename T, size_t Capacity&gt;
+class BoundedVector {
+private:
+    std::array&lt;T, Capacity&gt; data_{};
+    size_t size_{0};
+
+public:
+    constexpr bool push_back(const T&amp; item) noexcept {
+        if (size_ &gt;= Capacity) return false; // Fixed capacity reached
+        data_[size_++] = item;
+        return true;
+    }
+
+    constexpr void clear() noexcept { size_ = 0; }
+    constexpr size_t size() const noexcept { return size_; }
+    constexpr size_t capacity() const noexcept { return Capacity; }
+
+    constexpr T&amp; operator[](size_t idx) noexcept { return data_[idx]; }
+    constexpr const T&amp; operator[](size_t idx) const noexcept { return data_[idx]; }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What happens if you allocate an array with &#x27;new int[10]&#x27; and deallocate it with scalar &#x27;delete myArray;&#x27; instead of &#x27;delete[] myArray;&#x27;?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Undefined Behavior occurs, potentially causing heap corruption and failing to call destructors for elements 1 through 9</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler automatically fixes the syntax at runtime</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Only the last element is deleted</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The program executes 10% faster</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Calling scalar <code>delete</code> on an array allocated with <code>new[]</code> is undefined behavior. The runtime cannot determine the array length, destructors for subsequent elements are skipped, and heap bookkeeping is corrupted.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How does a Bounded Vector (like etl::vector or std::inplace_vector) differ from std::vector?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Its elements are stored entirely within the container&#x27;s inline storage on the stack/static memory without heap allocation</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It can grow infinitely in size</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It requires an operating system kernel</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It only accepts integer data types</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Bounded vectors allocate a fixed-capacity inline buffer inside the object itself, providing variable length up to a maximum capacity with zero dynamic heap allocation.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why are Variable-Length Arrays (VLAs, e.g. int arr[n];) prohibited in safety-critical C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> They can silently blow past the available CPU stack size, causing catastrophic stack overflow crashes without any error handling</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> They increase binary Flash size by 500KB</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> They convert all variables to 64-bit doubles</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They disable compiler optimizations permanently</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            VLAs allocate variable amounts of memory on the stack at runtime. If the size is large or uncontrolled, the stack silently collides with SRAM variables, causing catastrophic system crashes.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What is the time complexity of pushing an element to a BoundedVector with available capacity?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> O(1) strictly deterministic constant time</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> O(N) linear time</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> O(log N) logarithmic time</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> O(N^2) quadratic time</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because capacity is pre-allocated inline and never requires dynamic memory reallocation or element copying, inserting into a bounded vector is strictly $O(1)$ deterministic.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="dynamic_dogs.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="drone_fleet.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

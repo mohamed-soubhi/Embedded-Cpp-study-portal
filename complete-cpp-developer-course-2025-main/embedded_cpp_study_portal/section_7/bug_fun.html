@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugging Diagnostics, Fault Handlers &amp; Defensive Assertions - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">BugFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
+        <span class="tag">HardFault</span> <span class="tag">MemManage</span> <span class="tag">Stack Smashing</span> <span class="tag">Defensive Assertions</span> <span class="tag">static_assert</span> <span class="tag">MISRA C++</span>
+      </div>
+      <h1 class="project-title">Syntax, Runtime, &amp; Logic Bugs vs Microcontroller Hardware Faults (HardFault &amp; MemManage)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Exploring the taxonomy of bugs: syntax errors, runtime faults, and subtle logic errors. In bare-metal systems, logic errors often manifest as fatal ARM Cortex-M HardFaults, MemManage violations, or stack-smashing crashes. We explore hardware fault triggers and defensive compile-time/runtime assertion architectures.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+using namespace std;
+
+int imBroken(int num1, int num2);
+
+int main() {
+	int a;
+
+	try {
+		a = imBroken(10, 5);
+		cout &lt;&lt; a &lt;&lt; endl;
+
+		a = imBroken(10, 0);   //will cause exception
+		cout &lt;&lt; a &lt;&lt; endl;
+	}
+	catch (invalid_argument&amp; err) {
+		cout &lt;&lt; &quot;Exception caught: &quot; &lt;&lt; err.what() &lt;&lt; endl;
+	}
+
+	return 0;
+}
+
+int imBroken(int num1, int num2) {
+	int result = 0;
+
+	if (num2 != 0) {
+		result = num1 / num2;
+	}
+	else {
+		throw invalid_argument(&quot;Cannot divide by 0&quot;);
+	}
+
+	return result;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Bug Classification Taxonomy</h3>
+        <ul>
+          <li><strong>Syntax Errors:</strong> Violations of the C++ grammar detected at compile-time (e.g. missing semicolons, type mismatches).</li>
+          <li><strong>Runtime Errors:</strong> Program halts unexpectedly during execution (e.g. division by zero, null pointer dereferencing, uncaught exceptions).</li>
+          <li><strong>Logic Errors:</strong> The program compiles and runs without crashing, but computes incorrect results (e.g. off-by-one loops, inverted boolean conditions).</li>
+        </ul>
+
+        <h3>2. Compiler Warning Diagnostics as First Line of Defense</h3>
+        <p>Modern compilers can catch 90%+ of common logic bugs when configured with strict flags: <code>-Wall -Wextra -Wpedantic -Wshadow -Wconversion -Werror</code>. In embedded safety-critical systems, treating warnings as errors is mandatory.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. How Bugs Manifest as Hardware Faults on ARM Cortex-M</h3>
+        <p>In microcontrollers without an operating system, runtime bugs trigger hardware interrupt exceptions:</p>
+        <ul>
+          <li><strong>HardFault:</strong> Triggered by unaligned memory access (if configured), executing undefined instructions, or bus errors during vector fetch.</li>
+          <li><strong>MemManage Fault:</strong> Triggered by Memory Protection Unit (MPU) rule violations (e.g. writing to read-only Flash or executing code from SRAM).</li>
+          <li><strong>BusFault:</strong> Triggered by attempting to access non-existent memory addresses or unpowered peripheral registers over the AHB/APB bus.</li>
+          <li><strong>UsageFault:</strong> Triggered by division by zero (when <code>DIV_0_TRP</code> is set in NVIC) or unaligned memory access.</li>
+        </ul>
+
+        <h3>2. Watchdog Timers (WDT) and Fail-Safe Recovery</h3>
+        <p>Logic bugs like infinite loops or deadlock cause watchdog timer expiration. The hardware watchdog forcibly resets the microcontroller into a known safe state (e.g., de-energizing motor PWMs and logging the Program Counter register to non-volatile backup registers).</p>
+
+        <div class="callout callout-warning">
+          <h4>⚠️ MISRA C++:2008 Rule 0-1-1 & Rule 0-1-9</h4>
+          <p>The code shall not contain unreachable code or dead execution paths. Defensive assertions must be implemented without introducing non-terminating loops in release builds.</p>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Production firmware replaces generic runtime crashes with compile-time <code>static_assert</code> and custom hardware fault capture handlers:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;type_traits&gt;
+
+// 1. Compile-Time Invariant Verification
+template &lt;typename T, size_t BufferSize&gt;
+struct DmaRingBuffer {
+    static_assert(BufferSize &gt; 0, "Buffer size must be non-zero");
+    static_assert((BufferSize &amp; (BufferSize - 1)) == 0, "Buffer size must be a power of 2 for fast bitmask indexing");
+    static_assert(std::is_trivially_copyable&lt;T&gt;::value, "DMA elements must be trivially copyable");
+    
+    T buffer[BufferSize];
+    uint32_t head{0};
+    uint32_t tail{0};
+};
+
+// 2. Hardware Fault Capture Handler (ARM Cortex-M Example)
+struct FaultFrame {
+    uint32_t r0, r1, r2, r3, r12, lr, pc, psr;
+};
+
+extern "C" void HardFault_Handler_C(FaultFrame* frame) {
+    // Read NVIC Configurable Fault Status Register (CFSR)
+    volatile uint32_t* const CFSR = reinterpret_cast&lt;volatile uint32_t*&gt;(0xE000ED28);
+    uint32_t fault_reason = *CFSR;
+    
+    // Log crash telemetry (PC and LR) to persistent battery-backed backup SRAM
+    // Safe shutdown: disable all actuators
+    while (1) {
+        // Halt or trigger controlled watchdog reset
+    }
+}</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> Which ARM Cortex-M hardware exception is triggered when firmware attempts to write to an unmapped peripheral memory address?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> MemManage Fault or BusFault</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Syntax Error Handler</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> Segmentation Fault (SIGSEGV)</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> Page Fault (Interrupt 14)</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Attempting to access non-existent memory addresses across the AHB/APB system bus triggers a BusFault or MemManage Fault (if an MPU is configured). Microcontrollers lack MMU-based OS page fault tables.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the primary advantage of static_assert over runtime assert() in embedded firmware?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It evaluates conditions at compile time, incurring zero ROM/RAM footprint and preventing buggy binaries from flashing</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It generates larger binary files with more debug symbols</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It dynamically catches hardware brown-out resets</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It allows strings to be dynamically formatted at runtime</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>static_assert</code> runs during compilation. If the condition is false, compilation fails immediately, ensuring zero runtime CPU cycle overhead and zero Flash memory bloat.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why are logic errors that cause infinite loops particularly hazardous in battery-powered IoT devices?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> They prevent CPU low-power sleep modes (WFI/WFE), causing rapid battery depletion and triggering Watchdog resets</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> They automatically corrupt flash bootloader sectors</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> They cause C++ templates to instantiate infinitely</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> They double the microcontroller clock frequency</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Infinite loops prevent the microcontroller from entering low-power sleep modes (Wait For Interrupt - WFI), causing current draw to stay at peak (e.g. 20mA vs 2uA), draining batteries in hours.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Which compiler flag configuration converts all warnings into fatal compilation errors in safety-critical builds?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> -Wall -Wextra -Werror</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> -O3 -fno-rtti</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> -g -nostdlib</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> -std=c++98 -fexceptions</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>-Wall -Wextra</code> enables comprehensive compiler warnings, and <code>-Werror</code> forces the compiler to treat all warnings as errors, preventing problematic code from compiling.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="rethrow_fun_1.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="custom_exceptions.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

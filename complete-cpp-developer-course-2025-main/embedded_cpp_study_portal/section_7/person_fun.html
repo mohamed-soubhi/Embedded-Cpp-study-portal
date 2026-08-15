@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exception Safety in Constructors &amp; Memory Leak Prevention - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">PersonFun</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Constructor Exceptions</span> <span class="tag">Resource Leak</span> <span class="tag">noexcept</span> <span class="tag">RAII</span> <span class="tag">Invariants</span>
+      </div>
+      <h1 class="project-title">Constructor Invariants, Destructor Guarantees &amp; Partial Initialization Leaks</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Deep dive into throwing exceptions from class constructors. We examine the classic C++ memory leak hazard when initializing multiple heap members in a constructor, analyze compiler destructor guarantees, and implement safe noexcept construction patterns.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Person.h</button>
+            <button class="code-tab" data-target="file-tab-2">Person.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;&gt;
+#include &lt;stdexcept&gt;
+#include &quot;Person.h&quot;
+using namespace std;
+
+int main() {
+	try {
+		Person person1(&quot;Bob&quot;);
+		Person person2(&quot;Sally&quot;);
+		//Person person3(&quot;John&quot;);
+		Person person4(&quot;William&quot;);
+
+		cout &lt;&lt; person1.getName() &lt;&lt; endl;
+		cout &lt;&lt; person2.getName() &lt;&lt; endl;
+		//cout &lt;&lt; person3.getName() &lt;&lt; endl;
+		cout &lt;&lt; person4.getName() &lt;&lt; endl;
+	}
+	catch (const runtime_error&amp; err) {
+		cout &lt;&lt; err.what() &lt;&lt; endl;
+	}
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef PERSON_H
+#define PERSON_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class Person {
+	public:
+		Person(string name);
+		string getName() const noexcept;
+		void setName(string name);
+
+	private:
+		string name;
+};
+
+#endif 
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Person.h&quot;
+#include &lt;stdexcept&gt;
+using namespace std;
+
+Person::Person(string name) {
+	setName(name);
+}
+
+string Person::getName() const noexcept {
+	return name;
+}
+
+void Person::setName(string name) {
+	if (name != &quot;John&quot;) {
+		this-&gt;name = name;
+	}
+	else {
+		throw runtime_error(&quot;John?  That guy is too ugly for an object!&quot;);
+	}
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Partial Construction Problem</h3>
+        <p>Consider a class that allocates two raw pointer resources in its constructor:</p>
+        <pre class="code-block">MyClass::MyClass() {
+    ptr1 = new ResourceA(); // Succeeded
+    ptr2 = new ResourceB(); // THROWS EXCEPTION!
+}</pre>
+        <p>Because the constructor never finished, <code>~MyClass()</code> will <strong>never be called</strong>. <code>ptr1</code> is leaked forever! This is why raw pointers in constructors violate basic exception safety.</p>
+
+        <h3>2. Solving via RAII Smart Wrappers</h3>
+        <p>Using <code>std::unique_ptr</code> for member variables guarantees that if a later initialization step throws, already initialized member smart pointers have their destructors called automatically.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. noexcept Constructor Guarantees in Firmware</h3>
+        <p>In embedded firmware, declaring constructors <code>noexcept</code> tells the compiler that no unwind tables are needed, enabling compiler optimizations like vector reallocation via move instead of copy.</p>
+
+        <h3>2. Placement-New and In-Place Static Construction</h3>
+        <p>For systems that cannot afford dynamic allocation, placement-new allows constructing an object inside a statically allocated byte buffer (<code>alignas(T) std::byte buffer[sizeof(T)]</code>) with deterministic placement.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is how to design exception-safe classes with guaranteed cleanup and noexcept construction:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+#include &lt;array&gt;
+
+class FirmwareNode {
+private:
+    std::array&lt;char, 16&gt; node_name_{};
+    uint8_t node_id_{0};
+
+public:
+    // Fully noexcept constructor; zero possibility of memory leak or throwing
+    constexpr FirmwareNode(uint8_t id, std::string_view name) noexcept : node_id_(id) {
+        size_t len = name.size() &lt; 15 ? name.size() : 15;
+        for (size_t i = 0; i &lt; len; ++i) {
+            node_name_[i] = name[i];
+        }
+        node_name_[len] = '\0';
+    }
+
+    constexpr uint8_t get_id() const noexcept { return node_id_; }
+    constexpr std::string_view get_name() const noexcept { return node_name_.data(); }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> If a constructor allocates Resource 1 with raw new, and then Resource 2 throws std::bad_alloc, what happens to Resource 1?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Resource 1 is leaked because the class destructor is never called for an object that failed construction</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> Resource 1 is automatically garbage collected</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The runtime calls the destructor on half-built objects</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The compiler rewires the pointer to null</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Because the constructor did not finish, the object was never fully created, so its destructor does not execute. Any raw resources allocated before the throw are leaked unless managed by RAII smart wrappers.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> What is the primary benefit of declaring constructors and methods noexcept in C++?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It signals that the function will never throw, allowing the compiler to omit exception unwinding tables and perform optimal move semantics</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It makes the function run in privileged CPU mode</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It converts the class into a template</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It forces parameters to be passed by reference</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>noexcept</code> promises that no exceptions will escape. This removes unwind code generation overhead and allows STL containers (like <code>std::vector</code>) to safely use fast move operations.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> How does RAII (std::unique_ptr) solve constructor resource leaks?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Member sub-objects that have already completed construction have their individual destructors executed automatically when an exception is thrown</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It converts raw pointers into integers</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It allocates memory in battery-backed SRAM</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It prevents constructors from taking arguments</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            C++ guarantees that all fully constructed sub-objects and base classes will have their destructors called if a constructor later throws. <code>std::unique_ptr</code> destructors automatically free their held pointers.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What happens if a function marked noexcept throws an exception?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> std::terminate() is immediately invoked, halting the program</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The exception is converted into a compiler warning</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The function retries execution from the beginning</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The catch block in main catches it as a generic exception</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            If an exception escapes a <code>noexcept</code> function, the runtime calls <code>std::terminate()</code> immediately without unwinding remaining stack frames.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="month_name_project.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="rethrow_fun_1.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Double Indirection (Pointers-to-Pointers) &amp; Cache Locality - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 8</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 8</a>
+      <span class="sep">/</span>
+      <span class="current">DroneFleet</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-8">Section 8</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">Double Indirection</span> <span class="tag">Pointer to Pointer</span> <span class="tag">Cache Locality</span> <span class="tag">Pointer Chasing</span> <span class="tag">AoS vs SoA</span>
+      </div>
+      <h1 class="project-title">Pointer-to-Pointer (Drone**) Fleet Arrays vs Flat Contiguous Array-of-Structures (AoS)</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Analyzing dynamic fleet management using double pointer indirection (Drone**). We contrast pointer-to-pointer architectures with contiguous flat memory buffers, showing how pointer chasing destroys CPU cache performance and wastes precious RAM on microcontrollers.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+            <button class="code-tab" data-target="file-tab-1">Drone.h</button>
+            <button class="code-tab" data-target="file-tab-2">Drone.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &quot;Drone.h&quot;
+using namespace std;
+
+void printFleet(Drone** fleet, int size);
+
+int main() {
+	int numDrones = 0;
+	string model;
+	double battery = 0.0;
+
+	cout &lt;&lt; &quot;How many drones are in your fleet?  &quot;;
+	cin &gt;&gt; numDrones;
+
+	Drone** droneFleet = new Drone* [numDrones];
+
+	for (int i = 0; i &lt; numDrones; i++) {
+		cout &lt;&lt; &quot;Enter model name for drone &quot; &lt;&lt; (i + 1) &lt;&lt; &quot;: &quot;;
+		cin.get();
+		getline(cin, model);
+
+		cout &lt;&lt; &quot;Enter battery life (as a percentage) for &quot; &lt;&lt; model &lt;&lt; &quot;:  &quot;;
+		cin &gt;&gt; battery;
+
+		droneFleet[i] = new Drone(model, battery);
+	} // end of the for loop
+
+	cout &lt;&lt; &quot;\nDrone Fleet Summary:&quot; &lt;&lt; endl;
+	printFleet(droneFleet, numDrones);
+
+	// cleanup
+	for (int i = 0; i &lt; numDrones; i++) {
+		delete droneFleet[i];
+		droneFleet[i] = nullptr;
+	}
+
+	delete[] droneFleet;
+
+
+	return 0;
+}
+
+
+void printFleet(Drone** fleet, int size) {
+	for (int i = 0; i &lt; size; i++) {
+		cout &lt;&lt; &quot;Drone &quot; &lt;&lt; (i + 1) &lt;&lt; &quot;: &quot; &lt;&lt; fleet[i]-&gt;getModelName()
+			&lt;&lt; &quot; | Battery: &quot; &lt;&lt; fleet[i]-&gt;getBatteryLife() &lt;&lt; &quot;%&quot; &lt;&lt; endl;
+	}
+}</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-1">
+          <pre class="code-block">#ifndef DRONE_H
+#define DRONE_H
+
+#include &lt;string&gt;
+using namespace std;
+
+class Drone {
+	public:
+		Drone(string modelName, double batteryLife);
+		string getModelName() const;
+		double getBatteryLife() const;
+
+	private:
+		string modelName;
+		double batteryLife;
+};
+
+#endif
+</pre>
+        </div>
+
+        <div class="code-panel" id="file-tab-2">
+          <pre class="code-block">#include &quot;Drone.h&quot;
+
+Drone::Drone(string modelName, double batteryLife) {
+	this-&gt;modelName = modelName;
+	this-&gt;batteryLife = batteryLife;
+}
+
+string Drone::getModelName() const {
+	return modelName;
+}
+
+double Drone::getBatteryLife() const {
+	return batteryLife;
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Pointer-to-Pointer Mechanics (<code>Type**</code>)</h3>
+        <p>A pointer-to-pointer stores the memory address of another pointer. In classical C++, dynamic 2D tables or arrays of polymorphic objects are created by allocating an array of pointers (<code>Drone** fleet = new Drone*[N]</code>) and then individually allocating each object (<code>fleet[i] = new Drone(...)</code>).</p>
+
+        <h3>2. Double Allocation Overhead</h3>
+        <p>Managing $N$ objects requires $N + 1$ distinct heap allocations ($1$ array of pointers $+ N$ individual objects) and $N + 1$ corresponding <code>delete</code> calls.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. The Hardware Cost of Pointer Chasing</h3>
+        <p>Accessing <code>fleet[i]-&gt;getBatteryLife()</code> requires <strong>double dereferencing</strong>:</p>
+        <ol>
+          <li>Read the pointer from the pointer array: <code>ptr = *(fleet + i)</code>.</li>
+          <li>Dereference <code>ptr</code> to read the object in distant heap memory: <code>ptr-&gt;battery</code>.</li>
+        </ol>
+        <p>Because each object was allocated separately on the heap, they are scattered randomly across SRAM. On modern pipelined microcontrollers (ARM Cortex-M7 with L1 data cache), this causes frequent <strong>cache misses and memory stall cycles</strong>.</p>
+
+        <h3>2. Flat Contiguous Storage: Array of Structures (AoS)</h3>
+        <p>Storing objects contiguously in a single flat array (<code>std::array&lt;Drone, MaxDrones&gt;</code>) requires <strong>zero pointer storage</strong> (saving $4 \times N$ bytes of RAM) and maximizes CPU spatial cache locality.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded fleet manager using flat contiguous memory with zero pointer indirection:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+#include &lt;string_view&gt;
+#include &lt;array&gt;
+
+struct DroneTelemetry {
+    char     model_name[16];
+    uint16_t battery_milli_volts; // e.g. 3700 mV
+    uint8_t  active_status;
+};
+
+template &lt;size_t MaxFleetSize&gt;
+class FlatDroneFleet {
+private:
+    // Contiguous in SRAM; 100% spatial cache locality; 0 pointer overhead
+    std::array&lt;DroneTelemetry, MaxFleetSize&gt; drones_{};
+    size_t active_count_{0};
+
+public:
+    bool register_drone(std::string_view model, uint16_t battery_mv) noexcept {
+        if (active_count_ &gt;= MaxFleetSize) return false;
+        
+        DroneTelemetry&amp; d = drones_[active_count_++];
+        size_t len = model.size() &lt; 15 ? model.size() : 15;
+        for (size_t i = 0; i &lt; len; ++i) d.model_name[i] = model[i];
+        d.model_name[len] = '\0';
+        d.battery_milli_volts = battery_mv;
+        d.active_status = 1;
+        return true;
+    }
+
+    const DroneTelemetry* data() const noexcept { return drones_.data(); }
+    size_t count() const noexcept { return active_count_; }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is &#x27;pointer chasing&#x27; and why does it degrade execution speed on pipelined microcontrollers?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> Following multiple levels of pointer indirection to scattered memory locations, causing CPU pipeline stalls and cache misses</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> A compiler optimization that speeds up loops</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> A tool for debugging memory leaks</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> A technique to compress pointer tables in ROM</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Pointer chasing forces the CPU to wait for memory loads before it can determine the next address to fetch. When data is scattered across SRAM, cache misses stall the pipeline.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> How much RAM is wasted storing a Drone** array of 50 pointers on a 32-bit ARM Cortex-M microcontroller?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> 200 bytes (50 pointers * 4 bytes per pointer) plus heap allocator bookkeeping headers</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> 0 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> 1024 bytes</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> 4 bytes</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            On a 32-bit MCU, each pointer requires 4 bytes. 50 pointers consume 200 bytes just for address storage, plus 8-16 bytes of heap allocator metadata per object.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why is a contiguous flat array (std::array&lt;Drone, N&gt;) superior to an array of pointers (Drone*[])?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> It guarantees sequential memory layout for optimal spatial cache locality, eliminates pointer storage overhead, and requires zero heap allocations</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> It allows drones to fly faster</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> It converts the class to pure virtual methods</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> It automatically generates unit tests</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Flat contiguous arrays place objects sequentially in memory, maximizing CPU cache line hits, eliminating pointer overhead, and removing dynamic memory risks.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> What happens if an individual Drone object in a Drone** array is deleted, but the pointer in the array is not set to nullptr?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> The array retains a dangling pointer; iterating over the array and calling methods on it causes undefined behavior</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> The compiler automatically re-allocates the drone</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> The pointer becomes a null reference safely</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> The CPU hardware halts with a power-saving mode</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            The array element still points to the freed memory. If loop code attempts to read that array element, a use-after-free bug occurs.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="dynamic_array_test.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="exhibit_tracker.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

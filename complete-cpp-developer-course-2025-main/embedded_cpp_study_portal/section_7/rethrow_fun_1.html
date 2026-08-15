@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exception Propagation &amp; Fault Escalation Hierarchies - C++ & Embedded Systems Guide</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="../index.html" class="nav-brand">
+        ⚡ C++ Embedded Deep-Dive
+        <span class="badge-tag">Section 7</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../section_7/bug_fun.html">Section 7</a></li>
+        <li><a href="../section_8/pointer_fun.html">Section 8</a></li>
+        <li><a href="../section_10/enum_fun.html">Section 10</a></li>
+        <li><a href="../section_11/smart_pointer_fun.html">Section 11</a></li>
+        <li><a href="../section_12/array_queue_app.html">Section 12</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub Repo</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="../index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <a href="../index.html">Section 7</a>
+      <span class="sep">/</span>
+      <span class="current">RethrowFun1</span>
+    </div>
+
+    <header class="project-header">
+      <div class="project-meta">
+        <span class="section-pill section-7">Section 7</span>
+        <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
+        <span class="tag">throw;</span> <span class="tag">Exception Slicing</span> <span class="tag">RTOS</span> <span class="tag">Fault Escalation</span> <span class="tag">NVRAM Logging</span>
+      </div>
+      <h1 class="project-title">Nested try-catch, Exception Slicing during Rethrow &amp; RTOS Fault Escalation</h1>
+      <div class="project-summary-box">
+        <strong>Executive Summary:</strong> Examining multi-layered exception handling and exception rethrowing with throw;. We contrast standard C++ exception propagation with real-time RTOS fault escalation architectures, where task-level errors are escalated to supervisors, safe mode, or persistent NVRAM black-box logging.
+      </div>
+    </header>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💻</span> 1. Annotated Source Code
+      </h2>
+      
+      <div class="code-viewer">
+        <div class="code-header">
+          <div class="code-tabs">
+            <button class="code-tab active" data-target="file-tab-0">main.cpp</button>
+          </div>
+          <div class="code-actions">
+            <button class="btn-copy">📋 Copy Active File</button>
+          </div>
+        </div>
+        
+        <div class="code-panel active" id="file-tab-0">
+          <pre class="code-block">#include &lt;iostream&gt;
+#include &lt;stdexcept&gt;
+using namespace std;
+
+void processPositive(int num);
+void doSomething(int num);
+
+int main() {
+
+	int input;
+
+	try {
+		cout &lt;&lt; &quot;Enter a number to process!&quot; &lt;&lt; endl;
+		cin &gt;&gt; input;
+
+		doSomething(input);
+		cout &lt;&lt; &quot;Yay!  main was able to completely process the num!&quot; &lt;&lt; endl;
+	}
+	catch (const invalid_argument&amp; err) {
+		cout &lt;&lt; &quot;main says there is an error!&quot; &lt;&lt; endl;
+		cout &lt;&lt; err.what() &lt;&lt; endl;
+	}
+	catch (const out_of_range&amp; err) {
+		cout &lt;&lt; &quot;main says the number is too big!&quot; &lt;&lt; endl;
+		cout &lt;&lt; err.what() &lt;&lt; endl;
+	}
+
+	return 0;
+}
+
+
+void processPositive(int num) {
+	cout &lt;&lt; &quot;Welcome to the positive integer processor!&quot; &lt;&lt; endl;
+
+	if (num &gt; 100) {
+		cout &lt;&lt; &quot;processPositive says the number is too big!&quot; &lt;&lt; endl;
+		throw out_of_range(&quot;Number cannot be greater than 100&quot;);
+	}
+	else if (num &gt;= 0) {
+		cout &lt;&lt; &quot;Good job!  You passed in a positive num to processPositive!&quot; &lt;&lt; endl;
+	}
+	else {
+		throw invalid_argument(&quot;Negative number passed in!&quot;);
+	}
+}
+
+void doSomething(int num) {
+	try {
+		processPositive(num);
+		cout &lt;&lt; &quot;Yay!  doSomething could process the num!&quot; &lt;&lt; endl;
+	}
+	catch (const invalid_argument&amp; err) {
+		cout &lt;&lt; &quot;doSomething says there is a problem!&quot; &lt;&lt; endl;
+		throw;
+	}
+	catch (const out_of_range&amp; err) {
+		cout &lt;&lt; &quot;doSomething says the number is too big!&quot; &lt;&lt; endl;
+		throw;
+	}
+}</pre>
+        </div>
+      </div>
+    
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. Correct Rethrowing Syntax (<code>throw;</code> vs <code>throw e;</code>)</h3>
+        <p>When rethrowing an active exception, always use <code>throw;</code> with no operand. Using <code>throw e;</code> constructs a <strong>new</strong> exception copy of type <code>e</code>, causing object slicing if <code>e</code> is a base class reference.</p>
+
+        <h3>2. Multi-Tier Error Propagation</h3>
+        <p>A low-level function catches an error to perform localized cleanup (e.g. closing a file or releasing a lock), and then rethrows it to let higher-level orchestration logic handle user notification or system recovery.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+      </h2>
+      <div class="content-card">
+        
+        <h3>1. RTOS Hierarchical Fault Escalation</h3>
+        <p>In multi-tasking Real-Time Operating Systems (e.g. FreeRTOS, Zephyr), errors escalate through formal levels:</p>
+        <ul>
+          <li><strong>Level 1 (Task Level):</strong> Retry transient peripheral read (e.g. I2C retry).</li>
+          <li><strong>Level 2 (Supervisor Level):</strong> Restart malfunctioning task and re-initialize peripheral driver.</li>
+          <li><strong>Level 3 (System Level):</strong> Log error telemetry to Non-Volatile Backup SRAM (NVRAM) and trigger a controlled software reset via NVIC.</li>
+        </ul>
+
+        <h3>2. Non-Volatile Black-Box Logging</h3>
+        <p>Safety-critical firmware maintains a circular crash log in battery-backed SRAM or EEPROM to preserve stack frames and fault status registers across watchdog resets for forensic diagnosis.</p>
+        
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+      </h2>
+      <div class="content-card">
+        
+        <p>Here is an embedded multi-tier fault escalation and telemetry logging architecture:</p>
+        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+
+enum class EscalationLevel : uint8_t {
+    TaskHandled = 0,
+    TaskRestart,
+    SystemResetSafeMode
+};
+
+struct FaultLogEntry {
+    uint32_t timestamp_ms;
+    uint16_t error_code;
+    uint8_t  task_id;
+    uint8_t  severity;
+};
+
+class SystemFaultSupervisor {
+public:
+    static EscalationLevel record_fault(uint8_t task_id, uint16_t error_code, uint8_t retries_exhausted) noexcept {
+        // 1. Write to Non-Volatile Backup SRAM
+        log_to_nvram({/* timestamp */ 123456, error_code, task_id, retries_exhausted});
+
+        // 2. Determine escalation tier
+        if (retries_exhausted &lt; 3) {
+            return EscalationLevel::TaskHandled;
+        } else if (retries_exhausted &lt; 5) {
+            return EscalationLevel::TaskRestart;
+        } else {
+            // Escalate to controlled MCU Reset
+            trigger_system_reset();
+            return EscalationLevel::SystemResetSafeMode;
+        }
+    }
+
+private:
+    static void log_to_nvram(const FaultLogEntry&amp; entry) noexcept {
+        // Write to battery-backed register bank
+    }
+    static void trigger_system_reset() noexcept {
+        // NVIC_SystemReset(); (ARM Cortex-M CMSIS call)
+    }
+};</pre>
+        
+      </div>
+    </section>
+
+    
+    <section class="study-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h3><span class="icon">📝</span> Knowledge Verification Quiz</h3>
+          <p>Test your understanding of the C++ concepts and embedded microcontroller trade-offs covered in this guide. Click any option for instant feedback.</p>
+        </div>
+        
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q1.</span> What is the critical difference between &#x27;throw;&#x27; and &#x27;throw e;&#x27; in a C++ catch block?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> &#x27;throw;&#x27; rethrows the exact original polymorphic exception object, while &#x27;throw e;&#x27; makes a copy and causes object slicing</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> &#x27;throw;&#x27; creates a new memory allocation</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> &#x27;throw e;&#x27; is faster because it bypasses the compiler</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> &#x27;throw;&#x27; cannot be used inside nested catch blocks</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>throw;</code> re-raises the active exception retaining its dynamic polymorphic type. <code>throw e;</code> copies the base-type slice, slicing away any derived class data and custom <code>what()</code> logic.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q2.</span> In an RTOS architecture, what is the primary role of a Supervisor Task?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> To monitor worker task heartbeats, handle unrecoverable task errors, and execute restart or fail-safe protocols</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> To compile C++ code at runtime</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> To allocate dynamic heap memory for all threads</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> To format SD card file systems on boot</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Supervisor tasks monitor thread health (via watchdog check-ins) and coordinate fault recovery (such as restarting crashed worker tasks or commanding safe shutdowns).
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q3.</span> Why is Non-Volatile RAM (NVRAM / Backup SRAM) preferred over regular SRAM for crash telemetry logging?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> NVRAM retains its data across CPU resets and power loss, allowing crash diagnostics after system reboot</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> NVRAM executes code 10x faster than cache</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> NVRAM has infinite storage capacity</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> NVRAM does not require address lines</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            Backup SRAM or battery-backed registers maintain state through hardware watchdog resets and power cycles, enabling post-mortem crash analysis.
+          </div>
+        </div>
+
+        <div class="quiz-card" data-correct="0">
+          <div class="quiz-question">
+            <span class="q-num">Q4.</span> Which ARM Cortex-M CMSIS function initiates a software-commanded system reset?
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-option"><span class="opt-letter">A</span> NVIC_SystemReset()</div>
+            <div class="quiz-option"><span class="opt-letter">B</span> CPU_Halt()</div>
+            <div class="quiz-option"><span class="opt-letter">C</span> WDT_Clear()</div>
+            <div class="quiz-option"><span class="opt-letter">D</span> OS_Exit()</div>
+          </div>
+          <div class="quiz-explanation">
+            <strong>Detailed Explanation:</strong>
+            <code>NVIC_SystemReset()</code> sets the <code>SYSRESETREQ</code> bit in the Application Interrupt and Reset Control Register (AIRCR), triggering an immediate hardware reset.
+          </div>
+        </div>
+      </div>
+    </section>
+    
+
+    <footer class="page-nav-footer">
+      <a href="person_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
+      <a href="bug_fun.html" class="btn-nav">Next Project →</a>
+    </footer>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Course Curriculum</h5>
+          <ul>
+            <li><a href="../section_7/bug_fun.html">Section 7: Exceptions &amp; Faults</a></li>
+            <li><a href="../section_8/pointer_fun.html">Section 8: Pointers &amp; Memory</a></li>
+            <li><a href="../section_10/enum_fun.html">Section 10: OOP &amp; Enums</a></li>
+            <li><a href="../section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+            <li><a href="../section_12/array_queue_app.html">Section 12: Data Structures</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

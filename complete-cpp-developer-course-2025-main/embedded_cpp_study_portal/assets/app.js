@@ -112,10 +112,11 @@ function initSearchAndFilters() {
       const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm) || tags.includes(searchTerm);
       
       let matchesFilter = true;
-      if (activeFilter === 'sec-10') matchesFilter = (section === '10');
-      else if (activeFilter === 'sec-11') matchesFilter = (section === '11');
-      else if (activeFilter === 'sec-12') matchesFilter = (section === '12');
-      else if (activeFilter === 'emb-high') matchesFilter = (relevance === 'high');
+      if (activeFilter.startsWith('sec-')) {
+        matchesFilter = (section === activeFilter.replace('sec-', ''));
+      } else if (activeFilter === 'emb-high') {
+        matchesFilter = (relevance === 'high');
+      }
 
       if (matchesSearch && matchesFilter) {
         card.style.display = 'flex';
