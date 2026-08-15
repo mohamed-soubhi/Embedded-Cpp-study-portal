@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complex Boolean Decision Rules &amp; Truth Table Minimization - C++ & Embedded Systems Guide</title>
+  <title>Complex Boolean Decision Rules &amp; Truth Table Minimization - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 3</a>
+      <a href="../index.html#grid-foundations">Section 3</a>
       <span class="sep">/</span>
       <span class="current">RetiredWomen</span>
     </div>
@@ -69,30 +75,30 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	int age;
-	char gender;
+	<span class="tok-type">int</span> age;
+	<span class="tok-type">char</span> gender;
 
-	cout &lt;&lt; &quot;Welcome to the Retired Women&#x27;s Club Discount Checker!&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Welcome to the Retired Women&#x27;s Club Discount Checker!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;Please enter your age: &quot;;
-	cin &gt;&gt; age;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Please enter your age: &quot;</span>;
+	<span class="tok-type">cin</span> &gt;&gt; age;
 
-	cout &lt;&lt; &quot;Please enter your gender (M/F): &quot;;
-	cin &gt;&gt; gender;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Please enter your gender (M/F): &quot;</span>;
+	<span class="tok-type">cin</span> &gt;&gt; gender;
 
-	if ((age &gt;= 60) &amp;&amp; (gender == &#x27;f&#x27; || gender == &#x27;F&#x27;)) {
-		cout &lt;&lt; &quot;You are eligible for the Retired Women&#x27;s Club Discount!&quot; &lt;&lt; endl;
+	<span class="tok-kw">if</span> ((age &gt;= <span class="tok-num">60</span>) &amp;&amp; (gender == &#x27;f&#x27; || gender == &#x27;F&#x27;)) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You are eligible for the Retired Women&#x27;s Club Discount!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	else {
-		cout &lt;&lt; &quot;Sorry, you are not eligible for the discount.&quot; &lt;&lt; endl;
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Sorry, you are not eligible for the discount.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -116,7 +122,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

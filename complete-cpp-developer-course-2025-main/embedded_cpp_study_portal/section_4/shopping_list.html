@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Vector Modification &amp; Real-Time Queuing - C++ & Embedded Systems Guide</title>
+  <title>Interactive Vector Modification &amp; Real-Time Queuing - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 4</a>
+      <a href="../index.html#grid-foundations">Section 4</a>
       <span class="sep">/</span>
       <span class="current">ShoppingList</span>
     </div>
@@ -69,31 +75,31 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	vector&lt;string&gt; shoppingList;
-	string item;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">string</span>&gt; shoppingList;
+	<span class="tok-type">string</span> item;
 
-	cout &lt;&lt; &quot;Enter items for your shopping list (type &#x27;done&#x27; to finish):&quot;;
-	getline(cin, item);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter items for your shopping list (type &#x27;done&#x27; to finish):&quot;</span>;
+	<span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, item);
 
-	while (item != &quot;done&quot;) {
-		shoppingList.push_back(item);
+	<span class="tok-kw">while</span> (item != <span class="tok-str">&quot;done&quot;</span>) {
+		shoppingList.<span class="tok-fn">push_back</span>(item);
 
-		cout &lt;&lt; &quot;Enter another item (or &#x27;done&#x27; to finish): &quot;;
-		getline(cin, item);
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter another item (or &#x27;done&#x27; to finish): &quot;</span>;
+		<span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, item);
 	}
 
-	cout &lt;&lt; &quot;\nYour shopping list: &quot; &lt;&lt; endl;
-	for (string listItem : shoppingList) {
-		cout &lt;&lt; &quot;- &quot; &lt;&lt; listItem &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nYour shopping list: &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-kw">for</span> (<span class="tok-type">string</span> listItem : shoppingList) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;- &quot;</span> &lt;&lt; listItem &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -117,7 +123,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

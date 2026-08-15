@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safety-Critical Threshold Monitoring &amp; Fail-Safe Latching - C++ & Embedded Systems Guide</title>
+  <title>Safety-Critical Threshold Monitoring &amp; Fail-Safe Latching - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 7</a>
+      <a href="../index.html#grid-advanced">Section 7</a>
       <span class="sep">/</span>
       <span class="current">FuelMonitorProject</span>
     </div>
@@ -70,56 +76,55 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;stdexcept&gt;
-#include &quot;FuelLevelCritical.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;stdexcept&gt;</span>
+<span class="tok-pre">#include &quot;FuelLevelCritical.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void checkFuelLevel(int percentage);
+<span class="tok-type">void</span> <span class="tok-fn">checkFuelLevel</span>(<span class="tok-type">int</span> percentage);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	cout &lt;&lt; &quot;Fuel Monitor Starting...&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Fuel Monitor Starting...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	try {
-		for (int i = 100; i &gt;= 0; i -= 10) {
-			checkFuelLevel(i);
+	<span class="tok-kw">try</span> {
+		<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">100</span>; i &gt;= <span class="tok-num">0</span>; i -= <span class="tok-num">10</span>) {
+			<span class="tok-fn">checkFuelLevel</span>(i);
 		}
 	}
-	catch (const FuelLevelCritical&amp; err) {
-		cout &lt;&lt; &quot;ALERT: &quot; &lt;&lt; err.what() &lt;&lt; endl;
+	<span class="tok-kw">catch</span> (<span class="tok-kw">const</span> FuelLevelCritical&amp; err) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;ALERT: &quot;</span> &lt;&lt; err.<span class="tok-fn">what</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void checkFuelLevel(int percentage) {
-	if (percentage &lt; 10) {
-		throw FuelLevelCritical();
+<span class="tok-type">void</span> <span class="tok-fn">checkFuelLevel</span>(<span class="tok-type">int</span> percentage) {
+	<span class="tok-kw">if</span> (percentage &lt; <span class="tok-num">10</span>) {
+		<span class="tok-kw">throw</span> <span class="tok-fn">FuelLevelCritical</span>();
 	}
 
-	cout &lt;&lt; &quot;Fuel level at &quot; &lt;&lt; percentage &lt;&lt; &quot;% - within safe operating range.&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Fuel level at &quot;</span> &lt;&lt; percentage &lt;&lt; <span class="tok-str">&quot;% - within safe operating range.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef FUEL_LEVEL_CRITICAL_H
-#define FUEL_LEVEL_CRITICAL_H
+          <pre class="code-block"><span class="tok-pre">#ifndef FUEL_LEVEL_CRITICAL_H</span>
+<span class="tok-pre">#define FUEL_LEVEL_CRITICAL_H</span>
 
-#include &lt;stdexcept&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;stdexcept&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class FuelLevelCritical : public runtime_error {
+<span class="tok-kw">class</span> FuelLevelCritical : <span class="tok-kw">public</span> runtime_error {
 
-	public:
-		FuelLevelCritical() : 
-			runtime_error(&quot;Fuel level is critically low! Ship must refuel immediately!&quot;) {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">FuelLevelCritical</span>() : 
+			<span class="tok-fn">runtime_error</span>(&quot;Fuel level is critically low! Ship must refuel immediately!&quot;) {
 
 		}
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
       </div>
     
@@ -142,7 +147,7 @@ class FuelLevelCritical : public runtime_error {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

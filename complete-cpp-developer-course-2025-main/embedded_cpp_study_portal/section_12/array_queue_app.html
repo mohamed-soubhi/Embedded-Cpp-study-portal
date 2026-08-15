@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Circular Array Queue: The Core Embedded Ring Buffer - C++ & Embedded Systems Guide</title>
+  <title>Circular Array Queue: The Core Embedded Ring Buffer - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 12</a>
+      <a href="../index.html#grid-advanced">Section 12</a>
       <span class="sep">/</span>
       <span class="current">ArrayQueueApp</span>
     </div>
@@ -71,135 +77,133 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef QUEUE_H
-#define QUEUE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef QUEUE_H</span>
+<span class="tok-pre">#define QUEUE_H</span>
 
-class Queue {
-	virtual void enqueue(int newEntry) = 0;
-	virtual int dequeue() = 0;
-	virtual int peekFront() const = 0;
-	virtual bool isEmpty() const = 0;
-	virtual void makeEmpty() = 0;
+<span class="tok-kw">class</span> Queue {
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">enqueue</span>(<span class="tok-type">int</span> newEntry) = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">dequeue</span>() = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">peekFront</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() = <span class="tok-num">0</span>;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef ARRAY_QUEUE_H
-#define ARRAY_QUEUE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef ARRAY_QUEUE_H</span>
+<span class="tok-pre">#define ARRAY_QUEUE_H</span>
 
-#include &lt;iostream&gt;
-#include &quot;Queue.h&quot;
-using namespace std;
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Queue.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class ArrayQueue : public Queue {
-	public:
+<span class="tok-kw">class</span> ArrayQueue : <span class="tok-kw">public</span> Queue {
+	<span class="tok-kw">public</span>:
 
-		ArrayQueue(int s = 16) : MAX_SIZE(s) {
-			front = 0;
-			back = 0;
-			numElements = 0;
-			mArray = new int[MAX_SIZE];
-		}//end ctor
+		<span class="tok-fn">ArrayQueue</span>(<span class="tok-type">int</span> s = <span class="tok-num">16</span>) : <span class="tok-fn">MAX_SIZE</span>(s) {
+			front = <span class="tok-num">0</span>;
+			back = <span class="tok-num">0</span>;
+			numElements = <span class="tok-num">0</span>;
+			mArray = <span class="tok-kw">new</span> <span class="tok-type">int</span>[MAX_SIZE];
+		}<span class="tok-com">//end ctor</span>
 
-		virtual ~ArrayQueue() {
-			delete[] mArray;
-		}//end dtor
+		<span class="tok-kw">virtual</span> ~<span class="tok-fn">ArrayQueue</span>() {
+			<span class="tok-kw">delete</span>[] mArray;
+		}<span class="tok-com">//end dtor</span>
 
-		void enqueue(int newEntry) override {
-			if (numElements &lt; MAX_SIZE - 1) {
+		<span class="tok-type">void</span> <span class="tok-fn">enqueue</span>(<span class="tok-type">int</span> newEntry) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (numElements &lt; MAX_SIZE - <span class="tok-num">1</span>) {
 				mArray[back] = newEntry;
-				back = (back + 1) % MAX_SIZE;
+				back = (back + <span class="tok-num">1</span>) % MAX_SIZE;
 				numElements++;
 			}
-			else {
-				cout &lt;&lt; &quot;You cannot enqueue onto a full queue&quot; &lt;&lt; endl;
+			<span class="tok-kw">else</span> {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You cannot enqueue onto a full queue&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 			}
-		}//end enqueue
+		}<span class="tok-com">//end enqueue</span>
 
-		int dequeue() override {
-			if (!isEmpty()) {
-				int data = mArray[front];
-				front = (front + 1) % MAX_SIZE;
+		<span class="tok-type">int</span> <span class="tok-fn">dequeue</span>() <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (!<span class="tok-fn">isEmpty</span>()) {
+				<span class="tok-type">int</span> data = mArray[front];
+				front = (front + <span class="tok-num">1</span>) % MAX_SIZE;
 				numElements--;
-				return data;
+				<span class="tok-kw">return</span> data;
 			}
-			else {
-				cout &lt;&lt; &quot;You cannot dequeueon an empty queue.&quot; &lt;&lt; endl;
-				return 0;
+			<span class="tok-kw">else</span> {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You cannot dequeueon an empty queue.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
-		}//end dequeue
+		}<span class="tok-com">//end dequeue</span>
 
-		int peekFront() const override {
-			if (!isEmpty()) {
-				return mArray[front];
+		<span class="tok-type">int</span> <span class="tok-fn">peekFront</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (!<span class="tok-fn">isEmpty</span>()) {
+				<span class="tok-kw">return</span> mArray[front];
 			}
-			else {
-				cout &lt;&lt; &quot;Queue is empty.  You cannot peek the front.&quot; &lt;&lt; endl;
-				return 0;
+			<span class="tok-kw">else</span> {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Queue is empty.  You cannot peek the front.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
-		}//end peekFront
+		}<span class="tok-com">//end peekFront</span>
 
 
-		bool isEmpty() const override {
-			return numElements == 0;
-		}//end isEmpty
+		<span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> numElements == <span class="tok-num">0</span>;
+		}<span class="tok-com">//end isEmpty</span>
 
-		void makeEmpty() override {
-			front = 0;
-			back = 0;
-			numElements = 0;
-		}//end makeEmpty
+		<span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() <span class="tok-kw">override</span> {
+			front = <span class="tok-num">0</span>;
+			back = <span class="tok-num">0</span>;
+			numElements = <span class="tok-num">0</span>;
+		}<span class="tok-com">//end makeEmpty</span>
 
 
-	private:
-		int* mArray;
-		const int MAX_SIZE;
-		int front;
-		int back;
-		int numElements;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span>* mArray;
+		<span class="tok-kw">const</span> <span class="tok-type">int</span> MAX_SIZE;
+		<span class="tok-type">int</span> front;
+		<span class="tok-type">int</span> back;
+		<span class="tok-type">int</span> numElements;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;ArrayQueue.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;ArrayQueue.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	ArrayQueue queue;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	ArrayQueue <span class="tok-type">queue</span>;
 
-	for (int i = 1; i &lt;= 16; i++) {
-		queue.enqueue(i * 100);
-	}//end for
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">1</span>; i &lt;= <span class="tok-num">16</span>; i++) {
+		<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(i * <span class="tok-num">100</span>);
+	}<span class="tok-com">//end for</span>
 
-	queue.enqueue(1234);  //should trigger an error
+	<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(<span class="tok-num">1234</span>);  <span class="tok-com">//should trigger an error</span>
 
-	while (!queue.isEmpty()) {
-		cout &lt;&lt; queue.dequeue() &lt;&lt; endl;
-	}//end while
+	<span class="tok-kw">while</span> (!<span class="tok-type">queue</span>.<span class="tok-fn">isEmpty</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">queue</span>.<span class="tok-fn">dequeue</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	}<span class="tok-com">//end while</span>
 
-	queue.dequeue();  //should trigger an error
+	<span class="tok-type">queue</span>.<span class="tok-fn">dequeue</span>();  <span class="tok-com">//should trigger an error</span>
 
-	for (int i = 0; i &lt; 20; i++) {
-		cout &lt;&lt; &quot;Just enqueued &quot; &lt;&lt; (i * 10) &lt;&lt; endl;
-		queue.enqueue(i * 10);
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">20</span>; i++) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Just enqueued &quot;</span> &lt;&lt; (i * <span class="tok-num">10</span>) &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(i * <span class="tok-num">10</span>);
 
-		if (i % 3 == 0) {
-			cout &lt;&lt; &quot;Just dequeued &quot; &lt;&lt; queue.dequeue() &lt;&lt; endl;
+		<span class="tok-kw">if</span> (i % <span class="tok-num">3</span> == <span class="tok-num">0</span>) {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Just dequeued &quot;</span> &lt;&lt; <span class="tok-type">queue</span>.<span class="tok-fn">dequeue</span>() &lt;&lt; <span class="tok-type">endl</span>;
 		}
 	}
 
-	queue.enqueue(123);
-	queue.enqueue(234);
-	queue.enqueue(345);
+	<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(<span class="tok-num">123</span>);
+	<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(<span class="tok-num">234</span>);
+	<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(<span class="tok-num">345</span>);
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -215,6 +219,31 @@ int main() {
         <h3>1. Abstract Interface & Array Implementation</h3>
         <p>The <code>Queue&lt;T&gt;</code> interface defines <code>enqueue</code>, <code>dequeue</code>, <code>peek</code>, and <code>isEmpty</code>. <code>ArrayQueue&lt;T&gt;</code> implements these operations in fixed contiguous memory using circular indexing.</p>
 
+        <div class="diagram-container">
+          <h4>🔄 Circular Ring Buffer FIFO Architecture</h4>
+          <svg class="svg-diagram" width="540" height="170" viewBox="0 0 540 170" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="47" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 0</text>
+            <rect x="85" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="112" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 1</text>
+            <rect x="150" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <text x="177" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 2</text>
+            <rect x="215" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <text x="242" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 3</text>
+            <rect x="280" y="45" width="55" height="55" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+            <text x="307" y="77" fill="#64748b" font-family="monospace" font-size="13" text-anchor="middle">Empty</text>
+            <rect x="345" y="45" width="55" height="55" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+            <text x="372" y="77" fill="#64748b" font-family="monospace" font-size="13" text-anchor="middle">Empty</text>
+            <!-- Pointer Arrows -->
+            <path d="M 47 130 L 47 110" stroke="#10b981" stroke-width="2"/>
+            <polygon points="47,105 42,112 52,112" fill="#10b981"/>
+            <text x="47" y="148" fill="#10b981" font-family="sans-serif" font-weight="bold" font-size="12" text-anchor="middle">TAIL (Dequeue)</text>
+            <path d="M 307 20 L 307 38" stroke="#38bdf8" stroke-width="2"/>
+            <polygon points="307,43 302,36 312,36" fill="#38bdf8"/>
+            <text x="307" y="14" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="12" text-anchor="middle">HEAD (Enqueue Next)</text>
+          </svg>
+        </div>
+
         <h3>2. Modulo Arithmetic Index Wrapping</h3>
         <p>Instead of shifting elements on dequeue ($O(N)$), the queue simply advances its <code>front</code> and <code>rear</code> indices using modulo arithmetic: <code>(rear + 1) % capacity</code>, achieving constant $O(1)$ enqueue and dequeue.</p>
         
@@ -223,7 +252,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

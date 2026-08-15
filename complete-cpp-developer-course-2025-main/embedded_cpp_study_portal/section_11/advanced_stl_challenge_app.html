@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced STL Container Operations - C++ & Embedded Systems Guide</title>
+  <title>Advanced STL Container Operations - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">AdvancedSTLChallengeApp</span>
     </div>
@@ -69,88 +75,88 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;map&gt;
-#include &lt;unordered_map&gt;
-#include &lt;string&gt;
-#include &lt;algorithm&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;map&gt;</span>
+<span class="tok-pre">#include &lt;unordered_map&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &lt;algorithm&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printVector(const vector&lt;string&gt;&amp; vec);
+<span class="tok-type">void</span> <span class="tok-fn">printVector</span>(<span class="tok-kw">const</span> <span class="tok-type">vector</span>&lt;<span class="tok-type">string</span>&gt;&amp; vec);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	vector &lt;string&gt; words;
+	<span class="tok-type">vector</span> &lt;<span class="tok-type">string</span>&gt; words;
 
-	words.push_back(&quot;hi&quot;);
-	words.emplace_back(&quot;hello&quot;);
-	words.push_back(&quot;cat&quot;);
-	words.emplace_back(&quot;world&quot;);
-	words.push_back(&quot;test&quot;);
+	words.<span class="tok-fn">push_back</span>(&quot;hi&quot;);
+	words.<span class="tok-fn">emplace_back</span>(&quot;hello&quot;);
+	words.<span class="tok-fn">push_back</span>(&quot;cat&quot;);
+	words.<span class="tok-fn">emplace_back</span>(&quot;world&quot;);
+	words.<span class="tok-fn">push_back</span>(&quot;test&quot;);
 
-	cout &lt;&lt; &quot;Original vector:&quot; &lt;&lt; endl;
-	printVector(words);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Original vector:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printVector</span>(words);
 
-	for (auto it = words.begin(); it != words.end();) {
-		if (it-&gt;length() &lt;= 3) {
-			it = words.erase(it);
+	<span class="tok-kw">for</span> (<span class="tok-kw">auto</span> it = words.<span class="tok-fn">begin</span>(); it != words.<span class="tok-fn">end</span>();) {
+		<span class="tok-kw">if</span> (it-&gt;<span class="tok-fn">length</span>() &lt;= <span class="tok-num">3</span>) {
+			it = words.<span class="tok-fn">erase</span>(it);
 		}
-		else {
+		<span class="tok-kw">else</span> {
 			++it;
 		}
-	}//end for
+	}<span class="tok-com">//end for</span>
 
-	cout &lt;&lt; &quot;\nAfter removing short strings (length &lt;= 3):&quot; &lt;&lt; endl;
-	printVector(words);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nAfter removing short strings (length &lt;= 3):&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printVector</span>(words);
 
-	words.erase(remove(words.begin(), words.end(), &quot;test&quot;), words.end());
+	words.<span class="tok-fn">erase</span>(<span class="tok-fn">remove</span>(words.<span class="tok-fn">begin</span>(), words.<span class="tok-fn">end</span>(), <span class="tok-str">&quot;test&quot;</span>), words.<span class="tok-fn">end</span>());
 
-	cout &lt;&lt; &quot;\nAfter removing &#x27;test&#x27; using remove-erase idiom:&quot; &lt;&lt; endl;
-	printVector(words);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nAfter removing &#x27;test&#x27; using remove-erase idiom:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printVector</span>(words);
 
-	map&lt;string, int&gt; wordLengthsOrdered;
-	unordered_map&lt;string, int&gt; wordLengthsUnordered;
+	<span class="tok-type">map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; wordLengthsOrdered;
+	<span class="tok-type">unordered_map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; wordLengthsUnordered;
 
-	for (const auto&amp; word : words) {
-		wordLengthsOrdered[word] = word.length();
-		wordLengthsUnordered[word] = word.length();
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; word : words) {
+		wordLengthsOrdered[word] = word.<span class="tok-fn">length</span>();
+		wordLengthsUnordered[word] = word.<span class="tok-fn">length</span>();
 	}
 
-	cout &lt;&lt; &quot;\nContents of map (ordered):&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nContents of map (ordered):&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	
-	for (const auto&amp; pair : wordLengthsOrdered) {
-		cout &lt;&lt; pair.first &lt;&lt; &quot; -&gt; &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-type">pair</span> : wordLengthsOrdered) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">pair</span>.first &lt;&lt; <span class="tok-str">&quot; -&gt; &quot;</span> &lt;&lt; <span class="tok-type">pair</span>.second &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	//lookup
-	string query = &quot;world&quot;;
-	cout &lt;&lt; &quot;\nLooking up &#x27;&quot; &lt;&lt; query &lt;&lt; &quot;&#x27; in both maps:&quot; &lt;&lt; endl;
+	<span class="tok-com">//lookup</span>
+	<span class="tok-type">string</span> query = <span class="tok-str">&quot;world&quot;</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nLooking up &#x27;&quot;</span> &lt;&lt; query &lt;&lt; <span class="tok-str">&quot;&#x27; in both maps:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	if (wordLengthsOrdered.find(query) != wordLengthsOrdered.end()) {
-		cout &lt;&lt; &quot;map: found -&gt; &quot; &lt;&lt; wordLengthsOrdered[query] &lt;&lt; endl;
+	<span class="tok-kw">if</span> (wordLengthsOrdered.<span class="tok-fn">find</span>(query) != wordLengthsOrdered.<span class="tok-fn">end</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;map: found -&gt; &quot;</span> &lt;&lt; wordLengthsOrdered[query] &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	else {
-		cout &lt;&lt; &quot;map: not found&quot; &lt;&lt; endl;
-	}
-
-	//unordered map lookup
-	if(wordLengthsUnordered.find(query) != wordLengthsUnordered.end()) {
-		cout &lt;&lt; &quot;unordered map: found -&gt; &quot; &lt;&lt; wordLengthsUnordered[query] &lt;&lt; endl;
-	}
-	else {
-		cout &lt;&lt; &quot;unordered map: not found&quot; &lt;&lt; endl;
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;map: not found&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
+	<span class="tok-com">//unordered map lookup</span>
+	<span class="tok-kw">if</span>(wordLengthsUnordered.<span class="tok-fn">find</span>(query) != wordLengthsUnordered.<span class="tok-fn">end</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;unordered map: found -&gt; &quot;</span> &lt;&lt; wordLengthsUnordered[query] &lt;&lt; <span class="tok-type">endl</span>;
+	}
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;unordered map: not found&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	}
 
-	return 0;
+
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printVector(const vector&lt;string&gt;&amp; vec) {
-	for (const auto&amp; item : vec) {
-		cout &lt;&lt; item &lt;&lt; &quot; &quot;;
+<span class="tok-type">void</span> <span class="tok-fn">printVector</span>(<span class="tok-kw">const</span> <span class="tok-type">vector</span>&lt;<span class="tok-type">string</span>&gt;&amp; vec) {
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; item : vec) {
+		<span class="tok-type">cout</span> &lt;&lt; item &lt;&lt; <span class="tok-str">&quot; &quot;</span>;
 	}
-	cout &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -168,7 +174,7 @@ void printVector(const vector&lt;string&gt;&amp; vec) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Embedded Guidelines</h3><p>Default to contiguous containers unless non-relocating element requirements mandate node containers.</p>

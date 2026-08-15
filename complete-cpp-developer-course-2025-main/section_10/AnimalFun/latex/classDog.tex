@@ -1,0 +1,124 @@
+\doxysection{Dog Class Reference}
+\hypertarget{classDog}{}\label{classDog}\index{Dog@{Dog}}
+
+
+{\ttfamily \#include $<$Dog.\+h$>$}
+
+
+
+Inheritance diagram for Dog\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=131pt]{classDog__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Dog\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=131pt]{classDog__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classDog_ae9f73517fff4535faf7fdd2d7f6c5640}{Dog}} (string \mbox{\hyperlink{classAnimal_a9cf3bfd9070daec7b3bbc87cbd958f35}{name}}, double \mbox{\hyperlink{classAnimal_a65e900977918b50f9e5ff534dc1e8c01}{weight}}, string \mbox{\hyperlink{classDog_a075f31a8b063cae56345d88bbaf03a92}{breed}})
+\item 
+string \mbox{\hyperlink{classDog_ac9838d858832d36657af05f670cc5114}{get\+Breed}} () const
+\item 
+void \mbox{\hyperlink{classDog_a9b589880be20ad45c89d030c53e54bb5}{dig\+Hole}} () const
+\item 
+string \mbox{\hyperlink{classDog_a68af3412bcc07e122070f5df959fc1d5}{make\+Noise}} () const override
+\item 
+void \mbox{\hyperlink{classDog_a42faf9bff8307588f42aac813ee5eb04}{chase\+Cat}} () const
+\item 
+string \mbox{\hyperlink{classDog_a997b25564f5200159e470e359a9ed34c}{eat}} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classAnimal}{Animal}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAnimal_a3144d4e623564dab4ac101f0be09b2bb}{Animal}} (string \mbox{\hyperlink{classAnimal_a9cf3bfd9070daec7b3bbc87cbd958f35}{name}}, double \mbox{\hyperlink{classAnimal_a65e900977918b50f9e5ff534dc1e8c01}{weight}})
+\item 
+string \mbox{\hyperlink{classAnimal_a62d892945e094bac3098df7a007080ba}{get\+Name}} () const
+\item 
+void \mbox{\hyperlink{classAnimal_a6e15203ae23a65e97609d41d8d392d66}{set\+Name}} (string \mbox{\hyperlink{classAnimal_a9cf3bfd9070daec7b3bbc87cbd958f35}{name}})
+\item 
+double \mbox{\hyperlink{classAnimal_a96ab6e5e6327b44568fd900e422d2149}{get\+Weight}} () const
+\item 
+void \mbox{\hyperlink{classAnimal_ad7b9cf0c91236b9a604c4c807f325c75}{set\+Weight}} (double \mbox{\hyperlink{classAnimal_a65e900977918b50f9e5ff534dc1e8c01}{weight}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{classDog_a075f31a8b063cae56345d88bbaf03a92}{breed}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classDog_ae9f73517fff4535faf7fdd2d7f6c5640}\label{classDog_ae9f73517fff4535faf7fdd2d7f6c5640} 
+\index{Dog@{Dog}!Dog@{Dog}}
+\index{Dog@{Dog}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{Dog()}{Dog()}}
+{\footnotesize\ttfamily Dog\+::\+Dog (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{double}]{weight,  }\item[{string}]{breed }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classDog_a42faf9bff8307588f42aac813ee5eb04}\label{classDog_a42faf9bff8307588f42aac813ee5eb04} 
+\index{Dog@{Dog}!chaseCat@{chaseCat}}
+\index{chaseCat@{chaseCat}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{chaseCat()}{chaseCat()}}
+{\footnotesize\ttfamily void Dog\+::chase\+Cat (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\Hypertarget{classDog_a9b589880be20ad45c89d030c53e54bb5}\label{classDog_a9b589880be20ad45c89d030c53e54bb5} 
+\index{Dog@{Dog}!digHole@{digHole}}
+\index{digHole@{digHole}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{digHole()}{digHole()}}
+{\footnotesize\ttfamily void Dog\+::dig\+Hole (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\Hypertarget{classDog_a997b25564f5200159e470e359a9ed34c}\label{classDog_a997b25564f5200159e470e359a9ed34c} 
+\index{Dog@{Dog}!eat@{eat}}
+\index{eat@{eat}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{eat()}{eat()}}
+{\footnotesize\ttfamily string Dog\+::eat (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAnimal_abe76c4542b9e3e3f7ba23ded2383b9fb}{Animal}}.
+
+\Hypertarget{classDog_ac9838d858832d36657af05f670cc5114}\label{classDog_ac9838d858832d36657af05f670cc5114} 
+\index{Dog@{Dog}!getBreed@{getBreed}}
+\index{getBreed@{getBreed}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{getBreed()}{getBreed()}}
+{\footnotesize\ttfamily string Dog\+::get\+Breed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\Hypertarget{classDog_a68af3412bcc07e122070f5df959fc1d5}\label{classDog_a68af3412bcc07e122070f5df959fc1d5} 
+\index{Dog@{Dog}!makeNoise@{makeNoise}}
+\index{makeNoise@{makeNoise}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{makeNoise()}{makeNoise()}}
+{\footnotesize\ttfamily string Dog\+::make\+Noise (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAnimal_ae8a434e08fa132b2681b047f8961579a}{Animal}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classDog_a075f31a8b063cae56345d88bbaf03a92}\label{classDog_a075f31a8b063cae56345d88bbaf03a92} 
+\index{Dog@{Dog}!breed@{breed}}
+\index{breed@{breed}!Dog@{Dog}}
+\doxysubsubsection{\texorpdfstring{breed}{breed}}
+{\footnotesize\ttfamily string Dog\+::breed\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Animal\+Fun/\mbox{\hyperlink{Dog_8h}{Dog.\+h}}\item 
+Animal\+Fun/\mbox{\hyperlink{Dog_8cpp}{Dog.\+cpp}}\end{DoxyCompactItemize}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Financial Calculations &amp; Currency Fixed-Point (Cents Math) - C++ & Embedded Systems Guide</title>
+  <title>Financial Calculations &amp; Currency Fixed-Point (Cents Math) - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 2</a>
+      <a href="../index.html#grid-foundations">Section 2</a>
       <span class="sep">/</span>
       <span class="current">TipCalculator</span>
     </div>
@@ -69,32 +75,32 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;iomanip&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	double billAmount;
-	double tipPercentage;
-	double tipAmount;
-	double totalAmount;
+	<span class="tok-type">double</span> billAmount;
+	<span class="tok-type">double</span> tipPercentage;
+	<span class="tok-type">double</span> tipAmount;
+	<span class="tok-type">double</span> totalAmount;
 
-	cout &lt;&lt; fixed &lt;&lt; setprecision(2);
+	<span class="tok-type">cout</span> &lt;&lt; fixed &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">2</span>);
 
-	cout &lt;&lt; &quot;Enter the total bill amount: &quot; &lt;&lt; endl;
-	cin &gt;&gt; billAmount;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the total bill amount: &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cin</span> &gt;&gt; billAmount;
 
-	cout &lt;&lt; &quot;Enter the tip percentage you would like to leave: &quot; &lt;&lt; endl;
-	cin &gt;&gt; tipPercentage;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the tip percentage you would like to leave: &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cin</span> &gt;&gt; tipPercentage;
 
-	tipAmount = billAmount * (tipPercentage / 100);
+	tipAmount = billAmount * (tipPercentage / <span class="tok-num">100</span>);
 	totalAmount = billAmount + tipAmount;
 
-	cout &lt;&lt; &quot;You should tip $&quot; &lt;&lt; tipAmount &lt;&lt; endl;
-	cout &lt;&lt; &quot;Your total with tip is: $&quot; &lt;&lt; totalAmount &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You should tip $&quot;</span> &lt;&lt; tipAmount &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Your total with tip is: $&quot;</span> &lt;&lt; totalAmount &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -118,7 +124,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

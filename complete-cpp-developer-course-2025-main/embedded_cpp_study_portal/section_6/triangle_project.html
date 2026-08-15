@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geometry Encapsulation &amp; The Static Initialization Fiasco - C++ & Embedded Systems Guide</title>
+  <title>Geometry Encapsulation &amp; The Static Initialization Fiasco - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 6</a>
+      <a href="../index.html#grid-foundations">Section 6</a>
       <span class="sep">/</span>
       <span class="current">TriangleProject</span>
     </div>
@@ -71,140 +77,138 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Triangle.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Triangle.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printTriangleData(const Triangle&amp; t);
+<span class="tok-type">void</span> <span class="tok-fn">printTriangleData</span>(<span class="tok-kw">const</span> <span class="tok-type">Triangle</span>&amp; t);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	Triangle t1;
-	Triangle t2(3, 4, 5);
-	Triangle t3(1, 2, 3);
+	<span class="tok-type">Triangle</span> t1;
+	<span class="tok-type">Triangle</span> <span class="tok-fn">t2</span>(<span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">5</span>);
+	<span class="tok-type">Triangle</span> <span class="tok-fn">t3</span>(<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>);
 
-	printTriangleData(t1);
-	printTriangleData(t2);
-	printTriangleData(t3);
+	<span class="tok-fn">printTriangleData</span>(t1);
+	<span class="tok-fn">printTriangleData</span>(t2);
+	<span class="tok-fn">printTriangleData</span>(t3);
 
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printTriangleData(const Triangle&amp; t) {
-	cout &lt;&lt; &quot;Sides:&quot;
-		&lt;&lt; t.getSideA() &lt;&lt; &quot;, &quot;
-		&lt;&lt; t.getSideB() &lt;&lt; &quot;, &quot;
-		&lt;&lt; t.getSideC() &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printTriangleData</span>(<span class="tok-kw">const</span> <span class="tok-type">Triangle</span>&amp; t) {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Sides:&quot;</span>
+		&lt;&lt; t.<span class="tok-fn">getSideA</span>() &lt;&lt; <span class="tok-str">&quot;, &quot;</span>
+		&lt;&lt; t.<span class="tok-fn">getSideB</span>() &lt;&lt; <span class="tok-str">&quot;, &quot;</span>
+		&lt;&lt; t.<span class="tok-fn">getSideC</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	if (t.isValid()) {
-		cout &lt;&lt; &quot;\tPerimeter: &quot; &lt;&lt; t.perimeter() &lt;&lt; endl;
-		cout &lt;&lt; &quot;\tArea: &quot; &lt;&lt; t.perimeter() &lt;&lt; endl;
+	<span class="tok-kw">if</span> (t.<span class="tok-fn">isValid</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tPerimeter: &quot;</span> &lt;&lt; t.<span class="tok-fn">perimeter</span>() &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tArea: &quot;</span> &lt;&lt; t.<span class="tok-fn">perimeter</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	else {
-		cout &lt;&lt; &quot;\tThis is not a valid triangle&quot; &lt;&lt; endl;
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tThis is not a valid triangle&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	cout &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef TRIANGLE_H
-#define TRIANGLE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef TRIANGLE_H</span>
+<span class="tok-pre">#define TRIANGLE_H</span>
 
-class Triangle {
-	public:
-		Triangle();
-		Triangle(double sideA, double sideB, double sideC);
+<span class="tok-kw">class</span> <span class="tok-type">Triangle</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Triangle</span>();
+		<span class="tok-type">Triangle</span>(<span class="tok-type">double</span> sideA, <span class="tok-type">double</span> sideB, <span class="tok-type">double</span> sideC);
 
-		double getSideA() const;
-		double getSideB() const;
-		double getSideC() const;
+		<span class="tok-type">double</span> <span class="tok-fn">getSideA</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">getSideB</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">getSideC</span>() <span class="tok-kw">const</span>;
 
-		void setSideA(double sideA);
-		void setSideB(double sideB);
-		void setSideC(double sideC);
+		<span class="tok-type">void</span> <span class="tok-fn">setSideA</span>(<span class="tok-type">double</span> sideA);
+		<span class="tok-type">void</span> <span class="tok-fn">setSideB</span>(<span class="tok-type">double</span> sideB);
+		<span class="tok-type">void</span> <span class="tok-fn">setSideC</span>(<span class="tok-type">double</span> sideC);
 
-		bool isValid() const;
-		double perimeter() const;
-		double area() const;
+		<span class="tok-kw">bool</span> <span class="tok-fn">isValid</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">perimeter</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">area</span>() <span class="tok-kw">const</span>;
 
-	private:
-		double sideA;
-		double sideB;
-		double sideC;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">double</span> sideA;
+		<span class="tok-type">double</span> sideB;
+		<span class="tok-type">double</span> sideC;
 };
 
-#endif
-</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Triangle.h&quot;
-#include &lt;cmath&gt;   //sqrt
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Triangle.h&quot;</span>
+<span class="tok-pre">#include &lt;cmath&gt;   //sqrt</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
 
-Triangle::Triangle() {
-	sideA = 1;
-	sideB = 1;
-	sideC = 1;
+<span class="tok-type">Triangle</span>::<span class="tok-type">Triangle</span>() {
+	sideA = <span class="tok-num">1</span>;
+	sideB = <span class="tok-num">1</span>;
+	sideC = <span class="tok-num">1</span>;
 }
 
-Triangle::Triangle(double sideA, double sideB, double sideC) {
-	this-&gt;sideA = sideA;
-	this-&gt;sideB = sideB;
-	this-&gt;sideC = sideC;
+<span class="tok-type">Triangle</span>::<span class="tok-type">Triangle</span>(<span class="tok-type">double</span> sideA, <span class="tok-type">double</span> sideB, <span class="tok-type">double</span> sideC) {
+	<span class="tok-kw">this</span>-&gt;sideA = sideA;
+	<span class="tok-kw">this</span>-&gt;sideB = sideB;
+	<span class="tok-kw">this</span>-&gt;sideC = sideC;
 }
 
-double Triangle::getSideA() const {
-	return sideA;
+<span class="tok-type">double</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">getSideA</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> sideA;
 }
 
-double Triangle::getSideB() const {
-	return sideB;
+<span class="tok-type">double</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">getSideB</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> sideB;
 }
 
-double Triangle::getSideC() const {
-	return sideC;
+<span class="tok-type">double</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">getSideC</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> sideC;
 }
 
-void Triangle::setSideA(double sideA) {
-	this-&gt;sideA = sideA;
+<span class="tok-type">void</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">setSideA</span>(<span class="tok-type">double</span> sideA) {
+	<span class="tok-kw">this</span>-&gt;sideA = sideA;
 }
 
-void Triangle::setSideB(double sideB) {
-	this-&gt;sideB = sideB;
+<span class="tok-type">void</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">setSideB</span>(<span class="tok-type">double</span> sideB) {
+	<span class="tok-kw">this</span>-&gt;sideB = sideB;
 }
 
-void Triangle::setSideC(double sideC) {
-	this-&gt;sideC = sideC;
+<span class="tok-type">void</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">setSideC</span>(<span class="tok-type">double</span> sideC) {
+	<span class="tok-kw">this</span>-&gt;sideC = sideC;
 }
 
-bool Triangle::isValid() const {
-	return (sideA + sideB &gt; sideC) &amp;&amp;
+<span class="tok-kw">bool</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">isValid</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> (sideA + sideB &gt; sideC) &amp;&amp;
 		(sideA + sideC &gt; sideB) &amp;&amp;
 		(sideB + sideC &gt; sideA);
 }
 
-double Triangle::perimeter() const {
-	return sideA + sideB + sideC;
+<span class="tok-type">double</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">perimeter</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> sideA + sideB + sideC;
 }
 
-double Triangle::area() const {
-	if (!isValid()) {
-		cout &lt;&lt; &quot;Cannot compute area: triangle is invalid.&quot; &lt;&lt; endl;
-		return 0;
+<span class="tok-type">double</span> <span class="tok-type">Triangle</span>::<span class="tok-fn">area</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">if</span> (!<span class="tok-fn">isValid</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Cannot compute area: triangle is invalid.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 	}
 
-	double s = perimeter() / 2.0;
+	<span class="tok-type">double</span> s = <span class="tok-fn">perimeter</span>() / <span class="tok-num">2.0</span>;
 
-	return sqrt(s * (s - sideA) * (s - sideB) * (s - sideC));
+	<span class="tok-kw">return</span> <span class="tok-fn">sqrt</span>(s * (s - sideA) * (s - sideB) * (s - sideC));
 
 
-}
-</pre>
+}</pre>
         </div>
       </div>
     
@@ -224,7 +228,7 @@ double Triangle::area() const {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

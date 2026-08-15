@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedList: Dynamic Insertion vs Memory Fragmentation - C++ & Embedded Systems Guide</title>
+  <title>LinkedList: Dynamic Insertion vs Memory Fragmentation - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 12</a>
+      <a href="../index.html#grid-advanced">Section 12</a>
       <span class="sep">/</span>
       <span class="current">LinkedListApp</span>
     </div>
@@ -71,270 +77,269 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef LIST_H
-#define LIST_H
+          <pre class="code-block"><span class="tok-pre">#ifndef LIST_H</span>
+<span class="tok-pre">#define LIST_H</span>
 
-class List {
-public:
-	virtual void add(int newEntry) = 0;
-	virtual void add(int newEntry, int position) = 0;
-	virtual void set(int newEntry, int position) = 0;
+<span class="tok-kw">class</span> List {
+<span class="tok-kw">public</span>:
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry) = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-type">set</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) = <span class="tok-num">0</span>;
 
-	virtual bool contains(int entry) const = 0;
-	virtual int find(int entry) const = 0;
-	virtual int remove(int position) = 0;
-	virtual void makeEmpty() = 0;
+	<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">contains</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">find</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">remove</span>(<span class="tok-type">int</span> position) = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() = <span class="tok-num">0</span>;
 
-	virtual int size() const = 0;
-	virtual bool isEmpty() const = 0;
-	virtual void printList() const = 0;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">printList</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
 
 };
 
-#endif
-</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef LINKED_LIST_H
-#define LINKED_LIST_H
+          <pre class="code-block"><span class="tok-pre">#ifndef LINKED_LIST_H</span>
+<span class="tok-pre">#define LINKED_LIST_H</span>
 
-#include &lt;iostream&gt;
-#include &quot;List.h&quot;
-using namespace std;
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;List.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-// ---------------- Node -------------------- //
-class Node {
-	public:
-		Node(int data, Node* next) {
-			this-&gt;data = data;
-			this-&gt;next = next;
-		}//end ctor
+<span class="tok-com">// ---------------- Node -------------------- //</span>
+<span class="tok-kw">class</span> Node {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Node</span>(<span class="tok-type">int</span> data, Node* next) {
+			<span class="tok-kw">this</span>-&gt;data = data;
+			<span class="tok-kw">this</span>-&gt;next = next;
+		}<span class="tok-com">//end ctor</span>
 
-		int getData() const {
-			return data;
+		<span class="tok-type">int</span> <span class="tok-fn">getData</span>() <span class="tok-kw">const</span> {
+			<span class="tok-kw">return</span> data;
 		}
 
-		void setData(int data) {
-			this-&gt;data = data;
+		<span class="tok-type">void</span> <span class="tok-fn">setData</span>(<span class="tok-type">int</span> data) {
+			<span class="tok-kw">this</span>-&gt;data = data;
 		}
 
-		Node* getNext() const {
-			return next;
+		Node* <span class="tok-fn">getNext</span>() <span class="tok-kw">const</span> {
+			<span class="tok-kw">return</span> next;
 		}
 
-		void setNext(Node* next) {
-			this-&gt;next = next;
+		<span class="tok-type">void</span> <span class="tok-fn">setNext</span>(Node* next) {
+			<span class="tok-kw">this</span>-&gt;next = next;
 		}
 
-	private:
-		int data;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span> data;
 		Node* next;
 };
 
-// --------------- Linked List ---------------------//
-class LinkedList : public List {
-	public:
-		LinkedList() {
-			mHead = nullptr;
-			mNumElements = 0;
-		}//end ctor
+<span class="tok-com">// --------------- Linked List ---------------------//</span>
+<span class="tok-kw">class</span> LinkedList : <span class="tok-kw">public</span> List {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">LinkedList</span>() {
+			mHead = <span class="tok-kw">nullptr</span>;
+			mNumElements = <span class="tok-num">0</span>;
+		}<span class="tok-com">//end ctor</span>
 
-		virtual ~LinkedList() {
-			makeEmpty();  //clean up the nodes
-		}//end dtor
+		<span class="tok-kw">virtual</span> ~<span class="tok-fn">LinkedList</span>() {
+			<span class="tok-fn">makeEmpty</span>();  <span class="tok-com">//clean up the nodes</span>
+		}<span class="tok-com">//end dtor</span>
 
-		void add(int newEntry) override {
-			Node* newNode = new Node(newEntry, nullptr);
+		<span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry) <span class="tok-kw">override</span> {
+			Node* newNode = <span class="tok-kw">new</span> <span class="tok-fn">Node</span>(newEntry, <span class="tok-kw">nullptr</span>);
 
-			if (mHead == nullptr) {
+			<span class="tok-kw">if</span> (mHead == <span class="tok-kw">nullptr</span>) {
 				mHead = newNode;
 			}
-			else {
+			<span class="tok-kw">else</span> {
 				Node* walker = mHead;                        
-				while (walker-&gt;getNext() != nullptr) {
-					walker = walker-&gt;getNext();
-				}//end while
+				<span class="tok-kw">while</span> (walker-&gt;<span class="tok-fn">getNext</span>() != <span class="tok-kw">nullptr</span>) {
+					walker = walker-&gt;<span class="tok-fn">getNext</span>();
+				}<span class="tok-com">//end while</span>
 
-				walker-&gt;setNext(newNode);
+				walker-&gt;<span class="tok-fn">setNext</span>(newNode);
 			}
 			mNumElements++;
-		}//end add
+		}<span class="tok-com">//end add</span>
 
 
-		void add(int newEntry, int position) override {
-			if (position &lt; 0 || position &gt; mNumElements) {
-				cout &lt;&lt; &quot;Error: Cannot add at specified position.&quot; &lt;&lt; endl;
-				return;
+		<span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (position &lt; <span class="tok-num">0</span> || position &gt; mNumElements) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Error: Cannot add at specified position.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span>;
 			}
 
-			Node* newNode = new Node(newEntry, nullptr);
+			Node* newNode = <span class="tok-kw">new</span> <span class="tok-fn">Node</span>(newEntry, <span class="tok-kw">nullptr</span>);
 
-			if (position == 0) {
-				newNode-&gt;setNext(mHead);
+			<span class="tok-kw">if</span> (position == <span class="tok-num">0</span>) {
+				newNode-&gt;<span class="tok-fn">setNext</span>(mHead);
 				mHead = newNode;
 			}
-			else {
+			<span class="tok-kw">else</span> {
 				Node* nodeBefore = mHead;
 
-				for (int i = 0; i &lt; position - 1; i++) {
-					nodeBefore = nodeBefore-&gt;getNext();
-				}//end for 
+				<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; position - <span class="tok-num">1</span>; i++) {
+					nodeBefore = nodeBefore-&gt;<span class="tok-fn">getNext</span>();
+				}<span class="tok-com">//end for </span>
 				                                                         
-				newNode-&gt;setNext(nodeBefore-&gt;getNext());     
-				nodeBefore-&gt;setNext(newNode);
+				newNode-&gt;<span class="tok-fn">setNext</span>(nodeBefore-&gt;<span class="tok-fn">getNext</span>());     
+				nodeBefore-&gt;<span class="tok-fn">setNext</span>(newNode);
 			}
 
 			mNumElements++;
-		}//end add
+		}<span class="tok-com">//end add</span>
 
-		void set(int newEntry, int position) override {
-			if (position &lt; 0 || position &gt; mNumElements) {
-				cout &lt;&lt; &quot;Error:  Invalid position.&quot; &lt;&lt; endl;
-				return;
+		<span class="tok-type">void</span> <span class="tok-type">set</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (position &lt; <span class="tok-num">0</span> || position &gt; mNumElements) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Error:  Invalid position.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span>;
 			}
 
 			Node* walker = mHead;
 
-			for (int i = 0; i &lt; position; i++) {
-				walker = walker-&gt;getNext();
-			}//end for 
+			<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; position; i++) {
+				walker = walker-&gt;<span class="tok-fn">getNext</span>();
+			}<span class="tok-com">//end for </span>
 
-			walker-&gt;setData(newEntry);
-		}//end set
+			walker-&gt;<span class="tok-fn">setData</span>(newEntry);
+		}<span class="tok-com">//end set</span>
 
-		bool contains(int entry) const override {
-			return find(entry) != -1;
-		}//end contains
+		<span class="tok-kw">bool</span> <span class="tok-fn">contains</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> <span class="tok-fn">find</span>(entry) != -<span class="tok-num">1</span>;
+		}<span class="tok-com">//end contains</span>
 
-		int find(int entry) const override {
+		<span class="tok-type">int</span> <span class="tok-fn">find</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
 			Node* walker = mHead;
-			int index = 0;
+			<span class="tok-type">int</span> index = <span class="tok-num">0</span>;
 
-			while (walker != nullptr) {
-				if (walker-&gt;getData() == entry) {
-					return index;
+			<span class="tok-kw">while</span> (walker != <span class="tok-kw">nullptr</span>) {
+				<span class="tok-kw">if</span> (walker-&gt;<span class="tok-fn">getData</span>() == entry) {
+					<span class="tok-kw">return</span> index;
 				}
-				walker = walker-&gt;getNext();
+				walker = walker-&gt;<span class="tok-fn">getNext</span>();
 				index++;
-			}//end while
+			}<span class="tok-com">//end while</span>
 
-			return -1;
+			<span class="tok-kw">return</span> -<span class="tok-num">1</span>;
 
-		}//end find
+		}<span class="tok-com">//end find</span>
 
-		int remove(int position) override {
-			if (position &lt; 0 || position &gt;= mNumElements) {
-				cout &lt;&lt; &quot;Error:  Cannot remove at specified position.&quot; &lt;&lt; endl;
-				return 0;
+		<span class="tok-type">int</span> <span class="tok-fn">remove</span>(<span class="tok-type">int</span> position) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (position &lt; <span class="tok-num">0</span> || position &gt;= mNumElements) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Error:  Cannot remove at specified position.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
 
-			int dataToReturn = 0;
+			<span class="tok-type">int</span> dataToReturn = <span class="tok-num">0</span>;
 
-			if (position == 0) {
+			<span class="tok-kw">if</span> (position == <span class="tok-num">0</span>) {
 				Node* temp = mHead;
-				dataToReturn = temp-&gt;getData();
-				mHead = mHead-&gt;getNext();
-				delete temp;
+				dataToReturn = temp-&gt;<span class="tok-fn">getData</span>();
+				mHead = mHead-&gt;<span class="tok-fn">getNext</span>();
+				<span class="tok-kw">delete</span> temp;
 			}
-			else {
+			<span class="tok-kw">else</span> {
 				Node* nodeBefore = mHead;
-				for (int i = 0; i &lt; position - 1; i++) {
-					nodeBefore = nodeBefore-&gt;getNext();
-				}//end for
+				<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; position - <span class="tok-num">1</span>; i++) {
+					nodeBefore = nodeBefore-&gt;<span class="tok-fn">getNext</span>();
+				}<span class="tok-com">//end for</span>
 
-				Node* nodeToRemove = nodeBefore-&gt;getNext();
-				Node* nodeAfter = nodeToRemove-&gt;getNext();
-				dataToReturn = nodeToRemove-&gt;getData();
+				Node* nodeToRemove = nodeBefore-&gt;<span class="tok-fn">getNext</span>();
+				Node* nodeAfter = nodeToRemove-&gt;<span class="tok-fn">getNext</span>();
+				dataToReturn = nodeToRemove-&gt;<span class="tok-fn">getData</span>();
 
-				nodeBefore-&gt;setNext(nodeAfter);
-				delete nodeToRemove;
+				nodeBefore-&gt;<span class="tok-fn">setNext</span>(nodeAfter);
+				<span class="tok-kw">delete</span> nodeToRemove;
 			}
 
 			mNumElements--;
-			return dataToReturn;
-		}//end remove 
+			<span class="tok-kw">return</span> dataToReturn;
+		}<span class="tok-com">//end remove </span>
 
-		void makeEmpty() override {
+		<span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() <span class="tok-kw">override</span> {
 			Node* temp;
-			while (mHead != nullptr) {
+			<span class="tok-kw">while</span> (mHead != <span class="tok-kw">nullptr</span>) {
 				temp = mHead;
-				mHead = mHead-&gt;getNext();
-				delete temp;
+				mHead = mHead-&gt;<span class="tok-fn">getNext</span>();
+				<span class="tok-kw">delete</span> temp;
 			}
-		}//end makeEmpty
+		}<span class="tok-com">//end makeEmpty</span>
 
-		int size() const override {
-			return mNumElements;
-		}//end size
+		<span class="tok-type">int</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> mNumElements;
+		}<span class="tok-com">//end size</span>
 
-		bool isEmpty() const override {
-			return mNumElements == 0;
-		}//end isEmpty
+		<span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> mNumElements == <span class="tok-num">0</span>;
+		}<span class="tok-com">//end isEmpty</span>
 
-		void printList() const override {
+		<span class="tok-type">void</span> <span class="tok-fn">printList</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
 			Node* walker = mHead;
-			while (walker != nullptr) {
-				cout &lt;&lt; walker-&gt;getData() &lt;&lt; endl;
-				walker = walker-&gt;getNext();
-			}//end while
+			<span class="tok-kw">while</span> (walker != <span class="tok-kw">nullptr</span>) {
+				<span class="tok-type">cout</span> &lt;&lt; walker-&gt;<span class="tok-fn">getData</span>() &lt;&lt; <span class="tok-type">endl</span>;
+				walker = walker-&gt;<span class="tok-fn">getNext</span>();
+			}<span class="tok-com">//end while</span>
 		}
 
-	private:
+	<span class="tok-kw">private</span>:
 		Node* mHead;
-		int mNumElements;
+		<span class="tok-type">int</span> mNumElements;
 };
 
 
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;LinkedList.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;LinkedList.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 	LinkedList myList;
-	int data;
+	<span class="tok-type">int</span> data;
 
-	myList.add(15);
-	myList.add(22);
-	myList.add(100);
-	myList.add(44);
-	myList.add(500);
-	myList.add(444);
-	myList.add(505);
-	myList.add(22);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">15</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">22</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">100</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">44</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">500</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">444</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">505</span>);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">22</span>);
 
-	myList.set(1515, 0);
-	myList.set(2222, 7);
+	myList.<span class="tok-type">set</span>(<span class="tok-num">1515</span>, <span class="tok-num">0</span>);
+	myList.<span class="tok-type">set</span>(<span class="tok-num">2222</span>, <span class="tok-num">7</span>);
 
-	myList.printList();
+	myList.<span class="tok-fn">printList</span>();
 
-	myList.add(1500, 89);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">1500</span>, <span class="tok-num">89</span>);
 
-	cout &lt;&lt; endl;
-	myList.printList();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
+	myList.<span class="tok-fn">printList</span>();
 
-	cout &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	int lastIndex = myList.size() - 1;
-	int removed = myList.remove(lastIndex);
+	<span class="tok-type">int</span> lastIndex = myList.<span class="tok-fn">size</span>() - <span class="tok-num">1</span>;
+	<span class="tok-type">int</span> removed = myList.<span class="tok-fn">remove</span>(lastIndex);
 
-	cout &lt;&lt; &quot;Just removed &quot; &lt;&lt; removed &lt;&lt; &quot; from the END of the list.&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Just removed &quot;</span> &lt;&lt; removed &lt;&lt; <span class="tok-str">&quot; from the END of the list.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
 
-	while (!myList.isEmpty()) {
-		data = myList.remove(0);
-		cout &lt;&lt; &quot;Just removed: &quot; &lt;&lt; data &lt;&lt; endl;
-	}//end while
+	<span class="tok-kw">while</span> (!myList.<span class="tok-fn">isEmpty</span>()) {
+		data = myList.<span class="tok-fn">remove</span>(<span class="tok-num">0</span>);
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Just removed: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
+	}<span class="tok-com">//end while</span>
 
-	cout &lt;&lt; endl &lt;&lt; &quot;Final contents (should be empty):&quot; &lt;&lt; endl;
-	myList.printList();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span> &lt;&lt; <span class="tok-str">&quot;Final contents (should be empty):&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	myList.<span class="tok-fn">printList</span>();
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -352,7 +357,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Intrusive Linked Lists (Embedded Gold Standard)</h3><p>In operating systems (FreeRTOS, Linux Kernel), nodes are embedded directly inside existing structures (intrusive lists), eliminating extra heap allocations entirely!</p>

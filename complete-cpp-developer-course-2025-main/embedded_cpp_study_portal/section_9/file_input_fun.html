@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Input Streams, LittleFS &amp; SPI Flash Memory - C++ & Embedded Systems Guide</title>
+  <title>File Input Streams, LittleFS &amp; SPI Flash Memory - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 9</a>
+      <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
       <span class="current">FileInputFun</span>
     </div>
@@ -70,54 +76,53 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;fstream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;fstream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	int inputNum;
-	int sum = 0;
-	vector&lt;int&gt; myInts;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">int</span> inputNum;
+	<span class="tok-type">int</span> sum = <span class="tok-num">0</span>;
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; myInts;
 
-	ifstream infile(&quot;input.txt&quot;);
+	<span class="tok-type">ifstream</span> <span class="tok-fn">infile</span>(&quot;input.txt&quot;);
 
-	if (!infile) {
-		cerr &lt;&lt; &quot;Could not open file.&quot; &lt;&lt; endl;
-		return 1;
+	<span class="tok-kw">if</span> (!infile) {
+		<span class="tok-type">cerr</span> &lt;&lt; <span class="tok-str">&quot;Could not open file.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">1</span>;
 	}
 
-	while (infile &gt;&gt; inputNum) {    // while(!infile.eof()) 
-		myInts.push_back(inputNum);
+	<span class="tok-kw">while</span> (infile &gt;&gt; inputNum) {    <span class="tok-com">// while(!infile.eof()) </span>
+		myInts.<span class="tok-fn">push_back</span>(inputNum);
 		sum += inputNum;
-	} // end while
+	} <span class="tok-com">// end while</span>
 
-	for (int num : myInts) {
-		cout &lt;&lt; num &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> num : myInts) {
+		<span class="tok-type">cout</span> &lt;&lt; num &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	cout &lt;&lt; &quot;Sum of numbers is: &quot; &lt;&lt; sum &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Sum of numbers is: &quot;</span> &lt;&lt; sum &lt;&lt; <span class="tok-type">endl</span>;
 
-	infile.close();
+	infile.<span class="tok-fn">close</span>();
 
-	return 0;
-}
-</pre>
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">10
-15
-20
-22
-28
-29
-17
-18
-33
-99
-12
-15</pre>
+          <pre class="code-block"><span class="tok-num">10</span>
+<span class="tok-num">15</span>
+<span class="tok-num">20</span>
+<span class="tok-num">22</span>
+<span class="tok-num">28</span>
+<span class="tok-num">29</span>
+<span class="tok-num">17</span>
+<span class="tok-num">18</span>
+<span class="tok-num">33</span>
+<span class="tok-num">99</span>
+<span class="tok-num">12</span>
+<span class="tok-num">15</span></pre>
         </div>
       </div>
     
@@ -140,7 +145,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

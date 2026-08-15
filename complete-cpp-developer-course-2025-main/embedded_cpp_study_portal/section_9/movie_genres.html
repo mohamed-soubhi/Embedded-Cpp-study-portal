@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Aggregation, Frequency Histograms &amp; Category Grouping - C++ & Embedded Systems Guide</title>
+  <title>Data Aggregation, Frequency Histograms &amp; Category Grouping - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 9</a>
+      <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
       <span class="current">MovieGenres</span>
     </div>
@@ -70,54 +76,54 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;fstream&gt;
-#include &lt;iomanip&gt;
-#include &lt;string&gt;
-#include &lt;map&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;fstream&gt;</span>
+<span class="tok-pre">#include &lt;iomanip&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &lt;map&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	ifstream infile(&quot;genres.txt&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">ifstream</span> <span class="tok-fn">infile</span>(&quot;genres.txt&quot;);
 
-	if (!infile) {
-		cerr &lt;&lt; &quot;Error opening genres.txt.  Aborting...&quot; &lt;&lt; endl;
-		return 1;
+	<span class="tok-kw">if</span> (!infile) {
+		<span class="tok-type">cerr</span> &lt;&lt; <span class="tok-str">&quot;Error opening genres.txt.  Aborting...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">1</span>;
 	}
 
-	map&lt;string, int&gt; genreCounts;
-	string genre;
-	int total = 0;
+	<span class="tok-type">map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; genreCounts;
+	<span class="tok-type">string</span> genre;
+	<span class="tok-type">int</span> total = <span class="tok-num">0</span>;
 
-	while (infile &gt;&gt; genre) {
+	<span class="tok-kw">while</span> (infile &gt;&gt; genre) {
 		genreCounts[genre]++;
 		total++;
 	}
 
-	infile.close();
+	infile.<span class="tok-fn">close</span>();
 
-	cout &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; setprecision(2);
-	cout &lt;&lt; &quot;\nMovie Genre Preferences&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;------------------------------&quot; &lt;&lt; endl;
-	cout &lt;&lt; left &lt;&lt; setw(15) &lt;&lt; &quot;Genre&quot;
-		&lt;&lt; right &lt;&lt; setw(10) &lt;&lt; &quot;Count&quot;
-		&lt;&lt; setw(12) &lt;&lt; &quot;Percent&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">2</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nMovie Genre Preferences&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;------------------------------&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; left &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">15</span>) &lt;&lt; <span class="tok-str">&quot;Genre&quot;</span>
+		&lt;&lt; right &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">10</span>) &lt;&lt; <span class="tok-str">&quot;Count&quot;</span>
+		&lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">12</span>) &lt;&lt; <span class="tok-str">&quot;Percent&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;------------------------------&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;------------------------------&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	for (const auto&amp; pair : genreCounts) {
-		double percent = (static_cast&lt;double&gt;(pair.second) / total) * 100.0;
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-type">pair</span> : genreCounts) {
+		<span class="tok-type">double</span> percent = (<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">double</span>&gt;(<span class="tok-type">pair</span>.second) / total) * <span class="tok-num">100.0</span>;
 
-		cout &lt;&lt; left &lt;&lt; setw(15) &lt;&lt; pair.first
-			&lt;&lt; right &lt;&lt; setw(10) &lt;&lt; pair.second
-			&lt;&lt; setw(11) &lt;&lt; percent &lt;&lt; &quot;%&quot; &lt;&lt; endl;
+		<span class="tok-type">cout</span> &lt;&lt; left &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">15</span>) &lt;&lt; <span class="tok-type">pair</span>.first
+			&lt;&lt; right &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">10</span>) &lt;&lt; <span class="tok-type">pair</span>.second
+			&lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">11</span>) &lt;&lt; percent &lt;&lt; <span class="tok-str">&quot;%&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	cout &lt;&lt; &quot;------------------------------&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;Total responses: &quot; &lt;&lt; total &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;------------------------------&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Total responses: &quot;</span> &lt;&lt; total &lt;&lt; <span class="tok-type">endl</span>;
 
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
@@ -161,7 +167,7 @@ animation</pre>
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exception Safety in Constructors &amp; Memory Leak Prevention - C++ & Embedded Systems Guide</title>
+  <title>Exception Safety in Constructors &amp; Memory Leak Prevention - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 7</a>
+      <a href="../index.html#grid-advanced">Section 7</a>
       <span class="sep">/</span>
       <span class="current">PersonFun</span>
     </div>
@@ -71,69 +77,68 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;&gt;
-#include &lt;stdexcept&gt;
-#include &quot;Person.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;&gt;</span>
+<span class="tok-pre">#include &lt;stdexcept&gt;</span>
+<span class="tok-pre">#include &quot;Person.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	try {
-		Person person1(&quot;Bob&quot;);
-		Person person2(&quot;Sally&quot;);
-		//Person person3(&quot;John&quot;);
-		Person person4(&quot;William&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-kw">try</span> {
+		Person <span class="tok-fn">person1</span>(&quot;Bob&quot;);
+		Person <span class="tok-fn">person2</span>(&quot;Sally&quot;);
+		<span class="tok-com">//Person person3(&quot;John&quot;);</span>
+		Person <span class="tok-fn">person4</span>(&quot;William&quot;);
 
-		cout &lt;&lt; person1.getName() &lt;&lt; endl;
-		cout &lt;&lt; person2.getName() &lt;&lt; endl;
-		//cout &lt;&lt; person3.getName() &lt;&lt; endl;
-		cout &lt;&lt; person4.getName() &lt;&lt; endl;
+		<span class="tok-type">cout</span> &lt;&lt; person1.<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">cout</span> &lt;&lt; person2.<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-com">//cout &lt;&lt; person3.getName() &lt;&lt; endl;</span>
+		<span class="tok-type">cout</span> &lt;&lt; person4.<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	catch (const runtime_error&amp; err) {
-		cout &lt;&lt; err.what() &lt;&lt; endl;
+	<span class="tok-kw">catch</span> (<span class="tok-kw">const</span> runtime_error&amp; err) {
+		<span class="tok-type">cout</span> &lt;&lt; err.<span class="tok-fn">what</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef PERSON_H
-#define PERSON_H
+          <pre class="code-block"><span class="tok-pre">#ifndef PERSON_H</span>
+<span class="tok-pre">#define PERSON_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Person {
-	public:
-		Person(string name);
-		string getName() const noexcept;
-		void setName(string name);
+<span class="tok-kw">class</span> Person {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Person</span>(<span class="tok-type">string</span> name);
+		<span class="tok-type">string</span> <span class="tok-fn">getName</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">setName</span>(<span class="tok-type">string</span> name);
 
-	private:
-		string name;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> name;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Person.h&quot;
-#include &lt;stdexcept&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Person.h&quot;</span>
+<span class="tok-pre">#include &lt;stdexcept&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-Person::Person(string name) {
-	setName(name);
+Person::<span class="tok-fn">Person</span>(<span class="tok-type">string</span> name) {
+	<span class="tok-fn">setName</span>(name);
 }
 
-string Person::getName() const noexcept {
-	return name;
+<span class="tok-type">string</span> Person::<span class="tok-fn">getName</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> {
+	<span class="tok-kw">return</span> name;
 }
 
-void Person::setName(string name) {
-	if (name != &quot;John&quot;) {
-		this-&gt;name = name;
+<span class="tok-type">void</span> Person::<span class="tok-fn">setName</span>(<span class="tok-type">string</span> name) {
+	<span class="tok-kw">if</span> (name != <span class="tok-str">&quot;John&quot;</span>) {
+		<span class="tok-kw">this</span>-&gt;name = name;
 	}
-	else {
-		throw runtime_error(&quot;John?  That guy is too ugly for an object!&quot;);
+	<span class="tok-kw">else</span> {
+		<span class="tok-kw">throw</span> <span class="tok-fn">runtime_error</span>(&quot;John?  That guy is too ugly <span class="tok-kw">for</span> an object!&quot;);
 	}
 }</pre>
         </div>
@@ -163,7 +168,7 @@ void Person::setName(string name) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

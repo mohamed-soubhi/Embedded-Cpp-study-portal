@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Standard Math Library (&lt;cmath&gt;) vs Integer Fast Approximations - C++ & Embedded Systems Guide</title>
+  <title>Standard Math Library (&lt;cmath&gt;) vs Integer Fast Approximations - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 5</a>
+      <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
       <span class="current">MathFun</span>
     </div>
@@ -69,25 +75,25 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;cmath&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;cmath&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	int powResult = pow(2, 3);
-	int sqrtResult = sqrt(25);
-	int ceilResult = ceil(4.2);
-	int floorResult = floor(4.2);
-	int logResult = log2(512);
+	<span class="tok-type">int</span> powResult = <span class="tok-fn">pow</span>(<span class="tok-num">2</span>, <span class="tok-num">3</span>);
+	<span class="tok-type">int</span> sqrtResult = <span class="tok-fn">sqrt</span>(<span class="tok-num">25</span>);
+	<span class="tok-type">int</span> ceilResult = <span class="tok-fn">ceil</span>(<span class="tok-num">4.2</span>);
+	<span class="tok-type">int</span> floorResult = <span class="tok-fn">floor</span>(<span class="tok-num">4.2</span>);
+	<span class="tok-type">int</span> logResult = <span class="tok-fn">log2</span>(<span class="tok-num">512</span>);
 
-	cout &lt;&lt; &quot;2^3 is &quot; &lt;&lt; powResult &lt;&lt; endl;
-	cout &lt;&lt; &quot;sqrt of 25 is &quot; &lt;&lt; sqrtResult &lt;&lt; endl;
-	cout &lt;&lt; &quot;ceiling of 4.2 is &quot; &lt;&lt; ceilResult &lt;&lt; endl;
-	cout &lt;&lt; &quot;floor of 4.2 is &quot; &lt;&lt; floorResult &lt;&lt; endl;
-	cout &lt;&lt; &quot;log2 of 512 is &quot; &lt;&lt; logResult &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;2^3 is &quot;</span> &lt;&lt; powResult &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;sqrt of 25 is &quot;</span> &lt;&lt; sqrtResult &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;ceiling of 4.2 is &quot;</span> &lt;&lt; ceilResult &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;floor of 4.2 is &quot;</span> &lt;&lt; floorResult &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;log2 of 512 is &quot;</span> &lt;&lt; logResult &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -111,7 +117,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Static Arrays of Pointers &amp; Fixed-Block Allocators - C++ & Embedded Systems Guide</title>
+  <title>Static Arrays of Pointers &amp; Fixed-Block Allocators - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 8</a>
+      <a href="../index.html#grid-advanced">Section 8</a>
       <span class="sep">/</span>
       <span class="current">ExhibitTracker</span>
     </div>
@@ -71,78 +77,77 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Exhibit.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Exhibit.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
 
-int main() {
-	const int EXHIBIT_COUNT = 3;
-	Exhibit* exhibitPtrs[EXHIBIT_COUNT];
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> EXHIBIT_COUNT = <span class="tok-num">3</span>;
+	<span class="tok-type">Exhibit</span>* exhibitPtrs[EXHIBIT_COUNT];
 
-	exhibitPtrs[0] = new Exhibit(&quot;T-Rex Skeleton&quot;, 101, 350.5);
-	exhibitPtrs[1] = new Exhibit(&quot;Ancient Egypt&quot;, 204, 480.25);
-	exhibitPtrs[2] = new Exhibit(&quot;Space Exploration&quot;, 309, 290.75);
+	exhibitPtrs[<span class="tok-num">0</span>] = <span class="tok-kw">new</span> <span class="tok-type">Exhibit</span>(&quot;T-Rex Skeleton&quot;, <span class="tok-num">101</span>, <span class="tok-num">350.5</span>);
+	exhibitPtrs[<span class="tok-num">1</span>] = <span class="tok-kw">new</span> <span class="tok-type">Exhibit</span>(&quot;Ancient Egypt&quot;, <span class="tok-num">204</span>, <span class="tok-num">480.25</span>);
+	exhibitPtrs[<span class="tok-num">2</span>] = <span class="tok-kw">new</span> <span class="tok-type">Exhibit</span>(&quot;Space Exploration&quot;, <span class="tok-num">309</span>, <span class="tok-num">290.75</span>);
 
-	for (int i = 0; i &lt; EXHIBIT_COUNT; i++) {
-		cout &lt;&lt; &quot;Exhibit: &quot; &lt;&lt; exhibitPtrs[i]-&gt;getName() &lt;&lt; endl;
-		cout &lt;&lt; &quot;\tRoom: &quot; &lt;&lt; exhibitPtrs[i]-&gt;getRoomNumber() &lt;&lt; endl;
-		cout &lt;&lt; &quot;\tDisplay Size (sq ft): &quot; &lt;&lt; exhibitPtrs[i]-&gt;getDisplaySize() &lt;&lt; endl;
-		cout &lt;&lt; endl;
-	}//end for
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; EXHIBIT_COUNT; i++) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Exhibit: &quot;</span> &lt;&lt; exhibitPtrs[i]-&gt;<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tRoom: &quot;</span> &lt;&lt; exhibitPtrs[i]-&gt;<span class="tok-fn">getRoomNumber</span>() &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tDisplay Size (sq ft): &quot;</span> &lt;&lt; exhibitPtrs[i]-&gt;<span class="tok-fn">getDisplaySize</span>() &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
+	}<span class="tok-com">//end for</span>
 
-	for (int i = 0; i &lt; EXHIBIT_COUNT; i++) {
-		delete exhibitPtrs[i];
-		exhibitPtrs[i] = nullptr;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; EXHIBIT_COUNT; i++) {
+		<span class="tok-kw">delete</span> exhibitPtrs[i];
+		exhibitPtrs[i] = <span class="tok-kw">nullptr</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef EXHIBIT_H
-#define EXHIBIT_H
+          <pre class="code-block"><span class="tok-pre">#ifndef EXHIBIT_H</span>
+<span class="tok-pre">#define EXHIBIT_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Exhibit {
-	public:
-		Exhibit(string name, int roomNumber, double displaySize);
-		string getName() const;
-		int getRoomNumber() const;
-		double getDisplaySize() const;
+<span class="tok-kw">class</span> <span class="tok-type">Exhibit</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Exhibit</span>(<span class="tok-type">string</span> name, <span class="tok-type">int</span> roomNumber, <span class="tok-type">double</span> displaySize);
+		<span class="tok-type">string</span> <span class="tok-fn">getName</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getRoomNumber</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">getDisplaySize</span>() <span class="tok-kw">const</span>;
 
-	private:
-		string name;
-		int roomNumber;
-		double displaySize;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> name;
+		<span class="tok-type">int</span> roomNumber;
+		<span class="tok-type">double</span> displaySize;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Exhibit.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Exhibit.h&quot;</span>
 
-Exhibit::Exhibit(string name, int roomNumber, double displaySize) {
-	this-&gt;name = name;
-	this-&gt;roomNumber = roomNumber;
-	this-&gt;displaySize = displaySize;
+<span class="tok-type">Exhibit</span>::<span class="tok-type">Exhibit</span>(<span class="tok-type">string</span> name, <span class="tok-type">int</span> roomNumber, <span class="tok-type">double</span> displaySize) {
+	<span class="tok-kw">this</span>-&gt;name = name;
+	<span class="tok-kw">this</span>-&gt;roomNumber = roomNumber;
+	<span class="tok-kw">this</span>-&gt;displaySize = displaySize;
 }
 
-string Exhibit::getName() const {
-	return name;
+<span class="tok-type">string</span> <span class="tok-type">Exhibit</span>::<span class="tok-fn">getName</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> name;
 }
 
-int Exhibit::getRoomNumber() const {
-	return roomNumber;
+<span class="tok-type">int</span> <span class="tok-type">Exhibit</span>::<span class="tok-fn">getRoomNumber</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> roomNumber;
 }
 
-double Exhibit::getDisplaySize() const {
-	return displaySize;
+<span class="tok-type">double</span> <span class="tok-type">Exhibit</span>::<span class="tok-fn">getDisplaySize</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> displaySize;
 }</pre>
         </div>
       </div>
@@ -166,7 +171,7 @@ double Exhibit::getDisplaySize() const {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

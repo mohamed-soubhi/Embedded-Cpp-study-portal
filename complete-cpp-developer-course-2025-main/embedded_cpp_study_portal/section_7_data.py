@@ -124,6 +124,43 @@ extern "C" void HardFault_Handler_C(FaultFrame* frame) {
         <h3>1. Creating Custom Domain Exceptions</h3>
         <p>In standard C++, custom exception classes inherit from <code>std::runtime_error</code> (for runtime issues) or <code>std::logic_error</code> (for precondition violations), overriding the virtual <code>const char* what() const noexcept</code> method.</p>
 
+        <div class="diagram-container">
+          <h4>📐 Exception Inheritance Hierarchy UML</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;std-base&gt;&gt;</span>
+                <span class="uml-class-name">std::exception</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ what() : const char* [virtual]</div>
+                <div class="uml-item public">+ ~exception() [virtual]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;std-runtime&gt;&gt;</span>
+                <span class="uml-class-name">std::runtime_error</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ runtime_error(msg: string)</div>
+                <div class="uml-item public">+ what() : const char* [override]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;custom-domain&gt;&gt;</span>
+                <span class="uml-class-name">AngryCatException</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ AngryCatException()</div>
+                <div class="uml-item public">+ AngryCatException(msg: string)</div>
+                <div class="uml-item public">+ what() : const char* [override]</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Object Slicing in Catch Handlers</h3>
         <p>Always catch exceptions by <strong>const reference</strong> (<code>catch (const std::exception& e)</code>). Catching by value (<code>catch (std::exception e)</code>) slices derived member variables away and destroys polymorphic <code>what()</code> dispatch.</p>
         """,

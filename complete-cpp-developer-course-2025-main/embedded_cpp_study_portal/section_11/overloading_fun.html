@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operator Overloading &amp; Fixed-Point Arithmetic - C++ & Embedded Systems Guide</title>
+  <title>Operator Overloading &amp; Fixed-Point Arithmetic - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">OverloadingFun</span>
     </div>
@@ -72,123 +78,122 @@
         
         <div class="code-panel active" id="file-tab-0">
           <pre class="code-block">
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+<span class="tok-pre">#ifndef RECTANGLE_H</span>
+<span class="tok-pre">#define RECTANGLE_H</span>
 
-class Rectangle {
-	public:
-		Rectangle();
-		Rectangle(double length, double width);
-		double getLength() const;
-		double getWidth() const;
-		void setLength(double length);
-		void setWidth(double width);
-		double area() const;
-		double perimeter() const;
+<span class="tok-kw">class</span> <span class="tok-type">Rectangle</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Rectangle</span>();
+		<span class="tok-type">Rectangle</span>(<span class="tok-type">double</span> length, <span class="tok-type">double</span> width);
+		<span class="tok-type">double</span> <span class="tok-fn">getLength</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">getWidth</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">setLength</span>(<span class="tok-type">double</span> length);
+		<span class="tok-type">void</span> <span class="tok-fn">setWidth</span>(<span class="tok-type">double</span> width);
+		<span class="tok-type">double</span> <span class="tok-fn">area</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">perimeter</span>() <span class="tok-kw">const</span>;
 
-		//overloaded operators
+		<span class="tok-com">//overloaded operators</span>
 
-		bool operator==(const Rectangle&amp; other) const;
-		bool operator!=(const Rectangle&amp; other) const;
-		bool operator&lt;(const Rectangle&amp; other) const;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>==(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>!=(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>&lt;(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span>;
 
-		Rectangle operator+(const Rectangle&amp; other) const;
-		void operator=(const Rectangle&amp; other);
+		<span class="tok-type">Rectangle</span> <span class="tok-kw">operator</span>+(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other);
 
 
 
-	private:
-		double length;
-		double width;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">double</span> length;
+		<span class="tok-type">double</span> width;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;Rectangle.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Rectangle.h&quot;</span>
 
-Rectangle::Rectangle() {
-	length = 1;
-	width = 1;
+<span class="tok-type">Rectangle</span>::<span class="tok-type">Rectangle</span>() {
+	length = <span class="tok-num">1</span>;
+	width = <span class="tok-num">1</span>;
 }
 
-Rectangle::Rectangle(double length, double width) {
-	this-&gt;length = length;
-	this-&gt;width = width;
+<span class="tok-type">Rectangle</span>::<span class="tok-type">Rectangle</span>(<span class="tok-type">double</span> length, <span class="tok-type">double</span> width) {
+	<span class="tok-kw">this</span>-&gt;length = length;
+	<span class="tok-kw">this</span>-&gt;width = width;
 }
 
-double Rectangle::getLength() const {
-	return length;
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">getLength</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> length;
 }
 
-double Rectangle::getWidth() const {
-	return width;
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">getWidth</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> width;
 }
 
-void Rectangle::setLength(double length) {
-	this-&gt;length = length;
+<span class="tok-type">void</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">setLength</span>(<span class="tok-type">double</span> length) {
+	<span class="tok-kw">this</span>-&gt;length = length;
 }
 
-void Rectangle::setWidth(double width) {
-	this-&gt;width = width;
+<span class="tok-type">void</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">setWidth</span>(<span class="tok-type">double</span> width) {
+	<span class="tok-kw">this</span>-&gt;width = width;
 }
 
-double Rectangle::area() const {
-	return length * width;
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">area</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> length * width;
 }
 
-double Rectangle::perimeter() const {
-	return 2 * (length + width);
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">perimeter</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-num">2</span> * (length + width);
 }
 
-bool Rectangle::operator==(const Rectangle&amp; other) const {
-	return length == other.length &amp;&amp; width == other.width;
+<span class="tok-kw">bool</span> <span class="tok-type">Rectangle</span>::<span class="tok-kw">operator</span>==(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> length == other.length &amp;&amp; width == other.width;
 }
 
-bool Rectangle::operator!=(const Rectangle&amp; other) const {
-	return !(*this == other);
+<span class="tok-kw">bool</span> <span class="tok-type">Rectangle</span>::<span class="tok-kw">operator</span>!=(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> !(*<span class="tok-kw">this</span> == other);
 }
 
-bool Rectangle::operator&lt;(const Rectangle &amp; other) const {
-	return this-&gt;area() &lt; other.area();
+<span class="tok-kw">bool</span> <span class="tok-type">Rectangle</span>::<span class="tok-kw">operator</span>&lt;(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span> &amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-kw">this</span>-&gt;<span class="tok-fn">area</span>() &lt; other.<span class="tok-fn">area</span>();
 }
 
-Rectangle Rectangle::operator+(const Rectangle&amp; other) const {
-	return Rectangle(length + other.length, width + other.width);
+<span class="tok-type">Rectangle</span> <span class="tok-type">Rectangle</span>::<span class="tok-kw">operator</span>+(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-type">Rectangle</span>(length + other.length, width + other.width);
 }
 
-void Rectangle::operator=(const Rectangle&amp; other) {
+<span class="tok-type">void</span> <span class="tok-type">Rectangle</span>::<span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> <span class="tok-type">Rectangle</span>&amp; other) {
 	length = other.length;
 	width = other.width;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Rectangle.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Rectangle.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	Rectangle rect1(10, 20);
-	Rectangle rect2(50, 100);
-	Rectangle rect3(10, 20);
-	Rectangle resultRect;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">Rectangle</span> <span class="tok-fn">rect1</span>(<span class="tok-num">10</span>, <span class="tok-num">20</span>);
+	<span class="tok-type">Rectangle</span> <span class="tok-fn">rect2</span>(<span class="tok-num">50</span>, <span class="tok-num">100</span>);
+	<span class="tok-type">Rectangle</span> <span class="tok-fn">rect3</span>(<span class="tok-num">10</span>, <span class="tok-num">20</span>);
+	<span class="tok-type">Rectangle</span> resultRect;
 
-	resultRect = rect1 + rect2;   //rect1.operator+(rect2);
+	resultRect = rect1 + rect2;   <span class="tok-com">//rect1.operator+(rect2);</span>
 
-	cout &lt;&lt; &quot;rect1 == rect3? &quot; &lt;&lt; boolalpha &lt;&lt; (rect1 == rect3) &lt;&lt; endl;
-	cout &lt;&lt; &quot;rect1 != rect2? &quot; &lt;&lt; boolalpha &lt;&lt; (rect1 != rect2) &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;rect1 == rect3? &quot;</span> &lt;&lt; boolalpha &lt;&lt; (rect1 == rect3) &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;rect1 != rect2? &quot;</span> &lt;&lt; boolalpha &lt;&lt; (rect1 != rect2) &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;resultRect: &quot;
-		&lt;&lt; resultRect.getLength() &lt;&lt; &quot; * &quot;
-		&lt;&lt; resultRect.getWidth() &lt;&lt; &quot; = &quot;
-		&lt;&lt; resultRect.area() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;resultRect: &quot;</span>
+		&lt;&lt; resultRect.<span class="tok-fn">getLength</span>() &lt;&lt; <span class="tok-str">&quot; * &quot;</span>
+		&lt;&lt; resultRect.<span class="tok-fn">getWidth</span>() &lt;&lt; <span class="tok-str">&quot; = &quot;</span>
+		&lt;&lt; resultRect.<span class="tok-fn">area</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;rect1 &lt; rect2? &quot; &lt;&lt; boolalpha &lt;&lt; (rect1 &lt; rect2) &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;rect1 &lt; rect2? &quot;</span> &lt;&lt; boolalpha &lt;&lt; (rect1 &lt; rect2) &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 
 }</pre>
         </div>
@@ -207,7 +212,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Fixed-Point Math for Cortex-M0/M3 (No FPU)</h3><p>Microcontrollers without hardware Floating Point Units emulate floats in software, taking dozens of cycles. Overloading operators on fixed-point integer types enables fast arithmetic with clean mathematical syntax.</p>

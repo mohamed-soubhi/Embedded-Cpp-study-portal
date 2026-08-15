@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Integer Division Truncation &amp; Rounding Corrections - C++ & Embedded Systems Guide</title>
+  <title>Integer Division Truncation &amp; Rounding Corrections - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 5</a>
+      <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
       <span class="current">AverageOfThree</span>
     </div>
@@ -69,23 +75,23 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-double average(double a, double b, double c);
+<span class="tok-type">double</span> <span class="tok-fn">average</span>(<span class="tok-type">double</span> a, <span class="tok-type">double</span> b, <span class="tok-type">double</span> c);
 
-int main() {
-	double s1 = 91.2, s2 = 87.8, s3 = 79.6;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">double</span> s1 = <span class="tok-num">91.2</span>, s2 = <span class="tok-num">87.8</span>, s3 = <span class="tok-num">79.6</span>;
 
-	double result = average(s1, s2, s3);
+	<span class="tok-type">double</span> result = <span class="tok-fn">average</span>(s1, s2, s3);
 
-	cout &lt;&lt; &quot;The average score is: &quot; &lt;&lt; result &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;The average score is: &quot;</span> &lt;&lt; result &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-double average(double a, double b, double c) {
-	return (a + b + c) / 3;
+<span class="tok-type">double</span> <span class="tok-fn">average</span>(<span class="tok-type">double</span> a, <span class="tok-type">double</span> b, <span class="tok-type">double</span> c) {
+	<span class="tok-kw">return</span> (a + b + c) / <span class="tok-num">3</span>;
 }</pre>
         </div>
       </div>
@@ -109,7 +115,7 @@ double average(double a, double b, double c) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

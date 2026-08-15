@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>std::vector Dynamic Growth &amp; Heap Reallocation Penalties - C++ & Embedded Systems Guide</title>
+  <title>std::vector Dynamic Growth &amp; Heap Reallocation Penalties - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 4</a>
+      <a href="../index.html#grid-foundations">Section 4</a>
       <span class="sep">/</span>
       <span class="current">VectorFun</span>
     </div>
@@ -69,50 +75,50 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;vector&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	vector&lt;int&gt; someVec;
-	vector&lt;string&gt; anotherVec(3);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; someVec;
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">string</span>&gt; <span class="tok-fn">anotherVec</span>(<span class="tok-num">3</span>);
 
-	someVec.push_back(1);
-	someVec.push_back(2);
-	someVec.push_back(3);
+	someVec.<span class="tok-fn">push_back</span>(<span class="tok-num">1</span>);
+	someVec.<span class="tok-fn">push_back</span>(<span class="tok-num">2</span>);
+	someVec.<span class="tok-fn">push_back</span>(<span class="tok-num">3</span>);
 
-	cout &lt;&lt; &quot;someVec size: &quot; &lt;&lt; someVec.size() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;someVec size: &quot;</span> &lt;&lt; someVec.<span class="tok-fn">size</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	anotherVec[0] = &quot;John&quot;;
-	anotherVec[1] = &quot;Bob&quot;;
-	anotherVec[2] = &quot;Sally&quot;;
+	anotherVec[<span class="tok-num">0</span>] = <span class="tok-str">&quot;John&quot;</span>;
+	anotherVec[<span class="tok-num">1</span>] = <span class="tok-str">&quot;Bob&quot;</span>;
+	anotherVec[<span class="tok-num">2</span>] = <span class="tok-str">&quot;Sally&quot;</span>;
 
-	anotherVec.push_back(&quot;Shannon&quot;);
+	anotherVec.<span class="tok-fn">push_back</span>(&quot;Shannon&quot;);
 
-	for (int val : someVec) {
-		cout &lt;&lt; val &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> val : someVec) {
+		<span class="tok-type">cout</span> &lt;&lt; val &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	cout &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	for (string name : anotherVec) {
-		cout &lt;&lt; name &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-type">string</span> name : anotherVec) {
+		<span class="tok-type">cout</span> &lt;&lt; name &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	cout &lt;&lt; endl;
-	cout &lt;&lt; &quot;Front and back of anotherVec:&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;front: &quot; &lt;&lt; anotherVec.front() &lt;&lt; endl;
-	cout &lt;&lt; &quot;back: &quot; &lt;&lt; anotherVec.back() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Front and back of anotherVec:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;front: &quot;</span> &lt;&lt; anotherVec.<span class="tok-fn">front</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;back: &quot;</span> &lt;&lt; anotherVec.<span class="tok-fn">back</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	anotherVec.pop_back();
-	anotherVec.insert(anotherVec.begin(), &quot;Don&quot;);
+	anotherVec.<span class="tok-fn">pop_back</span>();
+	anotherVec.<span class="tok-fn">insert</span>(anotherVec.<span class="tok-fn">begin</span>(), <span class="tok-str">&quot;Don&quot;</span>);
 
-	cout &lt;&lt; &quot;\nAfter modification: &quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;front: &quot; &lt;&lt; anotherVec.front() &lt;&lt; endl;
-	cout &lt;&lt; &quot;back: &quot; &lt;&lt; anotherVec.back() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nAfter modification: &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;front: &quot;</span> &lt;&lt; anotherVec.<span class="tok-fn">front</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;back: &quot;</span> &lt;&lt; anotherVec.<span class="tok-fn">back</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -139,7 +145,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

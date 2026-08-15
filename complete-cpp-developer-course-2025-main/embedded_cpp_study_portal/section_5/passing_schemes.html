@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Passing Schemes: Pass-by-Value, Reference &amp; Const Reference - C++ & Embedded Systems Guide</title>
+  <title>Passing Schemes: Pass-by-Value, Reference &amp; Const Reference - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 5</a>
+      <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
       <span class="current">PassingSchemes</span>
     </div>
@@ -69,38 +75,38 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void valueChanged1(int someNum);
-void valueChanged2(int&amp; someNum);  // &amp; means &#x27;pass by reference&#x27;
+<span class="tok-type">void</span> <span class="tok-fn">valueChanged1</span>(<span class="tok-type">int</span> someNum);
+<span class="tok-type">void</span> <span class="tok-fn">valueChanged2</span>(<span class="tok-type">int</span>&amp; someNum);  <span class="tok-com">// &amp; means &#x27;pass by reference&#x27;</span>
 
-int main() {
-	int myNumber = 20;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">int</span> myNumber = <span class="tok-num">20</span>;
 
-	cout &lt;&lt; &quot;Before valueChanged1 call, myNumber is &quot; &lt;&lt; myNumber &lt;&lt; endl;
-	valueChanged1(myNumber);
-	cout &lt;&lt; &quot;After valueChanged1 call, myNumber is &quot; &lt;&lt; myNumber &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Before valueChanged1 call, myNumber is &quot;</span> &lt;&lt; myNumber &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">valueChanged1</span>(myNumber);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;After valueChanged1 call, myNumber is &quot;</span> &lt;&lt; myNumber &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;\n-------------------------------------------\n&quot;;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\n-------------------------------------------\n&quot;</span>;
 
-	cout &lt;&lt; &quot;Before valueChanged2 call, myNumber is &quot; &lt;&lt; myNumber &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Before valueChanged2 call, myNumber is &quot;</span> &lt;&lt; myNumber &lt;&lt; <span class="tok-type">endl</span>;
 
-	valueChanged2(myNumber);
+	<span class="tok-fn">valueChanged2</span>(myNumber);
 
-	cout &lt;&lt; &quot;After valueChanged2 call, myNumber is &quot; &lt;&lt; myNumber &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;After valueChanged2 call, myNumber is &quot;</span> &lt;&lt; myNumber &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void valueChanged1(int someNum) {
-	someNum = 100;
-	cout &lt;&lt; &quot;Inside valueChanged1, someNum is &quot; &lt;&lt; someNum &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">valueChanged1</span>(<span class="tok-type">int</span> someNum) {
+	someNum = <span class="tok-num">100</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Inside valueChanged1, someNum is &quot;</span> &lt;&lt; someNum &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-void valueChanged2(int&amp; someNum) {
-	someNum = 100;
-	cout &lt;&lt; &quot;Inside valueChanged2, someNum is &quot; &lt;&lt; someNum &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">valueChanged2</span>(<span class="tok-type">int</span>&amp; someNum) {
+	someNum = <span class="tok-num">100</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Inside valueChanged2, someNum is &quot;</span> &lt;&lt; someNum &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -127,7 +133,7 @@ void valueChanged2(int&amp; someNum) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

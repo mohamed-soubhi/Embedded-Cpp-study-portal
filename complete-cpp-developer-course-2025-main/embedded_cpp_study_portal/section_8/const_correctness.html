@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Const Pointers, ROM-ability &amp; Flash Memory (.rodata) - C++ & Embedded Systems Guide</title>
+  <title>Const Pointers, ROM-ability &amp; Flash Memory (.rodata) - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 8</a>
+      <a href="../index.html#grid-advanced">Section 8</a>
       <span class="sep">/</span>
       <span class="current">ConstCorrectness</span>
     </div>
@@ -69,114 +75,113 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void noChange(const double* const someValue);
+<span class="tok-type">void</span> <span class="tok-fn">noChange</span>(<span class="tok-kw">const</span> <span class="tok-type">double</span>* <span class="tok-kw">const</span> someValue);
 
-void noConst();
-void cp2ncd();
-void ncp2cd();
-void cp2cd();
+<span class="tok-type">void</span> <span class="tok-fn">noConst</span>();
+<span class="tok-type">void</span> <span class="tok-fn">cp2ncd</span>();
+<span class="tok-type">void</span> <span class="tok-fn">ncp2cd</span>();
+<span class="tok-type">void</span> <span class="tok-fn">cp2cd</span>();
 
 
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	double* myDubz = new double(5.25);
+	<span class="tok-type">double</span>* myDubz = <span class="tok-kw">new</span> <span class="tok-type">double</span>(<span class="tok-num">5.25</span>);
 
-	noConst();
-	cout &lt;&lt; endl;
+	<span class="tok-fn">noConst</span>();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	cp2ncd();
-	cout &lt;&lt; endl;
+	<span class="tok-fn">cp2ncd</span>();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	ncp2cd();
-	cout &lt;&lt; endl;
+	<span class="tok-fn">ncp2cd</span>();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	cp2cd();
-	cout &lt;&lt; endl;
+	<span class="tok-fn">cp2cd</span>();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	noChange(myDubz);
+	<span class="tok-fn">noChange</span>(myDubz);
 
-	delete myDubz;
-	myDubz = nullptr;
+	<span class="tok-kw">delete</span> myDubz;
+	myDubz = <span class="tok-kw">nullptr</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void noChange(const double* const someValue) {
-	cout &lt;&lt; *someValue &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">noChange</span>(<span class="tok-kw">const</span> <span class="tok-type">double</span>* <span class="tok-kw">const</span> someValue) {
+	<span class="tok-type">cout</span> &lt;&lt; *someValue &lt;&lt; <span class="tok-type">endl</span>;
 }
 
 
-//1. non-const pointer to non-const data
-void noConst() {
-	cout &lt;&lt; &quot;In noConst&quot; &lt;&lt; endl;
+<span class="tok-com">//1. non-const pointer to non-const data</span>
+<span class="tok-type">void</span> <span class="tok-fn">noConst</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;In noConst&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	int* intPtr = new int(50);
-	cout &lt;&lt; &quot;\toriginal value:&quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	<span class="tok-type">int</span>* intPtr = <span class="tok-kw">new</span> <span class="tok-type">int</span>(<span class="tok-num">50</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\toriginal value:&quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	*intPtr = 100;
-	cout &lt;&lt; &quot;\tchanged data: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	*intPtr = <span class="tok-num">100</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tchanged data: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	delete intPtr;
+	<span class="tok-kw">delete</span> intPtr;
 
-	intPtr = new int(125);
-	cout &lt;&lt; &quot;\tnew int entirely: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	intPtr = <span class="tok-kw">new</span> <span class="tok-type">int</span>(<span class="tok-num">125</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tnew int entirely: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	delete intPtr;
+	<span class="tok-kw">delete</span> intPtr;
 
 }
 
-// 2. const pointer to non-const data
-void cp2ncd() {
-	cout &lt;&lt; &quot;In cp2ncd&quot; &lt;&lt; endl;
+<span class="tok-com">// 2. const pointer to non-const data</span>
+<span class="tok-type">void</span> <span class="tok-fn">cp2ncd</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;In cp2ncd&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	int* const intPtr = new int(100);
+	<span class="tok-type">int</span>* <span class="tok-kw">const</span> intPtr = <span class="tok-kw">new</span> <span class="tok-type">int</span>(<span class="tok-num">100</span>);
 
-	cout &lt;&lt; &quot;\toriginal value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\toriginal value: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	*intPtr = 250;
-	cout &lt;&lt; &quot;\tmodified value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	*intPtr = <span class="tok-num">250</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tmodified value: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	// intPtr = new int(222);   
+	<span class="tok-com">// intPtr = new int(222);   </span>
 	
-	delete intPtr;
+	<span class="tok-kw">delete</span> intPtr;
 	
 }
 
-// 3. non-const pointer to const data
-void ncp2cd() {
-	cout &lt;&lt; &quot;In ncp2cd&quot; &lt;&lt; endl;
+<span class="tok-com">// 3. non-const pointer to const data</span>
+<span class="tok-type">void</span> <span class="tok-fn">ncp2cd</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;In ncp2cd&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	const int* intPtr = new int(500);
-	cout &lt;&lt; &quot;\toriginal value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span>* intPtr = <span class="tok-kw">new</span> <span class="tok-type">int</span>(<span class="tok-num">500</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\toriginal value: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	// *intPtr = 600;  
+	<span class="tok-com">// *intPtr = 600;  </span>
 
-	delete intPtr;
+	<span class="tok-kw">delete</span> intPtr;
 
-	intPtr = new int(1000);  //pointer can change!
-	cout &lt;&lt; &quot;\tnew value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	intPtr = <span class="tok-kw">new</span> <span class="tok-type">int</span>(<span class="tok-num">1000</span>);  <span class="tok-com">//pointer can change!</span>
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\tnew value: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	delete intPtr;
+	<span class="tok-kw">delete</span> intPtr;
 }
 
-// 4. const pointer to const data
-void cp2cd() {
-	cout &lt;&lt; &quot;In cp2cd&quot; &lt;&lt; endl;
+<span class="tok-com">// 4. const pointer to const data</span>
+<span class="tok-type">void</span> <span class="tok-fn">cp2cd</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;In cp2cd&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	const int* const intPtr = new int(5000);
+	<span class="tok-kw">const</span> <span class="tok-type">int</span>* <span class="tok-kw">const</span> intPtr = <span class="tok-kw">new</span> <span class="tok-type">int</span>(<span class="tok-num">5000</span>);
 
-	cout &lt;&lt; &quot;\toriginal value: &quot; &lt;&lt; *intPtr &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\toriginal value: &quot;</span> &lt;&lt; *intPtr &lt;&lt; <span class="tok-type">endl</span>;
 
-	//  *intPtr = 6000;    // can&#x27;t do this, the data is constant
-	// intPtr = new int(6000);  //can&#x27;t do this, the pointer is constant
+	<span class="tok-com">//  *intPtr = 6000;    // can&#x27;t do this, the data is constant</span>
+	<span class="tok-com">// intPtr = new int(6000);  //can&#x27;t do this, the pointer is constant</span>
 
-	delete intPtr;
+	<span class="tok-kw">delete</span> intPtr;
 }
-
 </pre>
         </div>
       </div>
@@ -205,7 +210,7 @@ void cp2cd() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

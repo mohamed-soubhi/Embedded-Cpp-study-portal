@@ -162,6 +162,50 @@ constexpr GpioPin operator|(GpioPin a, GpioPin b) noexcept {
         <h3>1. Virtual Functions & Dynamic Dispatch</h3>
         <p>Declaring a method <code>virtual</code> instructs the compiler to perform dynamic dispatch at runtime via a <strong>Virtual Method Table (VTable)</strong>, enabling polymorphic behavior when calling methods through base class pointers.</p>
 
+        <div class="diagram-container">
+          <h4>📐 Polymorphic UML Class Hierarchy</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;abstract&gt;&gt;</span>
+                <span class="uml-class-name">Animal</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item protected"># name : string</div>
+                <div class="uml-item protected"># weight : double</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ makeNoise() : void = 0</div>
+                <div class="uml-item public">+ eat() : void</div>
+                <div class="uml-item public">+ ~Animal() [virtual]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;derived&gt;&gt;</span>
+                <span class="uml-class-name">Dog : public Animal</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item private">- breed : string</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ makeNoise() : void [override]</div>
+                <div class="uml-item public">+ chaseCat() : void</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;derived&gt;&gt;</span>
+                <span class="uml-class-name">Cat : public Animal</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ makeNoise() : void [override]</div>
+                <div class="uml-item public">+ chaseMouse() : void</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Pure Virtual Functions & Abstract Classes</h3>
         <p>Declaring a method with <code>= 0</code> creates an Abstract Base Class (interface) that cannot be instantiated directly, enforcing contract compliance across derived classes.</p>
         """,
@@ -258,6 +302,54 @@ public:
         "concepts_html": """
         <h3>1. Member Initializer Lists</h3>
         <p>Initializing member variables in constructor initialization lists directly initializes members rather than default-constructing and then assigning, eliminating redundant operations.</p>
+
+        <div class="diagram-container">
+          <h4>📐 RPG Class Hierarchy UML Architecture</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;base&gt;&gt;</span>
+                <span class="uml-class-name">Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item protected"># name : string</div>
+                <div class="uml-item protected"># hitPoints : int</div>
+                <div class="uml-item protected"># magicPoints : int</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [virtual]</div>
+                <div class="uml-item public">+ ~Player() [virtual]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;specialization&gt;&gt;</span>
+                <span class="uml-class-name">Warrior : public Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [override]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;specialization&gt;&gt;</span>
+                <span class="uml-class-name">Mage : public Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [override]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;specialization&gt;&gt;</span>
+                <span class="uml-class-name">Priest : public Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [override]</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <h3>2. Virtual Destructors</h3>
         <p>When deleting a derived class object through a base class pointer (<code>Base* ptr = new Derived(); delete ptr;</code>), the base class destructor <strong>must be virtual</strong>; otherwise, the derived class destructor is not called, causing silent resource leaks.</p>

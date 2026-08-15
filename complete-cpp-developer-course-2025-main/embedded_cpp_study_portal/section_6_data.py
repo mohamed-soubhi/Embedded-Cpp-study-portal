@@ -25,6 +25,30 @@ SECTION_6_PROJECTS = [
         <h3>1. Classes vs Structs in C++</h3>
         <p>In C++, the only difference between <code>class</code> and <code>struct</code> is the default access level: members and base classes default to <strong>private</strong> in a class, and <strong>public</strong> in a struct.</p>
 
+        <div class="diagram-container">
+          <h4>📐 Book Class UML Architecture</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;entity&gt;&gt;</span>
+                <span class="uml-class-name">Book</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item private">- author : string</div>
+                <div class="uml-item private">- title : string</div>
+                <div class="uml-item private">- numPages : int</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ Book(author, title, numPages)</div>
+                <div class="uml-item public">+ printBookDetails() : void</div>
+                <div class="uml-item public">+ getAuthor() : string const</div>
+                <div class="uml-item public">+ getTitle() : string const</div>
+                <div class="uml-item public">+ getNumPages() : int const</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Encapsulation & Invariants</h3>
         <p>Private member variables enforce data hiding; public member functions validate inputs and preserve object invariants.</p>
         """,
@@ -114,6 +138,30 @@ public:
         "concepts_html": """
         <h3>1. Member Initializer Lists vs Body Assignment</h3>
         <p>In a constructor, member initializer lists (<code>Rectangle::Rectangle(double l, double w) : length(l), width(w) {}</code>) initialize members directly when memory is allocated, avoiding double-initialization overhead.</p>
+
+        <div class="diagram-container">
+          <h4>📐 Rectangle Class UML Architecture</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;value-object&gt;&gt;</span>
+                <span class="uml-class-name">Rectangle</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item private">- length : double</div>
+                <div class="uml-item private">- width : double</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ Rectangle()</div>
+                <div class="uml-item public">+ Rectangle(l: double, w: double)</div>
+                <div class="uml-item public">+ getLength() : double const</div>
+                <div class="uml-item public">+ getWidth() : double const</div>
+                <div class="uml-item public">+ area() : double const</div>
+                <div class="uml-item public">+ perimeter() : double const</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <h3>2. <code>const</code> Member Functions</h3>
         <p>Methods that do not modify class state (<code>getLength() const</code>, <code>area() const</code>) must be marked <code>const</code>, allowing them to be called on const objects in Flash ROM.</p>

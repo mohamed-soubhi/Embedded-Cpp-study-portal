@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multiple Object Instances &amp; Memory Stride in SRAM - C++ & Embedded Systems Guide</title>
+  <title>Multiple Object Instances &amp; Memory Stride in SRAM - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 6</a>
+      <a href="../index.html#grid-foundations">Section 6</a>
       <span class="sep">/</span>
       <span class="current">Houses</span>
     </div>
@@ -71,133 +77,132 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &quot;House.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &quot;House.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
 
-int main() {
-	//House myHouse;
-	House theirHouse(2, 10, &quot;green&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-com">//House myHouse;</span>
+	<span class="tok-type">House</span> <span class="tok-fn">theirHouse</span>(<span class="tok-num">2</span>, <span class="tok-num">10</span>, <span class="tok-str">&quot;green&quot;</span>);
 
-	theirHouse.print();
+	theirHouse.<span class="tok-fn">print</span>();
 
-	//cout &lt;&lt; &quot;Before calling any setters...&quot; &lt;&lt; endl;
-	//myHouse.print();
+	<span class="tok-com">//cout &lt;&lt; &quot;Before calling any setters...&quot; &lt;&lt; endl;</span>
+	<span class="tok-com">//myHouse.print();</span>
 
-	////now call settings
-	//myHouse.setNumStories(2);
-	//myHouse.setNumWindows(6);
-	//myHouse.setColor(&quot;red&quot;);
+	<span class="tok-com">////now call settings</span>
+	<span class="tok-com">//myHouse.setNumStories(2);</span>
+	<span class="tok-com">//myHouse.setNumWindows(6);</span>
+	<span class="tok-com">//myHouse.setColor(&quot;red&quot;);</span>
 
-	//cout &lt;&lt; &quot;\nAfter calling setters...&quot; &lt;&lt; endl;
-	//myHouse.print();
+	<span class="tok-com">//cout &lt;&lt; &quot;\nAfter calling setters...&quot; &lt;&lt; endl;</span>
+	<span class="tok-com">//myHouse.print();</span>
 
-	//House yourHouse;
-	//House myHouse;
+	<span class="tok-com">//House yourHouse;</span>
+	<span class="tok-com">//House myHouse;</span>
 
-	/*myHouse.setNumStories(2);
-	myHouse.setNumWindows(6);
-	myHouse.setColor(&quot;red&quot;);
+	<span class="tok-com">/*myHouse.setNumStories(2);</span>
+<span class="tok-com">	myHouse.setNumWindows(6);</span>
+<span class="tok-com">	myHouse.setColor(&quot;red&quot;);</span>
+<span class="tok-com"></span>
+<span class="tok-com">	yourHouse.setNumStories(3);</span>
+<span class="tok-com">	yourHouse.setNumWindows(10);</span>
+<span class="tok-com">	yourHouse.setColor(&quot;blue&quot;);</span>
+<span class="tok-com"></span>
+<span class="tok-com">	myHouse.print();</span>
+<span class="tok-com">	yourHouse.print();*/</span>
 
-	yourHouse.setNumStories(3);
-	yourHouse.setNumWindows(10);
-	yourHouse.setColor(&quot;blue&quot;);
-
-	myHouse.print();
-	yourHouse.print();*/
 
 
-
-	return 0;
-}
-</pre>
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef HOUSE_H
-#define HOUSE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef HOUSE_H</span>
+<span class="tok-pre">#define HOUSE_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class House {
-	public:
-		House();
-		House(int numStories, int numWindows, string color);
-		virtual ~House();
-		void setNumStories(int numStories);
-		void setNumWindows(int numWindows);
-		void setColor(string color);
-		int getNumStories() const;
-		int getNumWindows() const;
-		string getColor() const;
-		void print() const;
+<span class="tok-kw">class</span> <span class="tok-type">House</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">House</span>();
+		<span class="tok-type">House</span>(<span class="tok-type">int</span> numStories, <span class="tok-type">int</span> numWindows, <span class="tok-type">string</span> color);
+		<span class="tok-kw">virtual</span> ~<span class="tok-type">House</span>();
+		<span class="tok-type">void</span> <span class="tok-fn">setNumStories</span>(<span class="tok-type">int</span> numStories);
+		<span class="tok-type">void</span> <span class="tok-fn">setNumWindows</span>(<span class="tok-type">int</span> numWindows);
+		<span class="tok-type">void</span> <span class="tok-fn">setColor</span>(<span class="tok-type">string</span> color);
+		<span class="tok-type">int</span> <span class="tok-fn">getNumStories</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getNumWindows</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">getColor</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">print</span>() <span class="tok-kw">const</span>;
 
-	private:
-		int numStories;
-		int numWindows;
-		string color;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span> numStories;
+		<span class="tok-type">int</span> numWindows;
+		<span class="tok-type">string</span> color;
 };
 
 
-#endif</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;House.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;House.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
 
-House::House() {
-	this-&gt;numStories = 1;
-	this-&gt;numWindows = 4;
-	this-&gt;color = &quot;white&quot;;
-}//end no-arg ctor
+<span class="tok-type">House</span>::<span class="tok-type">House</span>() {
+	<span class="tok-kw">this</span>-&gt;numStories = <span class="tok-num">1</span>;
+	<span class="tok-kw">this</span>-&gt;numWindows = <span class="tok-num">4</span>;
+	<span class="tok-kw">this</span>-&gt;color = <span class="tok-str">&quot;white&quot;</span>;
+}<span class="tok-com">//end no-arg ctor</span>
 
-House::House(int numStories, int numWindows, string color) {
-	this-&gt;numStories = numStories;
-	this-&gt;numWindows = numWindows;
-	this-&gt;color = color;
-}//end parameterized ctor
+<span class="tok-type">House</span>::<span class="tok-type">House</span>(<span class="tok-type">int</span> numStories, <span class="tok-type">int</span> numWindows, <span class="tok-type">string</span> color) {
+	<span class="tok-kw">this</span>-&gt;numStories = numStories;
+	<span class="tok-kw">this</span>-&gt;numWindows = numWindows;
+	<span class="tok-kw">this</span>-&gt;color = color;
+}<span class="tok-com">//end parameterized ctor</span>
 
 
-House::~House() {
-	cout &lt;&lt; &quot;The &quot; &lt;&lt; color &lt;&lt; &quot; house with &quot; &lt;&lt; numStories &lt;&lt; &quot; stories&quot;
-		&lt;&lt; &quot; and &quot; &lt;&lt; numWindows &lt;&lt; &quot; windows is being destroyed!&quot; &lt;&lt; endl;
+<span class="tok-type">House</span>::~<span class="tok-type">House</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;The &quot;</span> &lt;&lt; color &lt;&lt; <span class="tok-str">&quot; house with &quot;</span> &lt;&lt; numStories &lt;&lt; <span class="tok-str">&quot; stories&quot;</span>
+		&lt;&lt; <span class="tok-str">&quot; and &quot;</span> &lt;&lt; numWindows &lt;&lt; <span class="tok-str">&quot; windows is being destroyed!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-void House::setNumStories(int numStories) {
-	this-&gt;numStories = numStories;
+<span class="tok-type">void</span> <span class="tok-type">House</span>::<span class="tok-fn">setNumStories</span>(<span class="tok-type">int</span> numStories) {
+	<span class="tok-kw">this</span>-&gt;numStories = numStories;
 }
 
-void House::setNumWindows(int numWindows) {
-	this-&gt;numWindows = numWindows;
+<span class="tok-type">void</span> <span class="tok-type">House</span>::<span class="tok-fn">setNumWindows</span>(<span class="tok-type">int</span> numWindows) {
+	<span class="tok-kw">this</span>-&gt;numWindows = numWindows;
 }
 
-void House::setColor(string color) {
-	this-&gt;color = color;
+<span class="tok-type">void</span> <span class="tok-type">House</span>::<span class="tok-fn">setColor</span>(<span class="tok-type">string</span> color) {
+	<span class="tok-kw">this</span>-&gt;color = color;
 }
 
-int House::getNumStories() const {
-	return numStories;
+<span class="tok-type">int</span> <span class="tok-type">House</span>::<span class="tok-fn">getNumStories</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> numStories;
 }
 
-int House::getNumWindows() const {
-	return numWindows;
+<span class="tok-type">int</span> <span class="tok-type">House</span>::<span class="tok-fn">getNumWindows</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> numWindows;
 }
 
-string House::getColor() const {
-	return color;
+<span class="tok-type">string</span> <span class="tok-type">House</span>::<span class="tok-fn">getColor</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> color;
 }
 
-void House::print() const {
-	cout &lt;&lt; &quot;The house is &quot; &lt;&lt; color
-		&lt;&lt; &quot; and has &quot; &lt;&lt; numStories
-		&lt;&lt; &quot; stories and &quot; &lt;&lt; numWindows
-		&lt;&lt; &quot; windows.&quot; &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-type">House</span>::<span class="tok-fn">print</span>() <span class="tok-kw">const</span> {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;The house is &quot;</span> &lt;&lt; color
+		&lt;&lt; <span class="tok-str">&quot; and has &quot;</span> &lt;&lt; numStories
+		&lt;&lt; <span class="tok-str">&quot; stories and &quot;</span> &lt;&lt; numWindows
+		&lt;&lt; <span class="tok-str">&quot; windows.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -218,7 +223,7 @@ void House::print() const {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polymorphism &amp; VTable Mechanics - C++ & Embedded Systems Guide</title>
+  <title>Polymorphism &amp; VTable Mechanics - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 10</a>
+      <a href="../index.html#grid-advanced">Section 10</a>
       <span class="sep">/</span>
       <span class="current">AnimalFun</span>
     </div>
@@ -75,188 +81,185 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Animal.h&quot;
-#include &quot;Dog.h&quot;
-#include &quot;Cat.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Animal.h&quot;</span>
+<span class="tok-pre">#include &quot;Dog.h&quot;</span>
+<span class="tok-pre">#include &quot;Cat.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	Dog dog(&quot;Rover&quot;, 80, &quot;Greyhound&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">Dog</span> <span class="tok-fn">dog</span>(&quot;Rover<span class="tok-str">&quot;, 80, &quot;</span>Greyhound&quot;);
 
-	//Here is the key line:
-	Animal* dogPtr = new Dog(&quot;Fido&quot;, 115, &quot;Golden Retriever&quot;);
-	Animal* catPtr = new Cat(&quot;Felix&quot;, 12);
+	<span class="tok-com">//Here is the key line:</span>
+	<span class="tok-type">Animal</span>* dogPtr = <span class="tok-kw">new</span> <span class="tok-type">Dog</span>(&quot;Fido<span class="tok-str">&quot;, 115, &quot;</span>Golden Retriever&quot;);
+	<span class="tok-type">Animal</span>* catPtr = <span class="tok-kw">new</span> <span class="tok-type">Cat</span>(&quot;Felix&quot;, <span class="tok-num">12</span>);
 
-	cout &lt;&lt; &quot;Dog says: &quot; &lt;&lt; dogPtr-&gt;makeNoise() &lt;&lt; endl;
-	cout &lt;&lt; &quot;Dog eats: &quot; &lt;&lt; dogPtr-&gt;eat() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Dog says: &quot;</span> &lt;&lt; dogPtr-&gt;<span class="tok-fn">makeNoise</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Dog eats: &quot;</span> &lt;&lt; dogPtr-&gt;<span class="tok-fn">eat</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;Cat says: &quot; &lt;&lt; catPtr-&gt;makeNoise() &lt;&lt; endl;
-	cout &lt;&lt; &quot;Cat eats: &quot; &lt;&lt; catPtr-&gt;eat() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Cat says: &quot;</span> &lt;&lt; catPtr-&gt;<span class="tok-fn">makeNoise</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Cat eats: &quot;</span> &lt;&lt; catPtr-&gt;<span class="tok-fn">eat</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
 
-	// (Cat*)catPtr or reinterpret_cat&lt;Cat*&gt;(catPtr)
-	Cat* realCat = dynamic_cast&lt;Cat*&gt;(catPtr);
-	if (realCat) {
-		realCat-&gt;chaseMouse();
+	<span class="tok-com">// (Cat*)catPtr or reinterpret_cat&lt;Cat*&gt;(catPtr)</span>
+	<span class="tok-type">Cat</span>* realCat = <span class="tok-kw">dynamic_cast</span>&lt;<span class="tok-type">Cat</span>*&gt;(catPtr);
+	<span class="tok-kw">if</span> (realCat) {
+		realCat-&gt;<span class="tok-fn">chaseMouse</span>();
 	}
 
-	delete dogPtr;
-	dogPtr = nullptr;
+	<span class="tok-kw">delete</span> dogPtr;
+	dogPtr = <span class="tok-kw">nullptr</span>;
 
-	delete catPtr;
-	catPtr = nullptr;
+	<span class="tok-kw">delete</span> catPtr;
+	catPtr = <span class="tok-kw">nullptr</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef ANIMAL_H
-#define ANIMAL_H
+          <pre class="code-block"><span class="tok-pre">#ifndef ANIMAL_H</span>
+<span class="tok-pre">#define ANIMAL_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Animal {
+<span class="tok-kw">class</span> <span class="tok-type">Animal</span> {
 
-	public:
-		Animal(string name, double weight);
-		string getName() const;
-		void setName(string name);
-		double getWeight() const;
-		void setWeight(double weight);
-		virtual string makeNoise() const = 0;
-		virtual string eat() const = 0;
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Animal</span>(<span class="tok-type">string</span> name, <span class="tok-type">double</span> weight);
+		<span class="tok-type">string</span> <span class="tok-fn">getName</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">setName</span>(<span class="tok-type">string</span> name);
+		<span class="tok-type">double</span> <span class="tok-fn">getWeight</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">setWeight</span>(<span class="tok-type">double</span> weight);
+		<span class="tok-kw">virtual</span> <span class="tok-type">string</span> <span class="tok-fn">makeNoise</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">string</span> <span class="tok-fn">eat</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
 
-	private:
-		string name;
-		double weight;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> name;
+		<span class="tok-type">double</span> weight;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Animal.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Animal.h&quot;</span>
 
 
-Animal::Animal(string name, double weight) {
-	this-&gt;name = name;
-	this-&gt;weight = weight;
+<span class="tok-type">Animal</span>::<span class="tok-type">Animal</span>(<span class="tok-type">string</span> name, <span class="tok-type">double</span> weight) {
+	<span class="tok-kw">this</span>-&gt;name = name;
+	<span class="tok-kw">this</span>-&gt;weight = weight;
 }
 
-string Animal::getName() const {
-	return name;
+<span class="tok-type">string</span> <span class="tok-type">Animal</span>::<span class="tok-fn">getName</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> name;
 }
 
-void Animal::setName(string name) {
-	this-&gt;name = name;
+<span class="tok-type">void</span> <span class="tok-type">Animal</span>::<span class="tok-fn">setName</span>(<span class="tok-type">string</span> name) {
+	<span class="tok-kw">this</span>-&gt;name = name;
 }
 
-double Animal::getWeight() const {
-	return weight;
+<span class="tok-type">double</span> <span class="tok-type">Animal</span>::<span class="tok-fn">getWeight</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> weight;
 }
 
-void Animal::setWeight(double weight) {
-	this-&gt;weight = weight;
+<span class="tok-type">void</span> <span class="tok-type">Animal</span>::<span class="tok-fn">setWeight</span>(<span class="tok-type">double</span> weight) {
+	<span class="tok-kw">this</span>-&gt;weight = weight;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-3">
-          <pre class="code-block">#ifndef DOG_H
-#define DOG_H
-#include &lt;string&gt;
-#include &quot;Animal.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#ifndef DOG_H</span>
+<span class="tok-pre">#define DOG_H</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &quot;Animal.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Dog : public Animal {
-	public:
-		Dog(string name, double weight, string breed);
-		string getBreed() const;
-		void digHole() const;
-		string makeNoise() const override;
-		void chaseCat() const;
-		string eat() const override;
+<span class="tok-kw">class</span> <span class="tok-type">Dog</span> : <span class="tok-kw">public</span> <span class="tok-type">Animal</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Dog</span>(<span class="tok-type">string</span> name, <span class="tok-type">double</span> weight, <span class="tok-type">string</span> breed);
+		<span class="tok-type">string</span> <span class="tok-fn">getBreed</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">digHole</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">makeNoise</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">chaseCat</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">eat</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span>;
 
-	private:
-		string breed;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> breed;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-4">
-          <pre class="code-block">#include &quot;Dog.h&quot;
-#include &lt;iostream&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Dog.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-Dog::Dog(string name, double weight, string breed) : Animal(name, weight)  {
-	this-&gt;breed = breed;
+<span class="tok-type">Dog</span>::<span class="tok-type">Dog</span>(<span class="tok-type">string</span> name, <span class="tok-type">double</span> weight, <span class="tok-type">string</span> breed) : <span class="tok-type">Animal</span>(name, weight)  {
+	<span class="tok-kw">this</span>-&gt;breed = breed;
 }
 
-string Dog::getBreed() const {
-	return breed;
+<span class="tok-type">string</span> <span class="tok-type">Dog</span>::<span class="tok-fn">getBreed</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> breed;
 }
 
-void Dog::digHole() const {
-	cout &lt;&lt; &quot;I&#x27;m digging a hole!&quot; &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-type">Dog</span>::<span class="tok-fn">digHole</span>() <span class="tok-kw">const</span> {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;I&#x27;m digging a hole!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-string Dog::makeNoise() const {
-	return &quot;Woof!&quot;;
+<span class="tok-type">string</span> <span class="tok-type">Dog</span>::<span class="tok-fn">makeNoise</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-str">&quot;Woof!&quot;</span>;
 }
 
-void Dog::chaseCat() const {
-	cout &lt;&lt; &quot;Here, kitty kitty!&quot; &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-type">Dog</span>::<span class="tok-fn">chaseCat</span>() <span class="tok-kw">const</span> {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Here, kitty kitty!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-string Dog::eat() const {
-	return &quot;I love dog food!&quot;;
+<span class="tok-type">string</span> <span class="tok-type">Dog</span>::<span class="tok-fn">eat</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-str">&quot;I love dog food!&quot;</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-5">
-          <pre class="code-block">#ifndef CAT_H
-#define CAT_H
+          <pre class="code-block"><span class="tok-pre">#ifndef CAT_H</span>
+<span class="tok-pre">#define CAT_H</span>
 
-#include &lt;string&gt;
-#include &quot;Animal.h&quot;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &quot;Animal.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Cat : public Animal {
-	public:
-		Cat(string name, double weight);
-		void chaseMouse() const;
-		string makeNoise() const override;
-		string eat() const override;
+<span class="tok-kw">class</span> <span class="tok-type">Cat</span> : <span class="tok-kw">public</span> <span class="tok-type">Animal</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Cat</span>(<span class="tok-type">string</span> name, <span class="tok-type">double</span> weight);
+		<span class="tok-type">void</span> <span class="tok-fn">chaseMouse</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">makeNoise</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">eat</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span>;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-6">
-          <pre class="code-block">#include &quot;Cat.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Cat.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-Cat::Cat(string name, double weight) : Animal(name, weight) {
+<span class="tok-type">Cat</span>::<span class="tok-type">Cat</span>(<span class="tok-type">string</span> name, <span class="tok-type">double</span> weight) : <span class="tok-type">Animal</span>(name, weight) {
 }
 
-void Cat::chaseMouse() const {
-	cout &lt;&lt; &quot;I&#x27;m chasing a mouse!&quot; &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-type">Cat</span>::<span class="tok-fn">chaseMouse</span>() <span class="tok-kw">const</span> {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;I&#x27;m chasing a mouse!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-string Cat::makeNoise() const  {
-	return &quot;Meow!&quot;;
+<span class="tok-type">string</span> <span class="tok-type">Cat</span>::<span class="tok-fn">makeNoise</span>() <span class="tok-kw">const</span>  {
+	<span class="tok-kw">return</span> <span class="tok-str">&quot;Meow!&quot;</span>;
 }
 
-string Cat::eat() const {
-	return &quot;Tasty kitty food!&quot;;
+<span class="tok-type">string</span> <span class="tok-type">Cat</span>::<span class="tok-fn">eat</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-str">&quot;Tasty kitty food!&quot;</span>;
 }</pre>
         </div>
       </div>
@@ -272,6 +275,50 @@ string Cat::eat() const {
         <h3>1. Virtual Functions & Dynamic Dispatch</h3>
         <p>Declaring a method <code>virtual</code> instructs the compiler to perform dynamic dispatch at runtime via a <strong>Virtual Method Table (VTable)</strong>, enabling polymorphic behavior when calling methods through base class pointers.</p>
 
+        <div class="diagram-container">
+          <h4>📐 Polymorphic UML Class Hierarchy</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;abstract&gt;&gt;</span>
+                <span class="uml-class-name">Animal</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item protected"># name : string</div>
+                <div class="uml-item protected"># weight : double</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ makeNoise() : void = 0</div>
+                <div class="uml-item public">+ eat() : void</div>
+                <div class="uml-item public">+ ~Animal() [virtual]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;derived&gt;&gt;</span>
+                <span class="uml-class-name">Dog : public Animal</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item private">- breed : string</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ makeNoise() : void [override]</div>
+                <div class="uml-item public">+ chaseCat() : void</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;derived&gt;&gt;</span>
+                <span class="uml-class-name">Cat : public Animal</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ makeNoise() : void [override]</div>
+                <div class="uml-item public">+ chaseMouse() : void</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Pure Virtual Functions & Abstract Classes</h3>
         <p>Declaring a method with <code>= 0</code> creates an Abstract Base Class (interface) that cannot be instantiated directly, enforcing contract compliance across derived classes.</p>
         
@@ -280,7 +327,7 @@ string Cat::eat() const {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

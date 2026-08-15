@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArrayStack: Bounded LIFO Structures - C++ & Embedded Systems Guide</title>
+  <title>ArrayStack: Bounded LIFO Structures - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 12</a>
+      <a href="../index.html#grid-advanced">Section 12</a>
       <span class="sep">/</span>
       <span class="current">ArrayStackApp</span>
     </div>
@@ -71,108 +77,108 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef STACK_H
-#define STACK_H
+          <pre class="code-block"><span class="tok-pre">#ifndef STACK_H</span>
+<span class="tok-pre">#define STACK_H</span>
 
-class Stack {
-	public:
-		virtual void push(int newEntry) = 0;
-		virtual int pop() = 0;
-		virtual int peek() const = 0;
-		virtual bool isEmpty() const = 0;
-		virtual void makeEmpty() = 0;
+<span class="tok-kw">class</span> Stack {
+	<span class="tok-kw">public</span>:
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">push</span>(<span class="tok-type">int</span> newEntry) = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">pop</span>() = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">peek</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() = <span class="tok-num">0</span>;
 };
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef ARRAY_STACK_H
-#define ARRAY_STACK_H
+          <pre class="code-block"><span class="tok-pre">#ifndef ARRAY_STACK_H</span>
+<span class="tok-pre">#define ARRAY_STACK_H</span>
 
-#include &quot;Stack.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+<span class="tok-pre">#include &quot;Stack.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class ArrayStack : public Stack {
-	public:
-		ArrayStack(int s = 16) : MAX_SIZE(s) {
-			top = -1;
-			mArray = new int[MAX_SIZE];
-		}//end ctor
+<span class="tok-kw">class</span> ArrayStack : <span class="tok-kw">public</span> Stack {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">ArrayStack</span>(<span class="tok-type">int</span> s = <span class="tok-num">16</span>) : <span class="tok-fn">MAX_SIZE</span>(s) {
+			top = -<span class="tok-num">1</span>;
+			mArray = <span class="tok-kw">new</span> <span class="tok-type">int</span>[MAX_SIZE];
+		}<span class="tok-com">//end ctor</span>
 
-		void push(int newEntry) override {
-			if (top &lt; MAX_SIZE - 1) {
+		<span class="tok-type">void</span> <span class="tok-fn">push</span>(<span class="tok-type">int</span> newEntry) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (top &lt; MAX_SIZE - <span class="tok-num">1</span>) {
 				top++;
 				mArray[top] = newEntry;
 			}
-			else {
-				cout &lt;&lt; &quot;Error: Stack is full!  Cannot push.&quot; &lt;&lt; endl;
+			<span class="tok-kw">else</span> {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Error: Stack is full!  Cannot push.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 			}
-		}//end push
+		}<span class="tok-com">//end push</span>
 
-		int pop() override {
-			if (!isEmpty()) {
-				return mArray[top--];
+		<span class="tok-type">int</span> <span class="tok-fn">pop</span>() <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (!<span class="tok-fn">isEmpty</span>()) {
+				<span class="tok-kw">return</span> mArray[top--];
 			}
-			else {
-				cout&lt;&lt;&quot;You can&#x27;t pop from an empty stack!&quot;&lt;&lt;endl;
-				return 0;
+			<span class="tok-kw">else</span> {
+				<span class="tok-type">cout</span>&lt;&lt;&quot;You can&#x27;t pop from an empty <span class="tok-type">stack</span>!&quot;&lt;&lt;<span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
-		}//end pop
+		}<span class="tok-com">//end pop</span>
 
-		int peek() const override {
-			if (!isEmpty()) {
-				return mArray[top];
+		<span class="tok-type">int</span> <span class="tok-fn">peek</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (!<span class="tok-fn">isEmpty</span>()) {
+				<span class="tok-kw">return</span> mArray[top];
 			}
-			else {
-				cout &lt;&lt; &quot;The stack is empty.&quot; &lt;&lt; endl;
-				return 0;
+			<span class="tok-kw">else</span> {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;The stack is empty.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
-		}//end peek
+		}<span class="tok-com">//end peek</span>
 
-		bool isEmpty() const override {
-			return top == -1;
-		}//end isEmpty
+		<span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> top == -<span class="tok-num">1</span>;
+		}<span class="tok-com">//end isEmpty</span>
 
-		void makeEmpty() override {
-			top = -1;
+		<span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() <span class="tok-kw">override</span> {
+			top = -<span class="tok-num">1</span>;
 		}
 
-	private:
-		int* mArray;
-		const int MAX_SIZE;
-		int top;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span>* mArray;
+		<span class="tok-kw">const</span> <span class="tok-type">int</span> MAX_SIZE;
+		<span class="tok-type">int</span> top;
 };
 
 
 
-#endif</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;ArrayStack.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;ArrayStack.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	ArrayStack stack;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	ArrayStack <span class="tok-type">stack</span>;
 	ArrayStack stack2;
 
-	for (int i = 0; i &lt; 17; i++) {
-		stack.push(i);
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">17</span>; i++) {
+		<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(i);
 	}
 
-	while (!stack.isEmpty()) {
-		stack2.push(stack.pop());
+	<span class="tok-kw">while</span> (!<span class="tok-type">stack</span>.<span class="tok-fn">isEmpty</span>()) {
+		stack2.<span class="tok-fn">push</span>(<span class="tok-type">stack</span>.<span class="tok-fn">pop</span>());
 	}
 
-	cout &lt;&lt; &quot;Same order as entered, using second stack:&quot; &lt;&lt; endl;
-	while (!stack2.isEmpty()) {
-		cout &lt;&lt; stack2.pop() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Same order as entered, using second stack:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-kw">while</span> (!stack2.<span class="tok-fn">isEmpty</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; stack2.<span class="tok-fn">pop</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -184,13 +190,33 @@ int main() {
         <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
-        <h3>Stack Operations</h3><p>Push and pop operate on the top index in $O(1)$ time.</p>
+        
+        <h3>Stack Operations</h3>
+        <p>Push and pop operate on the top index in $O(1)$ time.</p>
+
+        <div class="diagram-container">
+          <h4>🥞 LIFO Stack Memory Layout (Push / Pop)</h4>
+          <svg class="svg-diagram" width="460" height="190" viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg">
+            <rect x="130" y="130" width="200" height="34" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="230" y="152" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">data[0] (Bottom)</text>
+            <rect x="130" y="90" width="200" height="34" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="230" y="112" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">data[1]</text>
+            <rect x="130" y="50" width="200" height="34" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <text x="230" y="72" fill="#38bdf8" font-family="monospace" font-size="13" text-anchor="middle">data[top-1] (Top Element)</text>
+            <rect x="130" y="10" width="200" height="34" rx="4" fill="#0f172a" stroke="#475569" stroke-width="1" stroke-dasharray="4"/>
+            <text x="230" y="32" fill="#64748b" font-family="monospace" font-size="13" text-anchor="middle">Free Space (Capacity)</text>
+            <path d="M 360 67 L 340 67" stroke="#00ff88" stroke-width="2"/>
+            <polygon points="335,67 342,63 342,71" fill="#00ff88"/>
+            <text x="400" y="71" fill="#00ff88" font-family="sans-serif" font-weight="bold" font-size="12" text-anchor="middle">top_ index</text>
+          </svg>
+        </div>
+        
       </div>
     </section>
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Deterministic LIFO Buffering</h3><p>Array-backed stacks have bounded memory and execute in guaranteed single-cycle operations.</p>

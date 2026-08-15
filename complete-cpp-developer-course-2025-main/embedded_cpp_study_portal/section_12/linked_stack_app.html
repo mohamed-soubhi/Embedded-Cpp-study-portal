@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedStack: Dynamic Node-Based LIFO - C++ & Embedded Systems Guide</title>
+  <title>LinkedStack: Dynamic Node-Based LIFO - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 12</a>
+      <a href="../index.html#grid-advanced">Section 12</a>
       <span class="sep">/</span>
       <span class="current">LinkedStackApp</span>
     </div>
@@ -71,153 +77,151 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef STACK_H
-#define STACK_H
+          <pre class="code-block"><span class="tok-pre">#ifndef STACK_H</span>
+<span class="tok-pre">#define STACK_H</span>
 
-class Stack {
-public:
-	virtual void push(int newEntry) = 0;
-	virtual int pop() = 0;
-	virtual int peek() const = 0;
-	virtual bool isEmpty() const = 0;
-	virtual void makeEmpty() = 0;
+<span class="tok-kw">class</span> Stack {
+<span class="tok-kw">public</span>:
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">push</span>(<span class="tok-type">int</span> newEntry) = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">pop</span>() = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">peek</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+	<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() = <span class="tok-num">0</span>;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;Stack.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Stack.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-//------------------- Node ------------------------//
-class Node {
-	public:
-		Node(int data, Node* next) : data(data), next(next) {}
+<span class="tok-com">//------------------- Node ------------------------//</span>
+<span class="tok-kw">class</span> Node {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Node</span>(<span class="tok-type">int</span> data, Node* next) : <span class="tok-fn">data</span>(data), <span class="tok-fn">next</span>(next) {}
 
-		int getData() const {
-			return data;
+		<span class="tok-type">int</span> <span class="tok-fn">getData</span>() <span class="tok-kw">const</span> {
+			<span class="tok-kw">return</span> data;
 		}
 
-		void setData(int data) {
-			this-&gt;data = data;
+		<span class="tok-type">void</span> <span class="tok-fn">setData</span>(<span class="tok-type">int</span> data) {
+			<span class="tok-kw">this</span>-&gt;data = data;
 		}
 
-		Node* getNext() const {
-			return next;
+		Node* <span class="tok-fn">getNext</span>() <span class="tok-kw">const</span> {
+			<span class="tok-kw">return</span> next;
 		}
 
-		void setNext(Node* next) {
-			this-&gt;next = next;
+		<span class="tok-type">void</span> <span class="tok-fn">setNext</span>(Node* next) {
+			<span class="tok-kw">this</span>-&gt;next = next;
 		}
 
-	private:
-		int data;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span> data;
 		Node* next;
 };
 
-//------------------ LinkedStack ------------------------//
-class LinkedStack : public Stack {
-	public:
-		LinkedStack() : top(nullptr) {}
-		//end ctor
+<span class="tok-com">//------------------ LinkedStack ------------------------//</span>
+<span class="tok-kw">class</span> LinkedStack : <span class="tok-kw">public</span> Stack {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">LinkedStack</span>() : <span class="tok-fn">top</span>(<span class="tok-kw">nullptr</span>) {}
+		<span class="tok-com">//end ctor</span>
 
-		virtual ~LinkedStack() {
-			makeEmpty();
-		}//end dtor
+		<span class="tok-kw">virtual</span> ~<span class="tok-fn">LinkedStack</span>() {
+			<span class="tok-fn">makeEmpty</span>();
+		}<span class="tok-com">//end dtor</span>
 
-		void push(int newEntry) override {
-			Node* newNode = new Node(newEntry, top);
+		<span class="tok-type">void</span> <span class="tok-fn">push</span>(<span class="tok-type">int</span> newEntry) <span class="tok-kw">override</span> {
+			Node* newNode = <span class="tok-kw">new</span> <span class="tok-fn">Node</span>(newEntry, top);
 			top = newNode;
-		}//end push
+		}<span class="tok-com">//end push</span>
 
-		int pop() override {
-			if (isEmpty()) {
-				cout &lt;&lt; &quot;You cannot pop on an empty stack!&quot; &lt;&lt; endl;
-				return 0;
+		<span class="tok-type">int</span> <span class="tok-fn">pop</span>() <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (<span class="tok-fn">isEmpty</span>()) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You cannot pop on an empty stack!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
 
 			Node* temp = top;
-			int data = temp-&gt;getData();
-			top = top-&gt;getNext();
-			delete temp;
-			temp = nullptr;
-			return data;
-		}//end pop
+			<span class="tok-type">int</span> data = temp-&gt;<span class="tok-fn">getData</span>();
+			top = top-&gt;<span class="tok-fn">getNext</span>();
+			<span class="tok-kw">delete</span> temp;
+			temp = <span class="tok-kw">nullptr</span>;
+			<span class="tok-kw">return</span> data;
+		}<span class="tok-com">//end pop</span>
 
-		int peek() const override {
-			if (isEmpty()) {
-				cout &lt;&lt; &quot;You cannot peek on an empty stack!&quot; &lt;&lt; endl;
-				return 0;
+		<span class="tok-type">int</span> <span class="tok-fn">peek</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (<span class="tok-fn">isEmpty</span>()) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You cannot peek on an empty stack!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 			}
 
-			return top-&gt;getData();
-		}//end peek
+			<span class="tok-kw">return</span> top-&gt;<span class="tok-fn">getData</span>();
+		}<span class="tok-com">//end peek</span>
 
-		bool isEmpty() const override {
-			return top == nullptr;
-		}//end isEmpty
+		<span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> top == <span class="tok-kw">nullptr</span>;
+		}<span class="tok-com">//end isEmpty</span>
 
-		void makeEmpty() override {
-			while (top != nullptr) {
+		<span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() <span class="tok-kw">override</span> {
+			<span class="tok-kw">while</span> (top != <span class="tok-kw">nullptr</span>) {
 				Node* temp = top;
-				top = top-&gt;getNext();
-				delete temp;
+				top = top-&gt;<span class="tok-fn">getNext</span>();
+				<span class="tok-kw">delete</span> temp;
 			}
-		}//end makeEmpty
+		}<span class="tok-com">//end makeEmpty</span>
 
-	private:
+	<span class="tok-kw">private</span>:
 		Node* top;
-};
-</pre>
+};</pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;LinkedStack.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;LinkedStack.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printStack(LinkedStack&amp; stack);
+<span class="tok-type">void</span> <span class="tok-fn">printStack</span>(LinkedStack&amp; <span class="tok-type">stack</span>);
 
-int main() {
-	LinkedStack stack;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	LinkedStack <span class="tok-type">stack</span>;
 
-	stack.push(100);
-	stack.push(150);
-	stack.push(222);
-	stack.push(71);
-	stack.push(53);
-	stack.push(125);
+	<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(<span class="tok-num">100</span>);
+	<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(<span class="tok-num">150</span>);
+	<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(<span class="tok-num">222</span>);
+	<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(<span class="tok-num">71</span>);
+	<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(<span class="tok-num">53</span>);
+	<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(<span class="tok-num">125</span>);
 
-	printStack(stack);
-	cout &lt;&lt; &quot;Again to verify it&#x27;s intact:&quot; &lt;&lt; endl;
-	printStack(stack);
+	<span class="tok-fn">printStack</span>(<span class="tok-type">stack</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Again to verify it&#x27;s intact:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printStack</span>(<span class="tok-type">stack</span>);
 
-	//cout &lt;&lt; &quot;Top of stack is: &quot; &lt;&lt; stack.peek() &lt;&lt; endl;
+	<span class="tok-com">//cout &lt;&lt; &quot;Top of stack is: &quot; &lt;&lt; stack.peek() &lt;&lt; endl;</span>
 
-	//while (!stack.isEmpty()) {
-	//	cout &lt;&lt; stack.pop() &lt;&lt; endl;
-	//}
-	return 0;
+	<span class="tok-com">//while (!stack.isEmpty()) {</span>
+	<span class="tok-com">//	cout &lt;&lt; stack.pop() &lt;&lt; endl;</span>
+	<span class="tok-com">//}</span>
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printStack(LinkedStack&amp; stack) {
+<span class="tok-type">void</span> <span class="tok-fn">printStack</span>(LinkedStack&amp; <span class="tok-type">stack</span>) {
 	LinkedStack temp;
-	int data;
+	<span class="tok-type">int</span> data;
 
-	while (!stack.isEmpty()) {
-		data = stack.pop();
-		cout &lt;&lt; data &lt;&lt; endl;
-		temp.push(data);
-	}//end while
+	<span class="tok-kw">while</span> (!<span class="tok-type">stack</span>.<span class="tok-fn">isEmpty</span>()) {
+		data = <span class="tok-type">stack</span>.<span class="tok-fn">pop</span>();
+		<span class="tok-type">cout</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
+		temp.<span class="tok-fn">push</span>(data);
+	}<span class="tok-com">//end while</span>
 
-	while (!temp.isEmpty()) {
-		stack.push(temp.pop());
+	<span class="tok-kw">while</span> (!temp.<span class="tok-fn">isEmpty</span>()) {
+		<span class="tok-type">stack</span>.<span class="tok-fn">push</span>(temp.<span class="tok-fn">pop</span>());
 	}
 
-}//end printStack</pre>
+}<span class="tok-com">//end printStack</span></pre>
         </div>
       </div>
     
@@ -234,7 +238,7 @@ void printStack(LinkedStack&amp; stack) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Memory Comparison</h3><p>Array stacks use contiguous static memory and outperform linked stacks across all embedded metrics.</p>

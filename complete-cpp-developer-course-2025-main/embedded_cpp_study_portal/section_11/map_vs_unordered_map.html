@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>std::map vs std::unordered_map in Real-Time Embedded Systems - C++ & Embedded Systems Guide</title>
+  <title>std::map vs std::unordered_map in Real-Time Embedded Systems - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">MapVsUnorderedMappApp</span>
     </div>
@@ -69,58 +75,58 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;map&gt;
-#include &lt;unordered_map&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;map&gt;</span>
+<span class="tok-pre">#include &lt;unordered_map&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	cout &lt;&lt; &quot;=== std::map ===&quot; &lt;&lt; endl;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;=== std::map ===&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	map&lt;string, int&gt; orderedMap;
-	orderedMap[&quot;banana&quot;] = 3;
-	orderedMap[&quot;apple&quot;] = 5;
-	orderedMap[&quot;cherry&quot;] = 2;
+	<span class="tok-type">map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; orderedMap;
+	orderedMap[&quot;banana&quot;] = <span class="tok-num">3</span>;
+	orderedMap[&quot;apple&quot;] = <span class="tok-num">5</span>;
+	orderedMap[&quot;cherry&quot;] = <span class="tok-num">2</span>;
 
-	cout &lt;&lt; &quot;Contents of ordered map (keys will be sorted):&quot; &lt;&lt; endl;
-	for (const auto&amp; pair : orderedMap) {
-		cout &lt;&lt; pair.first&lt;&lt;&quot;: &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Contents of ordered map (keys will be sorted):&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-type">pair</span> : orderedMap) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">pair</span>.first&lt;&lt;&quot;: &quot; &lt;&lt; <span class="tok-type">pair</span>.second &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	cout &lt;&lt; &quot;\nLooking up &#x27;apple&#x27; in orderedMap: &quot;;
-	auto it1 = orderedMap.find(&quot;apple&quot;);
-	if (it1 != orderedMap.end()) {
-		cout &lt;&lt; &quot;Found, value = &quot; &lt;&lt; it1-&gt;second &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nLooking up &#x27;apple&#x27; in orderedMap: &quot;</span>;
+	<span class="tok-kw">auto</span> it1 = orderedMap.<span class="tok-fn">find</span>(&quot;apple&quot;);
+	<span class="tok-kw">if</span> (it1 != orderedMap.<span class="tok-fn">end</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Found, value = &quot;</span> &lt;&lt; it1-&gt;second &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	else {
-		cout &lt;&lt; &quot;Not found!&quot; &lt;&lt; endl;
-	}
-
-	cout &lt;&lt; endl &lt;&lt; endl;
-	cout &lt;&lt; &quot;=== std::unordered_map ===&quot; &lt;&lt; endl;
-
-	unordered_map&lt;string, int&gt; unorderedMap;
-	unorderedMap[&quot;banana&quot;] = 3;
-	unorderedMap[&quot;apple&quot;] = 5;
-	unorderedMap[&quot;cherry&quot;] = 2;
-
-	cout &lt;&lt; &quot;Contents of unordered map (no guaranteed order):&quot; &lt;&lt; endl;
-	for (const auto&amp; pair : unorderedMap) {
-		cout &lt;&lt; pair.first &lt;&lt; &quot;: &quot; &lt;&lt; pair.second &lt;&lt; endl;
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Not found!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	cout &lt;&lt; &quot;\nLooking up &#x27;apple&#x27; in unorderedMap: &quot;;
-	auto it2 = unorderedMap.find(&quot;apple&quot;);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;=== std::unordered_map ===&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	if (it2 != unorderedMap.end()) {
-		cout &lt;&lt; &quot;Found, value = &quot; &lt;&lt; it2-&gt;second &lt;&lt; endl;
-	}
-	else {
-		cout &lt;&lt; &quot;Not found.&quot; &lt;&lt; endl;
+	<span class="tok-type">unordered_map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">int</span>&gt; unorderedMap;
+	unorderedMap[&quot;banana&quot;] = <span class="tok-num">3</span>;
+	unorderedMap[&quot;apple&quot;] = <span class="tok-num">5</span>;
+	unorderedMap[&quot;cherry&quot;] = <span class="tok-num">2</span>;
+
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Contents of unordered map (no guaranteed order):&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-type">pair</span> : unorderedMap) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">pair</span>.first &lt;&lt; <span class="tok-str">&quot;: &quot;</span> &lt;&lt; <span class="tok-type">pair</span>.second &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nLooking up &#x27;apple&#x27; in unorderedMap: &quot;</span>;
+	<span class="tok-kw">auto</span> it2 = unorderedMap.<span class="tok-fn">find</span>(&quot;apple&quot;);
+
+	<span class="tok-kw">if</span> (it2 != unorderedMap.<span class="tok-fn">end</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Found, value = &quot;</span> &lt;&lt; it2-&gt;second &lt;&lt; <span class="tok-type">endl</span>;
+	}
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Not found.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	}
+
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -142,7 +148,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

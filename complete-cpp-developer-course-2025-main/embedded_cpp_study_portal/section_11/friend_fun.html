@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Friend Functions &amp; Classes in Driver Architectures - C++ & Embedded Systems Guide</title>
+  <title>Friend Functions &amp; Classes in Driver Architectures - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">FriendFun</span>
     </div>
@@ -72,127 +78,125 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef RECTANGLE_H
-#define RECTANGLE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef RECTANGLE_H</span>
+<span class="tok-pre">#define RECTANGLE_H</span>
 
-class Rectangle {
-	friend void changeData(Rectangle&amp; rect);
-	friend void printData(Rectangle&amp; rect);
+<span class="tok-kw">class</span> <span class="tok-type">Rectangle</span> {
+	<span class="tok-kw">friend</span> <span class="tok-type">void</span> <span class="tok-fn">changeData</span>(<span class="tok-type">Rectangle</span>&amp; rect);
+	<span class="tok-kw">friend</span> <span class="tok-type">void</span> <span class="tok-fn">printData</span>(<span class="tok-type">Rectangle</span>&amp; rect);
 
-	friend class RectangleHelper;
+	<span class="tok-kw">friend</span> <span class="tok-kw">class</span> RectangleHelper;
 
-	public:
-		Rectangle();
-		Rectangle(double length, double width);
-		double getLength() const;
-		double getWidth() const;
-		void setLength(double length);
-		void setWidth(double width);
-		double area() const;
-		double perimeter() const;
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Rectangle</span>();
+		<span class="tok-type">Rectangle</span>(<span class="tok-type">double</span> length, <span class="tok-type">double</span> width);
+		<span class="tok-type">double</span> <span class="tok-fn">getLength</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">getWidth</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">setLength</span>(<span class="tok-type">double</span> length);
+		<span class="tok-type">void</span> <span class="tok-fn">setWidth</span>(<span class="tok-type">double</span> width);
+		<span class="tok-type">double</span> <span class="tok-fn">area</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">perimeter</span>() <span class="tok-kw">const</span>;
 
-	private:
-		double length; 
-		double width;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">double</span> length; 
+		<span class="tok-type">double</span> width;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;Rectangle.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Rectangle.h&quot;</span>
 
-Rectangle::Rectangle() {
-	length = 1;
-	width = 1;
+<span class="tok-type">Rectangle</span>::<span class="tok-type">Rectangle</span>() {
+	length = <span class="tok-num">1</span>;
+	width = <span class="tok-num">1</span>;
 }
 
-Rectangle::Rectangle(double length, double width) {
-	this-&gt;length = length;
-	this-&gt;width = width;
+<span class="tok-type">Rectangle</span>::<span class="tok-type">Rectangle</span>(<span class="tok-type">double</span> length, <span class="tok-type">double</span> width) {
+	<span class="tok-kw">this</span>-&gt;length = length;
+	<span class="tok-kw">this</span>-&gt;width = width;
 }
 
-double Rectangle::getLength() const {
-	return length;
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">getLength</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> length;
 }
 
-double Rectangle::getWidth() const {
-	return width;
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">getWidth</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> width;
 }
 
-void Rectangle::setLength(double length) {
-	this-&gt;length = length;
+<span class="tok-type">void</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">setLength</span>(<span class="tok-type">double</span> length) {
+	<span class="tok-kw">this</span>-&gt;length = length;
 }
 
-void Rectangle::setWidth(double width) {
-	this-&gt;width = width;
+<span class="tok-type">void</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">setWidth</span>(<span class="tok-type">double</span> width) {
+	<span class="tok-kw">this</span>-&gt;width = width;
 }
 
-double Rectangle::area() const {
-	return length * width;
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">area</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> length * width;
 }
 
-double Rectangle::perimeter() const {
-	return 2 * (length + width);
+<span class="tok-type">double</span> <span class="tok-type">Rectangle</span>::<span class="tok-fn">perimeter</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-num">2</span> * (length + width);
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#ifndef RECTANGLE_HELPER_H
-#define RECTANGLE_HELPER_H
+          <pre class="code-block"><span class="tok-pre">#ifndef RECTANGLE_HELPER_H</span>
+<span class="tok-pre">#define RECTANGLE_HELPER_H</span>
 
-#include &quot;Rectangle.h&quot;
+<span class="tok-pre">#include &quot;Rectangle.h&quot;</span>
 
-class RectangleHelper {
-	public:
-		void modifyRectangle(Rectangle&amp; rect) {
-			rect.length = 500;
-			rect.width = 500;
+<span class="tok-kw">class</span> RectangleHelper {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">void</span> <span class="tok-fn">modifyRectangle</span>(<span class="tok-type">Rectangle</span>&amp; rect) {
+			rect.length = <span class="tok-num">500</span>;
+			rect.width = <span class="tok-num">500</span>;
 		}
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-3">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Rectangle.h&quot;
-#include &quot;RectangleHelper.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Rectangle.h&quot;</span>
+<span class="tok-pre">#include &quot;RectangleHelper.h&quot;</span>
 
-using namespace std;
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void changeData(Rectangle&amp; rect);
-void printData(Rectangle&amp; rect);
+<span class="tok-type">void</span> <span class="tok-fn">changeData</span>(<span class="tok-type">Rectangle</span>&amp; rect);
+<span class="tok-type">void</span> <span class="tok-fn">printData</span>(<span class="tok-type">Rectangle</span>&amp; rect);
 
-int main() {
-	Rectangle r1(10, 25);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">Rectangle</span> <span class="tok-fn">r1</span>(<span class="tok-num">10</span>, <span class="tok-num">25</span>);
 	RectangleHelper helper;
 
-	cout &lt;&lt; &quot;r1 area: &quot; &lt;&lt; r1.area() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;r1 area: &quot;</span> &lt;&lt; r1.<span class="tok-fn">area</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	changeData(r1);
+	<span class="tok-fn">changeData</span>(r1);
 
-	cout &lt;&lt; &quot;Now, r1 area: &quot; &lt;&lt; r1.area() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Now, r1 area: &quot;</span> &lt;&lt; r1.<span class="tok-fn">area</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	helper.modifyRectangle(r1);
-	cout &lt;&lt; &quot;after helper modifies, area: &quot; &lt;&lt; r1.area() &lt;&lt; endl;
+	helper.<span class="tok-fn">modifyRectangle</span>(r1);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;after helper modifies, area: &quot;</span> &lt;&lt; r1.<span class="tok-fn">area</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;printing data directly with printData:&quot; &lt;&lt; endl;
-	printData(r1);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;printing data directly with printData:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printData</span>(r1);
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void changeData(Rectangle&amp; rect) {
-	rect.length = 100;
-	rect.width = 100;
+<span class="tok-type">void</span> <span class="tok-fn">changeData</span>(<span class="tok-type">Rectangle</span>&amp; rect) {
+	rect.length = <span class="tok-num">100</span>;
+	rect.width = <span class="tok-num">100</span>;
 }
 
-void printData(Rectangle&amp; rect) {
-	cout &lt;&lt; &quot;length: &quot; &lt;&lt; rect.length
-		&lt;&lt; &quot;, width: &quot; &lt;&lt; rect.width &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printData</span>(<span class="tok-type">Rectangle</span>&amp; rect) {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;length: &quot;</span> &lt;&lt; rect.length
+		&lt;&lt; <span class="tok-str">&quot;, width: &quot;</span> &lt;&lt; rect.width &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -210,7 +214,7 @@ void printData(Rectangle&amp; rect) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>HAL & Driver Cohesion</h3><p>A hardware Peripheral class can grant friend access to a Diagnostic Manager without making low-level configuration registers public.</p>

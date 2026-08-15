@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>std::vector Memory Growth &amp; Allocation Hazards - C++ & Embedded Systems Guide</title>
+  <title>std::vector Memory Growth &amp; Allocation Hazards - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">STLFun1</span>
     </div>
@@ -69,36 +75,36 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;deque&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;deque&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printDeque(const deque&lt;int&gt;&amp; deck);
+<span class="tok-type">void</span> <span class="tok-fn">printDeque</span>(<span class="tok-kw">const</span> <span class="tok-type">deque</span>&lt;<span class="tok-type">int</span>&gt;&amp; deck);
 
-int main() {
-	deque&lt;int&gt; myDeck;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">deque</span>&lt;<span class="tok-type">int</span>&gt; myDeck;
 
-	myDeck.push_back(1);
-	myDeck.push_back(5);
-	myDeck.push_back(10);
+	myDeck.<span class="tok-fn">push_back</span>(<span class="tok-num">1</span>);
+	myDeck.<span class="tok-fn">push_back</span>(<span class="tok-num">5</span>);
+	myDeck.<span class="tok-fn">push_back</span>(<span class="tok-num">10</span>);
 
-	cout &lt;&lt; &quot;First print:&quot; &lt;&lt; endl;
-	printDeque(myDeck);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;First print:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printDeque</span>(myDeck);
 
-	myDeck.push_front(20);
-	myDeck.push_front(30);
+	myDeck.<span class="tok-fn">push_front</span>(<span class="tok-num">20</span>);
+	myDeck.<span class="tok-fn">push_front</span>(<span class="tok-num">30</span>);
 
-	cout &lt;&lt; &quot;Next print:&quot; &lt;&lt; endl;
-	printDeque(myDeck);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Next print:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printDeque</span>(myDeck);
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printDeque(const deque&lt;int&gt;&amp; deck) {
-	for (int num : deck) {
-		cout &lt;&lt; num &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printDeque</span>(<span class="tok-kw">const</span> <span class="tok-type">deque</span>&lt;<span class="tok-type">int</span>&gt;&amp; deck) {
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> num : deck) {
+		<span class="tok-type">cout</span> &lt;&lt; num &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	cout &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -119,7 +125,7 @@ void printDeque(const deque&lt;int&gt;&amp; deck) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generic Template Swapping - C++ & Embedded Systems Guide</title>
+  <title>Generic Template Swapping - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">SwapperTest</span>
     </div>
@@ -70,76 +76,75 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef SWAPPER_H
-#define SWAPPER_H
+          <pre class="code-block"><span class="tok-pre">#ifndef SWAPPER_H</span>
+<span class="tok-pre">#define SWAPPER_H</span>
 
-template &lt;class T&gt;
-class Swapper {
-	public:
-		Swapper(T first, T second);
-		void swap();
-		T getFirst() const;
-		T getSecond() const; 
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+<span class="tok-kw">class</span> Swapper {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Swapper</span>(T first, T second);
+		<span class="tok-type">void</span> <span class="tok-fn">swap</span>();
+		T <span class="tok-fn">getFirst</span>() <span class="tok-kw">const</span>;
+		T <span class="tok-fn">getSecond</span>() <span class="tok-kw">const</span>; 
 
-	private:
+	<span class="tok-kw">private</span>:
 		T first;
 		T second;
 };
 
 
-template &lt;class T&gt;
-Swapper&lt;T&gt;::Swapper(T first, T second) : first(first), second(second) {}
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+Swapper&lt;T&gt;::<span class="tok-fn">Swapper</span>(T first, T second) : <span class="tok-fn">first</span>(first), <span class="tok-fn">second</span>(second) {}
 
-template &lt;class T&gt;
-void Swapper&lt;T&gt;::swap() {
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+<span class="tok-type">void</span> Swapper&lt;T&gt;::<span class="tok-fn">swap</span>() {
 	T temp = first;
 	first = second;
 	second = temp;
 }
 
-template &lt;class T&gt;
-T Swapper&lt;T&gt;::getFirst() const {
-	return first;
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+T Swapper&lt;T&gt;::<span class="tok-fn">getFirst</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> first;
 }
 
-template &lt;class T&gt;
-T Swapper&lt;T&gt;::getSecond() const {
-	return second;
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+T Swapper&lt;T&gt;::<span class="tok-fn">getSecond</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> second;
 }
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &quot;Swapper.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &quot;Swapper.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	Swapper&lt;int&gt; intSwapper(5, 10);
-	Swapper&lt;string&gt; stringSwapper(&quot;John&quot;, &quot;Bob&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	Swapper&lt;<span class="tok-type">int</span>&gt; <span class="tok-fn">intSwapper</span>(<span class="tok-num">5</span>, <span class="tok-num">10</span>);
+	Swapper&lt;<span class="tok-type">string</span>&gt; <span class="tok-fn">stringSwapper</span>(&quot;John<span class="tok-str">&quot;, &quot;</span>Bob&quot;);
 
-	cout &lt;&lt; &quot;Before swap:&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; intSwapper.getFirst() &lt;&lt; &quot;, &quot;
-		&lt;&lt; intSwapper.getSecond() &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; stringSwapper.getFirst() &lt;&lt; &quot;, &quot;
-		&lt;&lt; stringSwapper.getSecond() &lt;&lt; endl;
-
-
-	intSwapper.swap();
-	stringSwapper.swap();
-
-	cout &lt;&lt; &quot;\nAfter swap:&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; intSwapper.getFirst() &lt;&lt; &quot;, &quot;
-		&lt;&lt; intSwapper.getSecond() &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; stringSwapper.getFirst() &lt;&lt; &quot;, &quot;
-		&lt;&lt; stringSwapper.getSecond() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Before swap:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; intSwapper.<span class="tok-fn">getFirst</span>() &lt;&lt; <span class="tok-str">&quot;, &quot;</span>
+		&lt;&lt; intSwapper.<span class="tok-fn">getSecond</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; stringSwapper.<span class="tok-fn">getFirst</span>() &lt;&lt; <span class="tok-str">&quot;, &quot;</span>
+		&lt;&lt; stringSwapper.<span class="tok-fn">getSecond</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
 
-	return 0;
-}
-</pre>
+	intSwapper.<span class="tok-fn">swap</span>();
+	stringSwapper.<span class="tok-fn">swap</span>();
+
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nAfter swap:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; intSwapper.<span class="tok-fn">getFirst</span>() &lt;&lt; <span class="tok-str">&quot;, &quot;</span>
+		&lt;&lt; intSwapper.<span class="tok-fn">getSecond</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; stringSwapper.<span class="tok-fn">getFirst</span>() &lt;&lt; <span class="tok-str">&quot;, &quot;</span>
+		&lt;&lt; stringSwapper.<span class="tok-fn">getSecond</span>() &lt;&lt; <span class="tok-type">endl</span>;
+
+
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}</pre>
         </div>
       </div>
     
@@ -156,7 +161,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Register Swaps</h3><p>Compilers optimize reference swaps directly into CPU register instructions (e.g. <code>MOV</code>/<code>REV</code>).</p>

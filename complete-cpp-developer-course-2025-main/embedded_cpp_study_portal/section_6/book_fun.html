@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Class Encapsulation, Getters/Setters &amp; Struct Memory Layout - C++ & Embedded Systems Guide</title>
+  <title>Class Encapsulation, Getters/Setters &amp; Struct Memory Layout - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 6</a>
+      <a href="../index.html#grid-foundations">Section 6</a>
       <span class="sep">/</span>
       <span class="current">BookFun</span>
     </div>
@@ -71,101 +77,100 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Book.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Book.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-//void printBookDetails(const Book&amp; book);
+<span class="tok-com">//void printBookDetails(const Book&amp; book);</span>
 
-int main() {
-	Book gameOfThrones(&quot;George Martin&quot;, &quot;Game of Thrones&quot;,
-		&quot;Fantasy&quot;, 864);
-	Book mathBook(&quot;James Stewart&quot;, &quot;Calculus&quot;, &quot;Math&quot;, 1392);
-	Book cppBook(&quot;Bjarne Stroustrup&quot;, &quot;The C++ Programming Language&quot;, &quot;Programming&quot;, 1376);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">Book</span> <span class="tok-fn">gameOfThrones</span>(&quot;George Martin<span class="tok-str">&quot;, &quot;</span>Game of Thrones&quot;,
+		<span class="tok-str">&quot;Fantasy&quot;</span>, <span class="tok-num">864</span>);
+	<span class="tok-type">Book</span> <span class="tok-fn">mathBook</span>(&quot;James Stewart<span class="tok-str">&quot;, &quot;</span>Calculus<span class="tok-str">&quot;, &quot;</span>Math&quot;, <span class="tok-num">1392</span>);
+	<span class="tok-type">Book</span> <span class="tok-fn">cppBook</span>(&quot;Bjarne Stroustrup<span class="tok-str">&quot;, &quot;</span>The C++ Programming Language<span class="tok-str">&quot;, &quot;</span>Programming&quot;, <span class="tok-num">1376</span>);
 
-	/*printBookDetails(gameOfThrones);
-	printBookDetails(mathBook);
-	printBookDetails(cppBook);*/
+	<span class="tok-com">/*printBookDetails(gameOfThrones);</span>
+<span class="tok-com">	printBookDetails(mathBook);</span>
+<span class="tok-com">	printBookDetails(cppBook);*/</span>
 
-	gameOfThrones.printBookDetails();
-	mathBook.printBookDetails();
-	cppBook.printBookDetails();
+	gameOfThrones.<span class="tok-fn">printBookDetails</span>();
+	mathBook.<span class="tok-fn">printBookDetails</span>();
+	cppBook.<span class="tok-fn">printBookDetails</span>();
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-//void printBookDetails(const Book&amp; book) {
-//	cout &lt;&lt; book.getTitle() &lt;&lt; &quot; by &quot; &lt;&lt; book.getAuthor()
-//		&lt;&lt; &quot; has &quot; &lt;&lt; book.getNumPages() &lt;&lt; &quot; pages, &quot;
-//		&lt;&lt; &quot;and its genre is &quot; &lt;&lt; book.getGenre() &lt;&lt; endl;
-//}</pre>
+<span class="tok-com">//void printBookDetails(const Book&amp; book) {</span>
+<span class="tok-com">//	cout &lt;&lt; book.getTitle() &lt;&lt; &quot; by &quot; &lt;&lt; book.getAuthor()</span>
+<span class="tok-com">//		&lt;&lt; &quot; has &quot; &lt;&lt; book.getNumPages() &lt;&lt; &quot; pages, &quot;</span>
+<span class="tok-com">//		&lt;&lt; &quot;and its genre is &quot; &lt;&lt; book.getGenre() &lt;&lt; endl;</span>
+<span class="tok-com">//}</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef BOOK_H
-#define BOOK_H
+          <pre class="code-block"><span class="tok-pre">#ifndef BOOK_H</span>
+<span class="tok-pre">#define BOOK_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Book {
-	public:
-		Book(string author, string title,
-			string genre, int numPages);
-		string getAuthor() const;
-		string getTitle() const;
-		string getGenre() const;
-		int getNumPages() const;
-		void printBookDetails() const;
+<span class="tok-kw">class</span> <span class="tok-type">Book</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Book</span>(<span class="tok-type">string</span> author, <span class="tok-type">string</span> title,
+			<span class="tok-type">string</span> genre, <span class="tok-type">int</span> numPages);
+		<span class="tok-type">string</span> <span class="tok-fn">getAuthor</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">getTitle</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">string</span> <span class="tok-fn">getGenre</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getNumPages</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">printBookDetails</span>() <span class="tok-kw">const</span>;
 
-	private:
-		string author;
-		string title;
-		string genre;
-		int numPages;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> author;
+		<span class="tok-type">string</span> title;
+		<span class="tok-type">string</span> genre;
+		<span class="tok-type">int</span> numPages;
 
 };
 
-#endif</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Book.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Book.h&quot;</span>
 
-#include &lt;iostream&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-Book::Book(string author, string title,
-	string genre, int numPages) {
+<span class="tok-type">Book</span>::<span class="tok-type">Book</span>(<span class="tok-type">string</span> author, <span class="tok-type">string</span> title,
+	<span class="tok-type">string</span> genre, <span class="tok-type">int</span> numPages) {
 
-	this-&gt;author = author;
-	this-&gt;title = title;
-	this-&gt;genre = genre;
-	this-&gt;numPages = numPages;
-}//end ctor
+	<span class="tok-kw">this</span>-&gt;author = author;
+	<span class="tok-kw">this</span>-&gt;title = title;
+	<span class="tok-kw">this</span>-&gt;genre = genre;
+	<span class="tok-kw">this</span>-&gt;numPages = numPages;
+}<span class="tok-com">//end ctor</span>
 
-string Book::getAuthor() const {
-	return author;
+<span class="tok-type">string</span> <span class="tok-type">Book</span>::<span class="tok-fn">getAuthor</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> author;
 }
 
-string Book::getTitle() const {
-	return title;
+<span class="tok-type">string</span> <span class="tok-type">Book</span>::<span class="tok-fn">getTitle</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> title;
 }
 
-string Book::getGenre() const {
-	return genre;
+<span class="tok-type">string</span> <span class="tok-type">Book</span>::<span class="tok-fn">getGenre</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> genre;
 }
 
-int Book::getNumPages() const {
-	return numPages;
+<span class="tok-type">int</span> <span class="tok-type">Book</span>::<span class="tok-fn">getNumPages</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> numPages;
 }
 
-void Book::printBookDetails() const {
-	cout &lt;&lt; title &lt;&lt; &quot; by &quot; &lt;&lt; author
-		&lt;&lt; &quot; has &quot; &lt;&lt; numPages &lt;&lt; &quot; pages, &quot;
-		&lt;&lt; &quot;and its genre is &quot; &lt;&lt;  genre&lt;&lt; endl;
-}
-</pre>
+<span class="tok-type">void</span> <span class="tok-type">Book</span>::<span class="tok-fn">printBookDetails</span>() <span class="tok-kw">const</span> {
+	<span class="tok-type">cout</span> &lt;&lt; title &lt;&lt; <span class="tok-str">&quot; by &quot;</span> &lt;&lt; author
+		&lt;&lt; <span class="tok-str">&quot; has &quot;</span> &lt;&lt; numPages &lt;&lt; <span class="tok-str">&quot; pages, &quot;</span>
+		&lt;&lt; <span class="tok-str">&quot;and its genre is &quot;</span> &lt;&lt;  genre&lt;&lt; <span class="tok-type">endl</span>;
+}</pre>
         </div>
       </div>
     
@@ -180,6 +185,30 @@ void Book::printBookDetails() const {
         <h3>1. Classes vs Structs in C++</h3>
         <p>In C++, the only difference between <code>class</code> and <code>struct</code> is the default access level: members and base classes default to <strong>private</strong> in a class, and <strong>public</strong> in a struct.</p>
 
+        <div class="diagram-container">
+          <h4>📐 Book Class UML Architecture</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;entity&gt;&gt;</span>
+                <span class="uml-class-name">Book</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item private">- author : string</div>
+                <div class="uml-item private">- title : string</div>
+                <div class="uml-item private">- numPages : int</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ Book(author, title, numPages)</div>
+                <div class="uml-item public">+ printBookDetails() : void</div>
+                <div class="uml-item public">+ getAuthor() : string const</div>
+                <div class="uml-item public">+ getTitle() : string const</div>
+                <div class="uml-item public">+ getNumPages() : int const</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Encapsulation & Invariants</h3>
         <p>Private member variables enforce data hiding; public member functions validate inputs and preserve object invariants.</p>
         
@@ -188,7 +217,7 @@ void Book::printBookDetails() const {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

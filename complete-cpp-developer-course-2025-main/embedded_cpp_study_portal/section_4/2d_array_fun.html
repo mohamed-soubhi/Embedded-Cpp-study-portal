@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2D Arrays, Row-Major Layout &amp; DMA Burst Transfers - C++ & Embedded Systems Guide</title>
+  <title>2D Arrays, Row-Major Layout &amp; DMA Burst Transfers - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 4</a>
+      <a href="../index.html#grid-foundations">Section 4</a>
       <span class="sep">/</span>
       <span class="current">2DArrayFun</span>
     </div>
@@ -69,37 +75,37 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	int myNums[2][3] = {
-		{1, 2, 3},
-		{4, 5, 6}
+	<span class="tok-type">int</span> myNums[<span class="tok-num">2</span>][<span class="tok-num">3</span>] = {
+		{<span class="tok-num">1</span>, <span class="tok-num">2</span>, <span class="tok-num">3</span>},
+		{<span class="tok-num">4</span>, <span class="tok-num">5</span>, <span class="tok-num">6</span>}
 	};
 
-	cout &lt;&lt; myNums[0][2] &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; myNums[<span class="tok-num">0</span>][<span class="tok-num">2</span>] &lt;&lt; <span class="tok-type">endl</span>;
 
-	myNums[1][0] = 14;
+	myNums[<span class="tok-num">1</span>][<span class="tok-num">0</span>] = <span class="tok-num">14</span>;
 
-	cout &lt;&lt; myNums[1][0] &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; myNums[<span class="tok-num">1</span>][<span class="tok-num">0</span>] &lt;&lt; <span class="tok-type">endl</span>;
 
-	//for (int row = 0; row &lt; 2; row++) {
-	//	for (int col = 0; col &lt; 3; col++) {
-	//		cout &lt;&lt; myNums[row][col] &lt;&lt; &quot; &quot;;
-	//	}//end inner for
-	//	cout &lt;&lt; endl;
-	//}//end outer for
+	<span class="tok-com">//for (int row = 0; row &lt; 2; row++) {</span>
+	<span class="tok-com">//	for (int col = 0; col &lt; 3; col++) {</span>
+	<span class="tok-com">//		cout &lt;&lt; myNums[row][col] &lt;&lt; &quot; &quot;;</span>
+	<span class="tok-com">//	}//end inner for</span>
+	<span class="tok-com">//	cout &lt;&lt; endl;</span>
+	<span class="tok-com">//}//end outer for</span>
 
-	for (int row = 1; row &gt;= 0; row--) {
-		for (int col = 2; col &gt;= 0; col--) {
-			cout &lt;&lt; myNums[row][col] &lt;&lt; &quot; &quot;;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> row = <span class="tok-num">1</span>; row &gt;= <span class="tok-num">0</span>; row--) {
+		<span class="tok-kw">for</span> (<span class="tok-type">int</span> col = <span class="tok-num">2</span>; col &gt;= <span class="tok-num">0</span>; col--) {
+			<span class="tok-type">cout</span> &lt;&lt; myNums[row][col] &lt;&lt; <span class="tok-str">&quot; &quot;</span>;
 		}
-		cout &lt;&lt; endl;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -124,7 +130,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

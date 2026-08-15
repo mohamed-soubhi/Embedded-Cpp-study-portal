@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tabular Formatting, Stream Manipulators &amp; Statistical Aggregation - C++ & Embedded Systems Guide</title>
+  <title>Tabular Formatting, Stream Manipulators &amp; Statistical Aggregation - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 9</a>
+      <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
       <span class="current">EmployeeSalaryReport</span>
     </div>
@@ -70,65 +76,65 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;fstream&gt;
-#include &lt;iomanip&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;fstream&gt;</span>
+<span class="tok-pre">#include &lt;iomanip&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	ifstream infile(&quot;salaries.txt&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">ifstream</span> <span class="tok-fn">infile</span>(&quot;salaries.txt&quot;);
 
-	if (!infile) {
-		cerr &lt;&lt; &quot;Error opening file.  Aborting...&quot; &lt;&lt; endl;
-		return 1;
+	<span class="tok-kw">if</span> (!infile) {
+		<span class="tok-type">cerr</span> &lt;&lt; <span class="tok-str">&quot;Error opening file.  Aborting...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">1</span>;
 	}
 
-	double salary;
-	int employeeCount = 0;
-	double totalSalary = 0.0;
-	int highEarners = 0;
+	<span class="tok-type">double</span> salary;
+	<span class="tok-type">int</span> employeeCount = <span class="tok-num">0</span>;
+	<span class="tok-type">double</span> totalSalary = <span class="tok-num">0.0</span>;
+	<span class="tok-type">int</span> highEarners = <span class="tok-num">0</span>;
 
-	while (infile &gt;&gt; salary) {
-		if (salary &lt; 0 || salary &gt; 1000000) {
-			//skip invalid data
-			continue;
+	<span class="tok-kw">while</span> (infile &gt;&gt; salary) {
+		<span class="tok-kw">if</span> (salary &lt; <span class="tok-num">0</span> || salary &gt; <span class="tok-num">1000000</span>) {
+			<span class="tok-com">//skip invalid data</span>
+			<span class="tok-kw">continue</span>;
 		}
 
 		employeeCount++;
 		totalSalary += salary;
 
-		if (salary &gt; 100000) {
+		<span class="tok-kw">if</span> (salary &gt; <span class="tok-num">100000</span>) {
 			highEarners++;
 		}
-	}//end while
+	}<span class="tok-com">//end while</span>
 
-	infile.close();
+	infile.<span class="tok-fn">close</span>();
 
-	double averageSalary = (employeeCount &gt; 0) ? totalSalary / employeeCount : 0.0;
+	<span class="tok-type">double</span> averageSalary = (employeeCount &gt; <span class="tok-num">0</span>) ? totalSalary / employeeCount : <span class="tok-num">0.0</span>;
 
-	cout &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; setprecision(2);
-	cout &lt;&lt; &quot;Employee Salary Report&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;-------------------------------&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;Total Employees:               &quot; &lt;&lt; employeeCount &lt;&lt; endl;
-	cout &lt;&lt; &quot;Total Payroll:                 $&quot; &lt;&lt; totalSalary &lt;&lt; endl;
-	cout &lt;&lt; &quot;Average Salary:                $&quot; &lt;&lt; averageSalary &lt;&lt; endl;
-	cout &lt;&lt; &quot;Over $100,000 Earners:         &quot; &lt;&lt; highEarners &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">2</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Employee Salary Report&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;-------------------------------&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Total Employees:               &quot;</span> &lt;&lt; employeeCount &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Total Payroll:                 $&quot;</span> &lt;&lt; totalSalary &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Average Salary:                $&quot;</span> &lt;&lt; averageSalary &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Over $100,000 Earners:         &quot;</span> &lt;&lt; highEarners &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">55000
-72000
-98000
-121000
-45000
-105000
-86000
-34000
-145000
-99999</pre>
+          <pre class="code-block"><span class="tok-num">55000</span>
+<span class="tok-num">72000</span>
+<span class="tok-num">98000</span>
+<span class="tok-num">121000</span>
+<span class="tok-num">45000</span>
+<span class="tok-num">105000</span>
+<span class="tok-num">86000</span>
+<span class="tok-num">34000</span>
+<span class="tok-num">145000</span>
+<span class="tok-num">99999</span></pre>
         </div>
       </div>
     
@@ -152,7 +158,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

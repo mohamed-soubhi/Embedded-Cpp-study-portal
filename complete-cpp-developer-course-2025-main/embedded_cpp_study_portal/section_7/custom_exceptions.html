@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Exception Hierarchies vs Lightweight Tagged Enums - C++ & Embedded Systems Guide</title>
+  <title>Custom Exception Hierarchies vs Lightweight Tagged Enums - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 7</a>
+      <a href="../index.html#grid-advanced">Section 7</a>
       <span class="sep">/</span>
       <span class="current">CustomExceptions</span>
     </div>
@@ -70,59 +76,58 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;AngryCatException.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;AngryCatException.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void feedKitty(int numTreats);
+<span class="tok-type">void</span> <span class="tok-fn">feedKitty</span>(<span class="tok-type">int</span> numTreats);
 
-int main() {
-	int numTreats = 0;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">int</span> numTreats = <span class="tok-num">0</span>;
 
-	cout &lt;&lt; &quot;How many treats do you want to feed kitty?&quot; &lt;&lt; endl;
-	cin &gt;&gt; numTreats;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;How many treats do you want to feed kitty?&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cin</span> &gt;&gt; numTreats;
 
-	try {
-		feedKitty(numTreats);
+	<span class="tok-kw">try</span> {
+		<span class="tok-fn">feedKitty</span>(numTreats);
 	}
-	catch (const AngryCatException&amp; err) {
-		cout &lt;&lt; err.what() &lt;&lt; endl;
+	<span class="tok-kw">catch</span> (<span class="tok-kw">const</span> AngryCatException&amp; err) {
+		<span class="tok-type">cout</span> &lt;&lt; err.<span class="tok-fn">what</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void feedKitty(int numTreats) {
-	if (numTreats &lt; 3) {
-		throw AngryCatException();
+<span class="tok-type">void</span> <span class="tok-fn">feedKitty</span>(<span class="tok-type">int</span> numTreats) {
+	<span class="tok-kw">if</span> (numTreats &lt; <span class="tok-num">3</span>) {
+		<span class="tok-kw">throw</span> <span class="tok-fn">AngryCatException</span>();
 	}
-	else if (numTreats &lt; 6) {
-		throw AngryCatException(&quot;I&#x27;m still not happy!&quot;);  //not angry, just disappointed
+	<span class="tok-kw">else</span> <span class="tok-kw">if</span> (numTreats &lt; <span class="tok-num">6</span>) {
+		<span class="tok-kw">throw</span> <span class="tok-fn">AngryCatException</span>(&quot;I&#x27;m still not happy!&quot;);  <span class="tok-com">//not angry, just disappointed</span>
 	}
 
-	cout &lt;&lt; &quot;Kitty is happy with &quot; &lt;&lt; numTreats &lt;&lt; &quot; treats.&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Kitty is happy with &quot;</span> &lt;&lt; numTreats &lt;&lt; <span class="tok-str">&quot; treats.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef ANGRY_CAT_EXCEPTION_H
-#define ANGRY_CAT_EXCEPTION_H
+          <pre class="code-block"><span class="tok-pre">#ifndef ANGRY_CAT_EXCEPTION_H</span>
+<span class="tok-pre">#define ANGRY_CAT_EXCEPTION_H</span>
 
-#include &lt;stdexcept&gt;
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;stdexcept&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class AngryCatException : public runtime_error {
-	public:
-		AngryCatException() : runtime_error(&quot;Made kitty angry!&quot;) {
+<span class="tok-kw">class</span> AngryCatException : <span class="tok-kw">public</span> runtime_error {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">AngryCatException</span>() : <span class="tok-fn">runtime_error</span>(&quot;Made kitty angry!&quot;) {
 		}
 
-		AngryCatException(const string&amp; err) : runtime_error(err) {
+		<span class="tok-fn">AngryCatException</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; err) : <span class="tok-fn">runtime_error</span>(err) {
 		}
 };
 
-#endif
-</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
       </div>
     
@@ -137,6 +142,43 @@ class AngryCatException : public runtime_error {
         <h3>1. Creating Custom Domain Exceptions</h3>
         <p>In standard C++, custom exception classes inherit from <code>std::runtime_error</code> (for runtime issues) or <code>std::logic_error</code> (for precondition violations), overriding the virtual <code>const char* what() const noexcept</code> method.</p>
 
+        <div class="diagram-container">
+          <h4>📐 Exception Inheritance Hierarchy UML</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;std-base&gt;&gt;</span>
+                <span class="uml-class-name">std::exception</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ what() : const char* [virtual]</div>
+                <div class="uml-item public">+ ~exception() [virtual]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;std-runtime&gt;&gt;</span>
+                <span class="uml-class-name">std::runtime_error</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ runtime_error(msg: string)</div>
+                <div class="uml-item public">+ what() : const char* [override]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;custom-domain&gt;&gt;</span>
+                <span class="uml-class-name">AngryCatException</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ AngryCatException()</div>
+                <div class="uml-item public">+ AngryCatException(msg: string)</div>
+                <div class="uml-item public">+ what() : const char* [override]</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Object Slicing in Catch Handlers</h3>
         <p>Always catch exceptions by <strong>const reference</strong> (<code>catch (const std::exception& e)</code>). Catching by value (<code>catch (std::exception e)</code>) slices derived member variables away and destroys polymorphic <code>what()</code> dispatch.</p>
         
@@ -145,7 +187,7 @@ class AngryCatException : public runtime_error {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

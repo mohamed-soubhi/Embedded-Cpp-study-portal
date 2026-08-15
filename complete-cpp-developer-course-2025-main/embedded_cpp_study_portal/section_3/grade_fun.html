@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Switch Statements, Jump Tables &amp; TBB/TBH Instructions - C++ & Embedded Systems Guide</title>
+  <title>Switch Statements, Jump Tables &amp; TBB/TBH Instructions - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 3</a>
+      <a href="../index.html#grid-foundations">Section 3</a>
       <span class="sep">/</span>
       <span class="current">GradeFun</span>
     </div>
@@ -69,49 +75,49 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-/*
-	int x = 5;   
-	if(x &lt; 10)
-*/
+<span class="tok-com">/*</span>
+<span class="tok-com">	int x = 5;   </span>
+<span class="tok-com">	if(x &lt; 10)</span>
+<span class="tok-com">*/</span>
 
 
 
-int main() {
-	char grade;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">char</span> grade;
 
-	cout &lt;&lt; &quot;Enter your letter grade (A-F): &quot;;
-	cin &gt;&gt; grade;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter your letter grade (A-F): &quot;</span>;
+	<span class="tok-type">cin</span> &gt;&gt; grade;
 
-	switch (grade) {
-	case &#x27;A&#x27;:
-	case &#x27;a&#x27;:
-		cout &lt;&lt; &quot;Great job!&quot; &lt;&lt; endl;
-		break;
-	case &#x27;B&#x27;:
-	case &#x27;b&#x27;:
-		cout &lt;&lt; &quot;Good job!&quot; &lt;&lt; endl;
-		break;
-	case &#x27;C&#x27;:
-	case &#x27;c&#x27;:
-		cout &lt;&lt; &quot;You can do better!&quot; &lt;&lt; endl;
-		break;
-	case &#x27;D&#x27;:
-	case &#x27;d&#x27;:
-		cout &lt;&lt; &quot;You&#x27;re getting pretty close to failing&quot; &lt;&lt; endl;
-		break;
-	case &#x27;F&#x27;:
-	case &#x27;f&#x27;:
-		cout &lt;&lt; &quot;You are failing the course!&quot; &lt;&lt; endl;
-		break;
-	default:
-		cout &lt;&lt; &quot;You have entered an invalid grade.  Try again.&quot; &lt;&lt; endl;
+	<span class="tok-kw">switch</span> (grade) {
+	<span class="tok-kw">case</span> &#x27;A&#x27;:
+	<span class="tok-kw">case</span> &#x27;a&#x27;:
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Great job!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">break</span>;
+	<span class="tok-kw">case</span> &#x27;B&#x27;:
+	<span class="tok-kw">case</span> &#x27;b&#x27;:
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Good job!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">break</span>;
+	<span class="tok-kw">case</span> &#x27;C&#x27;:
+	<span class="tok-kw">case</span> &#x27;c&#x27;:
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You can do better!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">break</span>;
+	<span class="tok-kw">case</span> &#x27;D&#x27;:
+	<span class="tok-kw">case</span> &#x27;d&#x27;:
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You&#x27;re getting pretty close to failing&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">break</span>;
+	<span class="tok-kw">case</span> &#x27;F&#x27;:
+	<span class="tok-kw">case</span> &#x27;f&#x27;:
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You are failing the course!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">break</span>;
+	<span class="tok-kw">default</span>:
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You have entered an invalid grade.  Try again.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	}//end switch
+	}<span class="tok-com">//end switch</span>
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -135,7 +141,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

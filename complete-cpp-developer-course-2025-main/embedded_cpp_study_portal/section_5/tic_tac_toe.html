@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>State Machine Architecture &amp; Modular Function Decomposition - C++ & Embedded Systems Guide</title>
+  <title>State Machine Architecture &amp; Modular Function Decomposition - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 5</a>
+      <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
       <span class="current">TicTacToe</span>
     </div>
@@ -69,223 +75,222 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-const int ROWS = 3;
-const int COLS = 3;
+<span class="tok-kw">const</span> <span class="tok-type">int</span> ROWS = <span class="tok-num">3</span>;
+<span class="tok-kw">const</span> <span class="tok-type">int</span> COLS = <span class="tok-num">3</span>;
 
-void runGame();
-void initializeGameBoard(string gameBoard[ROWS][COLS]);
-void printCurrentBoard(string gameBoard[ROWS][COLS]);
-void getUserInput(bool xTurn, string gameBoard[ROWS][COLS]);
-bool cellAlreadyOccupied(int row, int col, string gameBoard[ROWS][COLS]);
-string getWinner(string gameBoard[ROWS][COLS]);
-bool isBoardFull(string gameBoard[ROWS][COLS]);
+<span class="tok-type">void</span> <span class="tok-fn">runGame</span>();
+<span class="tok-type">void</span> <span class="tok-fn">initializeGameBoard</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS]);
+<span class="tok-type">void</span> <span class="tok-fn">printCurrentBoard</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS]);
+<span class="tok-type">void</span> <span class="tok-fn">getUserInput</span>(<span class="tok-kw">bool</span> xTurn, <span class="tok-type">string</span> gameBoard[ROWS][COLS]);
+<span class="tok-kw">bool</span> <span class="tok-fn">cellAlreadyOccupied</span>(<span class="tok-type">int</span> row, <span class="tok-type">int</span> col, <span class="tok-type">string</span> gameBoard[ROWS][COLS]);
+<span class="tok-type">string</span> <span class="tok-fn">getWinner</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS]);
+<span class="tok-kw">bool</span> <span class="tok-fn">isBoardFull</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS]);
 
-int main()
+<span class="tok-type">int</span> <span class="tok-fn">main</span>()
 {
-	runGame();
-	return 0;
-}//end main
+	<span class="tok-fn">runGame</span>();
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
+}<span class="tok-com">//end main</span>
 
-//-------------------------------------------------//
-//----------| the game loop - runGame |------------//
-//-------------------------------------------------//
-void runGame()
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//----------| the game loop - runGame |------------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-type">void</span> <span class="tok-fn">runGame</span>()
 {
-	string winner = &quot;&quot;;
-	bool xTurn = true; //start with X&#x27;s turn
-	int theRow = 0;
-	int theCol = 0;
-	string gameBoard[ROWS][COLS];
+	<span class="tok-type">string</span> winner = <span class="tok-str">&quot;&quot;</span>;
+	<span class="tok-kw">bool</span> xTurn = <span class="tok-kw">true</span>; <span class="tok-com">//start with X&#x27;s turn</span>
+	<span class="tok-type">int</span> theRow = <span class="tok-num">0</span>;
+	<span class="tok-type">int</span> theCol = <span class="tok-num">0</span>;
+	<span class="tok-type">string</span> gameBoard[ROWS][COLS];
 
-	initializeGameBoard(gameBoard);
+	<span class="tok-fn">initializeGameBoard</span>(gameBoard);
 
-	//initial print
-	printCurrentBoard(gameBoard);
+	<span class="tok-com">//initial print</span>
+	<span class="tok-fn">printCurrentBoard</span>(gameBoard);
 
-	while (winner == &quot;&quot;)
+	<span class="tok-kw">while</span> (winner == <span class="tok-str">&quot;&quot;</span>)
 	{
-		if (xTurn)
+		<span class="tok-kw">if</span> (xTurn)
 		{
-			cout &lt;&lt; &quot;It is X&#x27;s turn&quot; &lt;&lt; endl;
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;It is X&#x27;s turn&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 		}
-		else
+		<span class="tok-kw">else</span>
 		{
-			cout &lt;&lt; &quot;It is O&#x27;s turn&quot; &lt;&lt; endl;
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;It is O&#x27;s turn&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 		}
-		getUserInput(xTurn, gameBoard);
-		cout &lt;&lt; endl;  //extra spacing
-		printCurrentBoard(gameBoard); //reprint the board
-		winner = getWinner(gameBoard);  //check for a winner
-		xTurn = !xTurn;  //flip it
+		<span class="tok-fn">getUserInput</span>(xTurn, gameBoard);
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;  <span class="tok-com">//extra spacing</span>
+		<span class="tok-fn">printCurrentBoard</span>(gameBoard); <span class="tok-com">//reprint the board</span>
+		winner = <span class="tok-fn">getWinner</span>(gameBoard);  <span class="tok-com">//check for a winner</span>
+		xTurn = !xTurn;  <span class="tok-com">//flip it</span>
 
-		if (winner == &quot;&quot; &amp;&amp; isBoardFull(gameBoard))
+		<span class="tok-kw">if</span> (winner == <span class="tok-str">&quot;&quot;</span> &amp;&amp; <span class="tok-fn">isBoardFull</span>(gameBoard))
 		{
-			winner = &quot;C&quot;;  //Cat&#x27;s game... no winner!
+			winner = <span class="tok-str">&quot;C&quot;</span>;  <span class="tok-com">//Cat&#x27;s game... no winner!</span>
 		}
-	}//end while
+	}<span class="tok-com">//end while</span>
 
-	//cat&#x27;s game?
-	cout &lt;&lt; endl;  //extra space before
-	if (winner == &quot;C&quot;)
+	<span class="tok-com">//cat&#x27;s game?</span>
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;  <span class="tok-com">//extra space before</span>
+	<span class="tok-kw">if</span> (winner == <span class="tok-str">&quot;C&quot;</span>)
 	{
-		cout &lt;&lt; &quot;It was the Cat&#x27;s game!  NO WINNER!&quot; &lt;&lt; endl;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;It was the Cat&#x27;s game!  NO WINNER!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	else {
-		cout &lt;&lt; &quot;The winner is &quot; &lt;&lt; winner &lt;&lt; endl;  //print&#x27;s X or O
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;The winner is &quot;</span> &lt;&lt; winner &lt;&lt; <span class="tok-type">endl</span>;  <span class="tok-com">//print&#x27;s X or O</span>
 	}
-	cout &lt;&lt; endl;  //extra space
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;  <span class="tok-com">//extra space</span>
 }
 
-//-------------------------------------------------//
-//------------| initialize the board |-------------//
-//-------------------------------------------------//
-void initializeGameBoard(string gameBoard[ROWS][COLS])
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//------------| initialize the board |-------------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-type">void</span> <span class="tok-fn">initializeGameBoard</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS])
 {
-	for (int i = 0; i &lt; ROWS; i++)
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; ROWS; i++)
 	{
-		for (int j = 0; j &lt; COLS; j++)
+		<span class="tok-kw">for</span> (<span class="tok-type">int</span> j = <span class="tok-num">0</span>; j &lt; COLS; j++)
 		{
-			gameBoard[i][j] = &quot; &quot;; //empty space
+			gameBoard[i][j] = <span class="tok-str">&quot; &quot;</span>; <span class="tok-com">//empty space</span>
 		}
 	}
-}//end initialize game board
+}<span class="tok-com">//end initialize game board</span>
 
-//-------------------------------------------------//
-//----------| print the current board |------------//
-//-------------------------------------------------//
-void printCurrentBoard(string gameBoard[ROWS][COLS])
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//----------| print the current board |------------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-type">void</span> <span class="tok-fn">printCurrentBoard</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS])
 {
-	for (int i = 0; i &lt; ROWS; i++)
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; ROWS; i++)
 	{
-		for (int j = 0; j &lt; COLS; j++)
+		<span class="tok-kw">for</span> (<span class="tok-type">int</span> j = <span class="tok-num">0</span>; j &lt; COLS; j++)
 		{
-			cout &lt;&lt; gameBoard[i][j];
-			if (j &lt; 2)
+			<span class="tok-type">cout</span> &lt;&lt; gameBoard[i][j];
+			<span class="tok-kw">if</span> (j &lt; <span class="tok-num">2</span>)
 			{
-				cout &lt;&lt; &quot; | &quot;;
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot; | &quot;</span>;
 			}
 		}
-		cout &lt;&lt; endl;
-		if (i &lt; 2)
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">if</span> (i &lt; <span class="tok-num">2</span>)
 		{
-			cout &lt;&lt; &quot;- - - - -&quot; &lt;&lt; endl;
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;- - - - -&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 		}
 	}
-	cout &lt;&lt; endl;  //extra spacing
-}//end print the current board
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;  <span class="tok-com">//extra spacing</span>
+}<span class="tok-com">//end print the current board</span>
 
-//-------------------------------------------------//
-//------| get user input and place symbol |--------//
-//-------------------------------------------------//
-void getUserInput(bool xTurn, string gameBoard[ROWS][COLS])
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//------| get user input and place symbol |--------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-type">void</span> <span class="tok-fn">getUserInput</span>(<span class="tok-kw">bool</span> xTurn, <span class="tok-type">string</span> gameBoard[ROWS][COLS])
 {
-	int row = -1;
-	int col = -1;
-	bool keepAsking = true;
-	while (keepAsking)
+	<span class="tok-type">int</span> row = -<span class="tok-num">1</span>;
+	<span class="tok-type">int</span> col = -<span class="tok-num">1</span>;
+	<span class="tok-kw">bool</span> keepAsking = <span class="tok-kw">true</span>;
+	<span class="tok-kw">while</span> (keepAsking)
 	{
-		//keep asking until you get a valid answer
-		cout &lt;&lt; &quot;Please enter the row THEN the column, each from 0, 1, or 2, separated by a space&quot; &lt;&lt; endl;
-		cin &gt;&gt; row;
-		cin &gt;&gt; col;
-		if (row &gt;= 0 &amp;&amp; col &gt;= 0 &amp;&amp; row &lt;= 2 &amp;&amp; col &lt;= 2)
+		<span class="tok-com">//keep asking until you get a valid answer</span>
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Please enter the row THEN the column, each from 0, 1, or 2, separated by a space&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">cin</span> &gt;&gt; row;
+		<span class="tok-type">cin</span> &gt;&gt; col;
+		<span class="tok-kw">if</span> (row &gt;= <span class="tok-num">0</span> &amp;&amp; col &gt;= <span class="tok-num">0</span> &amp;&amp; row &lt;= <span class="tok-num">2</span> &amp;&amp; col &lt;= <span class="tok-num">2</span>)
 		{
-			//valid/in-range selection
-			//but it STILL could be occupied by an X or O already...
-			if (!cellAlreadyOccupied(row, col, gameBoard))
+			<span class="tok-com">//valid/in-range selection</span>
+			<span class="tok-com">//but it STILL could be occupied by an X or O already...</span>
+			<span class="tok-kw">if</span> (!<span class="tok-fn">cellAlreadyOccupied</span>(row, col, gameBoard))
 			{
-				//only set the cell if the row/col is valid AND not occupied
-				keepAsking = false;
+				<span class="tok-com">//only set the cell if the row/col is valid AND not occupied</span>
+				keepAsking = <span class="tok-kw">false</span>;
 			}
-			else
+			<span class="tok-kw">else</span>
 			{
-				cout &lt;&lt; &quot;That cell is already occupied!&quot; &lt;&lt; endl;
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;That cell is already occupied!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 			}
 		}
-	}//end while
+	}<span class="tok-com">//end while</span>
 
-	//by the time it gets here, we know it&#x27;s a VALID row and col,
-	//in range, and not already occupied!
-	if (xTurn)  //must be an X
+	<span class="tok-com">//by the time it gets here, we know it&#x27;s a VALID row and col,</span>
+	<span class="tok-com">//in range, and not already occupied!</span>
+	<span class="tok-kw">if</span> (xTurn)  <span class="tok-com">//must be an X</span>
 	{
-		gameBoard[row][col] = &quot;X&quot;;
+		gameBoard[row][col] = <span class="tok-str">&quot;X&quot;</span>;
 	}
-	else  //must be an O
+	<span class="tok-kw">else</span>  <span class="tok-com">//must be an O</span>
 	{
-		gameBoard[row][col] = &quot;O&quot;;
+		gameBoard[row][col] = <span class="tok-str">&quot;O&quot;</span>;
 	}
-}//end getUserInput
+}<span class="tok-com">//end getUserInput</span>
 
-//-------------------------------------------------//
-//------| test if cell is already occupied |-------//
-//-------------------------------------------------//
-bool cellAlreadyOccupied(int row, int col, string gameBoard[ROWS][COLS])
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//------| test if cell is already occupied |-------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-kw">bool</span> <span class="tok-fn">cellAlreadyOccupied</span>(<span class="tok-type">int</span> row, <span class="tok-type">int</span> col, <span class="tok-type">string</span> gameBoard[ROWS][COLS])
 {
-	return gameBoard[row][col] != &quot; &quot;;  //if not a space, then it&#x27;s occupied
-}//end cellAlreadyOccupied
+	<span class="tok-kw">return</span> gameBoard[row][col] != <span class="tok-str">&quot; &quot;</span>;  <span class="tok-com">//if not a space, then it&#x27;s occupied</span>
+}<span class="tok-com">//end cellAlreadyOccupied</span>
 
-//-------------------------------------------------//
-//-----------------| get winner |------------------//
-//-------------------------------------------------//
-string getWinner(string gameBoard[ROWS][COLS])
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//-----------------| get winner |------------------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-type">string</span> <span class="tok-fn">getWinner</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS])
 {
-	//check rows
-	for (int i = 0; i &lt; ROWS; i++)
+	<span class="tok-com">//check rows</span>
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; ROWS; i++)
 	{
-		if (gameBoard[i][0] != &quot; &quot; &amp;&amp; gameBoard[i][0] == gameBoard[i][1] &amp;&amp; gameBoard[i][1] == gameBoard[i][2])
+		<span class="tok-kw">if</span> (gameBoard[i][<span class="tok-num">0</span>] != <span class="tok-str">&quot; &quot;</span> &amp;&amp; gameBoard[i][<span class="tok-num">0</span>] == gameBoard[i][<span class="tok-num">1</span>] &amp;&amp; gameBoard[i][<span class="tok-num">1</span>] == gameBoard[i][<span class="tok-num">2</span>])
 		{
-			return gameBoard[i][0];  //we have a match (horizontal)!
+			<span class="tok-kw">return</span> gameBoard[i][<span class="tok-num">0</span>];  <span class="tok-com">//we have a match (horizontal)!</span>
 		}
-	}//end for
+	}<span class="tok-com">//end for</span>
 
-	//check columns
-	for (int i = 0; i &lt; COLS; i++)
+	<span class="tok-com">//check columns</span>
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; COLS; i++)
 	{
-		if (gameBoard[0][i] != &quot; &quot; &amp;&amp; gameBoard[0][i] == gameBoard[1][i] &amp;&amp; gameBoard[1][i] == gameBoard[2][i])
+		<span class="tok-kw">if</span> (gameBoard[<span class="tok-num">0</span>][i] != <span class="tok-str">&quot; &quot;</span> &amp;&amp; gameBoard[<span class="tok-num">0</span>][i] == gameBoard[<span class="tok-num">1</span>][i] &amp;&amp; gameBoard[<span class="tok-num">1</span>][i] == gameBoard[<span class="tok-num">2</span>][i])
 		{
-			return gameBoard[0][i];  //we have a match (vertical)!
+			<span class="tok-kw">return</span> gameBoard[<span class="tok-num">0</span>][i];  <span class="tok-com">//we have a match (vertical)!</span>
 		}
-	}//end for
+	}<span class="tok-com">//end for</span>
 
-	//check diagonals
-	//upper-left to bottom right diagonal
-	if (gameBoard[0][0] != &quot; &quot; &amp;&amp; gameBoard[0][0] == gameBoard[1][1] &amp;&amp; gameBoard[1][1] == gameBoard[2][2])
+	<span class="tok-com">//check diagonals</span>
+	<span class="tok-com">//upper-left to bottom right diagonal</span>
+	<span class="tok-kw">if</span> (gameBoard[<span class="tok-num">0</span>][<span class="tok-num">0</span>] != <span class="tok-str">&quot; &quot;</span> &amp;&amp; gameBoard[<span class="tok-num">0</span>][<span class="tok-num">0</span>] == gameBoard[<span class="tok-num">1</span>][<span class="tok-num">1</span>] &amp;&amp; gameBoard[<span class="tok-num">1</span>][<span class="tok-num">1</span>] == gameBoard[<span class="tok-num">2</span>][<span class="tok-num">2</span>])
 	{
-		return gameBoard[0][0];  //we have a diagonal match!
+		<span class="tok-kw">return</span> gameBoard[<span class="tok-num">0</span>][<span class="tok-num">0</span>];  <span class="tok-com">//we have a diagonal match!</span>
 	}
 
-	//lower-left to upper right diagonal
-	if (gameBoard[2][0] != &quot; &quot; &amp;&amp; gameBoard[2][0] == gameBoard[1][1] &amp;&amp; gameBoard[1][1] == gameBoard[0][2])
+	<span class="tok-com">//lower-left to upper right diagonal</span>
+	<span class="tok-kw">if</span> (gameBoard[<span class="tok-num">2</span>][<span class="tok-num">0</span>] != <span class="tok-str">&quot; &quot;</span> &amp;&amp; gameBoard[<span class="tok-num">2</span>][<span class="tok-num">0</span>] == gameBoard[<span class="tok-num">1</span>][<span class="tok-num">1</span>] &amp;&amp; gameBoard[<span class="tok-num">1</span>][<span class="tok-num">1</span>] == gameBoard[<span class="tok-num">0</span>][<span class="tok-num">2</span>])
 	{
-		return gameBoard[2][0];  //we have a diagonal match!
+		<span class="tok-kw">return</span> gameBoard[<span class="tok-num">2</span>][<span class="tok-num">0</span>];  <span class="tok-com">//we have a diagonal match!</span>
 	}
 
-	return &quot;&quot;;  //no winner yet!
-}//end getWinner
+	<span class="tok-kw">return</span> <span class="tok-str">&quot;&quot;</span>;  <span class="tok-com">//no winner yet!</span>
+}<span class="tok-com">//end getWinner</span>
 
-//-------------------------------------------------//
-//-----------------| board full? |-----------------//
-//-------------------------------------------------//
-bool isBoardFull(string gameBoard[ROWS][COLS])
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-com">//-----------------| board full? |-----------------//</span>
+<span class="tok-com">//-------------------------------------------------//</span>
+<span class="tok-kw">bool</span> <span class="tok-fn">isBoardFull</span>(<span class="tok-type">string</span> gameBoard[ROWS][COLS])
 {
-	int countFill = 0;
-	for (int i = 0; i &lt; ROWS; i++)
+	<span class="tok-type">int</span> countFill = <span class="tok-num">0</span>;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; ROWS; i++)
 	{
-		for (int j = 0; j &lt; COLS; j++)
+		<span class="tok-kw">for</span> (<span class="tok-type">int</span> j = <span class="tok-num">0</span>; j &lt; COLS; j++)
 		{
-			if (gameBoard[i][j] != &quot; &quot;)
+			<span class="tok-kw">if</span> (gameBoard[i][j] != <span class="tok-str">&quot; &quot;</span>)
 			{
 				countFill++;
 			}
 		}
 	}
-	return countFill == 9;  //all 9 cells are full, then board is full
-}
-</pre>
+	<span class="tok-kw">return</span> countFill == <span class="tok-num">9</span>;  <span class="tok-com">//all 9 cells are full, then board is full</span>
+}</pre>
         </div>
       </div>
     
@@ -308,7 +313,7 @@ bool isBoardFull(string gameBoard[ROWS][COLS])
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

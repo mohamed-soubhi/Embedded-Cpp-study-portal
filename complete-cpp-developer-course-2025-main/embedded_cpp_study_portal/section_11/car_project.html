@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Encapsulation &amp; Object Composition - C++ & Embedded Systems Guide</title>
+  <title>Encapsulation &amp; Object Composition - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">CarProject</span>
     </div>
@@ -71,54 +77,54 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef CAR_H
-#define CAR_H
+          <pre class="code-block"><span class="tok-pre">#ifndef CAR_H</span>
+<span class="tok-pre">#define CAR_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Car {
-	public:
-		Car(string color, int numDoors);
-		string getColor() const;
-		int getNumDoors() const;
+<span class="tok-kw">class</span> Car {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Car</span>(<span class="tok-type">string</span> color, <span class="tok-type">int</span> numDoors);
+		<span class="tok-type">string</span> <span class="tok-fn">getColor</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getNumDoors</span>() <span class="tok-kw">const</span>;
 
-	private:
-		string color;
-		int numDoors;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> color;
+		<span class="tok-type">int</span> numDoors;
 };
 
-#endif</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;Car.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Car.h&quot;</span>
 
-Car::Car(string color, int numDoors) : color(color), numDoors(numDoors) {
+Car::<span class="tok-fn">Car</span>(<span class="tok-type">string</span> color, <span class="tok-type">int</span> numDoors) : <span class="tok-fn">color</span>(color), <span class="tok-fn">numDoors</span>(numDoors) {
 }
 
-string Car::getColor() const {
-	return color;
+<span class="tok-type">string</span> Car::<span class="tok-fn">getColor</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> color;
 }
 
-int Car::getNumDoors() const {
-	return numDoors;
+<span class="tok-type">int</span> Car::<span class="tok-fn">getNumDoors</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> numDoors;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Car.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Car.h&quot;</span>
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 	
-	auto myCarPtr = make_unique&lt;Car&gt;(&quot;red&quot;, 4);
+	<span class="tok-kw">auto</span> myCarPtr = <span class="tok-type">make_unique</span>&lt;Car&gt;(&quot;red&quot;, <span class="tok-num">4</span>);
 
-	cout &lt;&lt; &quot;Color: &quot; &lt;&lt; myCarPtr-&gt;getColor() &lt;&lt; endl;
-	cout &lt;&lt; &quot;Doors: &quot; &lt;&lt; myCarPtr-&gt;getNumDoors() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Color: &quot;</span> &lt;&lt; myCarPtr-&gt;<span class="tok-fn">getColor</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Doors: &quot;</span> &lt;&lt; myCarPtr-&gt;<span class="tok-fn">getNumDoors</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -136,7 +142,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Hardware Abstraction Layers (HAL)</h3><p>Encapsulation models physical hardware modules (Engine Controller, Brake Actuator) cleanly.</p>

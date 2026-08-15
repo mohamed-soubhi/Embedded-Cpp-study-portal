@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Return Types, Side Effects &amp; Pure Functions in Firmware - C++ & Embedded Systems Guide</title>
+  <title>Return Types, Side Effects &amp; Pure Functions in Firmware - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 5</a>
+      <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
       <span class="current">ReturnTypeParameterFun</span>
     </div>
@@ -69,55 +75,55 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printHello();
-void printNumber(int a);
-int giveMe10();
-int addThese(int num1, int num2);
+<span class="tok-type">void</span> <span class="tok-fn">printHello</span>();
+<span class="tok-type">void</span> <span class="tok-fn">printNumber</span>(<span class="tok-type">int</span> a);
+<span class="tok-type">int</span> <span class="tok-fn">giveMe10</span>();
+<span class="tok-type">int</span> <span class="tok-fn">addThese</span>(<span class="tok-type">int</span> num1, <span class="tok-type">int</span> num2);
 
-int square(int n);
+<span class="tok-type">int</span> <span class="tok-fn">square</span>(<span class="tok-type">int</span> n);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	int num1 = 120;
-	int num2 = 580;
+	<span class="tok-type">int</span> num1 = <span class="tok-num">120</span>;
+	<span class="tok-type">int</span> num2 = <span class="tok-num">580</span>;
 
-	printHello();
-	printNumber(100);
+	<span class="tok-fn">printHello</span>();
+	<span class="tok-fn">printNumber</span>(<span class="tok-num">100</span>);
 
-	int someData = giveMe10();
-	cout &lt;&lt; someData &lt;&lt; endl;
+	<span class="tok-type">int</span> someData = <span class="tok-fn">giveMe10</span>();
+	<span class="tok-type">cout</span> &lt;&lt; someData &lt;&lt; <span class="tok-type">endl</span>;
 
-	int totalValue = addThese(num1, num2);
-	cout &lt;&lt; totalValue &lt;&lt; endl;
+	<span class="tok-type">int</span> totalValue = <span class="tok-fn">addThese</span>(num1, num2);
+	<span class="tok-type">cout</span> &lt;&lt; totalValue &lt;&lt; <span class="tok-type">endl</span>;
 
-	printNumber(addThese(num1, 50));
+	<span class="tok-fn">printNumber</span>(<span class="tok-fn">addThese</span>(num1, <span class="tok-num">50</span>));
 
-	cout &lt;&lt; square(7) &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-fn">square</span>(<span class="tok-num">7</span>) &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printHello() {
-	cout &lt;&lt; &quot;Hello there!&quot; &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printHello</span>() {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Hello there!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-void printNumber(int a) {
-	cout &lt;&lt; &quot;The number is &quot; &lt;&lt; a &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printNumber</span>(<span class="tok-type">int</span> a) {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;The number is &quot;</span> &lt;&lt; a &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-int giveMe10() {
-	return 10;
+<span class="tok-type">int</span> <span class="tok-fn">giveMe10</span>() {
+	<span class="tok-kw">return</span> <span class="tok-num">10</span>;
 }
 
-int addThese(int num1, int num2) {
-	return num1 + num2;
+<span class="tok-type">int</span> <span class="tok-fn">addThese</span>(<span class="tok-type">int</span> num1, <span class="tok-type">int</span> num2) {
+	<span class="tok-kw">return</span> num1 + num2;
 }
 
-int square(int n) {
-	return n * n;
+<span class="tok-type">int</span> <span class="tok-fn">square</span>(<span class="tok-type">int</span> n) {
+	<span class="tok-kw">return</span> n * n;
 }</pre>
         </div>
       </div>
@@ -141,7 +147,7 @@ int square(int n) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bitwise Parity, Modulo Division &amp; Branchless Algorithms - C++ & Embedded Systems Guide</title>
+  <title>Bitwise Parity, Modulo Division &amp; Branchless Algorithms - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 5</a>
+      <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
       <span class="current">CountEvens</span>
     </div>
@@ -69,32 +75,32 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int countEvens(int arr[], int size);
+<span class="tok-type">int</span> <span class="tok-fn">countEvens</span>(<span class="tok-type">int</span> arr[], <span class="tok-type">int</span> size);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	int myArray[] = { 12, 7, 4, 19, 22, 3, 8, 10 };
+	<span class="tok-type">int</span> myArray[] = { <span class="tok-num">12</span>, <span class="tok-num">7</span>, <span class="tok-num">4</span>, <span class="tok-num">19</span>, <span class="tok-num">22</span>, <span class="tok-num">3</span>, <span class="tok-num">8</span>, <span class="tok-num">10</span> };
 
-	int numEvens = countEvens(myArray, 8);
+	<span class="tok-type">int</span> numEvens = <span class="tok-fn">countEvens</span>(myArray, <span class="tok-num">8</span>);
 
-	cout &lt;&lt; &quot;Number of even elements: &quot; &lt;&lt; numEvens &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Number of even elements: &quot;</span> &lt;&lt; numEvens &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-int countEvens(int arr[], int size) {
-	int count = 0;
+<span class="tok-type">int</span> <span class="tok-fn">countEvens</span>(<span class="tok-type">int</span> arr[], <span class="tok-type">int</span> size) {
+	<span class="tok-type">int</span> count = <span class="tok-num">0</span>;
 
-	for (int i = 0; i &lt; size; i++) {
-		if (arr[i] % 2 == 0) {
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; size; i++) {
+		<span class="tok-kw">if</span> (arr[i] % <span class="tok-num">2</span> == <span class="tok-num">0</span>) {
 			count++;
 		}
 	}
 
-	return count;
+	<span class="tok-kw">return</span> count;
 }</pre>
         </div>
       </div>
@@ -115,7 +121,7 @@ int countEvens(int arr[], int size) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

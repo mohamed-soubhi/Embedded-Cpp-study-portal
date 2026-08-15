@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Output Streams, Buffering &amp; Flush Mechanics - C++ & Embedded Systems Guide</title>
+  <title>File Output Streams, Buffering &amp; Flush Mechanics - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 9</a>
+      <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
       <span class="current">FileOutputFun</span>
     </div>
@@ -70,155 +76,154 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-#include &lt;fstream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;iomanip&gt;</span>
+<span class="tok-pre">#include &lt;fstream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printFormatted(ofstream&amp; outfile, int highNum);
+<span class="tok-type">void</span> <span class="tok-fn">printFormatted</span>(<span class="tok-type">ofstream</span>&amp; outfile, <span class="tok-type">int</span> highNum);
 
-int main() {
-	int highNum;
-	cout &lt;&lt; &quot;Enter a high number:  &quot;;
-	cin &gt;&gt; highNum;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">int</span> highNum;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter a high number:  &quot;</span>;
+	<span class="tok-type">cin</span> &gt;&gt; highNum;
 
-	cout &lt;&lt; &quot;Writing to file...&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Writing to file...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	ofstream outfile(&quot;output.txt&quot;);  
+	<span class="tok-type">ofstream</span> <span class="tok-fn">outfile</span>(&quot;output.txt&quot;);  
 
-	if (!outfile) {
-		cerr &lt;&lt; &quot;Error: Could not open file for writing.&quot; &lt;&lt; endl;
-		return 1;
+	<span class="tok-kw">if</span> (!outfile) {
+		<span class="tok-type">cerr</span> &lt;&lt; <span class="tok-str">&quot;Error: Could not open file for writing.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">1</span>;
 	}
 
-	cout &lt;&lt; fixed &lt;&lt; showpoint;
+	<span class="tok-type">cout</span> &lt;&lt; fixed &lt;&lt; showpoint;
 	outfile &lt;&lt; fixed &lt;&lt; showpoint;
 
-	printFormatted(outfile, highNum);
-	//outfile &lt;&lt; &quot;Hello world!&quot; &lt;&lt; endl;
+	<span class="tok-fn">printFormatted</span>(outfile, highNum);
+	<span class="tok-com">//outfile &lt;&lt; &quot;Hello world!&quot; &lt;&lt; endl;</span>
 
-	outfile.close();  
-	cout &lt;&lt; &quot;Done&quot; &lt;&lt; endl;
+	outfile.<span class="tok-fn">close</span>();  
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Done&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printFormatted(ofstream&amp; outfile, int highNum) {
-	for (int i = 1; i &lt;= highNum; i++) {
-		double value1 = i * 5.7575;
-		double value2 = i * 3.14159;
+<span class="tok-type">void</span> <span class="tok-fn">printFormatted</span>(<span class="tok-type">ofstream</span>&amp; outfile, <span class="tok-type">int</span> highNum) {
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">1</span>; i &lt;= highNum; i++) {
+		<span class="tok-type">double</span> value1 = i * <span class="tok-num">5.7575</span>;
+		<span class="tok-type">double</span> value2 = i * <span class="tok-num">3.14159</span>;
 
-		cout &lt;&lt; setw(12) &lt;&lt; setprecision(2) &lt;&lt; value1
-			&lt;&lt; setw(12) &lt;&lt; setprecision(3) &lt;&lt; value2 &lt;&lt; endl;
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">12</span>) &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">2</span>) &lt;&lt; value1
+			&lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">12</span>) &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">3</span>) &lt;&lt; value2 &lt;&lt; <span class="tok-type">endl</span>;
 
-		outfile &lt;&lt; setw(12) &lt;&lt; setprecision(2) &lt;&lt; value1
-			&lt;&lt; setw(12) &lt;&lt; setprecision(3) &lt;&lt; value2 &lt;&lt; endl;
+		outfile &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">12</span>) &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">2</span>) &lt;&lt; value1
+			&lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">12</span>) &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">3</span>) &lt;&lt; value2 &lt;&lt; <span class="tok-type">endl</span>;
 	}
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">        5.76       3.142
-       11.52       6.283
-       17.27       9.425
-       23.03      12.566
-       28.79      15.708
-       34.55      18.850
-       40.30      21.991
-       46.06      25.133
-       51.82      28.274
-       57.58      31.416
-       63.33      34.557
-       69.09      37.699
-       74.85      40.841
-       80.61      43.982
-       86.36      47.124
-       92.12      50.265
-       97.88      53.407
-      103.64      56.549
-      109.39      59.690
-      115.15      62.832
-      120.91      65.973
-      126.67      69.115
-      132.42      72.257
-      138.18      75.398
-      143.94      78.540
-      149.69      81.681
-      155.45      84.823
-      161.21      87.965
-      166.97      91.106
-      172.73      94.248
-      178.48      97.389
-      184.24     100.531
-      190.00     103.672
-      195.75     106.814
-      201.51     109.956
-      207.27     113.097
-      213.03     116.239
-      218.79     119.380
-      224.54     122.522
-      230.30     125.664
-      236.06     128.805
-      241.81     131.947
-      247.57     135.088
-      253.33     138.230
-      259.09     141.372
-      264.85     144.513
-      270.60     147.655
-      276.36     150.796
-      282.12     153.938
-      287.88     157.079
-      293.63     160.221
-      299.39     163.363
-      305.15     166.504
-      310.91     169.646
-      316.66     172.787
-      322.42     175.929
-      328.18     179.071
-      333.94     182.212
-      339.69     185.354
-      345.45     188.495
-      351.21     191.637
-      356.97     194.779
-      362.72     197.920
-      368.48     201.062
-      374.24     204.203
-      380.00     207.345
-      385.75     210.487
-      391.51     213.628
-      397.27     216.770
-      403.03     219.911
-      408.78     223.053
-      414.54     226.194
-      420.30     229.336
-      426.06     232.478
-      431.81     235.619
-      437.57     238.761
-      443.33     241.902
-      449.09     245.044
-      454.84     248.186
-      460.60     251.327
-      466.36     254.469
-      472.12     257.610
-      477.87     260.752
-      483.63     263.894
-      489.39     267.035
-      495.15     270.177
-      500.90     273.318
-      506.66     276.460
-      512.42     279.602
-      518.18     282.743
-      523.93     285.885
-      529.69     289.026
-      535.45     292.168
-      541.21     295.309
-      546.96     298.451
-      552.72     301.593
-      558.48     304.734
-      564.24     307.876
-      569.99     311.017
-      575.75     314.159
-</pre>
+          <pre class="code-block">        <span class="tok-num">5.76</span>       <span class="tok-num">3.142</span>
+       <span class="tok-num">11.52</span>       <span class="tok-num">6.283</span>
+       <span class="tok-num">17.27</span>       <span class="tok-num">9.425</span>
+       <span class="tok-num">23.03</span>      <span class="tok-num">12.566</span>
+       <span class="tok-num">28.79</span>      <span class="tok-num">15.708</span>
+       <span class="tok-num">34.55</span>      <span class="tok-num">18.850</span>
+       <span class="tok-num">40.30</span>      <span class="tok-num">21.991</span>
+       <span class="tok-num">46.06</span>      <span class="tok-num">25.133</span>
+       <span class="tok-num">51.82</span>      <span class="tok-num">28.274</span>
+       <span class="tok-num">57.58</span>      <span class="tok-num">31.416</span>
+       <span class="tok-num">63.33</span>      <span class="tok-num">34.557</span>
+       <span class="tok-num">69.09</span>      <span class="tok-num">37.699</span>
+       <span class="tok-num">74.85</span>      <span class="tok-num">40.841</span>
+       <span class="tok-num">80.61</span>      <span class="tok-num">43.982</span>
+       <span class="tok-num">86.36</span>      <span class="tok-num">47.124</span>
+       <span class="tok-num">92.12</span>      <span class="tok-num">50.265</span>
+       <span class="tok-num">97.88</span>      <span class="tok-num">53.407</span>
+      <span class="tok-num">103.64</span>      <span class="tok-num">56.549</span>
+      <span class="tok-num">109.39</span>      <span class="tok-num">59.690</span>
+      <span class="tok-num">115.15</span>      <span class="tok-num">62.832</span>
+      <span class="tok-num">120.91</span>      <span class="tok-num">65.973</span>
+      <span class="tok-num">126.67</span>      <span class="tok-num">69.115</span>
+      <span class="tok-num">132.42</span>      <span class="tok-num">72.257</span>
+      <span class="tok-num">138.18</span>      <span class="tok-num">75.398</span>
+      <span class="tok-num">143.94</span>      <span class="tok-num">78.540</span>
+      <span class="tok-num">149.69</span>      <span class="tok-num">81.681</span>
+      <span class="tok-num">155.45</span>      <span class="tok-num">84.823</span>
+      <span class="tok-num">161.21</span>      <span class="tok-num">87.965</span>
+      <span class="tok-num">166.97</span>      <span class="tok-num">91.106</span>
+      <span class="tok-num">172.73</span>      <span class="tok-num">94.248</span>
+      <span class="tok-num">178.48</span>      <span class="tok-num">97.389</span>
+      <span class="tok-num">184.24</span>     <span class="tok-num">100.531</span>
+      <span class="tok-num">190.00</span>     <span class="tok-num">103.672</span>
+      <span class="tok-num">195.75</span>     <span class="tok-num">106.814</span>
+      <span class="tok-num">201.51</span>     <span class="tok-num">109.956</span>
+      <span class="tok-num">207.27</span>     <span class="tok-num">113.097</span>
+      <span class="tok-num">213.03</span>     <span class="tok-num">116.239</span>
+      <span class="tok-num">218.79</span>     <span class="tok-num">119.380</span>
+      <span class="tok-num">224.54</span>     <span class="tok-num">122.522</span>
+      <span class="tok-num">230.30</span>     <span class="tok-num">125.664</span>
+      <span class="tok-num">236.06</span>     <span class="tok-num">128.805</span>
+      <span class="tok-num">241.81</span>     <span class="tok-num">131.947</span>
+      <span class="tok-num">247.57</span>     <span class="tok-num">135.088</span>
+      <span class="tok-num">253.33</span>     <span class="tok-num">138.230</span>
+      <span class="tok-num">259.09</span>     <span class="tok-num">141.372</span>
+      <span class="tok-num">264.85</span>     <span class="tok-num">144.513</span>
+      <span class="tok-num">270.60</span>     <span class="tok-num">147.655</span>
+      <span class="tok-num">276.36</span>     <span class="tok-num">150.796</span>
+      <span class="tok-num">282.12</span>     <span class="tok-num">153.938</span>
+      <span class="tok-num">287.88</span>     <span class="tok-num">157.079</span>
+      <span class="tok-num">293.63</span>     <span class="tok-num">160.221</span>
+      <span class="tok-num">299.39</span>     <span class="tok-num">163.363</span>
+      <span class="tok-num">305.15</span>     <span class="tok-num">166.504</span>
+      <span class="tok-num">310.91</span>     <span class="tok-num">169.646</span>
+      <span class="tok-num">316.66</span>     <span class="tok-num">172.787</span>
+      <span class="tok-num">322.42</span>     <span class="tok-num">175.929</span>
+      <span class="tok-num">328.18</span>     <span class="tok-num">179.071</span>
+      <span class="tok-num">333.94</span>     <span class="tok-num">182.212</span>
+      <span class="tok-num">339.69</span>     <span class="tok-num">185.354</span>
+      <span class="tok-num">345.45</span>     <span class="tok-num">188.495</span>
+      <span class="tok-num">351.21</span>     <span class="tok-num">191.637</span>
+      <span class="tok-num">356.97</span>     <span class="tok-num">194.779</span>
+      <span class="tok-num">362.72</span>     <span class="tok-num">197.920</span>
+      <span class="tok-num">368.48</span>     <span class="tok-num">201.062</span>
+      <span class="tok-num">374.24</span>     <span class="tok-num">204.203</span>
+      <span class="tok-num">380.00</span>     <span class="tok-num">207.345</span>
+      <span class="tok-num">385.75</span>     <span class="tok-num">210.487</span>
+      <span class="tok-num">391.51</span>     <span class="tok-num">213.628</span>
+      <span class="tok-num">397.27</span>     <span class="tok-num">216.770</span>
+      <span class="tok-num">403.03</span>     <span class="tok-num">219.911</span>
+      <span class="tok-num">408.78</span>     <span class="tok-num">223.053</span>
+      <span class="tok-num">414.54</span>     <span class="tok-num">226.194</span>
+      <span class="tok-num">420.30</span>     <span class="tok-num">229.336</span>
+      <span class="tok-num">426.06</span>     <span class="tok-num">232.478</span>
+      <span class="tok-num">431.81</span>     <span class="tok-num">235.619</span>
+      <span class="tok-num">437.57</span>     <span class="tok-num">238.761</span>
+      <span class="tok-num">443.33</span>     <span class="tok-num">241.902</span>
+      <span class="tok-num">449.09</span>     <span class="tok-num">245.044</span>
+      <span class="tok-num">454.84</span>     <span class="tok-num">248.186</span>
+      <span class="tok-num">460.60</span>     <span class="tok-num">251.327</span>
+      <span class="tok-num">466.36</span>     <span class="tok-num">254.469</span>
+      <span class="tok-num">472.12</span>     <span class="tok-num">257.610</span>
+      <span class="tok-num">477.87</span>     <span class="tok-num">260.752</span>
+      <span class="tok-num">483.63</span>     <span class="tok-num">263.894</span>
+      <span class="tok-num">489.39</span>     <span class="tok-num">267.035</span>
+      <span class="tok-num">495.15</span>     <span class="tok-num">270.177</span>
+      <span class="tok-num">500.90</span>     <span class="tok-num">273.318</span>
+      <span class="tok-num">506.66</span>     <span class="tok-num">276.460</span>
+      <span class="tok-num">512.42</span>     <span class="tok-num">279.602</span>
+      <span class="tok-num">518.18</span>     <span class="tok-num">282.743</span>
+      <span class="tok-num">523.93</span>     <span class="tok-num">285.885</span>
+      <span class="tok-num">529.69</span>     <span class="tok-num">289.026</span>
+      <span class="tok-num">535.45</span>     <span class="tok-num">292.168</span>
+      <span class="tok-num">541.21</span>     <span class="tok-num">295.309</span>
+      <span class="tok-num">546.96</span>     <span class="tok-num">298.451</span>
+      <span class="tok-num">552.72</span>     <span class="tok-num">301.593</span>
+      <span class="tok-num">558.48</span>     <span class="tok-num">304.734</span>
+      <span class="tok-num">564.24</span>     <span class="tok-num">307.876</span>
+      <span class="tok-num">569.99</span>     <span class="tok-num">311.017</span>
+      <span class="tok-num">575.75</span>     <span class="tok-num">314.159</span></pre>
         </div>
       </div>
     
@@ -238,7 +243,7 @@ void printFormatted(ofstream&amp; outfile, int highNum) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

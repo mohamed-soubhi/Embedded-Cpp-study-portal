@@ -1,10 +1,46 @@
-// Embedded C++ Study Portal Interactive Engine
+// Embedded C++ Study Portal Interactive Engine & Theme Manager
 document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
   initTabs();
   initCopyButtons();
   initQuiz();
   initSearchAndFilters();
 });
+
+// Day & Night Theme Toggle Manager
+function initTheme() {
+  const savedTheme = localStorage.getItem('study-portal-theme') || 'dark';
+  applyTheme(savedTheme);
+
+  const toggleBtns = document.querySelectorAll('#themeToggle, .theme-toggle-btn');
+  toggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+  });
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('study-portal-theme', theme);
+
+  const toggleBtns = document.querySelectorAll('#themeToggle, .theme-toggle-btn');
+  toggleBtns.forEach(btn => {
+    const iconSpan = btn.querySelector('.theme-icon');
+    const textSpan = btn.querySelector('.theme-text');
+    if (theme === 'light') {
+      if (iconSpan) iconSpan.textContent = '🌙';
+      if (textSpan) textSpan.textContent = 'Dark';
+      btn.setAttribute('title', 'Switch to Cyber Dark Theme');
+    } else {
+      if (iconSpan) iconSpan.textContent = '☀️';
+      if (textSpan) textSpan.textContent = 'Light';
+      btn.setAttribute('title', 'Switch to Light Theme');
+    }
+  });
+}
 
 // Tab Switching
 function initTabs() {

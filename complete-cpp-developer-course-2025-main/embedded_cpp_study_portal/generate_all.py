@@ -973,6 +973,31 @@ SECTION_12_PROJECTS = [
         <h3>1. Abstract Interface & Array Implementation</h3>
         <p>The <code>Queue&lt;T&gt;</code> interface defines <code>enqueue</code>, <code>dequeue</code>, <code>peek</code>, and <code>isEmpty</code>. <code>ArrayQueue&lt;T&gt;</code> implements these operations in fixed contiguous memory using circular indexing.</p>
 
+        <div class="diagram-container">
+          <h4>🔄 Circular Ring Buffer FIFO Architecture</h4>
+          <svg class="svg-diagram" width="540" height="170" viewBox="0 0 540 170" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="47" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 0</text>
+            <rect x="85" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="112" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 1</text>
+            <rect x="150" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <text x="177" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 2</text>
+            <rect x="215" y="45" width="55" height="55" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <text x="242" y="77" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">Slot 3</text>
+            <rect x="280" y="45" width="55" height="55" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+            <text x="307" y="77" fill="#64748b" font-family="monospace" font-size="13" text-anchor="middle">Empty</text>
+            <rect x="345" y="45" width="55" height="55" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1.5" stroke-dasharray="4"/>
+            <text x="372" y="77" fill="#64748b" font-family="monospace" font-size="13" text-anchor="middle">Empty</text>
+            <!-- Pointer Arrows -->
+            <path d="M 47 130 L 47 110" stroke="#10b981" stroke-width="2"/>
+            <polygon points="47,105 42,112 52,112" fill="#10b981"/>
+            <text x="47" y="148" fill="#10b981" font-family="sans-serif" font-weight="bold" font-size="12" text-anchor="middle">TAIL (Dequeue)</text>
+            <path d="M 307 20 L 307 38" stroke="#38bdf8" stroke-width="2"/>
+            <polygon points="307,43 302,36 312,36" fill="#38bdf8"/>
+            <text x="307" y="14" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="12" text-anchor="middle">HEAD (Enqueue Next)</text>
+          </svg>
+        </div>
+
         <h3>2. Modulo Arithmetic Index Wrapping</h3>
         <p>Instead of shifting elements on dequeue ($O(N)$), the queue simply advances its <code>front</code> and <code>rear</code> indices using modulo arithmetic: <code>(rear + 1) % capacity</code>, achieving constant $O(1)$ enqueue and dequeue.</p>
         """,
@@ -1040,7 +1065,7 @@ private:
         "emb_class": "emb-high",
         "emb_badge": "⚡ Embedded Relevance: High",
         "tags": ["ArrayList", "Dynamic Array", "Amortized O(1)", "Memory Relocation"],
-        "summary": "Building a custom dynamic array list implementing an abstract <code>List&lt;T&gt;</code> interface. We analyze growth factors, amortized complexity, and contiguous memory access benefits.",
+        "summary": "Building a custom dynamic array list implementing an abstract List<T> interface. We analyze growth factors, amortized complexity, and contiguous memory access benefits.",
         "files": [
             "section_12/ArrayListApp/ArrayListApp/List.h",
             "section_12/ArrayListApp/ArrayListApp/ArrayList.h",
@@ -1072,7 +1097,27 @@ private:
             "section_12/ArrayStackApp/ArrayStackApp/ArrayStack.h",
             "section_12/ArrayStackApp/ArrayStackApp/main.cpp"
         ],
-        "concepts_html": "<h3>Stack Operations</h3><p>Push and pop operate on the top index in $O(1)$ time.</p>",
+        "concepts_html": """
+        <h3>Stack Operations</h3>
+        <p>Push and pop operate on the top index in $O(1)$ time.</p>
+
+        <div class="diagram-container">
+          <h4>🥞 LIFO Stack Memory Layout (Push / Pop)</h4>
+          <svg class="svg-diagram" width="460" height="190" viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg">
+            <rect x="130" y="130" width="200" height="34" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="230" y="152" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">data[0] (Bottom)</text>
+            <rect x="130" y="90" width="200" height="34" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="230" y="112" fill="#f0fdf4" font-family="monospace" font-size="13" text-anchor="middle">data[1]</text>
+            <rect x="130" y="50" width="200" height="34" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+            <text x="230" y="72" fill="#38bdf8" font-family="monospace" font-size="13" text-anchor="middle">data[top-1] (Top Element)</text>
+            <rect x="130" y="10" width="200" height="34" rx="4" fill="#0f172a" stroke="#475569" stroke-width="1" stroke-dasharray="4"/>
+            <text x="230" y="32" fill="#64748b" font-family="monospace" font-size="13" text-anchor="middle">Free Space (Capacity)</text>
+            <path d="M 360 67 L 340 67" stroke="#00ff88" stroke-width="2"/>
+            <polygon points="335,67 342,63 342,71" fill="#00ff88"/>
+            <text x="400" y="71" fill="#00ff88" font-family="sans-serif" font-weight="bold" font-size="12" text-anchor="middle">top_ index</text>
+          </svg>
+        </div>
+        """,
         "embedded_html": "<h3>Deterministic LIFO Buffering</h3><p>Array-backed stacks have bounded memory and execute in guaranteed single-cycle operations.</p>",
         "refactor_html": "<pre class=\"code-block\" style=\"background:#0d1117; padding:16px; border-radius:8px;\">template &lt;typename T, size_t Cap&gt;\nclass SafeArrayStack {\n    std::array&lt;T, Cap&gt; data_; size_t top_ = 0;\n};</pre>",
         "quiz": [
@@ -1097,7 +1142,32 @@ private:
             "section_12/LinkedChainFun/LinkedChainFun/Node.h",
             "section_12/LinkedChainFun/LinkedChainFun/main.cpp"
         ],
-        "concepts_html": "<h3>Node Anatomy</h3><p>Each node encapsulates a data payload and a pointer to the next node.</p>",
+        "concepts_html": """
+        <h3>Node Anatomy & Pointer Chaining</h3>
+        <p>Each node encapsulates a data payload and a pointer to the next node.</p>
+
+        <div class="diagram-container">
+          <h4>🔗 Singly Linked Node Pointer Chain</h4>
+          <svg class="svg-diagram" width="520" height="110" viewBox="0 0 520 110" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="75" height="45" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="57" y="52" fill="#f0fdf4" font-family="monospace" font-size="12" text-anchor="middle">Data (4B)</text>
+            <rect x="95" y="25" width="45" height="45" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+            <text x="117" y="52" fill="#38bdf8" font-family="monospace" font-size="11" text-anchor="middle">next*</text>
+            <path d="M 140 47 L 195 47" stroke="#38bdf8" stroke-width="2"/>
+            <polygon points="195,43 203,47 195,51" fill="#38bdf8"/>
+            <rect x="205" y="25" width="75" height="45" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="242" y="52" fill="#f0fdf4" font-family="monospace" font-size="12" text-anchor="middle">Data (4B)</text>
+            <rect x="280" y="25" width="45" height="45" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+            <text x="302" y="52" fill="#38bdf8" font-family="monospace" font-size="11" text-anchor="middle">next*</text>
+            <path d="M 325 47 L 380 47" stroke="#38bdf8" stroke-width="2"/>
+            <polygon points="380,43 388,47 380,51" fill="#38bdf8"/>
+            <rect x="390" y="25" width="75" height="45" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <text x="427" y="52" fill="#f0fdf4" font-family="monospace" font-size="12" text-anchor="middle">Data (4B)</text>
+            <rect x="465" y="25" width="45" height="45" rx="4" fill="#0f172a" stroke="#f43f5e" stroke-width="2"/>
+            <text x="487" y="52" fill="#f43f5e" font-family="monospace" font-size="10" text-anchor="middle">null</text>
+          </svg>
+        </div>
+        """,
         "embedded_html": "<h3>Pointer Memory Tax</h3><p>On 64-bit systems, storing a 4-byte <code>int</code> with an 8-byte <code>next</code> pointer incurs 200% memory overhead plus allocator metadata.</p>",
         "refactor_html": "<pre class=\"code-block\" style=\"background:#0d1117; padding:16px; border-radius:8px;\">// Intrusive Node pattern to save memory\nstruct IntrusiveNode { IntrusiveNode* next = nullptr; };</pre>",
         "quiz": [
@@ -1427,6 +1497,12 @@ def build_index():
         <li><a href="section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>

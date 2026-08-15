@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multi-Key Lookup &amp; Static Flash Tables - C++ & Embedded Systems Guide</title>
+  <title>Multi-Key Lookup &amp; Static Flash Tables - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">LanguageTranslatorProject</span>
     </div>
@@ -71,119 +77,119 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef LANGUAGE_TRANSLATOR_H
-#define LANGUAGE_TRANSLATOR_H
+          <pre class="code-block"><span class="tok-pre">#ifndef LANGUAGE_TRANSLATOR_H</span>
+<span class="tok-pre">#define LANGUAGE_TRANSLATOR_H</span>
 
-#include &lt;string&gt;
-#include &lt;map&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &lt;map&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class LanguageTranslator {
-	public:
-		void addTranslation(const string&amp; englishWord, const string&amp; translatedWord);
-		string getTranslation(const string&amp; englishWord) const;
-		void printAll() const;
-	private:
-		map&lt;string, string&gt; translations;
+<span class="tok-kw">class</span> LanguageTranslator {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">void</span> <span class="tok-fn">addTranslation</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; englishWord, <span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; translatedWord);
+		<span class="tok-type">string</span> <span class="tok-fn">getTranslation</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; englishWord) <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-fn">printAll</span>() <span class="tok-kw">const</span>;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">string</span>&gt; translations;
 };
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;LanguageTranslator.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;LanguageTranslator.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void LanguageTranslator::addTranslation(const string&amp; englishWord, const string&amp; translatedWord) {
+<span class="tok-type">void</span> LanguageTranslator::<span class="tok-fn">addTranslation</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; englishWord, <span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; translatedWord) {
 	translations[englishWord] = translatedWord;
 }
 
-string LanguageTranslator::getTranslation(const string&amp; englishWord) const {
-	auto it = translations.find(englishWord);
-	if (it != translations.end()) {
-		return it-&gt;second;
+<span class="tok-type">string</span> LanguageTranslator::<span class="tok-fn">getTranslation</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; englishWord) <span class="tok-kw">const</span> {
+	<span class="tok-kw">auto</span> it = translations.<span class="tok-fn">find</span>(englishWord);
+	<span class="tok-kw">if</span> (it != translations.<span class="tok-fn">end</span>()) {
+		<span class="tok-kw">return</span> it-&gt;second;
 	}
-	else {
-		return &quot;NOT FOUND&quot;;
+	<span class="tok-kw">else</span> {
+		<span class="tok-kw">return</span> <span class="tok-str">&quot;NOT FOUND&quot;</span>;
 	}
 }
 
-void LanguageTranslator::printAll() const {
-	for (const auto&amp; pair : translations) {
-		cout &lt;&lt; pair.first &lt;&lt; &quot; -&gt; &quot; &lt;&lt; pair.second &lt;&lt; endl;
+<span class="tok-type">void</span> LanguageTranslator::<span class="tok-fn">printAll</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-kw">auto</span>&amp; <span class="tok-type">pair</span> : translations) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">pair</span>.first &lt;&lt; <span class="tok-str">&quot; -&gt; &quot;</span> &lt;&lt; <span class="tok-type">pair</span>.second &lt;&lt; <span class="tok-type">endl</span>;
 	}
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &quot;LanguageTranslator.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &quot;LanguageTranslator.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printMenu();
-void handleAdd(LanguageTranslator&amp; translator);
-void handleLookup(const LanguageTranslator&amp; translator);
+<span class="tok-type">void</span> <span class="tok-fn">printMenu</span>();
+<span class="tok-type">void</span> <span class="tok-fn">handleAdd</span>(LanguageTranslator&amp; translator);
+<span class="tok-type">void</span> <span class="tok-fn">handleLookup</span>(<span class="tok-kw">const</span> LanguageTranslator&amp; translator);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
     LanguageTranslator translator;
-    int choice;
+    <span class="tok-type">int</span> choice;
 
-    printMenu();
-    cin &gt;&gt; choice; 
-    cin.ignore();
+    <span class="tok-fn">printMenu</span>();
+    <span class="tok-type">cin</span> &gt;&gt; choice; 
+    <span class="tok-type">cin</span>.<span class="tok-fn">ignore</span>();
 
-    while (choice != 0) {
-        if (choice == 1) {
-            handleAdd(translator);
+    <span class="tok-kw">while</span> (choice != <span class="tok-num">0</span>) {
+        <span class="tok-kw">if</span> (choice == <span class="tok-num">1</span>) {
+            <span class="tok-fn">handleAdd</span>(translator);
         }
-        else if (choice == 2) {
-            handleLookup(translator);
+        <span class="tok-kw">else</span> <span class="tok-kw">if</span> (choice == <span class="tok-num">2</span>) {
+            <span class="tok-fn">handleLookup</span>(translator);
         }
-        else if (choice == 3) {
-            cout &lt;&lt; &quot;All translations:&quot; &lt;&lt; endl;
-            translator.printAll();
+        <span class="tok-kw">else</span> <span class="tok-kw">if</span> (choice == <span class="tok-num">3</span>) {
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;All translations:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+            translator.<span class="tok-fn">printAll</span>();
         }
-        else {
-            cout &lt;&lt; &quot;Invalid choice&quot; &lt;&lt; endl;
+        <span class="tok-kw">else</span> {
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Invalid choice&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
         }
 
-        cout &lt;&lt; endl;
-        printMenu();
-        cin &gt;&gt; choice;
-        cin.ignore();
+        <span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
+        <span class="tok-fn">printMenu</span>();
+        <span class="tok-type">cin</span> &gt;&gt; choice;
+        <span class="tok-type">cin</span>.<span class="tok-fn">ignore</span>();
     }
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printMenu() {
-    cout &lt;&lt; &quot;Select an option:&quot; &lt;&lt; endl;
-    cout &lt;&lt; &quot;1 - Add or update a translation&quot; &lt;&lt; endl;
-    cout &lt;&lt; &quot;2 - Look up a translation&quot; &lt;&lt; endl;
-    cout &lt;&lt; &quot;3 - Print all translations&quot; &lt;&lt; endl;
-    cout &lt;&lt; &quot;0 - Exit&quot; &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printMenu</span>() {
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Select an option:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;1 - Add or update a translation&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;2 - Look up a translation&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;3 - Print all translations&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;0 - Exit&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 }
 
-void handleAdd(LanguageTranslator&amp; translator) {
-    string englishWord;
-    string translatedWord;
+<span class="tok-type">void</span> <span class="tok-fn">handleAdd</span>(LanguageTranslator&amp; translator) {
+    <span class="tok-type">string</span> englishWord;
+    <span class="tok-type">string</span> translatedWord;
 
-    cout &lt;&lt; &quot;Enter the English word: &quot;;
-    getline(cin, englishWord);
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the English word: &quot;</span>;
+    <span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, englishWord);
 
-    cout &lt;&lt; &quot;Enter the translation: &quot;;
-    getline(cin, translatedWord);
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the translation: &quot;</span>;
+    <span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, translatedWord);
 
-    translator.addTranslation(englishWord, translatedWord);
+    translator.<span class="tok-fn">addTranslation</span>(englishWord, translatedWord);
 }
 
-void handleLookup(const LanguageTranslator&amp; translator) {
-    string word;
-    cout &lt;&lt; &quot;Enter the English word to translate: &quot;;
-    getline(cin, word);
-    cout &lt;&lt; &quot;Translation: &quot; &lt;&lt; translator.getTranslation(word) &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">handleLookup</span>(<span class="tok-kw">const</span> LanguageTranslator&amp; translator) {
+    <span class="tok-type">string</span> word;
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the English word to translate: &quot;</span>;
+    <span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, word);
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Translation: &quot;</span> &lt;&lt; translator.<span class="tok-fn">getTranslation</span>(word) &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -201,7 +207,7 @@ void handleLookup(const LanguageTranslator&amp; translator) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Diagnostic Trouble Codes (DTC)</h3><p>In automotive firmware, fault code string tables are stored entirely in Flash ROM to save SRAM.</p>

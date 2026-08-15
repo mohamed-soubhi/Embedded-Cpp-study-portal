@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Value Types &amp; Operator Overloading in Simulations - C++ & Embedded Systems Guide</title>
+  <title>Value Types &amp; Operator Overloading in Simulations - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">CropHybridizationSimulator</span>
     </div>
@@ -71,101 +77,100 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef CROP_H
-#define CROP_H
+          <pre class="code-block"><span class="tok-pre">#ifndef CROP_H</span>
+<span class="tok-pre">#define CROP_H</span>
 
-class Crop {
-	public:
-		Crop(int height, int yield, int droughtResistance);
-		int getHeight() const;
-		int getYield() const;
-		int getDroughtResistance() const;
-		int getScore() const;
+<span class="tok-kw">class</span> Crop {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Crop</span>(<span class="tok-type">int</span> height, <span class="tok-type">int</span> yield, <span class="tok-type">int</span> droughtResistance);
+		<span class="tok-type">int</span> <span class="tok-fn">getHeight</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getYield</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getDroughtResistance</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getScore</span>() <span class="tok-kw">const</span>;
 
-		bool operator==(const Crop&amp; other) const;
-		bool operator!=(const Crop&amp; other) const;
-		bool operator&lt;(const Crop&amp; other) const;
-		bool operator&gt;(const Crop&amp; other) const;
-		bool operator&lt;=(const Crop&amp; other) const;
-		bool operator&gt;=(const Crop&amp; other) const;
-		Crop operator+(const Crop&amp; other) const;
-		void operator=(const Crop&amp; other);
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>==(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>!=(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>&lt;(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>&gt;(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>&lt;=(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-kw">bool</span> <span class="tok-kw">operator</span>&gt;=(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		Crop <span class="tok-kw">operator</span>+(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span>;
+		<span class="tok-type">void</span> <span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> Crop&amp; other);
 
-	private:
-		int height;
-		int yield;
-		int droughtResistance;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span> height;
+		<span class="tok-type">int</span> yield;
+		<span class="tok-type">int</span> droughtResistance;
 };
-#endif
-</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;Crop.h&quot;
-#include &lt;cstdlib&gt;
-#include &lt;ctime&gt;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Crop.h&quot;</span>
+<span class="tok-pre">#include &lt;cstdlib&gt;</span>
+<span class="tok-pre">#include &lt;ctime&gt;</span>
 
-using namespace std;
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-Crop::Crop(int height, int yield, int droughtResistance) : height(height), yield(yield), 
-droughtResistance(droughtResistance) {
+Crop::<span class="tok-fn">Crop</span>(<span class="tok-type">int</span> height, <span class="tok-type">int</span> yield, <span class="tok-type">int</span> droughtResistance) : <span class="tok-fn">height</span>(height), <span class="tok-fn">yield</span>(yield), 
+<span class="tok-fn">droughtResistance</span>(droughtResistance) {
 }
 
-int Crop::getHeight() const {
-	return height;
+<span class="tok-type">int</span> Crop::<span class="tok-fn">getHeight</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> height;
 }
 
-int Crop::getYield() const {
-	return yield;
+<span class="tok-type">int</span> Crop::<span class="tok-fn">getYield</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> yield;
 }
 
-int Crop::getDroughtResistance() const {
-	return droughtResistance;
+<span class="tok-type">int</span> Crop::<span class="tok-fn">getDroughtResistance</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> droughtResistance;
 }
 
-int Crop::getScore() const {
-	return (height * 2) + (yield * 3) + (droughtResistance * 4);
+<span class="tok-type">int</span> Crop::<span class="tok-fn">getScore</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> (height * <span class="tok-num">2</span>) + (yield * <span class="tok-num">3</span>) + (droughtResistance * <span class="tok-num">4</span>);
 }
 
-bool Crop::operator==(const Crop&amp; other) const {
-	return getScore() == other.getScore();
+<span class="tok-kw">bool</span> Crop::<span class="tok-kw">operator</span>==(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-fn">getScore</span>() == other.<span class="tok-fn">getScore</span>();
 }
 
-bool Crop::operator!=(const Crop&amp; other) const {
-	return !(*this == other);
+<span class="tok-kw">bool</span> Crop::<span class="tok-kw">operator</span>!=(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> !(*<span class="tok-kw">this</span> == other);
 }
 
-bool Crop::operator&lt;(const Crop&amp; other) const {
-	return getScore() &lt; other.getScore();
+<span class="tok-kw">bool</span> Crop::<span class="tok-kw">operator</span>&lt;(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-fn">getScore</span>() &lt; other.<span class="tok-fn">getScore</span>();
 }
 
-bool Crop::operator&gt;(const Crop&amp; other) const {
-	return getScore() &gt; other.getScore();
+<span class="tok-kw">bool</span> Crop::<span class="tok-kw">operator</span>&gt;(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-fn">getScore</span>() &gt; other.<span class="tok-fn">getScore</span>();
 }
 
-bool Crop::operator&lt;=(const Crop&amp; other) const {
-	return getScore() &lt;= other.getScore();
+<span class="tok-kw">bool</span> Crop::<span class="tok-kw">operator</span>&lt;=(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-fn">getScore</span>() &lt;= other.<span class="tok-fn">getScore</span>();
 }
 
-bool Crop::operator&gt;=(const Crop&amp; other) const {
-	return getScore() &gt;= other.getScore();
+<span class="tok-kw">bool</span> Crop::<span class="tok-kw">operator</span>&gt;=(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> <span class="tok-fn">getScore</span>() &gt;= other.<span class="tok-fn">getScore</span>();
 }
 
-Crop Crop::operator+(const Crop&amp; other) const {
-	srand(time(nullptr));
-	auto randomize = [](int value) {
-		int variation = (rand() % 3) - 1;   // -1, 0, or +1
-			return value + variation;
+Crop Crop::<span class="tok-kw">operator</span>+(<span class="tok-kw">const</span> Crop&amp; other) <span class="tok-kw">const</span> {
+	<span class="tok-fn">srand</span>(<span class="tok-fn">time</span>(<span class="tok-kw">nullptr</span>));
+	<span class="tok-kw">auto</span> randomize = [](<span class="tok-type">int</span> value) {
+		<span class="tok-type">int</span> variation = (<span class="tok-fn">rand</span>() % <span class="tok-num">3</span>) - <span class="tok-num">1</span>;   <span class="tok-com">// -1, 0, or +1</span>
+			<span class="tok-kw">return</span> value + variation;
 	};
 
-	int newHeight = randomize((height + other.height) / 2);
-	int newYield = randomize((yield + other.yield) / 2);
-	int newDrought = randomize((droughtResistance + other.droughtResistance) / 2);
+	<span class="tok-type">int</span> newHeight = <span class="tok-fn">randomize</span>((height + other.height) / <span class="tok-num">2</span>);
+	<span class="tok-type">int</span> newYield = <span class="tok-fn">randomize</span>((yield + other.yield) / <span class="tok-num">2</span>);
+	<span class="tok-type">int</span> newDrought = <span class="tok-fn">randomize</span>((droughtResistance + other.droughtResistance) / <span class="tok-num">2</span>);
 
-	return Crop(newHeight, newYield, newDrought);
+	<span class="tok-kw">return</span> <span class="tok-fn">Crop</span>(newHeight, newYield, newDrought);
 }
 
-void Crop::operator=(const Crop&amp; other) {
+<span class="tok-type">void</span> Crop::<span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> Crop&amp; other) {
 	height = other.height;
 	yield = other.yield;
 	droughtResistance = other.droughtResistance;
@@ -173,47 +178,47 @@ void Crop::operator=(const Crop&amp; other) {
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;memory&gt;
-#include &quot;Crop.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;memory&gt;</span>
+<span class="tok-pre">#include &quot;Crop.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printCrop(const Crop&amp; crop);
+<span class="tok-type">void</span> <span class="tok-fn">printCrop</span>(<span class="tok-kw">const</span> Crop&amp; crop);
 
-int main() {
-	vector&lt;unique_ptr&lt;Crop&gt;&gt; crops;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">unique_ptr</span>&lt;Crop&gt;&gt; crops;
 
-	crops.push_back(make_unique&lt;Crop&gt;(30, 40, 20));
-	crops.push_back(make_unique&lt;Crop&gt;(25, 50, 15));
-	crops.push_back(make_unique&lt;Crop&gt;(32, 38, 22));
+	crops.<span class="tok-fn">push_back</span>(<span class="tok-type">make_unique</span>&lt;Crop&gt;(<span class="tok-num">30</span>, <span class="tok-num">40</span>, <span class="tok-num">20</span>));
+	crops.<span class="tok-fn">push_back</span>(<span class="tok-type">make_unique</span>&lt;Crop&gt;(<span class="tok-num">25</span>, <span class="tok-num">50</span>, <span class="tok-num">15</span>));
+	crops.<span class="tok-fn">push_back</span>(<span class="tok-type">make_unique</span>&lt;Crop&gt;(<span class="tok-num">32</span>, <span class="tok-num">38</span>, <span class="tok-num">22</span>));
 
-	Crop hybrid = *crops[0] + *crops[1];
+	Crop hybrid = *crops[<span class="tok-num">0</span>] + *crops[<span class="tok-num">1</span>];
 
-	cout &lt;&lt; &quot;Crop 1:&quot; &lt;&lt; endl;
-	printCrop(*crops[0]);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Crop 1:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printCrop</span>(*crops[<span class="tok-num">0</span>]);
 
-	cout &lt;&lt; &quot;Crop 2:&quot; &lt;&lt; endl;
-	printCrop(*crops[1]);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Crop 2:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printCrop</span>(*crops[<span class="tok-num">1</span>]);
 
-	cout &lt;&lt; &quot;Crop 3:&quot; &lt;&lt; endl;
-	printCrop(*crops[2]);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Crop 3:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printCrop</span>(*crops[<span class="tok-num">2</span>]);
 
-	cout &lt;&lt; &quot;Hybrid crop:&quot; &lt;&lt; endl;
-	printCrop(hybrid);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Hybrid crop:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-fn">printCrop</span>(hybrid);
 
-	cout &lt;&lt; boolalpha;
-	cout &lt;&lt; &quot;Hybrid == Crop 3?&quot; &lt;&lt; (hybrid == *crops[2]) &lt;&lt; endl;
-	cout &lt;&lt; &quot;Hybrid &gt; Crop 3?&quot; &lt;&lt; (hybrid &gt; *crops[2]) &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; boolalpha;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Hybrid == Crop 3?&quot;</span> &lt;&lt; (hybrid == *crops[<span class="tok-num">2</span>]) &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Hybrid &gt; Crop 3?&quot;</span> &lt;&lt; (hybrid &gt; *crops[<span class="tok-num">2</span>]) &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printCrop(const Crop&amp; crop) {
-	cout &lt;&lt; &quot;Height: &quot; &lt;&lt; crop.getHeight()
-		&lt;&lt; &quot;, Yield: &quot; &lt;&lt; crop.getYield()
-		&lt;&lt; &quot;, Drought Resistance: &quot; &lt;&lt; crop.getDroughtResistance()
-		&lt;&lt; &quot;, Score: &quot; &lt;&lt; crop.getScore() &lt;&lt; endl &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printCrop</span>(<span class="tok-kw">const</span> Crop&amp; crop) {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Height: &quot;</span> &lt;&lt; crop.<span class="tok-fn">getHeight</span>()
+		&lt;&lt; <span class="tok-str">&quot;, Yield: &quot;</span> &lt;&lt; crop.<span class="tok-fn">getYield</span>()
+		&lt;&lt; <span class="tok-str">&quot;, Drought Resistance: &quot;</span> &lt;&lt; crop.<span class="tok-fn">getDroughtResistance</span>()
+		&lt;&lt; <span class="tok-str">&quot;, Score: &quot;</span> &lt;&lt; crop.<span class="tok-fn">getScore</span>() &lt;&lt; <span class="tok-type">endl</span> &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -231,7 +236,7 @@ void printCrop(const Crop&amp; crop) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Stack-Based Physics & Control</h3><p>Value objects are placed on the stack or in static arrays with zero dynamic allocation.</p>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArrayList: Dynamic Array Resizing &amp; Amortized Complexity - C++ & Embedded Systems Guide</title>
+  <title>ArrayList: Dynamic Array Resizing &amp; Amortized Complexity - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 12</a>
+      <a href="../index.html#grid-advanced">Section 12</a>
       <span class="sep">/</span>
       <span class="current">ArrayListApp</span>
     </div>
@@ -49,7 +55,7 @@
       </div>
       <h1 class="project-title">Implementing Custom Dynamic Arrays, Resize Policies, and Bounded Alternatives</h1>
       <div class="project-summary-box">
-        <strong>Executive Summary:</strong> Building a custom dynamic array list implementing an abstract <code>List&lt;T&gt;</code> interface. We analyze growth factors, amortized complexity, and contiguous memory access benefits.
+        <strong>Executive Summary:</strong> Building a custom dynamic array list implementing an abstract List<T> interface. We analyze growth factors, amortized complexity, and contiguous memory access benefits.
       </div>
     </header>
 
@@ -71,171 +77,170 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef LIST_H
-#define LIST_H
+          <pre class="code-block"><span class="tok-pre">#ifndef LIST_H</span>
+<span class="tok-pre">#define LIST_H</span>
 
-class List {
-	public:
-		virtual void add(int newEntry) = 0;
-		virtual void add(int newEntry, int position) = 0;
-		virtual void set(int newEntry, int position) = 0;
+<span class="tok-kw">class</span> List {
+	<span class="tok-kw">public</span>:
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry) = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-type">set</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) = <span class="tok-num">0</span>;
 
-		virtual bool contains(int entry) const = 0;
-		virtual int find(int entry) const = 0;
-		virtual int remove(int position) = 0;
-		virtual void makeEmpty() = 0;
+		<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">contains</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">find</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">remove</span>(<span class="tok-type">int</span> position) = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() = <span class="tok-num">0</span>;
 
-		virtual int size() const = 0;
-		virtual bool isEmpty() const = 0;
-		virtual void printList() const = 0;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">printList</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
 
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef ARRAY_LIST_H 
-#define ARRAY_LIST_H
+          <pre class="code-block"><span class="tok-pre">#ifndef ARRAY_LIST_H </span>
+<span class="tok-pre">#define ARRAY_LIST_H</span>
 
-#include &lt;iostream&gt;
-#include &quot;List.h&quot;
-using namespace std;
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;List.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class ArrayList : public List {
-	public:
-		ArrayList(int s = 16) : MAX_SIZE(s) {
-			mArray = new int[MAX_SIZE];
-			mNumElements = 0;
-		}//end ctor
+<span class="tok-kw">class</span> ArrayList : <span class="tok-kw">public</span> List {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">ArrayList</span>(<span class="tok-type">int</span> s = <span class="tok-num">16</span>) : <span class="tok-fn">MAX_SIZE</span>(s) {
+			mArray = <span class="tok-kw">new</span> <span class="tok-type">int</span>[MAX_SIZE];
+			mNumElements = <span class="tok-num">0</span>;
+		}<span class="tok-com">//end ctor</span>
 
-		void add(int newEntry) override {
-			if (mNumElements &gt;= MAX_SIZE) {
-				cout &lt;&lt; &quot;Cannot add any more elements.  List is full.&quot; &lt;&lt; endl;
-				return;
+		<span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (mNumElements &gt;= MAX_SIZE) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Cannot add any more elements.  List is full.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span>;
 			}
 
 			mArray[mNumElements++] = newEntry;
-		}//end add
+		}<span class="tok-com">//end add</span>
 
-		void add(int newEntry, int position) override {
-			if (mNumElements &gt;= MAX_SIZE) {
-				cout &lt;&lt; &quot;List is full.  Cannot add element.&quot; &lt;&lt; endl;
-				return;
+		<span class="tok-type">void</span> <span class="tok-fn">add</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (mNumElements &gt;= MAX_SIZE) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;List is full.  Cannot add element.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span>;
 			}
 
-			if (position &lt; 0 || position &gt; mNumElements) {
-				cout &lt;&lt; &quot;Position out of range.&quot; &lt;&lt; endl;
-				return;
+			<span class="tok-kw">if</span> (position &lt; <span class="tok-num">0</span> || position &gt; mNumElements) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Position out of range.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span>;
 			}
 
-			for (int i = mNumElements; i &gt; position; i--) {
-				mArray[i] = mArray[i - 1];
+			<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = mNumElements; i &gt; position; i--) {
+				mArray[i] = mArray[i - <span class="tok-num">1</span>];
 			}
 
 			mArray[position] = newEntry;
 			mNumElements++;
-		}//end add
+		}<span class="tok-com">//end add</span>
 
-		void set(int newEntry, int position) override {
-			if (position &lt; 0 || position &gt;= mNumElements) {
-				cout &lt;&lt; &quot;Invalid position for set.&quot; &lt;&lt; endl;
-				return;
+		<span class="tok-type">void</span> <span class="tok-type">set</span>(<span class="tok-type">int</span> newEntry, <span class="tok-type">int</span> position) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (position &lt; <span class="tok-num">0</span> || position &gt;= mNumElements) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Invalid position for set.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span>;
 			}
 
 			mArray[position] = newEntry;
-		}//end set 
+		}<span class="tok-com">//end set </span>
 
-		bool contains(int entry) const override {
-			for (int i = 0; i &lt; mNumElements; i++) {
-				if (mArray[i] == entry) {
-					return true;
+		<span class="tok-kw">bool</span> <span class="tok-fn">contains</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; mNumElements; i++) {
+				<span class="tok-kw">if</span> (mArray[i] == entry) {
+					<span class="tok-kw">return</span> <span class="tok-kw">true</span>;
 				}
-			}//end for 
-			return false;
-		}//end contains
+			}<span class="tok-com">//end for </span>
+			<span class="tok-kw">return</span> <span class="tok-kw">false</span>;
+		}<span class="tok-com">//end contains</span>
 
-		int find(int entry) const override {
-			for (int i = 0; i &lt; mNumElements; i++) {
-				if (mArray[i] == entry) {
-					return i;
+		<span class="tok-type">int</span> <span class="tok-fn">find</span>(<span class="tok-type">int</span> entry) <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; mNumElements; i++) {
+				<span class="tok-kw">if</span> (mArray[i] == entry) {
+					<span class="tok-kw">return</span> i;
 				}
-			}//end for
-			return -1;
-		}//end find
+			}<span class="tok-com">//end for</span>
+			<span class="tok-kw">return</span> -<span class="tok-num">1</span>;
+		}<span class="tok-com">//end find</span>
 
-		int remove(int position) override {
-			if (position &lt; 0 || position &gt;= mNumElements) {
-				cout &lt;&lt; &quot;Position out of range.&quot; &lt;&lt; endl;
-				return -1;
+		<span class="tok-type">int</span> <span class="tok-fn">remove</span>(<span class="tok-type">int</span> position) <span class="tok-kw">override</span> {
+			<span class="tok-kw">if</span> (position &lt; <span class="tok-num">0</span> || position &gt;= mNumElements) {
+				<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Position out of range.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+				<span class="tok-kw">return</span> -<span class="tok-num">1</span>;
 			}
 
-			int value = mArray[position];
-			for (int i = position; i &lt; mNumElements - 1; i++) {
-				mArray[i] = mArray[i + 1];
-			}//end for
+			<span class="tok-type">int</span> value = mArray[position];
+			<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = position; i &lt; mNumElements - <span class="tok-num">1</span>; i++) {
+				mArray[i] = mArray[i + <span class="tok-num">1</span>];
+			}<span class="tok-com">//end for</span>
 
 			mNumElements--;
-			return value;
-		}//end remove  
+			<span class="tok-kw">return</span> value;
+		}<span class="tok-com">//end remove  </span>
 
-		void makeEmpty() override {
-			mNumElements = 0;
-		}//end makeEmpty
+		<span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() <span class="tok-kw">override</span> {
+			mNumElements = <span class="tok-num">0</span>;
+		}<span class="tok-com">//end makeEmpty</span>
 
-		int size() const override {
-			return mNumElements;
-		}//end size
+		<span class="tok-type">int</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> mNumElements;
+		}<span class="tok-com">//end size</span>
 
-		bool isEmpty() const override {
-			return mNumElements == 0;
-		}//end isEmpty
+		<span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> mNumElements == <span class="tok-num">0</span>;
+		}<span class="tok-com">//end isEmpty</span>
 
-		void printList() const override {
-			for (int i = 0; i &lt; mNumElements; i++) {
-				cout &lt;&lt; mArray[i] &lt;&lt; endl;
+		<span class="tok-type">void</span> <span class="tok-fn">printList</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; mNumElements; i++) {
+				<span class="tok-type">cout</span> &lt;&lt; mArray[i] &lt;&lt; <span class="tok-type">endl</span>;
 			}
 		}
 
 
-	private:
-		int* mArray;
-		const int MAX_SIZE;
-		int mNumElements;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">int</span>* mArray;
+		<span class="tok-kw">const</span> <span class="tok-type">int</span> MAX_SIZE;
+		<span class="tok-type">int</span> mNumElements;
 };
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;ArrayList.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;ArrayList.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 	ArrayList myList;
 
-	for (int i = 0; i &lt; 15; i++) {
-		myList.add(i * 10);
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">15</span>; i++) {
+		myList.<span class="tok-fn">add</span>(i * <span class="tok-num">10</span>);
 	}
 
-	myList.printList();
+	myList.<span class="tok-fn">printList</span>();
 
-	cout &lt;&lt; endl &lt;&lt; &quot;Size is &quot; &lt;&lt; myList.size() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span> &lt;&lt; <span class="tok-str">&quot;Size is &quot;</span> &lt;&lt; myList.<span class="tok-fn">size</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	myList.add(555, 15);
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">555</span>, <span class="tok-num">15</span>);
 
-	myList.printList();
-	cout &lt;&lt; &quot;Size is now &quot; &lt;&lt; myList.size() &lt;&lt; endl;
+	myList.<span class="tok-fn">printList</span>();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Size is now &quot;</span> &lt;&lt; myList.<span class="tok-fn">size</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	myList.set(987, 3);  
+	myList.<span class="tok-type">set</span>(<span class="tok-num">987</span>, <span class="tok-num">3</span>);  
 
-	myList.printList();
+	myList.<span class="tok-fn">printList</span>();
 
-	myList.add(1000);  //should trigger an error.
+	myList.<span class="tok-fn">add</span>(<span class="tok-num">1000</span>);  <span class="tok-com">//should trigger an error.</span>
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -253,7 +258,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Heap Relocation Hazards</h3><p>Resizing an ArrayList requires allocating a new memory block and copying all data, causing latency spikes in real-time loops.</p>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Object Pointer Member Access &amp; Placement Mechanics - C++ & Embedded Systems Guide</title>
+  <title>Object Pointer Member Access &amp; Placement Mechanics - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 8</a>
+      <a href="../index.html#grid-advanced">Section 8</a>
       <span class="sep">/</span>
       <span class="current">DynamicDogs</span>
     </div>
@@ -71,40 +77,40 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;Dog.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;Dog.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	Dog* myDogPtr = new Dog(&quot;Rover&quot;, &quot;German Shepherd&quot;);
-	Dog* yourDogPtr = new Dog(&quot;Fido&quot;, &quot;Beagle&quot;);
+	<span class="tok-type">Dog</span>* myDogPtr = <span class="tok-kw">new</span> <span class="tok-type">Dog</span>(&quot;Rover<span class="tok-str">&quot;, &quot;</span>German Shepherd&quot;);
+	<span class="tok-type">Dog</span>* yourDogPtr = <span class="tok-kw">new</span> <span class="tok-type">Dog</span>(&quot;Fido<span class="tok-str">&quot;, &quot;</span>Beagle&quot;);
 
-	cout &lt;&lt; &quot;Using arrow operator: &quot; &lt;&lt; endl;
-	cout &lt;&lt; myDogPtr-&gt;getName() &lt;&lt; &quot; - &quot;
-		&lt;&lt; myDogPtr-&gt;getBreed() &lt;&lt; endl;
-	cout &lt;&lt; yourDogPtr-&gt;getName() &lt;&lt; &quot; - &quot;
-		&lt;&lt; yourDogPtr-&gt;getBreed() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Using arrow operator: &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; myDogPtr-&gt;<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-str">&quot; - &quot;</span>
+		&lt;&lt; myDogPtr-&gt;<span class="tok-fn">getBreed</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; yourDogPtr-&gt;<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-str">&quot; - &quot;</span>
+		&lt;&lt; yourDogPtr-&gt;<span class="tok-fn">getBreed</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	cout &lt;&lt; &quot;\nUsing dereference and dot operator&quot; &lt;&lt; endl;
-	cout &lt;&lt; (*myDogPtr).getName() &lt;&lt; &quot; - &quot;
-		&lt;&lt; (*myDogPtr).getBreed() &lt;&lt; endl;
-	cout &lt;&lt; (*yourDogPtr).getName() &lt;&lt; &quot; - &quot;
-		&lt;&lt; (*yourDogPtr).getBreed() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nUsing dereference and dot operator&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; (*myDogPtr).<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-str">&quot; - &quot;</span>
+		&lt;&lt; (*myDogPtr).<span class="tok-fn">getBreed</span>() &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; (*yourDogPtr).<span class="tok-fn">getName</span>() &lt;&lt; <span class="tok-str">&quot; - &quot;</span>
+		&lt;&lt; (*yourDogPtr).<span class="tok-fn">getBreed</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-	delete myDogPtr;
-	delete yourDogPtr;
+	<span class="tok-kw">delete</span> myDogPtr;
+	<span class="tok-kw">delete</span> yourDogPtr;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">// File not found: section_8/DynamicDogs/Dog.h</pre>
+          <pre class="code-block"><span class="tok-com">// File not found: section_8/DynamicDogs/Dog.h</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">// File not found: section_8/DynamicDogs/Dog.cpp</pre>
+          <pre class="code-block"><span class="tok-com">// File not found: section_8/DynamicDogs/Dog.cpp</span></pre>
         </div>
       </div>
     
@@ -127,7 +133,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

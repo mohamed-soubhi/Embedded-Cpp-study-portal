@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Class Hierarchies &amp; Memory Safety - C++ & Embedded Systems Guide</title>
+  <title>Class Hierarchies &amp; Memory Safety - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 10</a>
+      <a href="../index.html#grid-advanced">Section 10</a>
       <span class="sep">/</span>
       <span class="current">RPGProject</span>
     </div>
@@ -77,274 +83,270 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;vector&gt;
-#include &quot;Player.h&quot;
-#include &quot;Warrior.h&quot;
-#include &quot;Priest.h&quot;
-#include &quot;Mage.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &quot;Player.h&quot;</span>
+<span class="tok-pre">#include &quot;Warrior.h&quot;</span>
+<span class="tok-pre">#include &quot;Priest.h&quot;</span>
+<span class="tok-pre">#include &quot;Mage.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printMainMenu();
-void printRaceMenu();
-Race getRace(int raceNum);
-Player* createPlayer(string name, int typeNum, int raceNum);
-void printAll(const vector&lt;Player*&gt;&amp; playerList);
-void doCleanup(vector&lt;Player*&gt;&amp; playerList);
+<span class="tok-type">void</span> <span class="tok-fn">printMainMenu</span>();
+<span class="tok-type">void</span> <span class="tok-fn">printRaceMenu</span>();
+Race <span class="tok-fn">getRace</span>(<span class="tok-type">int</span> raceNum);
+<span class="tok-type">Player</span>* <span class="tok-fn">createPlayer</span>(<span class="tok-type">string</span> name, <span class="tok-type">int</span> typeNum, <span class="tok-type">int</span> raceNum);
+<span class="tok-type">void</span> <span class="tok-fn">printAll</span>(<span class="tok-kw">const</span> <span class="tok-type">vector</span>&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList);
+<span class="tok-type">void</span> <span class="tok-fn">doCleanup</span>(<span class="tok-type">vector</span>&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList);
 
-int main() {
-    int choice;
-    int raceNum;
-    string playerName;
-    vector&lt;Player*&gt; playerList;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+    <span class="tok-type">int</span> choice;
+    <span class="tok-type">int</span> raceNum;
+    <span class="tok-type">string</span> playerName;
+    <span class="tok-type">vector</span>&lt;<span class="tok-type">Player</span>*&gt; playerList;
 
-    printMainMenu();
-    cin &gt;&gt; choice; 
-    cin.get();
+    <span class="tok-fn">printMainMenu</span>();
+    <span class="tok-type">cin</span> &gt;&gt; choice; 
+    <span class="tok-type">cin</span>.<span class="tok-fn">get</span>();
 
-    while (choice != 0) {
-        cout &lt;&lt; &quot;What would you like to name your character?&quot; &lt;&lt; endl;
-        getline(cin, playerName);
+    <span class="tok-kw">while</span> (choice != <span class="tok-num">0</span>) {
+        <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;What would you like to name your character?&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+        <span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, playerName);
 
-        printRaceMenu();
-        cin &gt;&gt; raceNum;
-        cin.get();
+        <span class="tok-fn">printRaceMenu</span>();
+        <span class="tok-type">cin</span> &gt;&gt; raceNum;
+        <span class="tok-type">cin</span>.<span class="tok-fn">get</span>();
 
-        Player* tempPlayer = createPlayer(playerName, choice, raceNum);
-        playerList.push_back(tempPlayer);
+        <span class="tok-type">Player</span>* tempPlayer = <span class="tok-fn">createPlayer</span>(playerName, choice, raceNum);
+        playerList.<span class="tok-fn">push_back</span>(tempPlayer);
 
-        printMainMenu();
-        cin &gt;&gt; choice;
-        cin.get();
-    }//end while
+        <span class="tok-fn">printMainMenu</span>();
+        <span class="tok-type">cin</span> &gt;&gt; choice;
+        <span class="tok-type">cin</span>.<span class="tok-fn">get</span>();
+    }<span class="tok-com">//end while</span>
 
-    printAll(playerList);
-    doCleanup(playerList);
+    <span class="tok-fn">printAll</span>(playerList);
+    <span class="tok-fn">doCleanup</span>(playerList);
 
-    cout &lt;&lt; &quot;Program done!&quot; &lt;&lt; endl;
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Program done!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-    return 0;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printMainMenu() {
-    cout &lt;&lt; &quot;\nChoose a class:\n&quot;
-        &lt;&lt; &quot;\t1 - Warrior\n&quot;
-        &lt;&lt; &quot;\t2 - Priest\n&quot;
-        &lt;&lt; &quot;\t3 - Mage\n&quot;
-        &lt;&lt; &quot;\t0 - Finish\n&quot;;
-}//end printMainMenu
+<span class="tok-type">void</span> <span class="tok-fn">printMainMenu</span>() {
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nChoose a class:\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t1 - Warrior\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t2 - Priest\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t3 - Mage\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t0 - Finish\n&quot;</span>;
+}<span class="tok-com">//end printMainMenu</span>
 
-void printRaceMenu() {
-    cout &lt;&lt; &quot;Choose a race:\n&quot;
-        &lt;&lt; &quot;\t1 - Human\n&quot;
-        &lt;&lt; &quot;\t2 - Elf\n&quot;
-        &lt;&lt; &quot;\t3 - Dwarf\n&quot;
-        &lt;&lt; &quot;\t4 - Orc\n&quot;
-        &lt;&lt; &quot;\t5 - Troll\n&quot;;
-}//end printRaceMenu
+<span class="tok-type">void</span> <span class="tok-fn">printRaceMenu</span>() {
+    <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Choose a race:\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t1 - Human\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t2 - Elf\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t3 - Dwarf\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t4 - Orc\n&quot;</span>
+        &lt;&lt; <span class="tok-str">&quot;\t5 - Troll\n&quot;</span>;
+}<span class="tok-com">//end printRaceMenu</span>
 
-Race getRace(int raceNum) {
-    switch (raceNum) {
-        case 1: return Race::HUMAN;
-        case 2: return Race::ELF;
-        case 3: return Race::DWARF;
-        case 4: return Race::ORC;
-        case 5: return Race::TROLL;
-        default: return Race::HUMAN;
+Race <span class="tok-fn">getRace</span>(<span class="tok-type">int</span> raceNum) {
+    <span class="tok-kw">switch</span> (raceNum) {
+        <span class="tok-kw">case</span> <span class="tok-num">1</span>: <span class="tok-kw">return</span> Race::HUMAN;
+        <span class="tok-kw">case</span> <span class="tok-num">2</span>: <span class="tok-kw">return</span> Race::ELF;
+        <span class="tok-kw">case</span> <span class="tok-num">3</span>: <span class="tok-kw">return</span> Race::DWARF;
+        <span class="tok-kw">case</span> <span class="tok-num">4</span>: <span class="tok-kw">return</span> Race::ORC;
+        <span class="tok-kw">case</span> <span class="tok-num">5</span>: <span class="tok-kw">return</span> Race::TROLL;
+        <span class="tok-kw">default</span>: <span class="tok-kw">return</span> Race::HUMAN;
     }
-}//end getRace
+}<span class="tok-com">//end getRace</span>
 
-Player* createPlayer(string name, int typeNum, int raceNum) {
-    Race race = getRace(raceNum);
-    switch (typeNum) {
-        case 1: return new Warrior(name, race);
-        case 2: return new Priest(name, race);
-        case 3: return new Mage(name, race);
-        default: return nullptr;
-    }
-}
-
-void printAll(const vector&lt;Player*&gt;&amp; playerList) {
-    for (const Player* player : playerList) {
-        cout &lt;&lt; &quot;My name is &quot;&lt;&lt;player-&gt;getName()
-            &lt;&lt; &quot;. I&#x27;m a &quot; &lt;&lt; player-&gt;whatRace()
-            &lt;&lt; &quot; and my attack is: &quot; &lt;&lt; player-&gt;attack() &lt;&lt; endl;
+<span class="tok-type">Player</span>* <span class="tok-fn">createPlayer</span>(<span class="tok-type">string</span> name, <span class="tok-type">int</span> typeNum, <span class="tok-type">int</span> raceNum) {
+    Race race = <span class="tok-fn">getRace</span>(raceNum);
+    <span class="tok-kw">switch</span> (typeNum) {
+        <span class="tok-kw">case</span> <span class="tok-num">1</span>: <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-type">Warrior</span>(name, race);
+        <span class="tok-kw">case</span> <span class="tok-num">2</span>: <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-type">Priest</span>(name, race);
+        <span class="tok-kw">case</span> <span class="tok-num">3</span>: <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-type">Mage</span>(name, race);
+        <span class="tok-kw">default</span>: <span class="tok-kw">return</span> <span class="tok-kw">nullptr</span>;
     }
 }
 
-void doCleanup(vector&lt;Player*&gt;&amp; playerList) {
-    for (Player* player : playerList) {
-        delete player;
+<span class="tok-type">void</span> <span class="tok-fn">printAll</span>(<span class="tok-kw">const</span> <span class="tok-type">vector</span>&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList) {
+    <span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-type">Player</span>* player : playerList) {
+        <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;My name is &quot;</span>&lt;&lt;player-&gt;<span class="tok-fn">getName</span>()
+            &lt;&lt; <span class="tok-str">&quot;. I&#x27;m a &quot;</span> &lt;&lt; player-&gt;<span class="tok-fn">whatRace</span>()
+            &lt;&lt; <span class="tok-str">&quot; and my attack is: &quot;</span> &lt;&lt; player-&gt;<span class="tok-fn">attack</span>() &lt;&lt; <span class="tok-type">endl</span>;
     }
-    playerList.clear();
 }
-</pre>
+
+<span class="tok-type">void</span> <span class="tok-fn">doCleanup</span>(<span class="tok-type">vector</span>&lt;<span class="tok-type">Player</span>*&gt;&amp; playerList) {
+    <span class="tok-kw">for</span> (<span class="tok-type">Player</span>* player : playerList) {
+        <span class="tok-kw">delete</span> player;
+    }
+    playerList.<span class="tok-fn">clear</span>();
+}</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef PLAYER_H
-#define PLAYER_H
+          <pre class="code-block"><span class="tok-pre">#ifndef PLAYER_H</span>
+<span class="tok-pre">#define PLAYER_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-enum class Race { HUMAN, ELF, DWARF, ORC, TROLL };
+<span class="tok-kw">enum</span> <span class="tok-kw">class</span> Race { HUMAN, ELF, DWARF, ORC, TROLL };
 
 
-class Player {
-public:
-	Player(string name, Race race, int hitPoints, int magicPoints);
-	virtual ~Player() = default;
+<span class="tok-kw">class</span> <span class="tok-type">Player</span> {
+<span class="tok-kw">public</span>:
+	<span class="tok-type">Player</span>(<span class="tok-type">string</span> name, Race race, <span class="tok-type">int</span> hitPoints, <span class="tok-type">int</span> magicPoints);
+	<span class="tok-kw">virtual</span> ~<span class="tok-type">Player</span>() = <span class="tok-kw">default</span>;
 
-	string getName() const;
-	Race getRace() const;
-	string whatRace() const;
-	int getHitPoints() const;
-	int getMagicPointers() const;
+	<span class="tok-type">string</span> <span class="tok-fn">getName</span>() <span class="tok-kw">const</span>;
+	Race <span class="tok-fn">getRace</span>() <span class="tok-kw">const</span>;
+	<span class="tok-type">string</span> <span class="tok-fn">whatRace</span>() <span class="tok-kw">const</span>;
+	<span class="tok-type">int</span> <span class="tok-fn">getHitPoints</span>() <span class="tok-kw">const</span>;
+	<span class="tok-type">int</span> <span class="tok-fn">getMagicPointers</span>() <span class="tok-kw">const</span>;
 
-	void setName(string name);
-	void setRace(Race race);
-	void setHitPoints(int hitPoints);
-	void setMagicPoints(int magicPoints);
+	<span class="tok-type">void</span> <span class="tok-fn">setName</span>(<span class="tok-type">string</span> name);
+	<span class="tok-type">void</span> <span class="tok-fn">setRace</span>(Race race);
+	<span class="tok-type">void</span> <span class="tok-fn">setHitPoints</span>(<span class="tok-type">int</span> hitPoints);
+	<span class="tok-type">void</span> <span class="tok-fn">setMagicPoints</span>(<span class="tok-type">int</span> magicPoints);
 
-	virtual string attack() const = 0;
+	<span class="tok-kw">virtual</span> <span class="tok-type">string</span> <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
 
-private:
-	string name;
+<span class="tok-kw">private</span>:
+	<span class="tok-type">string</span> name;
 	Race race;
-	int hitPoints;
-	int magicPoints;
+	<span class="tok-type">int</span> hitPoints;
+	<span class="tok-type">int</span> magicPoints;
 };
 
-#endif 
-
+<span class="tok-pre">#endif </span>
 </pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Player.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Player.h&quot;</span>
 
-Player::Player(string name, Race race, int hitPoints, int magicPoints) 
- : name(name), race(race), hitPoints(hitPoints), magicPoints(magicPoints){
+<span class="tok-type">Player</span>::<span class="tok-type">Player</span>(<span class="tok-type">string</span> name, Race race, <span class="tok-type">int</span> hitPoints, <span class="tok-type">int</span> magicPoints) 
+ : <span class="tok-fn">name</span>(name), <span class="tok-fn">race</span>(race), <span class="tok-fn">hitPoints</span>(hitPoints), <span class="tok-fn">magicPoints</span>(magicPoints){
 }
 
-string Player::getName() const {
-	return name;
+<span class="tok-type">string</span> <span class="tok-type">Player</span>::<span class="tok-fn">getName</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> name;
 }
 
-Race Player::getRace() const {
-	return race;
+Race <span class="tok-type">Player</span>::<span class="tok-fn">getRace</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> race;
 }
 
-string Player::whatRace() const {
-	switch(race) {
-		case Race::HUMAN:
-			return &quot;Human&quot;;
-		case Race::ELF:
-			return &quot;Elf&quot;;
-		case Race::DWARF:
-			return &quot;Dwarf&quot;;
-		case Race::ORC:
-			return &quot;Orc&quot;;
-		case Race::TROLL:
-			return &quot;Troll&quot;;
-		default:
-			return &quot;Unknown&quot;;
+<span class="tok-type">string</span> <span class="tok-type">Player</span>::<span class="tok-fn">whatRace</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">switch</span>(race) {
+		<span class="tok-kw">case</span> Race::HUMAN:
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;Human&quot;</span>;
+		<span class="tok-kw">case</span> Race::ELF:
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;Elf&quot;</span>;
+		<span class="tok-kw">case</span> Race::DWARF:
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;Dwarf&quot;</span>;
+		<span class="tok-kw">case</span> Race::ORC:
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;Orc&quot;</span>;
+		<span class="tok-kw">case</span> Race::TROLL:
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;Troll&quot;</span>;
+		<span class="tok-kw">default</span>:
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;Unknown&quot;</span>;
 	}
 }
 
-int Player::getHitPoints() const {
-	return hitPoints;
+<span class="tok-type">int</span> <span class="tok-type">Player</span>::<span class="tok-fn">getHitPoints</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> hitPoints;
 }
 
-int Player::getMagicPointers() const {
-	return magicPoints;
+<span class="tok-type">int</span> <span class="tok-type">Player</span>::<span class="tok-fn">getMagicPointers</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> magicPoints;
 }
 
-void Player::setName(string name) {
-	this-&gt;name = name;
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setName</span>(<span class="tok-type">string</span> name) {
+	<span class="tok-kw">this</span>-&gt;name = name;
 }
 
-void Player::setRace(Race race) {
-	this-&gt;race = race;
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setRace</span>(Race race) {
+	<span class="tok-kw">this</span>-&gt;race = race;
 }
 
-void Player::setHitPoints(int hitPoints) {
-	this-&gt;hitPoints = hitPoints;
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setHitPoints</span>(<span class="tok-type">int</span> hitPoints) {
+	<span class="tok-kw">this</span>-&gt;hitPoints = hitPoints;
 }
 
-void Player::setMagicPoints(int magicPoints) {
-	this-&gt;magicPoints = magicPoints;
+<span class="tok-type">void</span> <span class="tok-type">Player</span>::<span class="tok-fn">setMagicPoints</span>(<span class="tok-type">int</span> magicPoints) {
+	<span class="tok-kw">this</span>-&gt;magicPoints = magicPoints;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-3">
-          <pre class="code-block">#ifndef MAGE_H
-#define MAGE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef MAGE_H</span>
+<span class="tok-pre">#define MAGE_H</span>
 
-#include &quot;Player.h&quot;
+<span class="tok-pre">#include &quot;Player.h&quot;</span>
 
-class Mage : public Player {
-	public:	
-		Mage(string name, Race race) : Player(name, race, 150, 150) {}
+<span class="tok-kw">class</span> <span class="tok-type">Mage</span> : <span class="tok-kw">public</span> <span class="tok-type">Player</span> {
+	<span class="tok-kw">public</span>:	
+		<span class="tok-type">Mage</span>(<span class="tok-type">string</span> name, Race race) : <span class="tok-type">Player</span>(name, race, <span class="tok-num">150</span>, <span class="tok-num">150</span>) {}
 
-		string attack() const override {
-			return &quot;I will crush you with the power of my arcane missiles!&quot;;
+		<span class="tok-type">string</span> <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;I will crush you with the power of my arcane missiles!&quot;</span>;
 		}
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-4">
-          <pre class="code-block">// File not found: section_10/RPGProject/RPGProject/Mage.cpp</pre>
+          <pre class="code-block"><span class="tok-com">// File not found: section_10/RPGProject/RPGProject/Mage.cpp</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-5">
-          <pre class="code-block">#ifndef WARRIOR_H
-#define WARRIOR_H
-#include &quot;Player.h&quot;
+          <pre class="code-block"><span class="tok-pre">#ifndef WARRIOR_H</span>
+<span class="tok-pre">#define WARRIOR_H</span>
+<span class="tok-pre">#include &quot;Player.h&quot;</span>
 
-class Warrior : public Player {
+<span class="tok-kw">class</span> <span class="tok-type">Warrior</span> : <span class="tok-kw">public</span> <span class="tok-type">Player</span> {
 
-	public:
-		Warrior(string name, Race race) : Player(name, race, 200, 0) {}
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Warrior</span>(<span class="tok-type">string</span> name, Race race) : <span class="tok-type">Player</span>(name, race, <span class="tok-num">200</span>, <span class="tok-num">0</span>) {}
 
-		string attack() const override {
-			return &quot;I will destroy you with my sword, foul demon!&quot;;
+		<span class="tok-type">string</span> <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;I will destroy you with my sword, foul demon!&quot;</span>;
 		}
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-6">
-          <pre class="code-block">// File not found: section_10/RPGProject/RPGProject/Warrior.cpp</pre>
+          <pre class="code-block"><span class="tok-com">// File not found: section_10/RPGProject/RPGProject/Warrior.cpp</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-7">
-          <pre class="code-block">#ifndef PRIEST_H
-#define PRIEST_H
+          <pre class="code-block"><span class="tok-pre">#ifndef PRIEST_H</span>
+<span class="tok-pre">#define PRIEST_H</span>
 
-#include &quot;Player.h&quot;
+<span class="tok-pre">#include &quot;Player.h&quot;</span>
 
-class Priest : public Player {
-	public:
-		Priest(string name, Race race) : Player(name, race, 100, 200) {}
+<span class="tok-kw">class</span> <span class="tok-type">Priest</span> : <span class="tok-kw">public</span> <span class="tok-type">Player</span> {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">Priest</span>(<span class="tok-type">string</span> name, Race race) : <span class="tok-type">Player</span>(name, race, <span class="tok-num">100</span>, <span class="tok-num">200</span>) {}
 
-		string attack() const override {
-			return &quot;I will assault you with Holy Wrath!&quot;;
+		<span class="tok-type">string</span> <span class="tok-fn">attack</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+			<span class="tok-kw">return</span> <span class="tok-str">&quot;I will assault you with Holy Wrath!&quot;</span>;
 		}
 };
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-8">
-          <pre class="code-block">// File not found: section_10/RPGProject/RPGProject/Priest.cpp</pre>
+          <pre class="code-block"><span class="tok-com">// File not found: section_10/RPGProject/RPGProject/Priest.cpp</span></pre>
         </div>
       </div>
     
@@ -359,6 +361,54 @@ class Priest : public Player {
         <h3>1. Member Initializer Lists</h3>
         <p>Initializing member variables in constructor initialization lists directly initializes members rather than default-constructing and then assigning, eliminating redundant operations.</p>
 
+        <div class="diagram-container">
+          <h4>📐 RPG Class Hierarchy UML Architecture</h4>
+          <div class="uml-grid">
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;base&gt;&gt;</span>
+                <span class="uml-class-name">Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item protected"># name : string</div>
+                <div class="uml-item protected"># hitPoints : int</div>
+                <div class="uml-item protected"># magicPoints : int</div>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [virtual]</div>
+                <div class="uml-item public">+ ~Player() [virtual]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;specialization&gt;&gt;</span>
+                <span class="uml-class-name">Warrior : public Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [override]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;specialization&gt;&gt;</span>
+                <span class="uml-class-name">Mage : public Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [override]</div>
+              </div>
+            </div>
+            <div class="uml-class-card">
+              <div class="uml-class-header">
+                <span class="uml-stereotype">&lt;&lt;specialization&gt;&gt;</span>
+                <span class="uml-class-name">Priest : public Player</span>
+              </div>
+              <div class="uml-section">
+                <div class="uml-item public">+ attack() : string [override]</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <h3>2. Virtual Destructors</h3>
         <p>When deleting a derived class object through a base class pointer (<code>Base* ptr = new Derived(); delete ptr;</code>), the base class destructor <strong>must be virtual</strong>; otherwise, the derived class destructor is not called, causing silent resource leaks.</p>
         
@@ -367,7 +417,7 @@ class Priest : public Player {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

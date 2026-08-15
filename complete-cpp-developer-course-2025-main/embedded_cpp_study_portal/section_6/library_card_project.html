@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Validation, Class Invariants &amp; String References - C++ & Embedded Systems Guide</title>
+  <title>Data Validation, Class Invariants &amp; String References - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 6</a>
+      <a href="../index.html#grid-foundations">Section 6</a>
       <span class="sep">/</span>
       <span class="current">LibraryCardProject</span>
     </div>
@@ -71,94 +77,93 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;LibraryCard.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;LibraryCard.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void printLibraryCardDetails(const LibraryCard&amp; card);
+<span class="tok-type">void</span> <span class="tok-fn">printLibraryCardDetails</span>(<span class="tok-kw">const</span> <span class="tok-type">LibraryCard</span>&amp; card);
 
-int main() {
-	LibraryCard aliceCard(&quot;Alice Johnson&quot;);
-	LibraryCard bobCard(&quot;Bob Smith&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">LibraryCard</span> <span class="tok-fn">aliceCard</span>(&quot;Alice Johnson&quot;);
+	<span class="tok-type">LibraryCard</span> <span class="tok-fn">bobCard</span>(&quot;Bob Smith&quot;);
 
-	aliceCard.checkoutBook();
-	aliceCard.checkoutBook();
-	bobCard.checkoutBook();
+	aliceCard.<span class="tok-fn">checkoutBook</span>();
+	aliceCard.<span class="tok-fn">checkoutBook</span>();
+	bobCard.<span class="tok-fn">checkoutBook</span>();
 
-	printLibraryCardDetails(aliceCard);
-	printLibraryCardDetails(bobCard);
+	<span class="tok-fn">printLibraryCardDetails</span>(aliceCard);
+	<span class="tok-fn">printLibraryCardDetails</span>(bobCard);
 
-	cout &lt;&lt; &quot;Alice returns a book... &quot; &lt;&lt; endl;
-	aliceCard.returnBook();
-	printLibraryCardDetails(aliceCard);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Alice returns a book... &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	aliceCard.<span class="tok-fn">returnBook</span>();
+	<span class="tok-fn">printLibraryCardDetails</span>(aliceCard);
 
-	bobCard.returnBook();
-	bobCard.returnBook();  //should trigger a warning!
+	bobCard.<span class="tok-fn">returnBook</span>();
+	bobCard.<span class="tok-fn">returnBook</span>();  <span class="tok-com">//should trigger a warning!</span>
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void printLibraryCardDetails(const LibraryCard&amp; card) {
-	cout &lt;&lt; card.getCardholderName() &lt;&lt; &quot; has &quot;
-		 &lt;&lt; card.getBooksCheckedOut() &lt;&lt; &quot; books checked out.&quot; 
-		 &lt;&lt; endl;
-}
-</pre>
+<span class="tok-type">void</span> <span class="tok-fn">printLibraryCardDetails</span>(<span class="tok-kw">const</span> <span class="tok-type">LibraryCard</span>&amp; card) {
+	<span class="tok-type">cout</span> &lt;&lt; card.<span class="tok-fn">getCardholderName</span>() &lt;&lt; <span class="tok-str">&quot; has &quot;</span>
+		 &lt;&lt; card.<span class="tok-fn">getBooksCheckedOut</span>() &lt;&lt; <span class="tok-str">&quot; books checked out.&quot;</span> 
+		 &lt;&lt; <span class="tok-type">endl</span>;
+}</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef LIBRARY_CARD_H
-#define LIBRARY_CARD_H
+          <pre class="code-block"><span class="tok-pre">#ifndef LIBRARY_CARD_H</span>
+<span class="tok-pre">#define LIBRARY_CARD_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class LibraryCard {
+<span class="tok-kw">class</span> <span class="tok-type">LibraryCard</span> {
 
-	public:
-		LibraryCard(string cardholderName);
-		void checkoutBook();
-		void returnBook();
-		string getCardholderName() const;
-		int getBooksCheckedOut() const;
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">LibraryCard</span>(<span class="tok-type">string</span> cardholderName);
+		<span class="tok-type">void</span> <span class="tok-fn">checkoutBook</span>();
+		<span class="tok-type">void</span> <span class="tok-fn">returnBook</span>();
+		<span class="tok-type">string</span> <span class="tok-fn">getCardholderName</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">int</span> <span class="tok-fn">getBooksCheckedOut</span>() <span class="tok-kw">const</span>;
 
-	private:
-		string cardholderName;
-		int booksCheckedOut;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> cardholderName;
+		<span class="tok-type">int</span> booksCheckedOut;
 };
 
-#endif</pre>
+<span class="tok-pre">#endif</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;LibraryCard.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;LibraryCard.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-LibraryCard::LibraryCard(string cardholderName) {
-	this-&gt;cardholderName = cardholderName;
-	booksCheckedOut = 0;
+<span class="tok-type">LibraryCard</span>::<span class="tok-type">LibraryCard</span>(<span class="tok-type">string</span> cardholderName) {
+	<span class="tok-kw">this</span>-&gt;cardholderName = cardholderName;
+	booksCheckedOut = <span class="tok-num">0</span>;
 }
 
-void LibraryCard::checkoutBook() {
+<span class="tok-type">void</span> <span class="tok-type">LibraryCard</span>::<span class="tok-fn">checkoutBook</span>() {
 	booksCheckedOut++;
 }
 
-void LibraryCard::returnBook() {
-	if (booksCheckedOut &gt; 0) {
+<span class="tok-type">void</span> <span class="tok-type">LibraryCard</span>::<span class="tok-fn">returnBook</span>() {
+	<span class="tok-kw">if</span> (booksCheckedOut &gt; <span class="tok-num">0</span>) {
 		booksCheckedOut--;
 	}
-	else {
-		cout &lt;&lt; &quot;No books to return!&quot; &lt;&lt; endl;
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;No books to return!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 }
 
-string LibraryCard::getCardholderName() const {
-	return cardholderName;
+<span class="tok-type">string</span> <span class="tok-type">LibraryCard</span>::<span class="tok-fn">getCardholderName</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> cardholderName;
 }
 
-int LibraryCard::getBooksCheckedOut() const {
-	return booksCheckedOut;
+<span class="tok-type">int</span> <span class="tok-type">LibraryCard</span>::<span class="tok-fn">getBooksCheckedOut</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> booksCheckedOut;
 }</pre>
         </div>
       </div>
@@ -179,7 +184,7 @@ int LibraryCard::getBooksCheckedOut() const {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

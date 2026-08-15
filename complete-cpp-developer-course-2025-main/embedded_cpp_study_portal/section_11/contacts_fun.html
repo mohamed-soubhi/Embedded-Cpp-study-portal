@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Associative Key-Value Mappings - C++ & Embedded Systems Guide</title>
+  <title>Associative Key-Value Mappings - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">ContactsFun</span>
     </div>
@@ -69,24 +75,24 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;map&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-pre">#include &lt;map&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	map&lt;string, string&gt; contacts;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">map</span>&lt;<span class="tok-type">string</span>, <span class="tok-type">string</span>&gt; contacts;
 
-	contacts[&quot;John Baugh&quot;] = &quot;313-555-5555&quot;;
-	contacts[&quot;Bob Robinson&quot;] = &quot;734-555-5050&quot;;
-	contacts[&quot;Sally Snorkle&quot;] = &quot;810-555-8888&quot;;
+	contacts[&quot;John Baugh<span class="tok-str">&quot;] = &quot;</span><span class="tok-num">313</span>-<span class="tok-num">555</span>-<span class="tok-num">5555</span>&quot;;
+	contacts[&quot;Bob Robinson<span class="tok-str">&quot;] = &quot;</span><span class="tok-num">734</span>-<span class="tok-num">555</span>-<span class="tok-num">5050</span>&quot;;
+	contacts[&quot;Sally Snorkle<span class="tok-str">&quot;] = &quot;</span><span class="tok-num">810</span>-<span class="tok-num">555</span>-<span class="tok-num">8888</span>&quot;;
 
-	for (auto element : contacts) {
-		cout &lt;&lt; element.first &lt;&lt; &quot; = &quot; &lt;&lt; element.second &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-kw">auto</span> element : contacts) {
+		<span class="tok-type">cout</span> &lt;&lt; element.first &lt;&lt; <span class="tok-str">&quot; = &quot;</span> &lt;&lt; element.second &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -104,7 +110,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Flash ROM Lookups</h3><p>In firmware, key-value mappings are often stored in Flash ROM as constant arrays to conserve SRAM.</p>

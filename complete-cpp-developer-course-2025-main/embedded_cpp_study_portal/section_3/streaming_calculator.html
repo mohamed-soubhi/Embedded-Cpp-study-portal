@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Stream Parsers &amp; Polish Notation Machines - C++ & Embedded Systems Guide</title>
+  <title>Interactive Stream Parsers &amp; Polish Notation Machines - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 3</a>
+      <a href="../index.html#grid-foundations">Section 3</a>
       <span class="sep">/</span>
       <span class="current">StreamingCalculator</span>
     </div>
@@ -69,63 +75,63 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	char package;
-	int numDevices;
-	int totalCost = 0;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">char</span> package;
+	<span class="tok-type">int</span> numDevices;
+	<span class="tok-type">int</span> totalCost = <span class="tok-num">0</span>;
 
-	int devicesOver = 0;
-	const int includedA = 1;
-	const int includedB = 3;
-	const int includedC = 5;
+	<span class="tok-type">int</span> devicesOver = <span class="tok-num">0</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> includedA = <span class="tok-num">1</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> includedB = <span class="tok-num">3</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> includedC = <span class="tok-num">5</span>;
 
-	const int baseA = 9;
-	const int baseB = 14;
-	const int baseC = 20;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> baseA = <span class="tok-num">9</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> baseB = <span class="tok-num">14</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> baseC = <span class="tok-num">20</span>;
 
-	const int extraA = 6;
-	const int extraB = 4;
-	const int extraC = 2;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> extraA = <span class="tok-num">6</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> extraB = <span class="tok-num">4</span>;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> extraC = <span class="tok-num">2</span>;
 
-	cout &lt;&lt; &quot;Welcome to the Streaming Subscription Calculator!&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;Enter your package (A, B, or C): &quot;;
-	cin &gt;&gt; package;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Welcome to the Streaming Subscription Calculator!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter your package (A, B, or C): &quot;</span>;
+	<span class="tok-type">cin</span> &gt;&gt; package;
 
-	cout &lt;&lt; &quot;Enter number of simultaneous devices user: &quot;;
-	cin &gt;&gt; numDevices;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter number of simultaneous devices user: &quot;</span>;
+	<span class="tok-type">cin</span> &gt;&gt; numDevices;
 
-	if (package == &#x27;A&#x27;) {
+	<span class="tok-kw">if</span> (package == &#x27;A&#x27;) {
 		totalCost += baseA;
-		if (numDevices &gt; includedA) {
+		<span class="tok-kw">if</span> (numDevices &gt; includedA) {
 			devicesOver = numDevices - includedA;
 			totalCost += devicesOver * extraA;
 		}
 	}
-	else if (package == &#x27;B&#x27;) {
+	<span class="tok-kw">else</span> <span class="tok-kw">if</span> (package == &#x27;B&#x27;) {
 		totalCost += baseB;
-		if (numDevices &gt; includedB) {
+		<span class="tok-kw">if</span> (numDevices &gt; includedB) {
 			devicesOver = numDevices - includedB;
 			totalCost += devicesOver * extraB;
 		}
 	}
-	else if (package == &#x27;C&#x27;) {
+	<span class="tok-kw">else</span> <span class="tok-kw">if</span> (package == &#x27;C&#x27;) {
 		totalCost += baseC;
-		if (numDevices &gt; includedC) {
+		<span class="tok-kw">if</span> (numDevices &gt; includedC) {
 			devicesOver = numDevices - includedC;
 			totalCost += devicesOver * extraC;
 		}
 	}
-	else {
-		cout &lt;&lt; &quot;Invalid package selection.&quot; &lt;&lt; endl;
-		return 0;
+	<span class="tok-kw">else</span> {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Invalid package selection.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 	}
 
-	cout &lt;&lt; &quot;Your total cost for the month is: $&quot; &lt;&lt; totalCost &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Your total cost for the month is: $&quot;</span> &lt;&lt; totalCost &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -149,7 +155,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rule of Three, Five, and Zero in Embedded C++ - C++ & Embedded Systems Guide</title>
+  <title>Rule of Three, Five, and Zero in Embedded C++ - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">RuleOfThreeFiveZeroApp</span>
     </div>
@@ -70,140 +76,140 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef RULES_DEMO_H
-#define RULES_DEMO_H
+          <pre class="code-block"><span class="tok-pre">#ifndef RULES_DEMO_H</span>
+<span class="tok-pre">#define RULES_DEMO_H</span>
 
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#include &lt;memory&gt;
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;cstring&gt;</span>
+<span class="tok-pre">#include &lt;memory&gt;</span>
 
-using namespace std;
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class RuleOfThree {
-	public:
-		RuleOfThree(const char* text = &quot;default&quot;) {
-			data = new char[strlen(text) + 1];
-			strcpy_s(data, strlen(text) + 1, text);
-			cout &lt;&lt; &quot;[Three] Constructed with: &quot; &lt;&lt; data &lt;&lt; endl;
+<span class="tok-kw">class</span> RuleOfThree {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">RuleOfThree</span>(<span class="tok-kw">const</span> <span class="tok-type">char</span>* text = <span class="tok-str">&quot;default&quot;</span>) {
+			data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[<span class="tok-fn">strlen</span>(text) + <span class="tok-num">1</span>];
+			<span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(text) + <span class="tok-num">1</span>, text);
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Three] Constructed with: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
 		}
 
-		RuleOfThree(const RuleOfThree&amp; other) {
-			data = new char[strlen(other.data) + 1];
-			strcpy_s(data, strlen(other.data) + 1, other.data);
-			cout &lt;&lt; &quot;[Three] Copied: &quot; &lt;&lt; data &lt;&lt; endl;
+		<span class="tok-fn">RuleOfThree</span>(<span class="tok-kw">const</span> RuleOfThree&amp; other) {
+			data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[<span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>];
+			<span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>, other.data);
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Three] Copied: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
 		}
 
-		RuleOfThree&amp; operator=(const RuleOfThree&amp; other) {
-			if (this != &amp;other) {
-				delete[] data;
-				data = new char[strlen(other.data) + 1];
-				strcpy_s(data, strlen(other.data) + 1, other.data);
+		RuleOfThree&amp; <span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> RuleOfThree&amp; other) {
+			<span class="tok-kw">if</span> (<span class="tok-kw">this</span> != &amp;other) {
+				<span class="tok-kw">delete</span>[] data;
+				data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[<span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>];
+				<span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>, other.data);
 			}
-			cout &lt;&lt; &quot;[Three] Assigned: &quot; &lt;&lt; data &lt;&lt; endl;
-			return *this;
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Three] Assigned: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
+			<span class="tok-kw">return</span> *<span class="tok-kw">this</span>;
 		}
 
-		~RuleOfThree() {
-			cout &lt;&lt; &quot;[Three] Destroyed: &quot; &lt;&lt; data &lt;&lt; endl;
-			delete[] data;
+		~<span class="tok-fn">RuleOfThree</span>() {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Three] Destroyed: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
+			<span class="tok-kw">delete</span>[] data;
 		}
 
-	private:
-		char* data;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">char</span>* data;
 };
 
-class RuleOfFive {
+<span class="tok-kw">class</span> RuleOfFive {
 
-    public:
-        RuleOfFive(const char* text = &quot;default&quot;) {
-            data = new char[strlen(text) + 1];
-            strcpy_s(data, strlen(text) + 1, text);
-            cout &lt;&lt; &quot;[Five] Constructed with: &quot; &lt;&lt; data &lt;&lt; endl;
+    <span class="tok-kw">public</span>:
+        <span class="tok-fn">RuleOfFive</span>(<span class="tok-kw">const</span> <span class="tok-type">char</span>* text = <span class="tok-str">&quot;default&quot;</span>) {
+            data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[<span class="tok-fn">strlen</span>(text) + <span class="tok-num">1</span>];
+            <span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(text) + <span class="tok-num">1</span>, text);
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Five] Constructed with: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
         }
 
-        RuleOfFive(const RuleOfFive&amp; other) {
-            data = new char[strlen(other.data) + 1];
-            strcpy_s(data, strlen(other.data) + 1, other.data);
-            cout &lt;&lt; &quot;[Five] Copied: &quot; &lt;&lt; data &lt;&lt; endl;
+        <span class="tok-fn">RuleOfFive</span>(<span class="tok-kw">const</span> RuleOfFive&amp; other) {
+            data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[<span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>];
+            <span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>, other.data);
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Five] Copied: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
         }
 
-        RuleOfFive&amp; operator=(const RuleOfFive&amp; other) {
-            if (this != &amp;other) {
-                delete[] data;
-                data = new char[strlen(other.data) + 1];
-                strcpy_s(data, strlen(other.data) + 1, other.data);
+        RuleOfFive&amp; <span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> RuleOfFive&amp; other) {
+            <span class="tok-kw">if</span> (<span class="tok-kw">this</span> != &amp;other) {
+                <span class="tok-kw">delete</span>[] data;
+                data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[<span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>];
+                <span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>, other.data);
             }
-            cout &lt;&lt; &quot;[Five] Copy-assigned: &quot; &lt;&lt; data &lt;&lt; endl;
-            return *this;
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Five] Copy-assigned: &quot;</span> &lt;&lt; data &lt;&lt; <span class="tok-type">endl</span>;
+            <span class="tok-kw">return</span> *<span class="tok-kw">this</span>;
         }
 
-        RuleOfFive(RuleOfFive&amp;&amp; other) noexcept {
+        <span class="tok-fn">RuleOfFive</span>(RuleOfFive&amp;&amp; other) <span class="tok-kw">noexcept</span> {
             data = other.data;
-            other.data = nullptr;
-            cout &lt;&lt; &quot;[Five] Moved!&quot; &lt;&lt; endl;
+            other.data = <span class="tok-kw">nullptr</span>;
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Five] Moved!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
         }
 
-        RuleOfFive&amp; operator=(RuleOfFive&amp;&amp; other) noexcept {
-            if (this != &amp;other) {
-                delete[] data;
+        RuleOfFive&amp; <span class="tok-kw">operator</span>=(RuleOfFive&amp;&amp; other) <span class="tok-kw">noexcept</span> {
+            <span class="tok-kw">if</span> (<span class="tok-kw">this</span> != &amp;other) {
+                <span class="tok-kw">delete</span>[] data;
                 data = other.data;
-                other.data = nullptr;
+                other.data = <span class="tok-kw">nullptr</span>;
             }
-            cout &lt;&lt; &quot;[Five] Move-assigned!&quot; &lt;&lt; endl;
-            return *this;
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Five] Move-assigned!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+            <span class="tok-kw">return</span> *<span class="tok-kw">this</span>;
         }
 
-        ~RuleOfFive() {
-            cout &lt;&lt; &quot;[Five] Destroyed: &quot; &lt;&lt; (data ? data : &quot;null&quot;) &lt;&lt; endl;
-            delete[] data;
+        ~<span class="tok-fn">RuleOfFive</span>() {
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Five] Destroyed: &quot;</span> &lt;&lt; (data ? data : <span class="tok-str">&quot;null&quot;</span>) &lt;&lt; <span class="tok-type">endl</span>;
+            <span class="tok-kw">delete</span>[] data;
         }
 
-    private:
-        char* data;
+    <span class="tok-kw">private</span>:
+        <span class="tok-type">char</span>* data;
 };
 
 
-class RuleOfZero {
-    public:
-        RuleOfZero(const char* text = &quot;default&quot;) {
-            data = make_unique&lt;char[]&gt;(strlen(text) + 1);
-            strcpy_s(data.get(), strlen(text) + 1, text);
-            cout &lt;&lt; &quot;[Zero] Constructed with: &quot; &lt;&lt; data.get() &lt;&lt; endl;
+<span class="tok-kw">class</span> RuleOfZero {
+    <span class="tok-kw">public</span>:
+        <span class="tok-fn">RuleOfZero</span>(<span class="tok-kw">const</span> <span class="tok-type">char</span>* text = <span class="tok-str">&quot;default&quot;</span>) {
+            data = <span class="tok-type">make_unique</span>&lt;<span class="tok-type">char</span>[]&gt;(<span class="tok-fn">strlen</span>(text) + <span class="tok-num">1</span>);
+            <span class="tok-fn">strcpy_s</span>(data.<span class="tok-fn">get</span>(), <span class="tok-fn">strlen</span>(text) + <span class="tok-num">1</span>, text);
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Zero] Constructed with: &quot;</span> &lt;&lt; data.<span class="tok-fn">get</span>() &lt;&lt; <span class="tok-type">endl</span>;
         }
 
-        void print() const {
-            cout &lt;&lt; &quot;[Zero] Content: &quot; &lt;&lt; data.get() &lt;&lt; endl;
+        <span class="tok-type">void</span> <span class="tok-fn">print</span>() <span class="tok-kw">const</span> {
+            <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;[Zero] Content: &quot;</span> &lt;&lt; data.<span class="tok-fn">get</span>() &lt;&lt; <span class="tok-type">endl</span>;
         }
 
-    private:
-        unique_ptr&lt;char[]&gt; data;
+    <span class="tok-kw">private</span>:
+        <span class="tok-type">unique_ptr</span>&lt;<span class="tok-type">char</span>[]&gt; data;
 };
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;RulesDemo.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;RulesDemo.h&quot;</span>
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	cout &lt;&lt; &quot;\n--- Rule of Three ---&quot; &lt;&lt; endl;
-	RuleOfThree a(&quot;Alpha&quot;);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\n--- Rule of Three ---&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	RuleOfThree <span class="tok-fn">a</span>(&quot;Alpha&quot;);
 	RuleOfThree b = a;
 	b = a;
 
-	cout &lt;&lt; &quot;\n--- Rule of Five ---&quot; &lt;&lt; endl;
-	RuleOfFive c(&quot;Beta&quot;);
-	RuleOfFive d = move(c);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\n--- Rule of Five ---&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	RuleOfFive <span class="tok-fn">c</span>(&quot;Beta&quot;);
+	RuleOfFive d = <span class="tok-type">move</span>(c);
 	RuleOfFive e;
-	e = move(d);
+	e = <span class="tok-type">move</span>(d);
 
-	cout &lt;&lt; &quot;\n--- Rule of Zero ---&quot; &lt;&lt; endl;
-	RuleOfZero f(&quot;Gamma&quot;);
-	f.print();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\n--- Rule of Zero ---&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	RuleOfZero <span class="tok-fn">f</span>(&quot;Gamma&quot;);
+	f.<span class="tok-fn">print</span>();
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -230,7 +236,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

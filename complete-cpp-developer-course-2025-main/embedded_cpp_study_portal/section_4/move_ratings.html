@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nested Array Iteration, Matrix Math &amp; Boundary Invariants - C++ & Embedded Systems Guide</title>
+  <title>Nested Array Iteration, Matrix Math &amp; Boundary Invariants - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 4</a>
+      <a href="../index.html#grid-foundations">Section 4</a>
       <span class="sep">/</span>
       <span class="current">MoveRatings</span>
     </div>
@@ -69,41 +75,41 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	const int NUM_MOVIES = 5;
+	<span class="tok-kw">const</span> <span class="tok-type">int</span> NUM_MOVIES = <span class="tok-num">5</span>;
 
-	vector&lt;string&gt; movies;
-	vector&lt;int&gt; ratings;
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">string</span>&gt; movies;
+	<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; ratings;
 
-	string tempTitle;
-	int tempRating;
+	<span class="tok-type">string</span> tempTitle;
+	<span class="tok-type">int</span> tempRating;
 
-	for (int i = 0; i &lt; NUM_MOVIES; i++) {
-		cout &lt;&lt; &quot;Enter the title of movie #&quot; &lt;&lt; (i + 1) &lt;&lt; &quot;: &quot;;
-		getline(cin, tempTitle);
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; NUM_MOVIES; i++) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the title of movie #&quot;</span> &lt;&lt; (i + <span class="tok-num">1</span>) &lt;&lt; <span class="tok-str">&quot;: &quot;</span>;
+		<span class="tok-fn">getline</span>(<span class="tok-type">cin</span>, tempTitle);
 
-		cout &lt;&lt; &quot;Enter the rating for \&quot;&quot; &lt;&lt; tempTitle &lt;&lt; &quot;\&quot; (1-10): &quot;;
-		cin &gt;&gt; tempRating;
-		cin.get();
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enter the rating for \&quot;</span><span class="tok-str">&quot; &lt;&lt; tempTitle &lt;&lt; &quot;</span>\&quot; (<span class="tok-num">1</span>-<span class="tok-num">10</span>): &quot;;
+		<span class="tok-type">cin</span> &gt;&gt; tempRating;
+		<span class="tok-type">cin</span>.<span class="tok-fn">get</span>();
 
-		movies.push_back(tempTitle);
-		ratings.push_back(tempRating);
-	}//end for
+		movies.<span class="tok-fn">push_back</span>(tempTitle);
+		ratings.<span class="tok-fn">push_back</span>(tempRating);
+	}<span class="tok-com">//end for</span>
 
-	cout &lt;&lt; &quot;\nHere are your movie ratings:\n&quot;;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nHere are your movie ratings:\n&quot;</span>;
 
-	for (int i = 0; i &lt; NUM_MOVIES; i++) {
-		cout &lt;&lt; &quot;You rated \&quot;&quot; &lt;&lt; movies[i] &lt;&lt; &quot;\&quot; a &quot;
-			&lt;&lt; ratings[i] &lt;&lt; &quot;/10.&quot; &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; NUM_MOVIES; i++) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You rated \&quot;</span><span class="tok-str">&quot; &lt;&lt; movies[i] &lt;&lt; &quot;</span>\&quot; a &quot;
+			&lt;&lt; ratings[i] &lt;&lt; <span class="tok-str">&quot;/10.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -127,7 +133,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

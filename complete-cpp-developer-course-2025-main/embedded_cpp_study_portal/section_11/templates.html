@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C++ Templates &amp; Flash ROM Code Bloat Management - C++ & Embedded Systems Guide</title>
+  <title>C++ Templates &amp; Flash ROM Code Bloat Management - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">Templates</span>
     </div>
@@ -69,66 +75,66 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;string&gt;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
 
-using namespace std;
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-//double getBigger(double a, double b);
-//int getBigger(int a, int b);
-//string getBigger(string a, string b);
+<span class="tok-com">//double getBigger(double a, double b);</span>
+<span class="tok-com">//int getBigger(int a, int b);</span>
+<span class="tok-com">//string getBigger(string a, string b);</span>
 
-template &lt;class T&gt;
-T getBigger(T a, T b) {
-	return (a &gt; b) ? a : b;
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+T <span class="tok-fn">getBigger</span>(T a, T b) {
+	<span class="tok-kw">return</span> (a &gt; b) ? a : b;
 }
 
-template &lt;class T&gt;
-T getSmaller(T a, T b) {
-	return (a &lt; b) ? a : b;
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">class</span> T&gt;
+T <span class="tok-fn">getSmaller</span>(T a, T b) {
+	<span class="tok-kw">return</span> (a &lt; b) ? a : b;
 }
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	double d1 = 3.14;
-	double d2 = 5.55;
-	int i1 = 11;
-	int i2 = 9;
-	string s1 = &quot;Alice&quot;;
-	string s2 = &quot;John&quot;;
-
-
-	double biggerDub = getBigger(d1, d2);
-	int biggerInt = getBigger(i1, i2);
-	string biggerStr = getBigger(s1, s2);
-
-	double smallerDub = getSmaller(d1, d2);
-	int smallerInt = getSmaller(i1, i2);
-	string smallerString = getSmaller(s1, s2);
+	<span class="tok-type">double</span> d1 = <span class="tok-num">3.14</span>;
+	<span class="tok-type">double</span> d2 = <span class="tok-num">5.55</span>;
+	<span class="tok-type">int</span> i1 = <span class="tok-num">11</span>;
+	<span class="tok-type">int</span> i2 = <span class="tok-num">9</span>;
+	<span class="tok-type">string</span> s1 = <span class="tok-str">&quot;Alice&quot;</span>;
+	<span class="tok-type">string</span> s2 = <span class="tok-str">&quot;John&quot;</span>;
 
 
-	cout &lt;&lt; &quot;Bigger items:&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; biggerDub &lt;&lt; &quot;\n\t&quot; &lt;&lt; biggerInt &lt;&lt; &quot;\n\t&quot; &lt;&lt; biggerStr &lt;&lt; endl;
+	<span class="tok-type">double</span> biggerDub = <span class="tok-fn">getBigger</span>(d1, d2);
+	<span class="tok-type">int</span> biggerInt = <span class="tok-fn">getBigger</span>(i1, i2);
+	<span class="tok-type">string</span> biggerStr = <span class="tok-fn">getBigger</span>(s1, s2);
 
-	cout &lt;&lt; &quot;Smaller items:&quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; smallerDub &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; smallerInt &lt;&lt; endl;
-	cout &lt;&lt; &quot;\t&quot; &lt;&lt; smallerString &lt;&lt; endl;
+	<span class="tok-type">double</span> smallerDub = <span class="tok-fn">getSmaller</span>(d1, d2);
+	<span class="tok-type">int</span> smallerInt = <span class="tok-fn">getSmaller</span>(i1, i2);
+	<span class="tok-type">string</span> smallerString = <span class="tok-fn">getSmaller</span>(s1, s2);
 
-	return 0;
+
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Bigger items:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; biggerDub &lt;&lt; <span class="tok-str">&quot;\n\t&quot;</span> &lt;&lt; biggerInt &lt;&lt; <span class="tok-str">&quot;\n\t&quot;</span> &lt;&lt; biggerStr &lt;&lt; <span class="tok-type">endl</span>;
+
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Smaller items:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; smallerDub &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; smallerInt &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\t&quot;</span> &lt;&lt; smallerString &lt;&lt; <span class="tok-type">endl</span>;
+
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-//double getBigger(double a, double b) {
-//	return (a &gt; b) ? a : b;
-//}
-//
-//int getBigger(int a, int b) {
-//	return (a &gt; b) ? a : b;
-//}
-//
-//string getBigger(string a, string b) {
-//	return (a &gt; b) ? a : b;
-//}</pre>
+<span class="tok-com">//double getBigger(double a, double b) {</span>
+<span class="tok-com">//	return (a &gt; b) ? a : b;</span>
+<span class="tok-com">//}</span>
+<span class="tok-com">//</span>
+<span class="tok-com">//int getBigger(int a, int b) {</span>
+<span class="tok-com">//	return (a &gt; b) ? a : b;</span>
+<span class="tok-com">//}</span>
+<span class="tok-com">//</span>
+<span class="tok-com">//string getBigger(string a, string b) {</span>
+<span class="tok-com">//	return (a &gt; b) ? a : b;</span>
+<span class="tok-com">//}</span></pre>
         </div>
       </div>
     
@@ -148,7 +154,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

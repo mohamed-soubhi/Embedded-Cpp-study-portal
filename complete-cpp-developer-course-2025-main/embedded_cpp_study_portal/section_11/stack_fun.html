@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LIFO Stacks: Container Adapters vs MCU Call Stacks - C++ & Embedded Systems Guide</title>
+  <title>LIFO Stacks: Container Adapters vs MCU Call Stacks - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">StackFun</span>
     </div>
@@ -69,51 +75,51 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;stack&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;stack&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-void storeReverse(const string&amp; origString, stack&lt;char&gt;&amp; reverseStack);
-bool isPalindrome(const string&amp; origString);
-void printResult(const string&amp; origString);
+<span class="tok-type">void</span> <span class="tok-fn">storeReverse</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; origString, <span class="tok-type">stack</span>&lt;<span class="tok-type">char</span>&gt;&amp; reverseStack);
+<span class="tok-kw">bool</span> <span class="tok-fn">isPalindrome</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; origString);
+<span class="tok-type">void</span> <span class="tok-fn">printResult</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; origString);
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	string strArray[5] = { &quot;racecar&quot;, &quot;fudge&quot;, &quot;civic&quot;, &quot;bob&quot;, &quot;dogs&quot; };
+	<span class="tok-type">string</span> strArray[<span class="tok-num">5</span>] = { <span class="tok-str">&quot;racecar&quot;</span>, <span class="tok-str">&quot;fudge&quot;</span>, <span class="tok-str">&quot;civic&quot;</span>, <span class="tok-str">&quot;bob&quot;</span>, <span class="tok-str">&quot;dogs&quot;</span> };
 
-	for (const string&amp; str : strArray) {
-		printResult(str);
-		cout &lt;&lt; endl;
+	<span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; str : strArray) {
+		<span class="tok-fn">printResult</span>(str);
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-void storeReverse(const string&amp; origString, stack&lt;char&gt;&amp; reverseStack) {
-	for (char c : origString) {
-		reverseStack.push(c);
+<span class="tok-type">void</span> <span class="tok-fn">storeReverse</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; origString, <span class="tok-type">stack</span>&lt;<span class="tok-type">char</span>&gt;&amp; reverseStack) {
+	<span class="tok-kw">for</span> (<span class="tok-type">char</span> c : origString) {
+		reverseStack.<span class="tok-fn">push</span>(c);
 	}
 }
 
-bool isPalindrome(const string&amp; origString) {
-	stack&lt;char&gt; reverseStack;
-	storeReverse(origString, reverseStack);
+<span class="tok-kw">bool</span> <span class="tok-fn">isPalindrome</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; origString) {
+	<span class="tok-type">stack</span>&lt;<span class="tok-type">char</span>&gt; reverseStack;
+	<span class="tok-fn">storeReverse</span>(origString, reverseStack);
 
-	for (char c : origString) {
-		if (reverseStack.top() != c) {
-			return false;
+	<span class="tok-kw">for</span> (<span class="tok-type">char</span> c : origString) {
+		<span class="tok-kw">if</span> (reverseStack.<span class="tok-fn">top</span>() != c) {
+			<span class="tok-kw">return</span> <span class="tok-kw">false</span>;
 		}
-		reverseStack.pop();
+		reverseStack.<span class="tok-fn">pop</span>();
 	}
 
-	return true;
+	<span class="tok-kw">return</span> <span class="tok-kw">true</span>;
 
 }
 
-void printResult(const string&amp; origString) {
-	cout &lt;&lt; &quot;Is \&quot;&quot; &lt;&lt; origString &lt;&lt; &quot;\&quot; a palindrome? &quot;
-		&lt;&lt; boolalpha &lt;&lt; isPalindrome(origString) &lt;&lt; endl;
+<span class="tok-type">void</span> <span class="tok-fn">printResult</span>(<span class="tok-kw">const</span> <span class="tok-type">string</span>&amp; origString) {
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Is \&quot;</span><span class="tok-str">&quot; &lt;&lt; origString &lt;&lt; &quot;</span>\&quot; a palindrome? &quot;
+		&lt;&lt; boolalpha &lt;&lt; <span class="tok-fn">isPalindrome</span>(origString) &lt;&lt; <span class="tok-type">endl</span>;
 }</pre>
         </div>
       </div>
@@ -131,7 +137,7 @@ void printResult(const string&amp; origString) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Hardware Call Stack Constraints</h3><p>On microcontrollers, stack memory is shared between local variables and interrupt context saving. Stack overflow corrupts global variables silently unless MPU guards are enabled.</p>

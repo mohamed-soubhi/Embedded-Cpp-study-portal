@@ -38,6 +38,31 @@ SECTION_1_PROJECTS = [
           <li><code>.bss</code>: Zero-initialized global/static variables $\\rightarrow$ <strong>SRAM</strong> (cleared to 0 at boot).</li>
           <li><code>.stack</code> / <code>.heap</code>: Runtime stack and heap allocations $\\rightarrow$ <strong>Top and bottom of SRAM</strong>.</li>
         </ul>
+
+        <div class="diagram-container">
+          <h4>💾 ARM Cortex-M Physical Memory Map (Flash ROM vs SRAM)</h4>
+          <svg class="svg-diagram" width="540" height="210" viewBox="0 0 540 210" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="25" width="220" height="165" rx="8" fill="#111822" stroke="#059669" stroke-width="2"/>
+            <text x="130" y="50" fill="#34d399" font-family="sans-serif" font-weight="bold" font-size="13" text-anchor="middle">FLASH ROM (Non-Volatile)</text>
+            <rect x="40" y="65" width="180" height="30" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="1"/>
+            <text x="130" y="85" fill="#f0fdf4" font-family="monospace" font-size="11" text-anchor="middle">.text (Machine Code)</text>
+            <rect x="40" y="103" width="180" height="30" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="1"/>
+            <text x="130" y="123" fill="#f0fdf4" font-family="monospace" font-size="11" text-anchor="middle">.rodata (constexpr constants)</text>
+            <rect x="40" y="141" width="180" height="30" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+            <text x="130" y="161" fill="#38bdf8" font-family="monospace" font-size="11" text-anchor="middle">.data initial values (LMA)</text>
+            
+            <rect x="280" y="25" width="240" height="165" rx="8" fill="#111822" stroke="#38bdf8" stroke-width="2"/>
+            <text x="400" y="50" fill="#38bdf8" font-family="sans-serif" font-weight="bold" font-size="13" text-anchor="middle">SRAM (Volatile 16-128KB)</text>
+            <rect x="300" y="65" width="200" height="26" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+            <text x="400" y="82" fill="#f0fdf4" font-family="monospace" font-size="11" text-anchor="middle">.data (VMA copied from Flash)</text>
+            <rect x="300" y="97" width="200" height="26" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+            <text x="400" y="114" fill="#f0fdf4" font-family="monospace" font-size="11" text-anchor="middle">.bss (Zero-Cleared Globals)</text>
+            <rect x="300" y="129" width="200" height="24" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+            <text x="400" y="145" fill="#fbbf24" font-family="monospace" font-size="10" text-anchor="middle">Heap (malloc/new ↑)</text>
+            <rect x="300" y="157" width="200" height="24" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1"/>
+            <text x="400" y="173" fill="#fb7185" font-family="monospace" font-size="10" text-anchor="middle">Stack (Local Vars / ISRs ↓)</text>
+          </svg>
+        </div>
         """,
         "refactor_html": """
         <p>Minimal freestanding bare-metal main with zero OS dependencies:</p>

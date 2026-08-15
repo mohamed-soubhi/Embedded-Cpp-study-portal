@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Dynamic Buffer &amp; Memory Safety - C++ & Embedded Systems Guide</title>
+  <title>Custom Dynamic Buffer &amp; Memory Safety - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">RulesChallenge</span>
     </div>
@@ -70,117 +76,117 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef BUFFER_H
-#define BUFFER_H
+          <pre class="code-block"><span class="tok-pre">#ifndef BUFFER_H</span>
+<span class="tok-pre">#define BUFFER_H</span>
 
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;cstring&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Buffer {
-	public:
-		Buffer(const char* input) {
-			cout &lt;&lt; &quot;Constructor called&quot; &lt;&lt; endl;
-			length = strlen(input);
-			data = new char[length + 1];
-			strcpy_s(data, strlen(input) + 1, input);
-		}//end ctor
+<span class="tok-kw">class</span> Buffer {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Buffer</span>(<span class="tok-kw">const</span> <span class="tok-type">char</span>* input) {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Constructor called&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+			length = <span class="tok-fn">strlen</span>(input);
+			data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[length + <span class="tok-num">1</span>];
+			<span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(input) + <span class="tok-num">1</span>, input);
+		}<span class="tok-com">//end ctor</span>
 
-		~Buffer() {
-			cout &lt;&lt; &quot;Destructor called!&quot; &lt;&lt; endl;
-			delete[] data;
-		}//end dtor
+		~<span class="tok-fn">Buffer</span>() {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Destructor called!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+			<span class="tok-kw">delete</span>[] data;
+		}<span class="tok-com">//end dtor</span>
 
-		//copy ctor
-		Buffer(const Buffer&amp; other) {
-			cout &lt;&lt; &quot;Copy constructor called&quot; &lt;&lt; endl;
+		<span class="tok-com">//copy ctor</span>
+		<span class="tok-fn">Buffer</span>(<span class="tok-kw">const</span> Buffer&amp; other) {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Copy constructor called&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 			length = other.length;
-			data = new char[length + 1];
-			strcpy_s(data, strlen(other.data) + 1, other.data);
+			data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[length + <span class="tok-num">1</span>];
+			<span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>, other.data);
 		}
 
-		//copy assignment
-		Buffer&amp; operator=(const Buffer&amp; other) {
-			cout &lt;&lt; &quot;Copy assignment called&quot; &lt;&lt; endl; 
-			if (this != &amp;other) {
-				delete[] data;
+		<span class="tok-com">//copy assignment</span>
+		Buffer&amp; <span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> Buffer&amp; other) {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Copy assignment called&quot;</span> &lt;&lt; <span class="tok-type">endl</span>; 
+			<span class="tok-kw">if</span> (<span class="tok-kw">this</span> != &amp;other) {
+				<span class="tok-kw">delete</span>[] data;
 				length = other.length;
-				data = new char[length + 1];
-				strcpy_s(data, strlen(other.data) + 1, other.data);
+				data = <span class="tok-kw">new</span> <span class="tok-type">char</span>[length + <span class="tok-num">1</span>];
+				<span class="tok-fn">strcpy_s</span>(data, <span class="tok-fn">strlen</span>(other.data) + <span class="tok-num">1</span>, other.data);
 			}
 
-			return *this;
+			<span class="tok-kw">return</span> *<span class="tok-kw">this</span>;
 		}
 
-		//move constructor
-		Buffer(Buffer&amp;&amp; other) noexcept {
-			cout &lt;&lt; &quot;Move constructor called&quot; &lt;&lt; endl;
+		<span class="tok-com">//move constructor</span>
+		<span class="tok-fn">Buffer</span>(Buffer&amp;&amp; other) <span class="tok-kw">noexcept</span> {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Move constructor called&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 			data = other.data;
 			length = other.length;
-			other.data = nullptr;
-			other.length = 0;
+			other.data = <span class="tok-kw">nullptr</span>;
+			other.length = <span class="tok-num">0</span>;
 		}
 
-		//move assignment
-		Buffer&amp; operator=(Buffer&amp;&amp; other) noexcept {
-			cout &lt;&lt; &quot;Move assignment called&quot; &lt;&lt; endl;
-			if (this != &amp;other) {
-				delete[] data;
+		<span class="tok-com">//move assignment</span>
+		Buffer&amp; <span class="tok-kw">operator</span>=(Buffer&amp;&amp; other) <span class="tok-kw">noexcept</span> {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Move assignment called&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+			<span class="tok-kw">if</span> (<span class="tok-kw">this</span> != &amp;other) {
+				<span class="tok-kw">delete</span>[] data;
 				data = other.data;
 				length = other.length;
-				other.data = nullptr;
-				other.length = 0;
+				other.data = <span class="tok-kw">nullptr</span>;
+				other.length = <span class="tok-num">0</span>;
 			}
 
-			return *this;
+			<span class="tok-kw">return</span> *<span class="tok-kw">this</span>;
 		}
 
-		//print
-		void print() const{
-			cout &lt;&lt; &quot;Buffer contents: &quot; &lt;&lt; (data ? data : &quot;null&quot;) &lt;&lt; endl;
+		<span class="tok-com">//print</span>
+		<span class="tok-type">void</span> <span class="tok-fn">print</span>() <span class="tok-kw">const</span>{
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Buffer contents: &quot;</span> &lt;&lt; (data ? data : <span class="tok-str">&quot;null&quot;</span>) &lt;&lt; <span class="tok-type">endl</span>;
 		}
 
-	private:
-		char* data;
-		size_t length;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">char</span>* data;
+		<span class="tok-type">size_t</span> length;
 };
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#include &quot;Buffer.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Buffer.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	cout &lt;&lt; &quot;\nCreating Buffer a....&quot; &lt;&lt; endl;
-	Buffer a(&quot;Hello&quot;);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nCreating Buffer a....&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	Buffer <span class="tok-fn">a</span>(&quot;Hello&quot;);
 
-	cout &lt;&lt; &quot;\nCopying a to b ...&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nCopying a to b ...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 	Buffer b = a;
 
-	cout &lt;&lt; &quot;\nMoving a to c...&quot; &lt;&lt; endl;
-	Buffer c = move(a);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nMoving a to c...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	Buffer c = <span class="tok-type">move</span>(a);
 
-	cout &lt;&lt; &quot;\nAssigning b to d...&quot; &lt;&lt; endl;
-	Buffer d(&quot;Temp&quot;);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nAssigning b to d...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	Buffer <span class="tok-fn">d</span>(&quot;Temp&quot;);
 	d = b;
 
-	cout &lt;&lt; &quot;\nMoving c to e...&quot; &lt;&lt; endl;
-	Buffer e(&quot;Temp&quot;);
-	e = move(c);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nMoving c to e...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	Buffer <span class="tok-fn">e</span>(&quot;Temp&quot;);
+	e = <span class="tok-type">move</span>(c);
 
-	cout &lt;&lt; &quot;\nPrinting all buffers...&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nPrinting all buffers...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	b.print();
-	d.print();
-	e.print();
+	b.<span class="tok-fn">print</span>();
+	d.<span class="tok-fn">print</span>();
+	e.<span class="tok-fn">print</span>();
 
-	cout &lt;&lt; &quot;\nEnd of main&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nEnd of main&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -201,7 +207,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedQueue: Pointer-Based FIFO Queues - C++ & Embedded Systems Guide</title>
+  <title>LinkedQueue: Pointer-Based FIFO Queues - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 12</a>
+      <a href="../index.html#grid-advanced">Section 12</a>
       <span class="sep">/</span>
       <span class="current">LinkedQueueProject</span>
     </div>
@@ -71,153 +77,152 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#ifndef QUEUE_H
-#define QUEUE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef QUEUE_H</span>
+<span class="tok-pre">#define QUEUE_H</span>
 
-class Queue {
-	public:
-		virtual void enqueue(int newEntry) = 0;
-		virtual int dequeue() = 0;
-		virtual int peekFront() const = 0;
-		virtual bool isEmpty() const = 0;
-		virtual void makeEmpty() = 0;
+<span class="tok-kw">class</span> Queue {
+	<span class="tok-kw">public</span>:
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">enqueue</span>(<span class="tok-type">int</span> newEntry) = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">dequeue</span>() = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">int</span> <span class="tok-fn">peekFront</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> = <span class="tok-num">0</span>;
+		<span class="tok-kw">virtual</span> <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() = <span class="tok-num">0</span>;
 
-		virtual ~Queue() = default;
+		<span class="tok-kw">virtual</span> ~<span class="tok-fn">Queue</span>() = <span class="tok-kw">default</span>;
 };
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef LINKED_QUEUE_H
-#define LINKED_QUEUE_H
+          <pre class="code-block"><span class="tok-pre">#ifndef LINKED_QUEUE_H</span>
+<span class="tok-pre">#define LINKED_QUEUE_H</span>
 
-#include &quot;Queue.h&quot;
-#include &lt;iostream&gt;
-using namespace std;
+<span class="tok-pre">#include &quot;Queue.h&quot;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-// Doubly linked Node
-class Node {
-public:
-    Node(int data, Node* next = nullptr, Node* prev = nullptr)
-        : data(data), next(next), previous(prev) {
+<span class="tok-com">// Doubly linked Node</span>
+<span class="tok-kw">class</span> Node {
+<span class="tok-kw">public</span>:
+    <span class="tok-fn">Node</span>(<span class="tok-type">int</span> data, Node* next = <span class="tok-kw">nullptr</span>, Node* prev = <span class="tok-kw">nullptr</span>)
+        : <span class="tok-fn">data</span>(data), <span class="tok-fn">next</span>(next), <span class="tok-fn">previous</span>(prev) {
     }
 
-    int getData() const { return data; }
-    void setData(int val) { data = val; }
+    <span class="tok-type">int</span> <span class="tok-fn">getData</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> data; }
+    <span class="tok-type">void</span> <span class="tok-fn">setData</span>(<span class="tok-type">int</span> val) { data = val; }
 
-    Node* getNext() const { return next; }
-    void setNext(Node* n) { next = n; }
+    Node* <span class="tok-fn">getNext</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> next; }
+    <span class="tok-type">void</span> <span class="tok-fn">setNext</span>(Node* n) { next = n; }
 
-    Node* getPrevious() const { return previous; }
-    void setPrevious(Node* p) { previous = p; }
+    Node* <span class="tok-fn">getPrevious</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> previous; }
+    <span class="tok-type">void</span> <span class="tok-fn">setPrevious</span>(Node* p) { previous = p; }
 
-private:
-    int data;
+<span class="tok-kw">private</span>:
+    <span class="tok-type">int</span> data;
     Node* next;
     Node* previous;
 };
 
-class LinkedQueue : public Queue {
+<span class="tok-kw">class</span> LinkedQueue : <span class="tok-kw">public</span> Queue {
 
 
-    public:
-        LinkedQueue() : front(nullptr), back(nullptr) {}
-        //end ctor
+    <span class="tok-kw">public</span>:
+        <span class="tok-fn">LinkedQueue</span>() : <span class="tok-fn">front</span>(<span class="tok-kw">nullptr</span>), <span class="tok-fn">back</span>(<span class="tok-kw">nullptr</span>) {}
+        <span class="tok-com">//end ctor</span>
 
-        virtual ~LinkedQueue() {
-            makeEmpty();
-        }//end dtor
+        <span class="tok-kw">virtual</span> ~<span class="tok-fn">LinkedQueue</span>() {
+            <span class="tok-fn">makeEmpty</span>();
+        }<span class="tok-com">//end dtor</span>
 
-        void enqueue(int newEntry) override {
-            Node* newNode = new Node(newEntry);
+        <span class="tok-type">void</span> <span class="tok-fn">enqueue</span>(<span class="tok-type">int</span> newEntry) <span class="tok-kw">override</span> {
+            Node* newNode = <span class="tok-kw">new</span> <span class="tok-fn">Node</span>(newEntry);
             
-            if (isEmpty()) {
+            <span class="tok-kw">if</span> (<span class="tok-fn">isEmpty</span>()) {
                 front = back = newNode;
             }
-            else {
-                back-&gt;setNext(newNode);
-                newNode-&gt;setPrevious(back);
+            <span class="tok-kw">else</span> {
+                back-&gt;<span class="tok-fn">setNext</span>(newNode);
+                newNode-&gt;<span class="tok-fn">setPrevious</span>(back);
                 back = newNode;
             }
-        }//end enqueue
+        }<span class="tok-com">//end enqueue</span>
 
-        int dequeue() override {
-            if (isEmpty()) {
-                cout &lt;&lt; &quot;You cannot dequeue from an empty queue.&quot; &lt;&lt; endl;
-                return 0;
+        <span class="tok-type">int</span> <span class="tok-fn">dequeue</span>() <span class="tok-kw">override</span> {
+            <span class="tok-kw">if</span> (<span class="tok-fn">isEmpty</span>()) {
+                <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You cannot dequeue from an empty queue.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+                <span class="tok-kw">return</span> <span class="tok-num">0</span>;
             }
 
             Node* temp = front;
-            int data = temp-&gt;getData();
-            front = front-&gt;getNext();
+            <span class="tok-type">int</span> data = temp-&gt;<span class="tok-fn">getData</span>();
+            front = front-&gt;<span class="tok-fn">getNext</span>();
 
-            if (front == nullptr) {
-                back = nullptr;  //queue is now empty
+            <span class="tok-kw">if</span> (front == <span class="tok-kw">nullptr</span>) {
+                back = <span class="tok-kw">nullptr</span>;  <span class="tok-com">//queue is now empty</span>
             }
-            else {
-                front-&gt;setPrevious(nullptr);
+            <span class="tok-kw">else</span> {
+                front-&gt;<span class="tok-fn">setPrevious</span>(<span class="tok-kw">nullptr</span>);
             }
 
-            delete temp;
-            return data;
-        }//end dequeue
+            <span class="tok-kw">delete</span> temp;
+            <span class="tok-kw">return</span> data;
+        }<span class="tok-com">//end dequeue</span>
 
-        int peekFront() const override {
-            if (!isEmpty()) {
-                return front-&gt;getData();
+        <span class="tok-type">int</span> <span class="tok-fn">peekFront</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+            <span class="tok-kw">if</span> (!<span class="tok-fn">isEmpty</span>()) {
+                <span class="tok-kw">return</span> front-&gt;<span class="tok-fn">getData</span>();
             }
-            else {
-                cout &lt;&lt; &quot;You cannot peek the front of an empty queue!&quot; &lt;&lt; endl;
-                return 0;
+            <span class="tok-kw">else</span> {
+                <span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;You cannot peek the front of an empty queue!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+                <span class="tok-kw">return</span> <span class="tok-num">0</span>;
             }
-        }//end peekFront
+        }<span class="tok-com">//end peekFront</span>
 
-        bool isEmpty() const override {
-            return front == nullptr;
-        }//end isEmpty
+        <span class="tok-kw">bool</span> <span class="tok-fn">isEmpty</span>() <span class="tok-kw">const</span> <span class="tok-kw">override</span> {
+            <span class="tok-kw">return</span> front == <span class="tok-kw">nullptr</span>;
+        }<span class="tok-com">//end isEmpty</span>
 
-        void makeEmpty() override {
-            while (!isEmpty()) {
-                dequeue();
+        <span class="tok-type">void</span> <span class="tok-fn">makeEmpty</span>() <span class="tok-kw">override</span> {
+            <span class="tok-kw">while</span> (!<span class="tok-fn">isEmpty</span>()) {
+                <span class="tok-fn">dequeue</span>();
             }
-        }//end makeEmpty
+        }<span class="tok-com">//end makeEmpty</span>
 
-    private:
+    <span class="tok-kw">private</span>:
         Node* front;
         Node* back;
 
 };
 
 
-#endif </pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &quot;LinkedQueue.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &quot;LinkedQueue.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	LinkedQueue queue;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	LinkedQueue <span class="tok-type">queue</span>;
 
-	cout &lt;&lt; &quot;Enqueuing values...&quot; &lt;&lt; endl;
-	for (int i = 1; i &lt;= 10; i++) {
-		cout &lt;&lt; &quot;Enqueueing &quot; &lt;&lt; (i * 100) &lt;&lt; endl;
-		queue.enqueue(i * 100);
-	}//end for
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enqueuing values...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">1</span>; i &lt;= <span class="tok-num">10</span>; i++) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Enqueueing &quot;</span> &lt;&lt; (i * <span class="tok-num">100</span>) &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(i * <span class="tok-num">100</span>);
+	}<span class="tok-com">//end for</span>
 
-	queue.enqueue(1234);
+	<span class="tok-type">queue</span>.<span class="tok-fn">enqueue</span>(<span class="tok-num">1234</span>);
 
-	cout &lt;&lt; &quot;Dequeuing values...&quot; &lt;&lt; endl;
-	while (!queue.isEmpty()) {
-		cout &lt;&lt; queue.dequeue() &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Dequeuing values...&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-kw">while</span> (!<span class="tok-type">queue</span>.<span class="tok-fn">isEmpty</span>()) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-type">queue</span>.<span class="tok-fn">dequeue</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	queue.dequeue();
+	<span class="tok-type">queue</span>.<span class="tok-fn">dequeue</span>();
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -235,7 +240,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Heap Allocation Overhead</h3><p>Every enqueue calls <code>new Node</code>, creating dynamic allocation jitter in embedded environments.</p>

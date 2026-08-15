@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debugging Diagnostics, Fault Handlers &amp; Defensive Assertions - C++ & Embedded Systems Guide</title>
+  <title>Debugging Diagnostics, Fault Handlers &amp; Defensive Assertions - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 7</a>
+      <a href="../index.html#grid-advanced">Section 7</a>
       <span class="sep">/</span>
       <span class="current">BugFun</span>
     </div>
@@ -69,39 +75,39 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int imBroken(int num1, int num2);
+<span class="tok-type">int</span> <span class="tok-fn">imBroken</span>(<span class="tok-type">int</span> num1, <span class="tok-type">int</span> num2);
 
-int main() {
-	int a;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">int</span> a;
 
-	try {
-		a = imBroken(10, 5);
-		cout &lt;&lt; a &lt;&lt; endl;
+	<span class="tok-kw">try</span> {
+		a = <span class="tok-fn">imBroken</span>(<span class="tok-num">10</span>, <span class="tok-num">5</span>);
+		<span class="tok-type">cout</span> &lt;&lt; a &lt;&lt; <span class="tok-type">endl</span>;
 
-		a = imBroken(10, 0);   //will cause exception
-		cout &lt;&lt; a &lt;&lt; endl;
+		a = <span class="tok-fn">imBroken</span>(<span class="tok-num">10</span>, <span class="tok-num">0</span>);   <span class="tok-com">//will cause exception</span>
+		<span class="tok-type">cout</span> &lt;&lt; a &lt;&lt; <span class="tok-type">endl</span>;
 	}
-	catch (invalid_argument&amp; err) {
-		cout &lt;&lt; &quot;Exception caught: &quot; &lt;&lt; err.what() &lt;&lt; endl;
+	<span class="tok-kw">catch</span> (invalid_argument&amp; err) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Exception caught: &quot;</span> &lt;&lt; err.<span class="tok-fn">what</span>() &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }
 
-int imBroken(int num1, int num2) {
-	int result = 0;
+<span class="tok-type">int</span> <span class="tok-fn">imBroken</span>(<span class="tok-type">int</span> num1, <span class="tok-type">int</span> num2) {
+	<span class="tok-type">int</span> result = <span class="tok-num">0</span>;
 
-	if (num2 != 0) {
+	<span class="tok-kw">if</span> (num2 != <span class="tok-num">0</span>) {
 		result = num1 / num2;
 	}
-	else {
-		throw invalid_argument(&quot;Cannot divide by 0&quot;);
+	<span class="tok-kw">else</span> {
+		<span class="tok-kw">throw</span> <span class="tok-fn">invalid_argument</span>(&quot;Cannot divide by <span class="tok-num">0</span>&quot;);
 	}
 
-	return result;
+	<span class="tok-kw">return</span> result;
 }</pre>
         </div>
       </div>
@@ -129,7 +135,7 @@ int imBroken(int num1, int num2) {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

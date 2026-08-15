@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern C++ &lt;random&gt; Library vs Legacy C rand() - C++ & Embedded Systems Guide</title>
+  <title>Modern C++ &lt;random&gt; Library vs Legacy C rand() - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 3</a>
+      <a href="../index.html#grid-foundations">Section 3</a>
       <span class="sep">/</span>
       <span class="current">RandomFun</span>
     </div>
@@ -69,22 +75,22 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;cstdlib&gt;   // for rand() and srand()
-#include &lt;ctime&gt;     // for time()
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;cstdlib&gt;   // for rand() and srand()</span>
+<span class="tok-pre">#include &lt;ctime&gt;     // for time()</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
 
-	srand(time(nullptr));   //seeds the RNG with the current time
+	<span class="tok-fn">srand</span>(<span class="tok-fn">time</span>(<span class="tok-kw">nullptr</span>));   <span class="tok-com">//seeds the RNG with the current time</span>
 
-	int val1 = rand() % 10;   //0 to 9
-	int val2 = rand() % 10 + 1;  //1 to 10
+	<span class="tok-type">int</span> val1 = <span class="tok-fn">rand</span>() % <span class="tok-num">10</span>;   <span class="tok-com">//0 to 9</span>
+	<span class="tok-type">int</span> val2 = <span class="tok-fn">rand</span>() % <span class="tok-num">10</span> + <span class="tok-num">1</span>;  <span class="tok-com">//1 to 10</span>
 
-	cout &lt;&lt; val1 &lt;&lt; endl;
-	cout &lt;&lt; val2 &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; val1 &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; val2 &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -109,7 +115,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>std::deque &amp; std::list: Cache Locality &amp; Memory Layout - C++ & Embedded Systems Guide</title>
+  <title>std::deque &amp; std::list: Cache Locality &amp; Memory Layout - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 11</a>
+      <a href="../index.html#grid-advanced">Section 11</a>
       <span class="sep">/</span>
       <span class="current">AdvancedSTLApp</span>
     </div>
@@ -69,41 +75,41 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
 
-using namespace std;
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Person {
-	public:
-		string name;
-		int age;
+<span class="tok-kw">class</span> Person {
+	<span class="tok-kw">public</span>:
+		<span class="tok-type">string</span> name;
+		<span class="tok-type">int</span> age;
 
-		Person(string name, int age) : name(name), age(age) {
-			cout &lt;&lt; &quot;Constructed: &quot; &lt;&lt; name &lt;&lt; endl;
+		<span class="tok-fn">Person</span>(<span class="tok-type">string</span> name, <span class="tok-type">int</span> age) : <span class="tok-fn">name</span>(name), <span class="tok-fn">age</span>(age) {
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Constructed: &quot;</span> &lt;&lt; name &lt;&lt; <span class="tok-type">endl</span>;
 		}
 
-		Person(const Person&amp; other) {
+		<span class="tok-fn">Person</span>(<span class="tok-kw">const</span> Person&amp; other) {
 			name = other.name;
 			age = other.age;
-			cout &lt;&lt; &quot;Copied: &quot; &lt;&lt; name &lt;&lt; endl;
+			<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Copied: &quot;</span> &lt;&lt; name &lt;&lt; <span class="tok-type">endl</span>;
 		}
 };
 
 
-int main() {
-	vector&lt;Person&gt; people;
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">vector</span>&lt;Person&gt; people;
 
-	cout &lt;&lt; &quot;\nUsing push back:&quot; &lt;&lt; endl;
-	Person p1(&quot;Alice&quot;, 30);
-	people.push_back(p1);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nUsing push back:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	Person <span class="tok-fn">p1</span>(&quot;Alice&quot;, <span class="tok-num">30</span>);
+	people.<span class="tok-fn">push_back</span>(p1);
 
-	cout &lt;&lt; &quot;\nUsing emplace back:&quot; &lt;&lt; endl;
-	people.emplace_back(&quot;Bob&quot;, 40);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nUsing emplace back:&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	people.<span class="tok-fn">emplace_back</span>(&quot;Bob&quot;, <span class="tok-num">40</span>);
 
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
       </div>
@@ -124,7 +130,7 @@ int main() {
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

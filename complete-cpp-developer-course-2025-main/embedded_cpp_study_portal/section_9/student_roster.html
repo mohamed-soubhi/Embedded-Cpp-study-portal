@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Object Serialization, Binary Structs &amp; CRC32 Integrity - C++ & Embedded Systems Guide</title>
+  <title>Object Serialization, Binary Structs &amp; CRC32 Integrity - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 9</a>
+      <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
       <span class="current">StudentRoster</span>
     </div>
@@ -72,120 +78,119 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;fstream&gt;
-#include &lt;vector&gt;
-#include &lt;iomanip&gt;
-#include &quot;Student.h&quot;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;fstream&gt;</span>
+<span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;iomanip&gt;</span>
+<span class="tok-pre">#include &quot;Student.h&quot;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	ifstream infile(&quot;students.txt&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">ifstream</span> <span class="tok-fn">infile</span>(&quot;students.txt&quot;);
 
-	if (!infile) {
-		cerr &lt;&lt; &quot;Failed to open students.txt&quot; &lt;&lt; endl;
-		return 1;
+	<span class="tok-kw">if</span> (!infile) {
+		<span class="tok-type">cerr</span> &lt;&lt; <span class="tok-str">&quot;Failed to open students.txt&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">1</span>;
 	}
 
-	vector&lt;Student*&gt; roster;
-	string first;
-	string last;
-	double gpa;
+	<span class="tok-type">vector</span>&lt;Student*&gt; roster;
+	<span class="tok-type">string</span> first;
+	<span class="tok-type">string</span> last;
+	<span class="tok-type">double</span> gpa;
 
-	while (infile &gt;&gt; first &gt;&gt; last &gt;&gt; gpa) {
-		if (gpa &gt;= 0.0 &amp;&amp; gpa &lt;= 4.0) {
-			Student* s = new Student(first, last, gpa);
-			roster.push_back(s);
+	<span class="tok-kw">while</span> (infile &gt;&gt; first &gt;&gt; last &gt;&gt; gpa) {
+		<span class="tok-kw">if</span> (gpa &gt;= <span class="tok-num">0.0</span> &amp;&amp; gpa &lt;= <span class="tok-num">4.0</span>) {
+			Student* s = <span class="tok-kw">new</span> <span class="tok-fn">Student</span>(first, last, gpa);
+			roster.<span class="tok-fn">push_back</span>(s);
 		}
 	}
 
-	infile.close();
+	infile.<span class="tok-fn">close</span>();
 
-	cout &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; setprecision(2);
-	cout &lt;&lt; &quot;Student Roster: &quot; &lt;&lt; endl;
-	cout &lt;&lt; &quot;---------------------------------&quot; &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; <span class="tok-fn">setprecision</span>(<span class="tok-num">2</span>);
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Student Roster: &quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;---------------------------------&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	double sum = 0;
-	int honors = 0;
+	<span class="tok-type">double</span> sum = <span class="tok-num">0</span>;
+	<span class="tok-type">int</span> honors = <span class="tok-num">0</span>;
 
-	for (Student* s : roster) {
-		cout &lt;&lt; setw(20) &lt;&lt; left &lt;&lt; s-&gt;getFullName()
-			&lt;&lt; &quot;GPA: &quot; &lt;&lt; s-&gt;getGPA() &lt;&lt; endl;
+	<span class="tok-kw">for</span> (Student* s : roster) {
+		<span class="tok-type">cout</span> &lt;&lt; <span class="tok-fn">setw</span>(<span class="tok-num">20</span>) &lt;&lt; left &lt;&lt; s-&gt;<span class="tok-fn">getFullName</span>()
+			&lt;&lt; <span class="tok-str">&quot;GPA: &quot;</span> &lt;&lt; s-&gt;<span class="tok-fn">getGPA</span>() &lt;&lt; <span class="tok-type">endl</span>;
 
-		sum += s-&gt;getGPA();
+		sum += s-&gt;<span class="tok-fn">getGPA</span>();
 
-		if (s-&gt;getGPA() &gt;= 3.5) {
+		<span class="tok-kw">if</span> (s-&gt;<span class="tok-fn">getGPA</span>() &gt;= <span class="tok-num">3.5</span>) {
 			honors++;
 		}
-	}//end for
+	}<span class="tok-com">//end for</span>
 
-	double avgGPA = (roster.size() &gt; 0) ? sum / roster.size() : 0.0;
+	<span class="tok-type">double</span> avgGPA = (roster.<span class="tok-fn">size</span>() &gt; <span class="tok-num">0</span>) ? sum / roster.<span class="tok-fn">size</span>() : <span class="tok-num">0.0</span>;
 
-	cout &lt;&lt; &quot;\nClass Average GPA: &quot; &lt;&lt; avgGPA &lt;&lt; endl;
-	cout &lt;&lt; &quot;Honor Roll Students: &quot; &lt;&lt; honors &lt;&lt; endl;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;\nClass Average GPA: &quot;</span> &lt;&lt; avgGPA &lt;&lt; <span class="tok-type">endl</span>;
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Honor Roll Students: &quot;</span> &lt;&lt; honors &lt;&lt; <span class="tok-type">endl</span>;
 
-	//cleanup
+	<span class="tok-com">//cleanup</span>
 
-	for (Student* s : roster) {
-		delete s;
+	<span class="tok-kw">for</span> (Student* s : roster) {
+		<span class="tok-kw">delete</span> s;
 	}
 
-	roster.clear();
+	roster.<span class="tok-fn">clear</span>();
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-1">
-          <pre class="code-block">#ifndef STUDENT_H
-#define STUDENT_H
+          <pre class="code-block"><span class="tok-pre">#ifndef STUDENT_H</span>
+<span class="tok-pre">#define STUDENT_H</span>
 
-#include &lt;string&gt;
-using namespace std;
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-class Student {
-	public:
-		Student(string firstName, string lastName, double gpa);
-		string getFullName() const;
-		double getGPA() const;
+<span class="tok-kw">class</span> Student {
+	<span class="tok-kw">public</span>:
+		<span class="tok-fn">Student</span>(<span class="tok-type">string</span> firstName, <span class="tok-type">string</span> lastName, <span class="tok-type">double</span> gpa);
+		<span class="tok-type">string</span> <span class="tok-fn">getFullName</span>() <span class="tok-kw">const</span>;
+		<span class="tok-type">double</span> <span class="tok-fn">getGPA</span>() <span class="tok-kw">const</span>;
 
-	private:
-		string firstName;
-		string lastName;
-		double gpa;
+	<span class="tok-kw">private</span>:
+		<span class="tok-type">string</span> firstName;
+		<span class="tok-type">string</span> lastName;
+		<span class="tok-type">double</span> gpa;
 };
 
 
-#endif 
-</pre>
+<span class="tok-pre">#endif </span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">#include &quot;Student.h&quot;
+          <pre class="code-block"><span class="tok-pre">#include &quot;Student.h&quot;</span>
 
-Student::Student(string firstName, string lastName, double gpa) {
-	this-&gt;firstName = firstName;
-	this-&gt;lastName = lastName;
-	this-&gt;gpa = gpa;
+Student::<span class="tok-fn">Student</span>(<span class="tok-type">string</span> firstName, <span class="tok-type">string</span> lastName, <span class="tok-type">double</span> gpa) {
+	<span class="tok-kw">this</span>-&gt;firstName = firstName;
+	<span class="tok-kw">this</span>-&gt;lastName = lastName;
+	<span class="tok-kw">this</span>-&gt;gpa = gpa;
 }
 
-string Student::getFullName() const {
-	return firstName + &quot; &quot; + lastName;
+<span class="tok-type">string</span> Student::<span class="tok-fn">getFullName</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> firstName + <span class="tok-str">&quot; &quot;</span> + lastName;
 }
 
-double Student::getGPA() const {
-	return gpa;
+<span class="tok-type">double</span> Student::<span class="tok-fn">getGPA</span>() <span class="tok-kw">const</span> {
+	<span class="tok-kw">return</span> gpa;
 }</pre>
         </div>
 
         <div class="code-panel" id="file-tab-3">
-          <pre class="code-block">Alice Johnson 3.8
-Bob Smith 2.9
-Charlie Baker 3.5
-Dana Lee 4.0
-Evan Grant 1.7
-Faith Liu 3.2
-George Hall 3.9</pre>
+          <pre class="code-block">Alice Johnson <span class="tok-num">3.8</span>
+Bob Smith <span class="tok-num">2.9</span>
+Charlie Baker <span class="tok-num">3.5</span>
+Dana Lee <span class="tok-num">4.0</span>
+Evan Grant <span class="tok-num">1.7</span>
+Faith Liu <span class="tok-num">3.2</span>
+George Hall <span class="tok-num">3.9</span></pre>
         </div>
       </div>
     
@@ -211,7 +216,7 @@ George Hall 3.9</pre>
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

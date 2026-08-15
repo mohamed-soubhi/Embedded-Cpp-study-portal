@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parallel File Streams, Synchronization &amp; Correlation Records - C++ & Embedded Systems Guide</title>
+  <title>Parallel File Streams, Synchronization &amp; Correlation Records - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -27,6 +27,12 @@
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -36,7 +42,7 @@
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section 9</a>
+      <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
       <span class="current">NamesAges</span>
     </div>
@@ -72,35 +78,35 @@
         </div>
         
         <div class="code-panel active" id="file-tab-0">
-          <pre class="code-block">#include &lt;iostream&gt;
-#include &lt;fstream&gt;
-#include &lt;string&gt;
-using namespace std;
+          <pre class="code-block"><span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;fstream&gt;</span>
+<span class="tok-pre">#include &lt;string&gt;</span>
+<span class="tok-kw">using</span> <span class="tok-kw">namespace</span> <span class="tok-type">std</span>;
 
-int main() {
-	ifstream nameFile(&quot;names.txt&quot;);
-	ifstream ageFile(&quot;ages.txt&quot;);
-	ofstream outfile(&quot;output.txt&quot;);
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+	<span class="tok-type">ifstream</span> <span class="tok-fn">nameFile</span>(&quot;names.txt&quot;);
+	<span class="tok-type">ifstream</span> <span class="tok-fn">ageFile</span>(&quot;ages.txt&quot;);
+	<span class="tok-type">ofstream</span> <span class="tok-fn">outfile</span>(&quot;output.txt&quot;);
 
-	if (!nameFile || !ageFile) {
-		cerr &lt;&lt; &quot;Problem opening one of the input files.  Exiting.&quot; &lt;&lt; endl;
-		return 1;
+	<span class="tok-kw">if</span> (!nameFile || !ageFile) {
+		<span class="tok-type">cerr</span> &lt;&lt; <span class="tok-str">&quot;Problem opening one of the input files.  Exiting.&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
+		<span class="tok-kw">return</span> <span class="tok-num">1</span>;
 	}
 
-	string tempName;
-	int tempAge;
+	<span class="tok-type">string</span> tempName;
+	<span class="tok-type">int</span> tempAge;
 
-	while (getline(nameFile, tempName) &amp;&amp; (ageFile &gt;&gt; tempAge)) {
-		outfile &lt;&lt; tempName &lt;&lt; &quot; &quot; &lt;&lt; tempAge &lt;&lt; endl;
+	<span class="tok-kw">while</span> (<span class="tok-fn">getline</span>(nameFile, tempName) &amp;&amp; (ageFile &gt;&gt; tempAge)) {
+		outfile &lt;&lt; tempName &lt;&lt; <span class="tok-str">&quot; &quot;</span> &lt;&lt; tempAge &lt;&lt; <span class="tok-type">endl</span>;
 	}
 
 
-	nameFile.close();
-	ageFile.close();
-	outfile.close();
-	cout &lt;&lt; &quot;Done writing to output.txt!&quot; &lt;&lt; endl;
+	nameFile.<span class="tok-fn">close</span>();
+	ageFile.<span class="tok-fn">close</span>();
+	outfile.<span class="tok-fn">close</span>();
+	<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Done writing to output.txt!&quot;</span> &lt;&lt; <span class="tok-type">endl</span>;
 
-	return 0;
+	<span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         </div>
 
@@ -114,22 +120,21 @@ Samantha Struthers</pre>
         </div>
 
         <div class="code-panel" id="file-tab-2">
-          <pre class="code-block">25
-30
-52
-10
-19
-17</pre>
+          <pre class="code-block"><span class="tok-num">25</span>
+<span class="tok-num">30</span>
+<span class="tok-num">52</span>
+<span class="tok-num">10</span>
+<span class="tok-num">19</span>
+<span class="tok-num">17</span></pre>
         </div>
 
         <div class="code-panel" id="file-tab-3">
-          <pre class="code-block">John Robinson 25
-Sally Samuels 30
-Ali Rahman 52
-Steven Sardine 10
-Otis Campbell 19
-Samantha Struthers 17
-</pre>
+          <pre class="code-block">John Robinson <span class="tok-num">25</span>
+Sally Samuels <span class="tok-num">30</span>
+Ali Rahman <span class="tok-num">52</span>
+Steven Sardine <span class="tok-num">10</span>
+Otis Campbell <span class="tok-num">19</span>
+Samantha Struthers <span class="tok-num">17</span></pre>
         </div>
       </div>
     
@@ -149,7 +154,7 @@ Samantha Struthers 17
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         

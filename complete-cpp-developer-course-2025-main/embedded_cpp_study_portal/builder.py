@@ -1,9 +1,35 @@
 #!/usr/bin/env python3
 import os
 import html
+import re
 
 PORTAL_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(PORTAL_DIR)
+
+CPP_KEYWORDS = {
+    "alignas", "alignof", "auto", "bool", "break", "case", "catch", "class",
+    "concept", "const", "consteval", "constexpr", "constinit", "const_cast",
+    "continue", "decltype", "default", "delete", "do", "dynamic_cast", "else",
+    "enum", "explicit", "export", "extern", "false", "final", "for", "friend",
+    "goto", "if", "inline", "mutable", "namespace", "new", "noexcept", "nullptr",
+    "operator", "override", "private", "protected", "public", "register",
+    "reinterpret_cast", "requires", "return", "sizeof", "static", "static_assert",
+    "static_cast", "struct", "switch", "template", "this", "thread_local", "throw",
+    "true", "try", "typedef", "typeid", "typename", "union", "using", "virtual",
+    "volatile", "while"
+}
+
+CPP_TYPES = {
+    "int", "double", "float", "char", "void", "short", "long", "unsigned", "signed",
+    "size_t", "uint8_t", "uint16_t", "uint32_t", "uint64_t", "int8_t", "int16_t",
+    "int32_t", "int64_t", "uintptr_t", "intptr_t", "string", "string_view", "vector",
+    "array", "unique_ptr", "shared_ptr", "weak_ptr", "make_unique", "make_shared",
+    "queue", "deque", "list", "stack", "map", "unordered_map", "set", "unordered_set",
+    "pair", "tuple", "span", "optional", "variant", "expected", "move", "forward",
+    "cout", "cin", "endl", "cerr", "ifstream", "ofstream", "fstream", "stringstream",
+    "std", "Animal", "Dog", "Cat", "Player", "Warrior", "Mage", "Priest", "House",
+    "Rectangle", "Book", "LibraryCard", "IceCreamSundae", "Triangle", "Drone", "Exhibit"
+}
 
 def read_file(rel_path):
     full_path = os.path.join(ROOT_DIR, rel_path)
@@ -12,10 +38,80 @@ def read_file(rel_path):
     with open(full_path, "r", encoding="utf-8", errors="replace") as f:
         return f.read()
 
-def syntax_highlight(code_str):
-    escaped = html.escape(code_str)
-    # Basic highlighting markers can be added or simple styled text
-    return escaped
+def highlight_cpp(code_str):
+    lines = code_str.splitlines()
+    highlighted_lines = []
+    in_multiline = False
+
+    for raw_line in lines:
+        escaped_line = html.escape(raw_line)
+
+        if in_multiline:
+            if "*/" in escaped_line:
+                idx = escaped_line.find("*/") + 2
+                c_part = escaped_line[:idx]
+                rest = escaped_line[idx:]
+                in_multiline = False
+                highlighted_lines.append(f'<span class="tok-com">{c_part}</span>' + tokenize_line(rest))
+            else:
+                highlighted_lines.append(f'<span class="tok-com">{escaped_line}</span>')
+            continue
+
+        if "/*" in escaped_line and "*/" not in escaped_line:
+            idx = escaped_line.find("/*")
+            code_part = escaped_line[:idx]
+            c_part = escaped_line[idx:]
+            in_multiline = True
+            highlighted_lines.append(tokenize_line(code_part) + f'<span class="tok-com">{c_part}</span>')
+            continue
+
+        stripped = escaped_line.lstrip()
+        if stripped.startswith('#'):
+            highlighted_lines.append(f'<span class="tok-pre">{escaped_line}</span>')
+            continue
+
+        if "//" in escaped_line:
+            idx = escaped_line.find("//")
+            code_part = escaped_line[:idx]
+            c_part = escaped_line[idx:]
+            if any(k in c_part for k in ["[EMBEDDED", "[HARDWARE", "[AAPCS", "[MISRA", "[AUTOSAR", "NOTE", "CRITICAL", "STEP", "INVARIANT"]):
+                c_span = f'<span class="tok-emb-com">{c_part}</span>'
+            else:
+                c_span = f'<span class="tok-com">{c_part}</span>'
+            highlighted_lines.append(tokenize_line(code_part) + c_span)
+            continue
+
+        highlighted_lines.append(tokenize_line(escaped_line))
+
+    return "\n".join(highlighted_lines)
+
+def tokenize_line(line):
+    if not line:
+        return ""
+    pattern = re.compile(r'(&quot;.*?&quot;|\'.*?\'|0x[0-9a-fA-F]+|0b[01]+|\b\d+(?:\.\d+)?f?\b|\b[a-zA-Z_]\w*\b|[^\s\w]+)')
+    pos = 0
+    result = []
+    for m in pattern.finditer(line):
+        start, end = m.span()
+        if start > pos:
+            result.append(line[pos:start])
+        tok = m.group(0)
+        if tok.startswith('&quot;') or (tok.startswith("'") and tok.endswith("'")):
+            result.append(f'<span class="tok-str">{tok}</span>')
+        elif re.match(r'^(0x[0-9a-fA-F]+|0b[01]+|\d+(?:\.\d+)?f?)$', tok):
+            result.append(f'<span class="tok-num">{tok}</span>')
+        elif tok in CPP_KEYWORDS:
+            result.append(f'<span class="tok-kw">{tok}</span>')
+        elif tok in CPP_TYPES or tok.startswith('std::'):
+            result.append(f'<span class="tok-type">{tok}</span>')
+        elif end < len(line) and line[end:end+1] == '(':
+            result.append(f'<span class="tok-fn">{tok}</span>')
+        else:
+            result.append(tok)
+        pos = end
+    if pos < len(line):
+        result.append(line[pos:])
+    return "".join(result)
 
 def build_tabs(files_dict):
     tab_headers = []
@@ -26,9 +122,10 @@ def build_tabs(files_dict):
         active_class = " active" if first else ""
         target_id = f"file-tab-{idx}"
         tab_headers.append(f'<button class="code-tab{active_class}" data-target="{target_id}">{html.escape(filename)}</button>')
+        highlighted_code = highlight_cpp(content)
         tab_panels.append(f'''
         <div class="code-panel{active_class}" id="{target_id}">
-          <pre class="code-block">{html.escape(content)}</pre>
+          <pre class="code-block">{highlighted_code}</pre>
         </div>''')
         first = False
         
@@ -101,7 +198,7 @@ def generate_page(data, prev_link, next_link, section_num):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{html.escape(data['title'])} - C++ & Embedded Systems Guide</title>
+  <title>{html.escape(data['title'])} - C++ &amp; Embedded Systems Guide</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -125,6 +222,12 @@ def generate_page(data, prev_link, next_link, section_num):
         <li><a href="../section_10/enum_fun.html">Sec 10</a></li>
         <li><a href="../section_11/smart_pointer_fun.html">Sec 11</a></li>
         <li><a href="../section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
         <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
@@ -134,7 +237,7 @@ def generate_page(data, prev_link, next_link, section_num):
     <div class="breadcrumb">
       <a href="../index.html">Portal Home</a>
       <span class="sep">/</span>
-      <a href="../index.html">Section {section_num}</a>
+      <a href="../index.html#grid-{'foundations' if int(section_num) <= 6 else 'advanced'}">Section {section_num}</a>
       <span class="sep">/</span>
       <span class="current">{html.escape(data['name'])}</span>
     </div>
@@ -169,7 +272,7 @@ def generate_page(data, prev_link, next_link, section_num):
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems & Hardware Reality
+        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         {data['embedded_html']}
