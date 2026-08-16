@@ -135,7 +135,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Custom Exception Class Hierarchy &amp; DWARF .eh_frame Model
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">std::runtime_error</span>
+            <span class="uml-badge-tag">Base Exception</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">runtime_error(what_arg: const string&amp;)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">what()</span> <span class="field-type">: const char*</span><span class="method-spec">[virtual, noexcept]</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">CustomException</span>
+            <span class="uml-badge-tag">Custom Domain Exception</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">errorCode</span> <span class="field-type">: int32_t</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">CustomException(msg: string, code: int = -1)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getErrorCode()</span> <span class="field-type">: int32_t const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">what()</span> <span class="field-type">: const char*</span><span class="method-spec">[override, noexcept]</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>CustomException</strong>
+              <span>──▷</span>
+              <span class="uml-rel-badge inherits">public inherits</span>
+              <span>──▷</span>
+              <strong>std::runtime_error</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -187,7 +269,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -212,7 +294,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

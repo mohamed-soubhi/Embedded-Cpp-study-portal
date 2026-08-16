@@ -89,7 +89,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> C++ Build Pipeline &amp; Linker Section Memory Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card module-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;compilation-unit&gt;&gt;</span>
+            <span class="uml-class-name">HelloApp</span>
+            <span class="uml-badge-tag">Main Translation Unit</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">EXIT_SUCCESS</span> <span class="field-type">: const int32_t = 0</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">std</span> <span class="field-type">: :cout : std::ostream&amp;</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">main()</span> <span class="field-type">: int32_t</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">printBanner()</span> <span class="field-type">: void</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;linker-script&gt;&gt;</span>
+            <span class="uml-class-name">ELFSectionMapper</span>
+            <span class="uml-badge-tag">Memory Map Layout</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">FLASH_BASE</span> <span class="field-type">: uintptr_t = 0x08000000</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">SRAM_BASE</span> <span class="field-type">: uintptr_t = 0x20000000</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">.text</span> <span class="field-type">: Flash ROM</span><span class="method-spec">[Machine Code]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">.rodata</span> <span class="field-type">: Flash ROM</span><span class="method-spec">[Constants &amp; Literals]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">.data : SRAM (VMA) / Flash (LMA)</span><span class="method-spec">[Initialized]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">.bss</span> <span class="field-type">: SRAM</span><span class="method-spec">[Zero-Initialized Globals]</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Reset_Handler()</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">SystemInit()</span> <span class="field-type">: void</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>HelloApp</strong>
+              <span>─ ─ ></span>
+              <span class="uml-rel-badge uses">compiled &amp; linked into</span>
+              <span>─ ─ ></span>
+              <strong>ELFSectionMapper</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      <p style="margin-top:12px; font-size:0.88rem; color:var(--text-muted);">Deconstructs how the high-level C++ entry point maps through preprocessor, compiler, assembler, and linker script into physical Flash and SRAM memory banks.</p>
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -109,7 +191,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -153,7 +235,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

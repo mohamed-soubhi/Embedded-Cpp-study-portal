@@ -187,7 +187,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> ArrayStack LIFO Fixed Memory Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card abstract-class">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;interface&gt;&gt;</span>
+            <span class="uml-class-name">Stack&lt;T&gt;</span>
+            <span class="uml-badge-tag">Stack Interface Contract</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">push(entry: const T&amp;)</span> <span class="field-type">: bool</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">pop()</span> <span class="field-type">: bool</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">peek()</span> <span class="field-type">: T const</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">isEmpty()</span> <span class="field-type">: bool const</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">~Stack()</span><span class="method-spec">[virtual]</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">ArrayStack&lt;T&gt;</span>
+            <span class="uml-badge-tag">LIFO Array Stack</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">items[CAPACITY]</span> <span class="field-type">: T</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">top</span> <span class="field-type">: int32_t = -1</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">MAX_STACK</span> <span class="field-type">: constexpr size_t = 10</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">ArrayStack()</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">push(newEntry: const T&amp;)</span> <span class="field-type">: bool</span><span class="method-spec">[override, O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">pop()</span> <span class="field-type">: bool</span><span class="method-spec">[override, O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">peek()</span> <span class="field-type">: T const</span><span class="method-spec">[override, O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">isEmpty()</span> <span class="field-type">: bool const</span><span class="method-spec">[override, O(1)]</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>ArrayStack&lt;T&gt;</strong>
+              <span>- - ▷</span>
+              <span class="uml-rel-badge implements">implements interface</span>
+              <span>- - ▷</span>
+              <strong>Stack&lt;T&gt;</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -216,7 +298,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Deterministic LIFO Buffering</h3><p>Array-backed stacks have bounded memory and execute in guaranteed single-cycle operations.</p>
@@ -225,7 +307,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">template &lt;typename T, size_t Cap&gt;

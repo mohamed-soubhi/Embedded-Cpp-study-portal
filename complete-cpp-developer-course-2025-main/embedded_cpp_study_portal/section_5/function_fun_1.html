@@ -103,7 +103,54 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> ARM AAPCS Register Calling Convention Model (R0-R3)
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card module-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;compilation-unit&gt;&gt;</span>
+            <span class="uml-class-name">AAPCSCallingUnit</span>
+            <span class="uml-badge-tag">Register Passing Engine</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">R0 : uint32_t (Param 1 / Return Value)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">R1 : uint32_t (Param 2)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">R2 : uint32_t (Param 3)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">R3 : uint32_t (Param 4)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">R14_LR : uint32_t (Link Register - Return Addr)</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">printHello()</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">doWork()</span> <span class="field-type">: void</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -118,7 +165,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -140,7 +187,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

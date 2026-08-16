@@ -171,7 +171,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Drone Class &amp; Fleet Dynamic Manager Model
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">Drone</span>
+            <span class="uml-badge-tag">Telemetry Device</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">droneId</span> <span class="field-type">: int32_t</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">batteryLevel</span> <span class="field-type">: float</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">altitudeMeters</span> <span class="field-type">: float</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Drone(id: int, battery: float)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">takeOff(targetAlt: float)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">land()</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getAltitude()</span> <span class="field-type">: float const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getBattery()</span> <span class="field-type">: float const</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">DroneFleet</span>
+            <span class="uml-badge-tag">Fleet Manager</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">drones : Drone** (Dynamic Pointer Array)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">fleetSize</span> <span class="field-type">: size_t</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">DroneFleet(size: size_t)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">~DroneFleet()</span><span class="method-spec">[frees all drones]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getDrone(idx: size_t)</span> <span class="field-type">: Drone*</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>DroneFleet</strong>
+              <span>◆──</span>
+              <span class="uml-rel-badge composes">manages array of drone pointers</span>
+              <span>◆──</span>
+              <strong>Drone</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -186,7 +268,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -206,7 +288,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

@@ -100,7 +100,54 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Compile-Time Constants &amp; Flash ROM (.rodata) Model
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;struct&gt;&gt;</span>
+            <span class="uml-class-name">ConstexprMemoryPool</span>
+            <span class="uml-badge-tag">.rodata Placement (Zero SRAM)</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">PI</span> <span class="field-type">: constexpr double = 3.141592653589793</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">MAX_BUFFER_SIZE</span> <span class="field-type">: constexpr size_t = 128</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">DEVICE_ID</span> <span class="field-type">: constexpr uint32_t = 0xAA5500FF</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">calculateCircumference(radius: double)</span> <span class="field-type">: constexpr double</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -118,7 +165,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -130,7 +177,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

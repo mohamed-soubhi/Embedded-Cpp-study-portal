@@ -135,7 +135,109 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> std::map (Red-Black) vs std::unordered_map (Hash Table) Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">std::map&lt;Key, Value&gt;</span>
+            <span class="uml-badge-tag">O(log N) Red-Black Tree</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">_M_root</span> <span class="field-type">: _Rb_tree_node*</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">operator</span><span class="method-spec">[](k: const Key&amp;) : Value&amp; [O(log N)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">insert(p: pair&lt;const Key, Value&gt;)</span> <span class="field-type">: pair&lt;iterator, bool&gt;</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">std::unordered_map&lt;Key, Value&gt;</span>
+            <span class="uml-badge-tag">O(1) Hash Table (Unbounded Worst-Case)</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">_M_buckets : _Hash_node** (Dynamic Bucket Array)</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">operator</span><span class="method-spec">[](k: const Key&amp;) : Value&amp; [O(1) Avg, O(N) Worst]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">rehash(n: size_t)</span> <span class="field-type">: void</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;embedded-etl&gt;&gt;</span>
+            <span class="uml-class-name">FlatSortedMap&lt;Key, Value, N&gt;</span>
+            <span class="uml-badge-tag">Zero-Heap Contiguous Flat Map</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">keys[N]</span> <span class="field-type">: Key</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">values[N]</span> <span class="field-type">: Value</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">count</span> <span class="field-type">: size_t</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">find(k: Key)</span> <span class="field-type">: Value*</span><span class="method-spec">[Binary Search O(log N)]</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>std::map&lt;Key, Value&gt;</strong>
+              <span>─ ─ ></span>
+              <span class="uml-rel-badge uses">embedded deterministic alternative</span>
+              <span>─ ─ ></span>
+              <strong>FlatSortedMap&lt;Key, Value, N&gt;</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -148,7 +250,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -168,7 +270,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

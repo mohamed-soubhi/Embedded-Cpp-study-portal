@@ -348,7 +348,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> LinkedList Dynamic Pointer-Linked Sequential List
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;struct&gt;&gt;</span>
+            <span class="uml-class-name">ListNode&lt;T&gt;</span>
+            <span class="uml-badge-tag">Linked Node</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">item</span> <span class="field-type">: T</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">next</span> <span class="field-type">: ListNode&lt;T&gt;*</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">ListNode(item: const T&amp;, next: ListNode&lt;T&gt;* = nullptr)</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">LinkedList&lt;T&gt;</span>
+            <span class="uml-badge-tag">Dynamic Linked List</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">headPtr</span> <span class="field-type">: ListNode&lt;T&gt;*</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">itemCount</span> <span class="field-type">: size_t = 0</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">LinkedList()</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">~LinkedList()</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">insert(newPosition: int, newEntry: const T&amp;)</span> <span class="field-type">: bool</span><span class="method-spec">[O(N)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">remove(position: int)</span> <span class="field-type">: bool</span><span class="method-spec">[O(N)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getEntry(position: int)</span> <span class="field-type">: T const</span><span class="method-spec">[O(N)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">clear()</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">isEmpty()</span> <span class="field-type">: bool const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getLength()</span> <span class="field-type">: size_t const</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>LinkedList&lt;T&gt;</strong>
+              <span>◆──</span>
+              <span class="uml-rel-badge composes">manages heap chain</span>
+              <span>◆──</span>
+              <strong>ListNode&lt;T&gt;</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         <h3>List Traversal and Modification</h3><p>Inserting at the head is $O(1)$, while arbitrary index access requires $O(N)$ linear traversal.</p>
@@ -357,7 +439,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Intrusive Linked Lists (Embedded Gold Standard)</h3><p>In operating systems (FreeRTOS, Linux Kernel), nodes are embedded directly inside existing structures (intrusive lists), eliminating extra heap allocations entirely!</p>
@@ -366,7 +448,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct TaskControlBlock {

@@ -182,6 +182,201 @@ def build_mcq(quiz_list):
     </section>
     '''
 
+def format_uml_item(raw_item):
+    if isinstance(raw_item, dict):
+        vis = raw_item.get("vis", "+")
+        name = raw_item.get("name", "")
+        itype = raw_item.get("type", "")
+        spec = raw_item.get("spec", "")
+    else:
+        raw_str = str(raw_item).strip()
+        vis = "+"
+        if raw_str.startswith("-"):
+            vis = "-"
+            raw_str = raw_str[1:].strip()
+        elif raw_str.startswith("+"):
+            vis = "+"
+            raw_str = raw_str[1:].strip()
+        elif raw_str.startswith("#"):
+            vis = "#"
+            raw_str = raw_str[1:].strip()
+        elif raw_str.startswith("~"):
+            vis = "~"
+            raw_str = raw_str[1:].strip()
+
+        spec = ""
+        spec_match = re.search(r'\[(.*?)\]$', raw_str)
+        if spec_match:
+            spec = spec_match.group(1)
+            raw_str = raw_str[:spec_match.start()].strip()
+
+        if ")" in raw_str:
+            close_idx = raw_str.rfind(")")
+            after_paren = raw_str[close_idx+1:].strip()
+            if after_paren.startswith(":"):
+                name = raw_str[:close_idx+1].strip()
+                itype = after_paren
+            else:
+                name = raw_str[:close_idx+1].strip() + ((" " + after_paren) if after_paren else "")
+                itype = ""
+        elif ":" in raw_str:
+            parts = raw_str.split(":", 1)
+            name = parts[0].strip()
+            itype = ": " + parts[1].strip()
+        else:
+            name = raw_str
+            itype = ""
+
+    vis_class = "public"
+    if vis == "-":
+        vis_class = "private"
+    elif vis == "#":
+        vis_class = "protected"
+    elif vis == "~":
+        vis_class = "internal"
+
+    spec_html = f'<span class="method-spec">[{html.escape(spec)}]</span>' if spec else ""
+    type_html = f' <span class="field-type">{html.escape(itype)}</span>' if itype else ""
+    name_html = f'<span class="field-name">{html.escape(name)}</span>'
+
+    return f'<div class="uml-item {vis_class}"><span class="vis">{vis}</span>{name_html}{type_html}{spec_html}</div>'
+
+def build_uml_section(uml_data, default_title="UML Architecture & Class Model"):
+    if not uml_data:
+        return ""
+    if isinstance(uml_data, str):
+        if "<div" in uml_data or "<svg" in uml_data:
+            return uml_data
+        else:
+            return f'<p>{html.escape(uml_data)}</p>'
+
+    if isinstance(uml_data, list):
+        classes_list = uml_data
+        title = default_title
+        relationships = []
+        notes = ""
+    else:
+        classes_list = uml_data.get("classes", [])
+        title = uml_data.get("title", default_title)
+        relationships = uml_data.get("relationships", [])
+        notes = uml_data.get("notes", "")
+
+    cards_html = []
+    for cls in classes_list:
+        cname = cls.get("name", "Unnamed")
+        cstereo = cls.get("stereotype", "<<class>>")
+        cbadge = cls.get("badge", "")
+        ctype = cls.get("type", "")
+        card_class = "uml-class-card"
+        if "abstract" in cstereo.lower() or ctype == "abstract":
+            card_class += " abstract-class"
+        elif "struct" in cstereo.lower() or ctype == "struct":
+            card_class += " struct-card"
+        elif "unit" in cstereo.lower() or "module" in cstereo.lower() or ctype == "module":
+            card_class += " module-card"
+
+        badge_html = f'<span class="uml-badge-tag">{html.escape(cbadge)}</span>' if cbadge else ""
+        
+        attrs = cls.get("attributes", [])
+        attrs_rendered = [format_uml_item(a) for a in attrs]
+        
+        if attrs_rendered:
+            attrs_section_html = f'''
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              {''.join(attrs_rendered)}
+            </div>
+            '''
+        else:
+            attrs_section_html = f'''
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            '''
+
+        methods = cls.get("methods", [])
+        methods_rendered = [format_uml_item(m) for m in methods]
+        
+        methods_section_html = ""
+        if methods_rendered:
+            methods_section_html = f'''
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              {''.join(methods_rendered)}
+            </div>
+            '''
+
+        cards_html.append(f'''
+        <div class="{card_class}">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">{html.escape(cstereo)}</span>
+            <span class="uml-class-name">{html.escape(cname)}</span>
+            {badge_html}
+          </div>
+          {attrs_section_html}
+          {methods_section_html}
+        </div>
+        ''')
+
+    rel_html = ""
+    if relationships:
+        rows = []
+        for r in relationships:
+            r_from = html.escape(r.get("from", ""))
+            r_to = html.escape(r.get("to", ""))
+            r_type = r.get("type", "inherits")
+            r_label = html.escape(r.get("label", r_type))
+            arrow = "──▷"
+            if r_type == "composes":
+                arrow = "◆──"
+            elif r_type == "aggregates":
+                arrow = "◇──"
+            elif r_type == "uses":
+                arrow = "─ ─ >"
+            elif r_type == "implements":
+                arrow = "- - ▷"
+            
+            rows.append(f'''
+            <div class="uml-rel-row">
+              <strong>{r_from}</strong>
+              <span>{arrow}</span>
+              <span class="uml-rel-badge {r_type}">{r_label}</span>
+              <span>{arrow}</span>
+              <strong>{r_to}</strong>
+            </div>
+            ''')
+        rel_html = f'''
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            {''.join(rows)}
+          </div>
+        </div>
+        '''
+
+    notes_html = f'<p style="margin-top:12px; font-size:0.88rem; color:var(--text-muted);">{notes}</p>' if notes else ""
+
+    return f'''
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> {html.escape(title)}
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        {''.join(cards_html)}
+      </div>
+      {rel_html}
+      {notes_html}
+    </div>
+    '''
+
 def generate_page(data, prev_link, next_link, section_num):
     files_dict = {}
     for fpath in data['files']:
@@ -190,6 +385,7 @@ def generate_page(data, prev_link, next_link, section_num):
         
     code_viewer_html = build_tabs(files_dict)
     quiz_html = build_mcq(data['quiz'])
+    uml_content_html = build_uml_section(data.get('uml_diagram') or data.get('uml_html', ''))
     
     tags_html = " ".join([f'<span class="tag">{html.escape(t)}</span>' for t in data['tags']])
     
@@ -263,7 +459,16 @@ def generate_page(data, prev_link, next_link, section_num):
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        {uml_content_html}
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         {data['concepts_html']}
@@ -272,7 +477,7 @@ def generate_page(data, prev_link, next_link, section_num):
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         {data['embedded_html']}
@@ -281,7 +486,7 @@ def generate_page(data, prev_link, next_link, section_num):
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         {data['refactor_html']}

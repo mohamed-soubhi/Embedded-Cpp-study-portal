@@ -227,7 +227,54 @@ Crop Crop::<span class="tok-kw">operator</span>+(<span class="tok-kw">const</spa
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Crop Hybridization Genetic Operator Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">Crop</span>
+            <span class="uml-badge-tag">Agricultural Model</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">cropName</span> <span class="field-type">: std::string</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">yieldPerAcre</span> <span class="field-type">: double</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">diseaseResistance</span> <span class="field-type">: double</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Crop(name: string, yield: double, resist: double)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">hybridizeWith(other: const Crop&amp;)</span> <span class="field-type">: Crop</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">printCrop()</span> <span class="field-type">: void const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getYield()</span> <span class="field-type">: double const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getResistance()</span> <span class="field-type">: double const</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         <h3>Value Semantics</h3><p>Value types manage their own state cleanly without requiring pointer indirection.</p>
@@ -236,7 +283,7 @@ Crop Crop::<span class="tok-kw">operator</span>+(<span class="tok-kw">const</spa
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Stack-Based Physics & Control</h3><p>Value objects are placed on the stack or in static arrays with zero dynamic allocation.</p>
@@ -245,7 +292,7 @@ Crop Crop::<span class="tok-kw">operator</span>+(<span class="tok-kw">const</spa
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct Vector3D { float x, y, z; Vector3D operator+(const Vector3D&amp; o) const { return {x+o.x, y+o.y, z+o.z}; } };</pre>

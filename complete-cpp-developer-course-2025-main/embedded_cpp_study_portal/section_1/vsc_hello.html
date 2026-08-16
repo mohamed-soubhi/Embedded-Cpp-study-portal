@@ -89,7 +89,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Cross-Compilation Toolchain &amp; Embedded Serial Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card module-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;compilation-unit&gt;&gt;</span>
+            <span class="uml-class-name">VscHelloApp</span>
+            <span class="uml-badge-tag">Main Entry Point</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">bannerText</span> <span class="field-type">: const char*</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">std</span> <span class="field-type">: :cout : std::ostream&amp;</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">main()</span> <span class="field-type">: int32_t</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">renderBanner(title: const char*)</span> <span class="field-type">: void</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;hardware-driver&gt;&gt;</span>
+            <span class="uml-class-name">UARTStreamBuffer</span>
+            <span class="uml-badge-tag">Embedded Serial Console</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">USART1_DR</span> <span class="field-type">: volatile uint32_t*</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">USART1_SR</span> <span class="field-type">: volatile uint32_t*</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">baudRate</span> <span class="field-type">: uint32_t = 115200</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">init(baud: uint32_t)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">writeChar(c: char)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">writeString(str: const char*)</span> <span class="field-type">: void</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>VscHelloApp</strong>
+              <span>─ ─ ></span>
+              <span class="uml-rel-badge uses">routes stdout to</span>
+              <span>─ ─ ></span>
+              <strong>UARTStreamBuffer</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -108,7 +190,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -126,7 +208,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

@@ -231,7 +231,84 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> LinkedQueue FIFO Pointer Queue with Head &amp; Tail Pointers
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;struct&gt;&gt;</span>
+            <span class="uml-class-name">QueueNode&lt;T&gt;</span>
+            <span class="uml-badge-tag">Queue Node</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">item</span> <span class="field-type">: T</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">next</span> <span class="field-type">: QueueNode&lt;T&gt;*</span></div>
+            </div>
+            
+          
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">LinkedQueue&lt;T&gt;</span>
+            <span class="uml-badge-tag">FIFO Linked Queue</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">frontPtr</span> <span class="field-type">: QueueNode&lt;T&gt;*</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">backPtr</span> <span class="field-type">: QueueNode&lt;T&gt;*</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">LinkedQueue()</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">~LinkedQueue()</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">enqueue(newEntry: const T&amp;)</span> <span class="field-type">: bool</span><span class="method-spec">[O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">dequeue()</span> <span class="field-type">: bool</span><span class="method-spec">[O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">peekFront()</span> <span class="field-type">: T const</span><span class="method-spec">[O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">isEmpty()</span> <span class="field-type">: bool const</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>LinkedQueue&lt;T&gt;</strong>
+              <span>◆──</span>
+              <span class="uml-rel-badge composes">enqueues &amp; dequeues</span>
+              <span>◆──</span>
+              <strong>QueueNode&lt;T&gt;</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         <h3>Two-Pointer Queue Mechanics</h3><p>Maintains head and tail pointers for $O(1)$ push and pop.</p>
@@ -240,7 +317,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Heap Allocation Overhead</h3><p>Every enqueue calls <code>new Node</code>, creating dynamic allocation jitter in embedded environments.</p>
@@ -249,7 +326,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">// Prefer ArrayQueue / RingBuffer for embedded queues</pre>

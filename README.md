@@ -44,8 +44,9 @@ The portal elevates traditional desktop C++ curriculum code into **bare-metal em
 
 ## ✨ Key Features of the Study Portal
 
-1. **4-Pillar Deep-Dive per Project**:
+1. **5-Pillar Deep-Dive per Project**:
    - 💻 **Annotated Source Code**: Full syntax-highlighted code viewers with multi-file tab switching and 1-click clipboard copy.
+   - 📐 **Architecture & UML Class Model**: Complete UML Class Diagrams showcasing class hierarchies (`is-a`, `has-a`, `implements`, `composes`), stereotypes (`<<abstract>>`, `<<template>>`, `<<struct>>`, `<<enum class>>`, `<<compilation-unit>>`), member variable access specifiers (`+ public`, `- private`, `# protected`), and method signatures.
    - 📚 **Core C++ Mechanics**: Deep architectural breakdown of language rules, C++11/14/17/20 idioms, and standard compliance.
    - ⚡ **Embedded Systems & Hardware Reality**: Assembly instruction generation (Thumb-2), stack frame analysis, CPU pipeline stalls, cache locality, and register passing.
    - 💡 **Production-Ready Embedded Refactoring**: Zero-cost, MISRA-compliant, MISRA-safe alternatives (e.g. `std::string_view`, `etl::vector`, static ring buffers, `constexpr` tables, tagged error codes).

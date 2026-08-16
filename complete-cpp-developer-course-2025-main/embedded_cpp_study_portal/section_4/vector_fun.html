@@ -127,7 +127,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Dynamic std::vector Heap Allocation vs etl::vector Model
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">StdVectorModel</span>
+            <span class="uml-badge-tag">Heap Dynamic Vector</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">_M_start : T* (Heap Pointer)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">_M_finish : T* (End Element Pointer)</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">_M_end_of_storage : T* (Capacity Pointer)</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">push_back(val: const T&amp;)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">capacity()</span> <span class="field-type">: size_t const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">size()</span> <span class="field-type">: size_t const</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;embedded-etl&gt;&gt;</span>
+            <span class="uml-class-name">EtlVectorFixed</span>
+            <span class="uml-badge-tag">Zero-Heap Alternative</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">buffer[CAPACITY]</span> <span class="field-type">: T</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">currentSize</span> <span class="field-type">: size_t</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">push_back(val: const T&amp;)</span> <span class="field-type">: bool</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">is_full()</span> <span class="field-type">: bool const</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>StdVectorModel</strong>
+              <span>─ ─ ></span>
+              <span class="uml-rel-badge uses">refactors to in embedded</span>
+              <span>─ ─ ></span>
+              <strong>EtlVectorFixed</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -145,7 +227,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -160,7 +242,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

@@ -354,7 +354,168 @@ Race <span class="tok-type">Player</span>::<span class="tok-fn">getRace</span>()
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> RPG Polymorphic Character Hierarchy &amp; VTable Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;enum class : uint8_t&gt;&gt;</span>
+            <span class="uml-class-name">Race</span>
+            <span class="uml-badge-tag">Character Race</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">HUMAN</span> <span class="field-type">: uint8_t = 0</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">ELF</span> <span class="field-type">: uint8_t = 1</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">DWARF</span> <span class="field-type">: uint8_t = 2</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">ORC</span> <span class="field-type">: uint8_t = 3</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">TROLL</span> <span class="field-type">: uint8_t = 4</span></div>
+            </div>
+            
+          
+        </div>
+        
+        <div class="uml-class-card abstract-class">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;abstract class&gt;&gt;</span>
+            <span class="uml-class-name">Player</span>
+            <span class="uml-badge-tag">Base Class (vtable owner)</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item protected"><span class="vis">#</span><span class="field-name">_vptr : void** (4 bytes)</span></div><div class="uml-item protected"><span class="vis">#</span><span class="field-name">name</span> <span class="field-type">: std::string</span></div><div class="uml-item protected"><span class="vis">#</span><span class="field-name">race</span> <span class="field-type">: Race</span></div><div class="uml-item protected"><span class="vis">#</span><span class="field-name">hitPoints</span> <span class="field-type">: int32_t</span></div><div class="uml-item protected"><span class="vis">#</span><span class="field-name">magicPoints</span> <span class="field-type">: int32_t</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Player(name: string, race: Race, hp: int, mp: int)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getName()</span> <span class="field-type">: std::string const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getRace()</span> <span class="field-type">: Race const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getHitPoints()</span> <span class="field-type">: int32_t const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getMagicPoints()</span> <span class="field-type">: int32_t const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">setName(name: string)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">setRace(race: Race)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">setHitPoints(hp: int)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">setMagicPoints(mp: int)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">attack()</span> <span class="field-type">: std::string</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">~Player()</span><span class="method-spec">[virtual]</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">Warrior</span>
+            <span class="uml-badge-tag">Melee Subclass</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Warrior(name: string, race: Race)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">attack()</span> <span class="field-type">: std::string</span><span class="method-spec">[override]</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">Mage</span>
+            <span class="uml-badge-tag">Caster Subclass</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Mage(name: string, race: Race)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">attack()</span> <span class="field-type">: std::string</span><span class="method-spec">[override]</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">Priest</span>
+            <span class="uml-badge-tag">Healer Subclass</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Priest(name: string, race: Race)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">attack()</span> <span class="field-type">: std::string</span><span class="method-spec">[override]</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>Player</strong>
+              <span>◆──</span>
+              <span class="uml-rel-badge composes">holds race</span>
+              <span>◆──</span>
+              <strong>Race</strong>
+            </div>
+            
+            <div class="uml-rel-row">
+              <strong>Warrior</strong>
+              <span>──▷</span>
+              <span class="uml-rel-badge inherits">inherits (virtual attack)</span>
+              <span>──▷</span>
+              <strong>Player</strong>
+            </div>
+            
+            <div class="uml-rel-row">
+              <strong>Mage</strong>
+              <span>──▷</span>
+              <span class="uml-rel-badge inherits">inherits (virtual attack)</span>
+              <span>──▷</span>
+              <strong>Player</strong>
+            </div>
+            
+            <div class="uml-rel-row">
+              <strong>Priest</strong>
+              <span>──▷</span>
+              <span class="uml-rel-badge inherits">inherits (virtual attack)</span>
+              <span>──▷</span>
+              <strong>Player</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -417,7 +578,7 @@ Race <span class="tok-type">Player</span>::<span class="tok-fn">getRace</span>()
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -429,7 +590,7 @@ Race <span class="tok-type">Player</span>::<span class="tok-fn">getRace</span>()
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

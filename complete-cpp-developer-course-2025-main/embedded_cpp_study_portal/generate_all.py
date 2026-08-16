@@ -14,6 +14,7 @@ from section_7_data import SECTION_7_PROJECTS
 from section_8_data import SECTION_8_PROJECTS
 from section_9_data import SECTION_9_PROJECTS
 from section_10_data import SECTION_10_PROJECTS
+from uml_data_definitions import UML_DEFINITIONS
 
 def sanitize_card_desc(text, max_len=120):
     # Strip any HTML tags (e.g. <code>, <strong>, etc.)
@@ -1688,6 +1689,9 @@ def main():
     for sec_num, proj_list in sections_to_build:
         print(f"Generating Section {sec_num} HTML pages...")
         for idx, p in enumerate(proj_list):
+            if 'uml_diagram' not in p and p['id'] in UML_DEFINITIONS:
+                p['uml_diagram'] = UML_DEFINITIONS[p['id']]
+            
             prev_p = proj_list[idx - 1] if idx > 0 else proj_list[-1]
             next_p = proj_list[idx + 1] if idx < len(proj_list) - 1 else proj_list[0]
             

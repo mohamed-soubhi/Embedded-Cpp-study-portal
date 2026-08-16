@@ -110,7 +110,107 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Scoped enum class (uint8_t) &amp; Bitmask Memory Model
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;enum class : uint8_t&gt;&gt;</span>
+            <span class="uml-class-name">Direction</span>
+            <span class="uml-badge-tag">1-Byte Scoped Enum</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">NORTH</span> <span class="field-type">: uint8_t = 0</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">SOUTH</span> <span class="field-type">: uint8_t = 1</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">EAST</span> <span class="field-type">: uint8_t = 2</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">WEST</span> <span class="field-type">: uint8_t = 3</span></div>
+            </div>
+            
+          
+        </div>
+        
+        <div class="uml-class-card struct-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;enum class : uint8_t&gt;&gt;</span>
+            <span class="uml-class-name">SystemStatus</span>
+            <span class="uml-badge-tag">Status Enum</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">IDLE</span> <span class="field-type">: uint8_t = 0</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">RUNNING</span> <span class="field-type">: uint8_t = 1</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">ERROR</span> <span class="field-type">: uint8_t = 2</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">FAULT</span> <span class="field-type">: uint8_t = 3</span></div>
+            </div>
+            
+          
+        </div>
+        
+        <div class="uml-class-card module-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;compilation-unit&gt;&gt;</span>
+            <span class="uml-class-name">EnumDispatcher</span>
+            <span class="uml-badge-tag">Switch Jump Table</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">processDirection(dir: Direction)</span> <span class="field-type">: void</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getStatusString(s: SystemStatus)</span> <span class="field-type">: std::string_view</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>EnumDispatcher</strong>
+              <span>─ ─ ></span>
+              <span class="uml-rel-badge uses">switches on</span>
+              <span>─ ─ ></span>
+              <strong>Direction</strong>
+            </div>
+            
+            <div class="uml-rel-row">
+              <strong>EnumDispatcher</strong>
+              <span>─ ─ ></span>
+              <span class="uml-rel-badge uses">switches on</span>
+              <span>─ ─ ></span>
+              <strong>SystemStatus</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         
@@ -156,7 +256,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         
@@ -181,7 +281,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         

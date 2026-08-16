@@ -128,7 +128,54 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> std::stack Container Adapter (LIFO) Model
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">std::stack&lt;T, Container&gt;</span>
+            <span class="uml-badge-tag">LIFO Adapter</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item protected"><span class="vis">#</span><span class="field-name">c : Container (defaults to std::deque&lt;T&gt;)</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">push(val: const T&amp;)</span> <span class="field-type">: void</span><span class="method-spec">[calls c.push_back]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">pop()</span> <span class="field-type">: void</span><span class="method-spec">[calls c.pop_back]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">top()</span> <span class="field-type">: T&amp;</span><span class="method-spec">[calls c.back]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">empty()</span> <span class="field-type">: bool const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">size()</span> <span class="field-type">: size_t const</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         <h3>LIFO Stack Operations</h3><p><code>std::stack</code> provides <code>push()</code>, <code>pop()</code>, <code>top()</code>, and <code>empty()</code> using LIFO semantics.</p>
@@ -137,7 +184,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Hardware Call Stack Constraints</h3><p>On microcontrollers, stack memory is shared between local variables and interrupt context saving. Stack overflow corrupts global variables silently unless MPU guards are enabled.</p>
@@ -146,7 +193,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">template &lt;typename T, size_t MaxDepth&gt;

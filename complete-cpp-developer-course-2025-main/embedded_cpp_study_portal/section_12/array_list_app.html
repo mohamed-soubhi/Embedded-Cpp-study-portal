@@ -249,7 +249,89 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> ArrayList Contiguous Sequential List Architecture
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card abstract-class">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;interface&gt;&gt;</span>
+            <span class="uml-class-name">List&lt;T&gt;</span>
+            <span class="uml-badge-tag">List Interface Contract</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item public" style="color:var(--text-dim); font-style:italic;">(none / stateless)</div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">insert(pos: int, entry: const T&amp;)</span> <span class="field-type">: bool</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">remove(pos: int)</span> <span class="field-type">: bool</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getEntry(pos: int)</span> <span class="field-type">: T const</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">isEmpty()</span> <span class="field-type">: bool const</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getLength()</span> <span class="field-type">: size_t const</span><span class="method-spec">[pure virtual =0]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">~List()</span><span class="method-spec">[virtual]</span></div>
+            </div>
+            
+        </div>
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;template class&gt;&gt;</span>
+            <span class="uml-class-name">ArrayList&lt;T&gt;</span>
+            <span class="uml-badge-tag">Contiguous List</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">items[CAPACITY]</span> <span class="field-type">: T</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">itemCount</span> <span class="field-type">: size_t = 0</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">maxItems</span> <span class="field-type">: size_t = CAPACITY</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">ArrayList()</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">insert(newPosition: int, newEntry: const T&amp;)</span> <span class="field-type">: bool</span><span class="method-spec">[override, O(N) Shift]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">remove(position: int)</span> <span class="field-type">: bool</span><span class="method-spec">[override, O(N) Shift]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getEntry(position: int)</span> <span class="field-type">: T const</span><span class="method-spec">[override, O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">replace(position: int, newEntry: const T&amp;)</span> <span class="field-type">: T</span><span class="method-spec">[O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">clear()</span> <span class="field-type">: void</span><span class="method-spec">[O(1)]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">isEmpty()</span> <span class="field-type">: bool const</span><span class="method-spec">[override]</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">getLength()</span> <span class="field-type">: size_t const</span><span class="method-spec">[override]</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+        <div class="uml-relationships">
+          <div class="uml-rel-title">🔗 Architectural Relationships &amp; Hierarchy</div>
+          <div class="uml-rel-list">
+            
+            <div class="uml-rel-row">
+              <strong>ArrayList&lt;T&gt;</strong>
+              <span>- - ▷</span>
+              <span class="uml-rel-badge implements">implements interface</span>
+              <span>- - ▷</span>
+              <strong>List&lt;T&gt;</strong>
+            </div>
+            
+          </div>
+        </div>
+        
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         <h3>Dynamic Array Fundamentals</h3><p>Implements indexable random access ($O(1)$) with dynamic growth when capacity is reached.</p>
@@ -258,7 +340,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Heap Relocation Hazards</h3><p>Resizing an ArrayList requires allocating a new memory block and copying all data, causing latency spikes in real-time loops.</p>
@@ -267,7 +349,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">// Bounded ArrayList with zero dynamic allocation

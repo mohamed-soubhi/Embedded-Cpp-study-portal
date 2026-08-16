@@ -203,7 +203,54 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">📚</span> 2. Core C++ Concepts Deep-Dive
+        <span class="icon">📐</span> 2. Architecture &amp; UML Class Model
+      </h2>
+      <div class="content-card">
+        
+    <div class="uml-diagram-wrapper">
+      <div class="uml-header-bar">
+        <div class="uml-header-title">
+          <span>📐</span> Operator Overloading (+, ==, !=, &lt;&lt;) on Rectangle Class
+        </div>
+        <div class="uml-legend">
+          <span class="uml-legend-item"><span class="uml-legend-badge pub">+</span> Public</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge priv">-</span> Private</span>
+          <span class="uml-legend-item"><span class="uml-legend-badge prot">#</span> Protected</span>
+        </div>
+      </div>
+      <div class="uml-grid">
+        
+        <div class="uml-class-card">
+          <div class="uml-class-header">
+            <span class="uml-stereotype">&lt;&lt;class&gt;&gt;</span>
+            <span class="uml-class-name">Rectangle</span>
+            <span class="uml-badge-tag">Overloaded Entity</span>
+          </div>
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Attributes / Data Members</div>
+              <div class="uml-item private"><span class="vis">-</span><span class="field-name">length</span> <span class="field-type">: double</span></div><div class="uml-item private"><span class="vis">-</span><span class="field-name">width</span> <span class="field-type">: double</span></div>
+            </div>
+            
+          
+            <div class="uml-section">
+              <div class="uml-section-label">Operations / Methods</div>
+              <div class="uml-item public"><span class="vis">+</span><span class="field-name">Rectangle(l: double, w: double)</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">operator+(other: const Rectangle&amp;)</span> <span class="field-type">: Rectangle const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">operator==(other: const Rectangle&amp;)</span> <span class="field-type">: bool const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">operator!=(other: const Rectangle&amp;)</span> <span class="field-type">: bool const</span></div><div class="uml-item public"><span class="vis">+</span><span class="field-name">friend operator&lt;&lt;(os: ostream&amp;, r: const Rectangle&amp;)</span> <span class="field-type">: ostream&amp;</span></div>
+            </div>
+            
+        </div>
+        
+      </div>
+      
+      
+    </div>
+    
+      </div>
+    </section>
+
+    <section class="study-section">
+      <h2 class="section-heading">
+        <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
         <h3>Operator Overloading Syntax</h3><p>Custom classes can overload arithmetic and comparison operators to act like fundamental types.</p>
@@ -212,7 +259,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">⚡</span> 3. Embedded Systems &amp; Hardware Reality
+        <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
         <h3>Fixed-Point Math for Cortex-M0/M3 (No FPU)</h3><p>Microcontrollers without hardware Floating Point Units emulate floats in software, taking dozens of cycles. Overloading operators on fixed-point integer types enables fast arithmetic with clean mathematical syntax.</p>
@@ -221,7 +268,7 @@
 
     <section class="study-section">
       <h2 class="section-heading">
-        <span class="icon">💡</span> 4. Production-Ready Embedded Refactoring
+        <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
         <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct Millivolts {
