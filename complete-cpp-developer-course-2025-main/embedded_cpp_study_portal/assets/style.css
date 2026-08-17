@@ -245,6 +245,60 @@ a:hover {
   margin: 0 auto 28px;
 }
 
+/* Hero Statistics Metrics */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 960px;
+  margin: 24px auto 0;
+  padding: 0 12px;
+}
+
+.stat-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.15);
+}
+
+.stat-number {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--accent-neon);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+[data-theme="light"] .stat-number {
+  color: var(--accent-primary);
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-sub {
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
+}
+
 /* Track Navigation Tabs */
 .track-switcher {
   display: flex;

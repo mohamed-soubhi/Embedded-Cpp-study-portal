@@ -152,13 +152,15 @@ function initSearchAndFilters() {
 
     cards.forEach(card => {
       const title = card.querySelector('.card-title')?.innerText.toLowerCase() || '';
+      const numBadge = card.querySelector('.project-num-badge')?.innerText.toLowerCase() || '';
       const desc = card.querySelector('.card-desc')?.innerText.toLowerCase() || '';
       const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.innerText.toLowerCase()).join(' ');
       const section = card.getAttribute('data-section') || '';
       const track = card.getAttribute('data-track') || '';
       const relevance = card.getAttribute('data-relevance') || '';
 
-      const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm) || tags.includes(searchTerm);
+      const cleanSearch = searchTerm.startsWith('#') ? searchTerm.substring(1) : searchTerm;
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || numBadge.includes(searchTerm) || numBadge.includes(cleanSearch) || desc.includes(searchTerm) || tags.includes(searchTerm);
       
       let matchesTrack = true;
       if (activeTrack === 'foundations') {
