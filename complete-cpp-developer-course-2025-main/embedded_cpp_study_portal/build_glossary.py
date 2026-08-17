@@ -135,7 +135,7 @@ def generate_glossary_page():
             <span class="theme-text">Light</span>
           </button>
         </li>
-        <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
   </header>
@@ -241,8 +241,8 @@ def generate_glossary_page():
         <div class="footer-col">
           <h5>Attribution &amp; Source</h5>
           <ul>
-            <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-            <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
             <li><span>Author: Mohamed Soubhi</span></li>
           </ul>
         </div>
