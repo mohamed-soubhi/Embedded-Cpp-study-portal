@@ -425,7 +425,7 @@ def generate_page(data, prev_link, next_link, section_num):
             <span class="theme-text">Light</span>
           </button>
         </li>
-        <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
   </header>
@@ -536,8 +536,8 @@ def generate_page(data, prev_link, next_link, section_num):
           <h5>Attribution &amp; Source</h5>
           <ul>
             <li><a href="../glossary.html">📖 Technical Glossary &amp; Reference</a></li>
-            <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-            <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
             <li><span>Author: Mohamed Soubhi</span></li>
           </ul>
         </div>

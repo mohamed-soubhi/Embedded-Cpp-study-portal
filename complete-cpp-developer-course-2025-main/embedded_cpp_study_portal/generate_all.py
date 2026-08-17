@@ -1506,7 +1506,7 @@ def build_index():
             <span class="theme-text">Light</span>
           </button>
         </li>
-        <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
   </header>
@@ -1527,10 +1527,10 @@ def build_index():
           <a href="glossary.html" class="btn-ref" style="background: rgba(16, 185, 129, 0.15); border-color: var(--accent-primary); color: var(--accent-neon);">
             <span>📖</span> Technical Glossary (68+ Terms)
           </a>
-          <a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer" class="btn-ref">
+          <a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer" class="btn-ref">
             <span>📂</span> GitHub Repository
           </a>
-          <a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="btn-ref">
+          <a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="btn-ref">
             <span>📖</span> Course Syllabus &amp; Setup Guide
           </a>
           <span class="ref-pill">⚡ ARM Cortex-M &amp; MISRA C++ Focus</span>
@@ -1653,8 +1653,8 @@ def build_index():
           <h5>Attribution &amp; Source</h5>
           <ul>
             <li><a href="glossary.html">📖 Technical Glossary &amp; Reference</a></li>
-            <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-            <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/embedded-cpp-study-portal/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
             <li><span>Author: Mohamed Soubhi</span></li>
           </ul>
         </div>
