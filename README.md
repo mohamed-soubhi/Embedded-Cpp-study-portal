@@ -1,20 +1,20 @@
-# ⚡ Modern C++ & Embedded Systems Deep-Dive Study Portal
+# ⚡ Embedded Modern C++: From Bare-Metal to STL
 ### *An Interactive Engineering Companion & Architectural Curriculum (116 Projects)*
 
-[![Live Study Portal](https://img.shields.io/badge/🌐_Live_Portal-GitHub_Pages-10b981?style=for-the-badge&logo=github)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
-[![Glossary](https://img.shields.io/badge/📖_Glossary-68_Technical_Terms-10b981?style=for-the-badge)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/glossary.html)
-[![Curriculum Projects](https://img.shields.io/badge/Projects-116_Interactive_Deep--Dives-38bdf8?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
-[![Quizzes](https://img.shields.io/badge/Self--Checking_MCQs-464_Questions-a855f7?style=for-the-badge)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
-[![Standard](https://img.shields.io/badge/Standard-C%2B%2B11%20%7C%2014%20%7C%2017%20%7C%2020-f59e0b?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
-[![Target](https://img.shields.io/badge/Target-ARM_Cortex--M_%7C_MISRA_C%2B%2B-ef4444?style=for-the-badge&logo=arm)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
-[![Release](https://img.shields.io/badge/Release-v1.0-00ff88?style=for-the-badge)](https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/releases/tag/v1.0)
+[![Live Study Portal](https://img.shields.io/badge/🌐_Live_Portal-GitHub_Pages-10b981?style=for-the-badge&logo=github)](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/)
+[![Glossary](https://img.shields.io/badge/📖_Glossary-68_Technical_Terms-10b981?style=for-the-badge)](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/glossary.html)
+[![Curriculum Projects](https://img.shields.io/badge/Projects-116_Interactive_Deep--Dives-38bdf8?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/)
+[![Quizzes](https://img.shields.io/badge/Self--Checking_MCQs-464_Questions-a855f7?style=for-the-badge)](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/)
+[![Standard](https://img.shields.io/badge/Standard-C%2B%2B11%20%7C%2014%20%7C%2017%20%7C%2020-f59e0b?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/)
+[![Target](https://img.shields.io/badge/Target-ARM_Cortex--M_%7C_MISRA_C%2B%2B-ef4444?style=for-the-badge&logo=arm)](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/)
+[![Release](https://img.shields.io/badge/Release-v2.1-00ff88?style=for-the-badge)](https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/releases/tag/v2.1)
 
 ---
 
 ## 🚀 Live Interactive Portal
 
 Explore the live web application here:  
-👉 **[https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)**
+👉 **[https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/](https://mohamed-soubhi.github.io/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/)**
 
 ---
 
@@ -26,8 +26,8 @@ The portal elevates traditional desktop C++ curriculum code into **bare-metal em
 
 ```
        ┌──────────────────────────────────────────────────────────┐
-       │     Modern C++ & Embedded Systems Study Portal (v1.0)    │
-       │     116 Projects • 464 Quizzes • Cyber Matrix UI         │
+       │   Embedded Modern C++: From Bare-Metal to STL (v2.1)     │
+       │   116 Projects • 464 Quizzes • 68 Terms • Cyber UI       │
        └────────────────────────────┬─────────────────────────────┘
                                     │
           ┌─────────────────────────┴─────────────────────────┐
@@ -97,13 +97,13 @@ The study portal is built with a fast, dependency-free Python static generator a
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course.git
-cd The-Complete-Cpp-Developer-Course
+git clone https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL.git
+cd Embedded-Modern-Cpp-From-Bare-Metal-to-STL
 
 # 2. Navigate to the portal generator directory
 cd complete-cpp-developer-course-2025-main/embedded_cpp_study_portal
 
-# 3. Regenerate all 116 pages and the master landing index
+# 3. Regenerate all 116 pages, technical glossary, and master landing index
 python3 generate_all.py
 
 # 4. Preview locally with any static web server

@@ -104,14 +104,14 @@ def generate_glossary_page():
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Technical Glossary &amp; Architecture Reference - Modern C++ &amp; Embedded Systems Portal</title>
+  <title>Technical Glossary &amp; Architecture Reference - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="container nav-bar">
       <a href="index.html" class="nav-brand">
-        ⚡ C++ &amp; Embedded Systems Deep-Dive Portal
+        ⚡ Embedded Modern C++
         <span class="badge-tag">Glossary Reference</span>
       </a>
       <ul class="nav-links">
@@ -135,7 +135,7 @@ def generate_glossary_page():
             <span class="theme-text">Light</span>
           </button>
         </li>
-        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+        <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
       </ul>
     </div>
   </header>
@@ -212,7 +212,7 @@ def generate_glossary_page():
   <footer class="site-footer">
     <div class="container footer-content">
       <div class="footer-brand">
-        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <h4>⚡ Embedded Modern C++: From Bare-Metal to STL</h4>
         <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
       </div>
       <div class="footer-links-group">
@@ -241,8 +241,8 @@ def generate_glossary_page():
         <div class="footer-col">
           <h5>Attribution &amp; Source</h5>
           <ul>
-            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/Embedded-Modern-Cpp-From-Bare-Metal-to-STL/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
             <li><span>Author: Mohamed Soubhi</span></li>
           </ul>
         </div>
