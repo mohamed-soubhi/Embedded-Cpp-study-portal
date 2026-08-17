@@ -15,6 +15,7 @@ from section_8_data import SECTION_8_PROJECTS
 from section_9_data import SECTION_9_PROJECTS
 from section_10_data import SECTION_10_PROJECTS
 from uml_data_definitions import UML_DEFINITIONS
+from build_glossary import generate_glossary_page
 
 def sanitize_card_desc(text, max_len=120):
     # Strip any HTML tags (e.g. <code>, <strong>, etc.)
@@ -1486,6 +1487,7 @@ def build_index():
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">🏠 Home</a></li>
+        <li><a href="glossary.html">📖 Glossary</a></li>
         <li><a href="section_1/hello.html">Sec 1</a></li>
         <li><a href="section_2/hello_world.html">Sec 2</a></li>
         <li><a href="section_3/control_statements_intro.html">Sec 3</a></li>
@@ -1522,6 +1524,9 @@ def build_index():
           This portal serves as an advanced companion resource—expanding foundational C++ code into production-grade embedded systems architectures, deterministic real-time patterns, ARM Cortex-M hardware analyses, and interactive quizzes.
         </p>
         <div class="reference-links">
+          <a href="glossary.html" class="btn-ref" style="background: rgba(16, 185, 129, 0.15); border-color: var(--accent-primary); color: var(--accent-neon);">
+            <span>📖</span> Technical Glossary (68+ Terms)
+          </a>
           <a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="btn-ref">
             <span>📂</span> GitHub Repository
           </a>
@@ -1647,6 +1652,7 @@ def build_index():
         <div class="footer-col">
           <h5>Attribution &amp; Source</h5>
           <ul>
+            <li><a href="glossary.html">📖 Technical Glossary &amp; Reference</a></li>
             <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
             <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
             <li><span>Author: Mohamed Soubhi</span></li>
@@ -1704,9 +1710,12 @@ def main():
                 f.write(html_out)
             print(f"  ✓ [{idx+1}/{len(proj_list)}] section_{sec_num}/{p['id']}.html")
 
+    print("Building Technical Glossary Page...")
+    generate_glossary_page()
+
     print("Building Master Index Landing Page...")
     build_index()
-    print("All 116 portal pages generated successfully!")
+    print("All 116 portal pages & Technical Glossary generated successfully!")
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,7 @@
 ### *An Interactive Engineering Companion & Architectural Curriculum (116 Projects)*
 
 [![Live Study Portal](https://img.shields.io/badge/🌐_Live_Portal-GitHub_Pages-10b981?style=for-the-badge&logo=github)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
+[![Glossary](https://img.shields.io/badge/📖_Glossary-68_Technical_Terms-10b981?style=for-the-badge)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/glossary.html)
 [![Curriculum Projects](https://img.shields.io/badge/Projects-116_Interactive_Deep--Dives-38bdf8?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
 [![Quizzes](https://img.shields.io/badge/Self--Checking_MCQs-464_Questions-a855f7?style=for-the-badge)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
 [![Standard](https://img.shields.io/badge/Standard-C%2B%2B11%20%7C%2014%20%7C%2017%20%7C%2020-f59e0b?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/The-Complete-Cpp-Developer-Course/)
@@ -57,6 +58,8 @@ The portal elevates traditional desktop C++ curriculum code into **bare-metal em
    - Equal-height, symmetrical card layout with instant search across concepts (`AAPCS`, `MMIO`, `vtable`, `LittleFS`, `DMA`, `CRTP`, `alignas`).
 4. **Dual-Track Categorization**:
    - Instant filtering between **Track 1: Foundations** (61 projects) and **Track 2: Advanced Systems** (55 projects).
+5. **Dedicated Technical Glossary & Hardware Architecture Reference**:
+   - **68+ technical entries** with real-time keyword search, domain filters, CPU registers, low-level hardware realities, and cross-project links.
 
 ---
 

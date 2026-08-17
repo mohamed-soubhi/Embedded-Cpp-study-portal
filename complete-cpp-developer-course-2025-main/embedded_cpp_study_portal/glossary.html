@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Glossary &amp; Architecture Reference - Modern C++ &amp; Embedded Systems Portal</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-bar">
+      <a href="index.html" class="nav-brand">
+        ⚡ C++ &amp; Embedded Systems Deep-Dive Portal
+        <span class="badge-tag">Glossary Reference</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="glossary.html" class="active">📖 Glossary</a></li>
+        <li><a href="section_1/hello.html">Sec 1</a></li>
+        <li><a href="section_2/hello_world.html">Sec 2</a></li>
+        <li><a href="section_3/control_statements_intro.html">Sec 3</a></li>
+        <li><a href="section_4/array_fun.html">Sec 4</a></li>
+        <li><a href="section_5/function_fun_1.html">Sec 5</a></li>
+        <li><a href="section_6/book_fun.html">Sec 6</a></li>
+        <li><a href="section_7/bug_fun.html">Sec 7</a></li>
+        <li><a href="section_8/pointer_fun.html">Sec 8</a></li>
+        <li><a href="section_9/file_input_fun.html">Sec 9</a></li>
+        <li><a href="section_10/enum_fun.html">Sec 10</a></li>
+        <li><a href="section_11/smart_pointer_fun.html">Sec 11</a></li>
+        <li><a href="section_12/array_queue_app.html">Sec 12</a></li>
+        <li>
+          <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+            <span class="theme-icon">☀️</span>
+            <span class="theme-text">Light</span>
+          </button>
+        </li>
+        <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer" class="nav-github-link">📦 GitHub</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Portal Home</a>
+      <span class="sep">/</span>
+      <span class="current">Technical Glossary &amp; Architecture Reference</span>
+    </div>
+
+    <section class="hero glossary-hero">
+      <div class="hero-badge">📖 Authoritative Engineering Reference</div>
+      <h1>Technical Glossary &amp; Hardware Concepts</h1>
+      <p>A comprehensive architectural reference defining the acronyms, CPU registers, low-level idioms, memory layouts, toolchain concepts, and safety standards explored across all 116 curriculum projects.</p>
+      
+      <div class="glossary-stats-grid">
+        <div class="stat-card">
+          <span class="stat-num">68</span>
+          <span class="stat-lbl">Technical Terms</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">5</span>
+          <span class="stat-lbl">Core Engineering Domains</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">116</span>
+          <span class="stat-lbl">Cross-Referenced Projects</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">100%</span>
+          <span class="stat-lbl">Zero-Cost &amp; Bare-Metal Focus</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <section class="filter-panel glossary-controls">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="glossarySearch" class="search-input" placeholder="Search 68 terms (e.g. AAPCS, MMIO, DMA, LittleFS, CRTP, VTable, alignas, SRAM, MISRA, DWARF)...">
+      </div>
+      
+      <div class="filter-chips glossary-chips">
+        <span class="filter-label">Filter Domain:</span>
+        <button class="chip active" data-filter="all">All Domains (68)</button>
+        <button class="chip" data-filter="embedded-hw">⚡ Embedded &amp; CPU (19)</button>
+        <button class="chip" data-filter="cpp-idiom">📚 Modern C++ (21)</button>
+        <button class="chip" data-filter="memory-storage">💾 Memory &amp; Storage (11)</button>
+        <button class="chip" data-filter="toolchain-standards">🛡️ Toolchains &amp; Standards (12)</button>
+        <button class="chip" data-filter="data-structures">📐 Data Structures (5)</button>
+      </div>
+
+      <!-- Quick Alphabetical Jump Index -->
+      <div class="alphabet-nav-bar">
+        <span class="alpha-label">Alphabetical Jump:</span>
+        <div class="alpha-links">
+          <a href="#letter-A" class="alpha-jump-btn" data-letter="A">A</a><a href="#letter-B" class="alpha-jump-btn" data-letter="B">B</a><a href="#letter-C" class="alpha-jump-btn" data-letter="C">C</a><a href="#letter-D" class="alpha-jump-btn" data-letter="D">D</a><a href="#letter-E" class="alpha-jump-btn" data-letter="E">E</a><a href="#letter-F" class="alpha-jump-btn" data-letter="F">F</a><a href="#letter-H" class="alpha-jump-btn" data-letter="H">H</a><a href="#letter-L" class="alpha-jump-btn" data-letter="L">L</a><a href="#letter-M" class="alpha-jump-btn" data-letter="M">M</a><a href="#letter-N" class="alpha-jump-btn" data-letter="N">N</a><a href="#letter-P" class="alpha-jump-btn" data-letter="P">P</a><a href="#letter-R" class="alpha-jump-btn" data-letter="R">R</a><a href="#letter-S" class="alpha-jump-btn" data-letter="S">S</a><a href="#letter-T" class="alpha-jump-btn" data-letter="T">T</a><a href="#letter-U" class="alpha-jump-btn" data-letter="U">U</a><a href="#letter-V" class="alpha-jump-btn" data-letter="V">V</a><a href="#letter-W" class="alpha-jump-btn" data-letter="W">W</a><a href="#letter-Z" class="alpha-jump-btn" data-letter="Z">Z</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Result Counter -->
+    <div class="results-counter" id="glossaryCounter">
+      Showing <strong>68</strong> of <strong>68</strong> Technical Terms
+    </div>
+
+    <!-- Glossary List Grid -->
+    <section class="glossary-container" id="glossaryList">
+      
+            <div class="glossary-letter-group" id="letter-A" data-letter="A">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">A</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="aapcs" data-category="embedded-hw" data-letter="A">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#aapcs" class="term-anchor" title="Direct link to AAPCS">AAPCS</a>
+              </h3>
+              <div class="glossary-expansion">ARM Architecture Procedure Call Standard</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="aapcs" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">Calling Convention</span> <span class="tag">Registers</span> <span class="tag">ABI</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The official ABI standard governing how subroutines and functions pass parameters, return values, and preserve registers in ARM processors.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Under AAPCS, the first 4 integer or pointer arguments (up to 32 bits each) are passed directly in CPU registers R0–R3 without touching RAM. Return values are passed in R0 (and R1 for 64-bit). The return address is stored in the Link Register (R14/LR). Keeping function parameter counts to 4 or fewer eliminates stack memory push/pop overhead completely.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/function_fun_1.html" class="glossary-project-link">📌 Sec 5: Functions &amp; AAPCS</a> <a href="section_5/passing_schemes.html" class="glossary-project-link">📌 Sec 5: Parameter Schemes</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="adl" data-category="cpp-idiom" data-letter="A">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#adl" class="term-anchor" title="Direct link to ADL">ADL</a>
+              </h3>
+              <div class="glossary-expansion">Argument-Dependent Lookup (Koenig Lookup)</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="adl" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Language</span> <span class="tag">Name Lookup</span> <span class="tag">Namespaces</span> <span class="tag">STL</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A C++ compiler name lookup rule that searches the namespaces of a function's arguments in addition to the local scope when resolving unqualified function calls.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enables idiomatic, zero-cost customization points such as <code>swap(a, b)</code> (which selects specialized hardware or container swap functions before falling back to <code>std::swap</code>) and overloaded stream/math operators without requiring explicit namespace prefixes.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/advanced_stl_app.html" class="glossary-project-link">📌 Sec 11: Advanced STL</a> <a href="section_11/remove_erase_idiom.html" class="glossary-project-link">📌 Sec 11: Remove-Erase Idiom</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="alignas-alignof" data-category="cpp-idiom" data-letter="A">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#alignas-alignof" class="term-anchor" title="Direct link to alignas / alignof">alignas / alignof</a>
+              </h3>
+              <div class="glossary-expansion">Memory Alignment Specifier &amp; Operator</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="alignas-alignof" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++11</span> <span class="tag">Memory Alignment</span> <span class="tag">DMA</span> <span class="tag">Cache Line</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p><code>alignas</code> forces a variable or struct to align on a specific byte boundary in memory. <code>alignof</code> queries the natural alignment requirements of a given type.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Hardware peripherals such as DMA controllers, cache lines (typically 32 or 64 bytes), and vector units require buffers to be placed at specific memory boundaries (e.g. <code>alignas(32) uint8_t dma_buf[512];</code>). Misaligned memory accesses on ARM Cortex-M0/M3 can trigger hardware usage faults or require multi-cycle bus transactions.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_6/book_fun.html" class="glossary-project-link">📌 Sec 6: OOP &amp; Struct Alignment</a> <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: DMA &amp; Arrays</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="aos-vs-soa" data-category="memory-storage" data-letter="A">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#aos-vs-soa" class="term-anchor" title="Direct link to AoS vs SoA">AoS vs SoA</a>
+              </h3>
+              <div class="glossary-expansion">Array of Structures vs Structure of Arrays</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="aos-vs-soa" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Data Layout</span> <span class="tag">SIMD</span> <span class="tag">Cache Lines</span> <span class="tag">Performance</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>Two distinct memory organization patterns: AoS stores complete struct objects consecutively in memory; SoA separates each struct field into its own contiguous parallel array.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>In embedded DSP and graphics processing, SoA maximizes cache locality when algorithms only read one or two specific fields across all elements (e.g. updating only X coordinates), enabling contiguous burst reads and SIMD execution without loading unused padding bytes.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_8/dynamic_array_test.html" class="glossary-project-link">📌 Sec 8: Dynamic Arrays &amp; Layout</a> <a href="section_4/2d_array_fun.html" class="glossary-project-link">📌 Sec 4: 2D Arrays</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="apsr" data-category="embedded-hw" data-letter="A">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#apsr" class="term-anchor" title="Direct link to APSR">APSR</a>
+              </h3>
+              <div class="glossary-expansion">Application Program Status Register</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="apsr" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">ALU</span> <span class="tag">Condition Flags</span> <span class="tag">Branching</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The hardware CPU status register that contains the arithmetic condition flags resulting from the most recent ALU operation.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Holds the Negative (N), Zero (Z), Carry (C), Overflow (V), and Q (Saturation) flags. Conditional branch instructions (<code>BEQ</code>, <code>BNE</code>, <code>BGT</code>, <code>BLT</code>) directly evaluate these flags to make zero-latency branch decisions. Mispredicting or stalling conditional checks causes CPU pipeline bubbles.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/control_statements_intro.html" class="glossary-project-link">📌 Sec 3: Control Flow &amp; Flags</a> <a href="section_3/selection_fun.html" class="glossary-project-link">📌 Sec 3: Selection Fun</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="autosar-cpp" data-category="toolchain-standards" data-letter="A">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#autosar-cpp" class="term-anchor" title="Direct link to AUTOSAR C++14">AUTOSAR C++14</a>
+              </h3>
+              <div class="glossary-expansion">Automotive Open System Architecture C++ Guidelines</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="autosar-cpp" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Automotive</span> <span class="tag">Safety-Critical</span> <span class="tag">MISRA</span> <span class="tag">ISO 26262</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>An authoritative coding standard for using Modern C++ (C++14) in safety-critical automotive systems (e.g. ADAS, engine controllers, braking ECUs).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Strictly forbids non-deterministic runtime operations including raw <code>new/delete</code>, dynamic exceptions without bounded catch times, recursion (due to stack overflow risk), and unbounded loops. Mandates static allocation, deterministic response times, and static analysis enforcement.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/smart_pointer_fun.html" class="glossary-project-link">📌 Sec 11: Smart Pointers &amp; AUTOSAR</a> <a href="section_7/bug_fun.html" class="glossary-project-link">📌 Sec 7: Faults &amp; Exceptions</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-B" data-letter="B">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">B</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="branch-pipeline" data-category="embedded-hw" data-letter="B">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#branch-pipeline" class="term-anchor" title="Direct link to Branch Prediction &amp; Pipeline Flush">Branch Prediction &amp; Pipeline Flush</a>
+              </h3>
+              <div class="glossary-expansion">CPU Instruction Pipeline Flushes &amp; Branch Penalties</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="branch-pipeline" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">CPU Architecture</span> <span class="tag">Pipeline</span> <span class="tag">Thumb-2</span> <span class="tag">Optimization</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>When a CPU encounters a conditional jump (<code>if/else</code>, <code>switch</code>), branch prediction attempts to speculate the next instruction. If mispredicted, the processor must flush all instructions in the pipeline and reload from the jump target.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>In Cortex-M3/M4/M7 processors with 3-to-6 stage pipelines, every mispredicted branch incurs a 2-to-5 clock cycle penalty. In high-frequency interrupt service routines (ISRs) and tight DSP loops, branchless code and C++20 <code>[[likely]]/[[unlikely]]</code> annotations eliminate costly pipeline stalls.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/control_statements_intro.html" class="glossary-project-link">📌 Sec 3: Control Statements</a> <a href="section_3/selection_fun.html" class="glossary-project-link">📌 Sec 3: Branching Optimization</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="bss-section" data-category="toolchain-standards" data-letter="B">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#bss-section" class="term-anchor" title="Direct link to .bss Section">.bss Section</a>
+              </h3>
+              <div class="glossary-expansion">Block Started by Symbol</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="bss-section" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ELF</span> <span class="tag">Linker</span> <span class="tag">Memory Sections</span> <span class="tag">SRAM</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A memory section in compiled ELF binaries dedicated to uninitialized global and static variables.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>The <code>.bss</code> section occupies 0 bytes in Flash ROM storage. During startup before <code>main()</code> runs, the CRT0 startup code zeroes out the entire <code>.bss</code> RAM region in a tight loop. Grouping zero-initialized buffers into <code>.bss</code> saves vital Flash space.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Linker Scripts &amp; Sections</a> <a href="section_2/variable_fun.html" class="glossary-project-link">📌 Sec 2: Variables &amp; Memory</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="busfault" data-category="embedded-hw" data-letter="B">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#busfault" class="term-anchor" title="Direct link to BusFault">BusFault</a>
+              </h3>
+              <div class="glossary-expansion">ARM Cortex-M Bus Error Exception</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="busfault" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Fault Handling</span> <span class="tag">ARM Cortex-M</span> <span class="tag">AHB/APB</span> <span class="tag">Hardware Error</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A hardware CPU fault triggered when an error occurs during an instruction fetch or data access on the processor's system bus (AHB/APB).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Commonly caused by dereferencing invalid memory addresses, accessing unclocked hardware peripherals (forgetting to enable the APB peripheral clock in RCC registers), or attempting unaligned 32-bit accesses on strict buses. Logged in the BusFault Status Register (BFSR).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/bug_fun.html" class="glossary-project-link">📌 Sec 7: Hardware Faults &amp; Exceptions</a> <a href="section_8/pointer_fun.html" class="glossary-project-link">📌 Sec 8: Pointer Safety &amp; MMIO</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-C" data-letter="C">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">C</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="cache-line" data-category="memory-storage" data-letter="C">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#cache-line" class="term-anchor" title="Direct link to Cache Line &amp; Locality">Cache Line &amp; Locality</a>
+              </h3>
+              <div class="glossary-expansion">Spatial and Temporal CPU Cache Memory Blocks</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="cache-line" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Cache</span> <span class="tag">SRAM</span> <span class="tag">Locality</span> <span class="tag">Performance</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The fundamental unit of data transfer between main memory (SRAM/DRAM) and CPU L1/L2 cache (typically 32 or 64 bytes).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>When a single byte is accessed, the hardware cache controller loads the entire 32- or 64-byte line. Sequential array traversals exhibit high spatial locality (cache hits), running at ~1 cycle per access. In contrast, linked lists and pointer chasing cause frequent cache misses, stalling the CPU for 10-100+ cycles per dereference.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: Arrays &amp; Memory Locality</a> <a href="section_12/array_list_app.html" class="glossary-project-link">📌 Sec 12: Data Structures &amp; Cache</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="constexpr-consteval" data-category="cpp-idiom" data-letter="C">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#constexpr-consteval" class="term-anchor" title="Direct link to constexpr / consteval / constinit">constexpr / consteval / constinit</a>
+              </h3>
+              <div class="glossary-expansion">Compile-Time Evaluation &amp; Initialization Qualifiers</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="constexpr-consteval" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++11/14/20</span> <span class="tag">Zero-SRAM</span> <span class="tag">Flash ROM</span> <span class="tag">Optimization</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p><code>constexpr</code> marks values or functions that can be computed at compile-time. <code>consteval</code> guarantees immediate compile-time execution. <code>constinit</code> ensures static initialization without dynamic startup code.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Precomputing mathematical tables (trigonometric LUTs, CRC tables, state machine transitions) at compile time consumes zero runtime CPU cycles and places the result directly in Flash ROM (<code>.rodata</code>), eliminating RAM consumption and boot-time calculation overhead.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_2/constant_fun.html" class="glossary-project-link">📌 Sec 2: Constants &amp; Compile-Time</a> <a href="section_5/math_fun.html" class="glossary-project-link">📌 Sec 5: Math &amp; CORDIC</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="cordic" data-category="embedded-hw" data-letter="C">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#cordic" class="term-anchor" title="Direct link to CORDIC">CORDIC</a>
+              </h3>
+              <div class="glossary-expansion">Coordinate Rotation Digital Computer</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="cordic" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Hardware Accelerator</span> <span class="tag">Trigonometry</span> <span class="tag">DSP</span> <span class="tag">ARM</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A hardware iterative algorithm / coprocessor used in embedded microcontrollers (e.g. STM32G4) to compute trigonometric, hyperbolic, and logarithmic functions using only additions and bit-shifts.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides single-cycle or fixed microcode computation of <code>sin()</code>, <code>cos()</code>, <code>atan2()</code>, and polar-to-Cartesian conversions without requiring costly floating-point Taylor series approximations or large RAM lookup tables.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/math_fun.html" class="glossary-project-link">📌 Sec 5: Math &amp; CORDIC Acceleration</a> <a href="section_2/arithmetic_fun.html" class="glossary-project-link">📌 Sec 2: Arithmetic Mechanics</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="crtp" data-category="cpp-idiom" data-letter="C">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#crtp" class="term-anchor" title="Direct link to CRTP">CRTP</a>
+              </h3>
+              <div class="glossary-expansion">Curiously Recurring Template Pattern</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="crtp" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Templates</span> <span class="tag">Static Polymorphism</span> <span class="tag">Zero-Cost</span> <span class="tag">VTable-Free</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A C++ template design idiom where a derived class inherits from a base class template instantiated with the derived class itself as a template argument (<code>class Derived : public Base&lt;Derived&gt;</code>).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides polymorphic interface behavior at compile time without any virtual functions. This completely avoids the VTable and VPtr RAM overhead (saving 4 bytes per object) and enables full function inlining, eliminating indirect jump instruction delays.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_10/animal_fun.html" class="glossary-project-link">📌 Sec 10: OOP &amp; CRTP Refactoring</a> <a href="section_11/templates.html" class="glossary-project-link">📌 Sec 11: Templates Deep-Dive</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="cyclomatic-complexity" data-category="toolchain-standards" data-letter="C">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#cyclomatic-complexity" class="term-anchor" title="Direct link to Cyclomatic Complexity">Cyclomatic Complexity</a>
+              </h3>
+              <div class="glossary-expansion">McCabe Software Complexity Metric (ISO 26262 / MISRA)</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="cyclomatic-complexity" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Safety Standards</span> <span class="tag">Testing</span> <span class="tag">Control Flow</span> <span class="tag">MISRA</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A quantitative software metric measuring the number of linearly independent paths through a program's source code.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Safety standards like ISO 26262 (automotive) and IEC 61508 (industrial) mandate a cyclomatic complexity threshold (typically $\le 10$ to $15$ per function). Lower complexity ensures every branch path can be fully tested with 100% MC/DC (Modified Condition/Decision Coverage) on target hardware.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/selection_fun.html" class="glossary-project-link">📌 Sec 3: Control Flow &amp; Complexity</a> <a href="section_5/scope_fun.html" class="glossary-project-link">📌 Sec 5: Functions &amp; Scope</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-D" data-letter="D">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">D</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="data-section" data-category="toolchain-standards" data-letter="D">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#data-section" class="term-anchor" title="Direct link to .data Section">.data Section</a>
+              </h3>
+              <div class="glossary-expansion">Initialized Data Memory Section</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="data-section" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ELF</span> <span class="tag">Linker</span> <span class="tag">Memory Sections</span> <span class="tag">Flash &amp; SRAM</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The memory section holding global and static variables that are explicitly initialized to non-zero values (e.g. <code>int sensor_baud = 115200;</code>).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Requires dual storage: the initial values are stored in non-volatile Flash ROM (LMA - Load Memory Address). At startup, the reset handler copies these values byte-for-byte from Flash into volatile SRAM (VMA - Virtual Memory Address). Minimizing non-const globals directly reduces boot time and SRAM usage.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Linker Scripts</a> <a href="section_2/variable_fun.html" class="glossary-project-link">📌 Sec 2: Variables &amp; Storage</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="dma" data-category="embedded-hw" data-letter="D">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#dma" class="term-anchor" title="Direct link to DMA">DMA</a>
+              </h3>
+              <div class="glossary-expansion">Direct Memory Access Controller</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="dma" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Hardware Peripheral</span> <span class="tag">Bus Master</span> <span class="tag">Zero-CPU</span> <span class="tag">Buffers</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A dedicated hardware engine on microcontrollers that transfers data directly between peripherals (ADC, SPI, UART) and memory (SRAM) without CPU intervention.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Allows multi-kilobyte sensor or audio data streams to be received in circular ring buffers in the background while the CPU sleeps in low-power mode (WFI) or executes other real-time tasks. Requires contiguous, properly aligned memory buffers.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: Arrays &amp; DMA Buffers</a> <a href="section_9/file_output_fun.html" class="glossary-project-link">📌 Sec 9: Streams &amp; Buffering</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="dwarf-eh-frame" data-category="toolchain-standards" data-letter="D">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#dwarf-eh-frame" class="term-anchor" title="Direct link to DWARF / .eh_frame">DWARF / .eh_frame</a>
+              </h3>
+              <div class="glossary-expansion">Debugging Format &amp; Exception Unwinding Table</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="dwarf-eh-frame" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Compilers</span> <span class="tag">Exceptions</span> <span class="tag">ROM Overhead</span> <span class="tag">DWARF</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The metadata format embedded in binaries to describe stack frames, local variable offsets, and exception handling unwinding instructions.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enabling C++ exceptions generates the <code>.eh_frame</code> and <code>.gcc_except_table</code> sections in Flash ROM, causing a 15KB–40KB ROM code size penalty on 32-bit MCUs even if no exception is ever thrown. For this reason, bare-metal systems commonly compile with <code>-fno-exceptions</code>.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/custom_exceptions.html" class="glossary-project-link">📌 Sec 7: Exceptions &amp; Faults</a> <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Toolchains &amp; Linkers</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-E" data-letter="E">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">E</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="eeprom" data-category="memory-storage" data-letter="E">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#eeprom" class="term-anchor" title="Direct link to EEPROM">EEPROM</a>
+              </h3>
+              <div class="glossary-expansion">Electrically Erasable Programmable Read-Only Memory</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="eeprom" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Non-Volatile</span> <span class="tag">Storage</span> <span class="tag">Hardware</span> <span class="tag">Endurance</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A non-volatile storage technology that allows individual bytes to be erased and rewritten repeatedly (typically rated for 100,000 to 1,000,000 write cycles).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Used for persistent configuration parameters, device serial numbers, and calibration offsets. Writes require significant time (3–10ms per byte) and block or require non-blocking I2C/SPI drivers with CRC checks.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_9/file_input_fun.html" class="glossary-project-link">📌 Sec 9: Flash &amp; Storage Streams</a> <a href="section_8/const_correctness.html" class="glossary-project-link">📌 Sec 8: Const Correctness</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="elf" data-category="toolchain-standards" data-letter="E">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#elf" class="term-anchor" title="Direct link to ELF">ELF</a>
+              </h3>
+              <div class="glossary-expansion">Executable and Linkable Format</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="elf" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Toolchain</span> <span class="tag">Linker</span> <span class="tag">Binary Format</span> <span class="tag">Embedded</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The standard binary file format generated by cross-compilers (e.g. <code>arm-none-eabi-gcc</code>) containing compiled code, symbols, section headers, and debug data.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>ELF files are processed by <code>objcopy</code> to generate flat binary (<code>.bin</code>) or Intel Hex (<code>.hex</code>) files for flashing directly onto physical microcontroller flash memory via JTAG/SWD debuggers.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Toolchains &amp; Linker Scripts</a> <a href="section_1/vsc_hello.html" class="glossary-project-link">📌 Sec 1: VS Code Toolchain Setup</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="erase-remove-idiom" data-category="data-structures" data-letter="E">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#erase-remove-idiom" class="term-anchor" title="Direct link to Erase-Remove Idiom">Erase-Remove Idiom</a>
+              </h3>
+              <div class="glossary-expansion">STL Container Element Removal Pattern</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-data-structures">📐 Data Structures &amp; Algorithms</span>
+              <button class="btn-copy-term" data-anchor="erase-remove-idiom" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">STL</span> <span class="tag">C++11/20</span> <span class="tag">std::vector</span> <span class="tag">Optimization</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A C++ standard idiom combining <code>std::remove()</code> (which shifts valid elements to the front) with <code>container.erase()</code> (which adjusts container size) in a single linear $O(N)$ pass.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Avoids quadratic $O(N^2)$ memory copying that occurs when erasing elements individually in a naive loop. In C++20, replaced by the cleaner non-member <code>std::erase(vec, value)</code>.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/remove_erase_idiom.html" class="glossary-project-link">📌 Sec 11: Remove-Erase Idiom</a> <a href="section_11/algorithm_fun.html" class="glossary-project-link">📌 Sec 11: STL Algorithms</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="etl-vector" data-category="data-structures" data-letter="E">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#etl-vector" class="term-anchor" title="Direct link to etl::vector">etl::vector</a>
+              </h3>
+              <div class="glossary-expansion">Embedded Template Library Fixed-Capacity Vector</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-data-structures">📐 Data Structures &amp; Algorithms</span>
+              <button class="btn-copy-term" data-anchor="etl-vector" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ETL</span> <span class="tag">Zero-Heap</span> <span class="tag">Deterministic</span> <span class="tag">MISRA</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A container from the Embedded Template Library (ETL) that provides the full API of <code>std::vector</code> but stores elements in a statically allocated buffer with a fixed maximum capacity.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Guarantees zero heap allocation, eliminates memory fragmentation risks, ensures deterministic execution time, and provides MISRA/AUTOSAR compliance for safety-critical real-time applications.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_4/vector_fun.html" class="glossary-project-link">📌 Sec 4: Vector Fun &amp; Fixed Allocations</a> <a href="section_11/advanced_stl_app.html" class="glossary-project-link">📌 Sec 11: Advanced STL</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-F" data-letter="F">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">F</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="fatfs" data-category="memory-storage" data-letter="F">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#fatfs" class="term-anchor" title="Direct link to FatFS">FatFS</a>
+              </h3>
+              <div class="glossary-expansion">FAT File System Module for Embedded Microcontrollers</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="fatfs" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">File System</span> <span class="tag">SD Card</span> <span class="tag">Storage</span> <span class="tag">FAT32</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A lightweight, generic FAT/exFAT file system module designed specifically for resource-constrained 8/16/32-bit microcontrollers.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enables microcontrollers to read and write SD cards, USB drives, and eMMC chips interoperably with PC operating systems (Windows, Linux, macOS) using standard FAT formats.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_9/file_input_fun.html" class="glossary-project-link">📌 Sec 9: File Streams &amp; Storage</a> <a href="section_9/student_roster.html" class="glossary-project-link">📌 Sec 9: Student Roster Files</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="fixed-block-allocator" data-category="memory-storage" data-letter="F">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#fixed-block-allocator" class="term-anchor" title="Direct link to Fixed-Block Memory Pool Allocator">Fixed-Block Memory Pool Allocator</a>
+              </h3>
+              <div class="glossary-expansion">Deterministic Fixed-Size Pool Allocator</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="fixed-block-allocator" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Memory Management</span> <span class="tag">Real-Time</span> <span class="tag">Zero-Fragmentation</span> <span class="tag">Deterministic</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A custom memory allocator that divides a pre-allocated static RAM buffer into equal, fixed-size blocks (e.g. 64 bytes each) managed via a free-list.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides deterministic $O(1)$ allocation and deallocation without searching or splitting blocks. Completely prevents external memory fragmentation, making it safe for long-running embedded systems.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_8/dynamic_fun.html" class="glossary-project-link">📌 Sec 8: Dynamic Memory &amp; Pools</a> <a href="section_8/pointer_fun.html" class="glossary-project-link">📌 Sec 8: Pointer Mechanics</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="flash-memory" data-category="memory-storage" data-letter="F">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#flash-memory" class="term-anchor" title="Direct link to Flash Memory (NOR / QSPI)">Flash Memory (NOR / QSPI)</a>
+              </h3>
+              <div class="glossary-expansion">Non-Volatile NOR Flash &amp; Quad-SPI Serial Flash</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="flash-memory" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Flash ROM</span> <span class="tag">QSPI</span> <span class="tag">Execute-in-Place (XIP)</span> <span class="tag">Non-Volatile</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>Non-volatile semiconductor storage where code and static read-only data are stored. NOR Flash supports random-access byte reading, enabling Execute-in-Place (XIP).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Flash must be erased in entire sectors or blocks before new data can be written (turning 1s into 0s on write, and resetting to 1s on erase). Write operations are orders of magnitude slower than SRAM and wear down cells over time.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_9/file_output_fun.html" class="glossary-project-link">📌 Sec 9: Streams &amp; Flash Storage</a> <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Linker Scripts &amp; Flash</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="flat-map" data-category="data-structures" data-letter="F">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#flat-map" class="term-anchor" title="Direct link to Flat Map / Sorted Flat Vector">Flat Map / Sorted Flat Vector</a>
+              </h3>
+              <div class="glossary-expansion">Contiguous Associative Sorted Container</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-data-structures">📐 Data Structures &amp; Algorithms</span>
+              <button class="btn-copy-term" data-anchor="flat-map" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Cache Locality</span> <span class="tag">Binary Search</span> <span class="tag">Zero-Heap</span> <span class="tag">C++23 std::flat_map</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>An associative key-value container implemented as a single contiguous array sorted by key, performing lookups via binary search (<code>std::lower_bound</code>).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides $O(\log N)$ lookup with optimal cache locality because elements are stored contiguously in memory, avoiding the pointer-chasing overhead and 24-byte per-node heap bloat of Red-Black trees (<code>std::map</code>).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/map_vs_unordered_map.html" class="glossary-project-link">📌 Sec 11: Map vs Unordered Map</a> <a href="section_12/array_list_app.html" class="glossary-project-link">📌 Sec 12: List Search</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="fno-rtti-exceptions" data-category="toolchain-standards" data-letter="F">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#fno-rtti-exceptions" class="term-anchor" title="Direct link to -fno-rtti &amp; -fno-exceptions">-fno-rtti &amp; -fno-exceptions</a>
+              </h3>
+              <div class="glossary-expansion">GCC/Clang Embedded Optimization Flags</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="fno-rtti-exceptions" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Compiler Flags</span> <span class="tag">Embedded</span> <span class="tag">ROM Optimization</span> <span class="tag">Zero-Overhead</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>Compiler flags that disable Runtime Type Information (<code>typeid</code> and <code>dynamic_cast</code>) and C++ exception handling (<code>try/catch/throw</code>) respectively.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Disabling RTTI saves typenames and type descriptors in Flash ROM; disabling exceptions removes <code>.eh_frame</code> tables, reducing overall binary size by 15KB–50KB and ensuring deterministic real-time execution on microcontrollers.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_10/animal_fun.html" class="glossary-project-link">📌 Sec 10: OOP &amp; -fno-rtti</a> <a href="section_7/custom_exceptions.html" class="glossary-project-link">📌 Sec 7: Custom Exceptions</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="freestanding-env" data-category="toolchain-standards" data-letter="F">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#freestanding-env" class="term-anchor" title="Direct link to Freestanding vs Hosted Environment">Freestanding vs Hosted Environment</a>
+              </h3>
+              <div class="glossary-expansion">Bare-Metal Freestanding C++ Execution Environment</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="freestanding-env" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Standard Compliance</span> <span class="tag">Bare-Metal</span> <span class="tag">No-OS</span> <span class="tag">CRT0</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>In C++, a hosted environment includes a full operating system with all standard library facilities (threads, files, processes), while a freestanding environment executes on bare metal without an OS.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Freestanding C++ requires custom startup code (reset handlers, CRT0), custom linker scripts, and only guarantees access to core language headers (<code>&lt;cstdint&gt;</code>, <code>&lt;cstddef&gt;</code>, <code>&lt;type_traits&gt;</code>, <code>&lt;limits&gt;</code>).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Toolchains &amp; Linkers</a> <a href="section_2/hello_world.html" class="glossary-project-link">📌 Sec 2: Types &amp; Precision</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-H" data-letter="H">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">H</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="hardfault" data-category="embedded-hw" data-letter="H">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#hardfault" class="term-anchor" title="Direct link to HardFault">HardFault</a>
+              </h3>
+              <div class="glossary-expansion">ARM Cortex-M Generic Unhandled Hardware Exception</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="hardfault" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Fault Handling</span> <span class="tag">ARM Cortex-M</span> <span class="tag">Exceptions</span> <span class="tag">Safety</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The top-level hardware exception handler invoked when a fault occurs that cannot be handled by another specialized handler (or when another fault handler escalates).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Triggered by null-pointer dereferences, executing invalid opcode bytes, unaligned memory accesses when unaligned traps are enabled, or stack overflows corrupting the vector table. Inspection requires reading the HardFault Status Register (HFSR) and Configurable Fault Status Register (CFSR).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/bug_fun.html" class="glossary-project-link">📌 Sec 7: Hardware Faults &amp; Exceptions</a> <a href="section_8/dynamic_dogs.html" class="glossary-project-link">📌 Sec 8: Dynamic Pointer Safety</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="heap-fragmentation" data-category="memory-storage" data-letter="H">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#heap-fragmentation" class="term-anchor" title="Direct link to Heap Fragmentation">Heap Fragmentation</a>
+              </h3>
+              <div class="glossary-expansion">Dynamic Memory External &amp; Internal Fragmentation</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="heap-fragmentation" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Memory Hazards</span> <span class="tag">Heap</span> <span class="tag">malloc/new</span> <span class="tag">Real-Time</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The phenomenon where free heap memory is broken into many small, non-contiguous pieces over time through repeated allocations and deallocations of varying sizes.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Can cause an allocation (<code>malloc</code> or <code>new</code>) to fail even when total free RAM exceeds the requested size. In mission-critical 24/7 firmware, dynamic heap allocation is strictly avoided or restricted to system bootup.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_8/dynamic_fun.html" class="glossary-project-link">📌 Sec 8: Dynamic Memory</a> <a href="section_11/smart_pointer_fun.html" class="glossary-project-link">📌 Sec 11: Smart Pointers</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-L" data-letter="L">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">L</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="likely-unlikely" data-category="cpp-idiom" data-letter="L">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#likely-unlikely" class="term-anchor" title="Direct link to [[likely]] / [[unlikely]]">[[likely]] / [[unlikely]]</a>
+              </h3>
+              <div class="glossary-expansion">C++20 Branch Prediction Attributes</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="likely-unlikely" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++20</span> <span class="tag">Branch Prediction</span> <span class="tag">Pipeline</span> <span class="tag">Optimization</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>C++20 standard attributes applied to conditional branches to hint to the compiler which execution path is most or least probable.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Guides the compiler to place the hot/likely execution path in straight-line contiguous machine code, avoiding taken-branch instruction fetch pipeline stalls on the processor.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/selection_fun.html" class="glossary-project-link">📌 Sec 3: Control Statements &amp; [[likely]]</a> <a href="section_3/control_statements_intro.html" class="glossary-project-link">📌 Sec 3: Control Flow Intro</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="linker-script" data-category="toolchain-standards" data-letter="L">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#linker-script" class="term-anchor" title="Direct link to Linker Script (.ld)">Linker Script (.ld)</a>
+              </h3>
+              <div class="glossary-expansion">GNU Linker Memory Mapping Script</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="linker-script" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Linker</span> <span class="tag">Memory Map</span> <span class="tag">Flash</span> <span class="tag">SRAM</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A script that instructs the GNU linker (<code>ld</code>) how to map compiled sections (<code>.text</code>, <code>.rodata</code>, <code>.data</code>, <code>.bss</code>) into the microcontroller's physical memory regions (Flash ROM and SRAM).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Defines the exact origin and length of Flash and SRAM, sets the initial stack pointer address, places the interrupt vector table at address <code>0x08000000</code> or <code>0x00000000</code>, and defines memory boundaries.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Linker Scripts</a> <a href="section_1/vsc_hello.html" class="glossary-project-link">📌 Sec 1: VS Code Toolchain</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="littlefs" data-category="memory-storage" data-letter="L">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#littlefs" class="term-anchor" title="Direct link to LittleFS">LittleFS</a>
+              </h3>
+              <div class="glossary-expansion">Fail-Safe Embedded Flash File System</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="littlefs" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">File System</span> <span class="tag">Flash</span> <span class="tag">Wear Leveling</span> <span class="tag">Power-Cut Resilient</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A high-integrity, fail-safe file system designed specifically for microcontrollers with external SPI/QSPI NOR and NAND Flash memory.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides power-cut resilience (guarantees file system integrity even if power is lost mid-write), dynamic wear leveling across flash erase blocks, and bounded RAM/ROM footprints.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_9/file_input_fun.html" class="glossary-project-link">📌 Sec 9: Streams &amp; File Systems</a> <a href="section_9/file_output_fun.html" class="glossary-project-link">📌 Sec 9: File Output Logging</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="link-register-lr" data-category="embedded-hw" data-letter="L">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#link-register-lr" class="term-anchor" title="Direct link to LR (R14)">LR (R14)</a>
+              </h3>
+              <div class="glossary-expansion">Link Register (CPU Register R14)</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="link-register-lr" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">Registers</span> <span class="tag">AAPCS</span> <span class="tag">Branch</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The ARM CPU register used to store the return address when a function call is made via branch-with-link (<code>BL</code> or <code>BLX</code>).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Leaf functions (functions that do not call any other functions) do not need to push LR to the stack, executing with zero stack frame memory overhead and returning via a direct <code>BX LR</code> instruction.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/function_fun_1.html" class="glossary-project-link">📌 Sec 5: AAPCS &amp; Calling Conventions</a> <a href="section_5/passing_schemes.html" class="glossary-project-link">📌 Sec 5: Passing Schemes</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-M" data-letter="M">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">M</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="memmanage-fault" data-category="embedded-hw" data-letter="M">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#memmanage-fault" class="term-anchor" title="Direct link to MemManage Fault">MemManage Fault</a>
+              </h3>
+              <div class="glossary-expansion">ARM Cortex-M Memory Management / MPU Fault</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="memmanage-fault" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Fault Handling</span> <span class="tag">MPU</span> <span class="tag">Security</span> <span class="tag">ARM Cortex-M</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A hardware memory protection fault generated when an instruction or data access violates rules configured in the Memory Protection Unit (MPU).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Triggered when user-level RTOS tasks attempt to execute code in SRAM (No-Execute NX violation), write to read-only Flash, or access private memory regions belonging to another task or the kernel.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/bug_fun.html" class="glossary-project-link">📌 Sec 7: Exceptions &amp; MPU</a> <a href="section_8/dynamic_dogs.html" class="glossary-project-link">📌 Sec 8: Dynamic Memory Safety</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="misra-cpp" data-category="toolchain-standards" data-letter="M">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#misra-cpp" class="term-anchor" title="Direct link to MISRA C++">MISRA C++</a>
+              </h3>
+              <div class="glossary-expansion">Motor Industry Software Reliability Association C++ Standard</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="misra-cpp" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Safety-Critical</span> <span class="tag">Automotive</span> <span class="tag">Medical</span> <span class="tag">Static Analysis</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>An international set of software development guidelines for writing safe, secure, and reliable C++ code in embedded and safety-critical environments.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Rules restrict unsafe C++ features such as implicit type conversions, raw pointers without bounds checks, unbounded recursion, unhandled enum switches, and memory leaks.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_6/book_fun.html" class="glossary-project-link">📌 Sec 6: OOP &amp; MISRA</a> <a href="section_10/enum_fun.html" class="glossary-project-link">📌 Sec 10: Enums &amp; Type Safety</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="mmio" data-category="embedded-hw" data-letter="M">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#mmio" class="term-anchor" title="Direct link to MMIO">MMIO</a>
+              </h3>
+              <div class="glossary-expansion">Memory-Mapped Input/Output</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="mmio" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Hardware Registers</span> <span class="tag">Peripherals</span> <span class="tag">Pointers</span> <span class="tag">volatile</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The architectural technique where hardware peripheral registers (GPIO, UART, Timers, SPI) are mapped directly into the CPU's physical memory address space.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Reading or writing to a specific memory address (e.g. <code>*(volatile uint32_t*)0x40020000</code>) interacts directly with physical hardware pins and registers. Always requires the <code>volatile</code> qualifier to prevent the compiler from optimizing away repeated hardware reads/writes.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_8/pointer_fun.html" class="glossary-project-link">📌 Sec 8: Pointer Mechanics &amp; MMIO</a> <a href="section_8/const_correctness.html" class="glossary-project-link">📌 Sec 8: Const Correctness &amp; Registers</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="mpu" data-category="embedded-hw" data-letter="M">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#mpu" class="term-anchor" title="Direct link to MPU">MPU</a>
+              </h3>
+              <div class="glossary-expansion">Memory Protection Unit</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="mpu" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Hardware Security</span> <span class="tag">Isolation</span> <span class="tag">RTOS</span> <span class="tag">ARM Cortex-M</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A hardware peripheral block on ARM Cortex-M microcontrollers that divides memory into 8 or 16 programmable regions with distinct access permissions.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enforces spatial isolation between RTOS tasks, prevents stack overflow from corrupting neighboring memory, and flags buffer overruns with immediate hardware MemManage exceptions.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/bug_fun.html" class="glossary-project-link">📌 Sec 7: Hardware Faults &amp; MPU</a> <a href="section_8/pointer_fun.html" class="glossary-project-link">📌 Sec 8: Memory Access</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-N" data-letter="N">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">N</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="natural-alignment" data-category="memory-storage" data-letter="N">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#natural-alignment" class="term-anchor" title="Direct link to Natural Alignment &amp; Struct Padding">Natural Alignment &amp; Struct Padding</a>
+              </h3>
+              <div class="glossary-expansion">Memory Byte Alignment &amp; Padding Waste</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="natural-alignment" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Memory Layout</span> <span class="tag">Struct Padding</span> <span class="tag">SRAM</span> <span class="tag">Optimization</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The hardware requirement that data types be placed at memory addresses that are integer multiples of their size (e.g. 4-byte <code>uint32_t</code> must be at addresses ending in 0x0, 0x4, 0x8, 0xC).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Improperly ordered struct members cause the compiler to insert padding bytes, wasting up to 50% of SRAM. Reordering members from largest to smallest eliminates padding waste without requiring packed attributes that penalize bus performance.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_6/book_fun.html" class="glossary-project-link">📌 Sec 6: OOP &amp; Struct Alignment</a> <a href="section_2/variable_fun.html" class="glossary-project-link">📌 Sec 2: Variables &amp; Types</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="nodiscard" data-category="cpp-idiom" data-letter="N">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#nodiscard" class="term-anchor" title="Direct link to [[nodiscard]]">[[nodiscard]]</a>
+              </h3>
+              <div class="glossary-expansion">C++17 Unused Return Value Warning Attribute</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="nodiscard" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++17</span> <span class="tag">Safety</span> <span class="tag">Error Handling</span> <span class="tag">MISRA</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A standard C++ attribute that causes the compiler to emit a warning if a function's return value (e.g. error code or status enum) is discarded by the caller.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enforces error handling at compile time, preventing bugs where firmware inadvertently ignores peripheral transmission errors or sensor timeout status codes.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/return_type_parameter_fun.html" class="glossary-project-link">📌 Sec 5: Return Types &amp; [[nodiscard]]</a> <a href="section_7/logic_error_fun.html" class="glossary-project-link">📌 Sec 7: Logic Errors</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="noexcept" data-category="cpp-idiom" data-letter="N">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#noexcept" class="term-anchor" title="Direct link to noexcept">noexcept</a>
+              </h3>
+              <div class="glossary-expansion">Non-Throwing Function Specification</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="noexcept" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++11</span> <span class="tag">Exceptions</span> <span class="tag">Optimization</span> <span class="tag">Move Semantics</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A C++ keyword declaring that a function is guaranteed not to throw exceptions.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Allows the compiler to omit exception-handling unwinding landing pads and vector reallocation copies (enabling move-if-noexcept optimizations), significantly reducing generated code size and execution time.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/custom_exceptions.html" class="glossary-project-link">📌 Sec 7: Exceptions &amp; Faults</a> <a href="section_11/rule_of_three_five_zero.html" class="glossary-project-link">📌 Sec 11: Rule of Three/Five/Zero</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-P" data-letter="P">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">P</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="program-counter-pc" data-category="embedded-hw" data-letter="P">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#program-counter-pc" class="term-anchor" title="Direct link to PC (R15)">PC (R15)</a>
+              </h3>
+              <div class="glossary-expansion">Program Counter (CPU Register R15)</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="program-counter-pc" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">Registers</span> <span class="tag">Instruction Fetch</span> <span class="tag">CPU</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The hardware register holding the memory address of the next instruction being fetched for execution.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>In ARM Cortex-M Thumb-2 state, bit 0 of the PC must always be 1 to indicate Thumb execution mode; jumping to an address with bit 0 set to 0 triggers an immediate UsageFault (INVSTATE).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/function_fun_1.html" class="glossary-project-link">📌 Sec 5: AAPCS &amp; Execution</a> <a href="section_3/control_statements_intro.html" class="glossary-project-link">📌 Sec 3: Control Statements</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="placement-new" data-category="cpp-idiom" data-letter="P">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#placement-new" class="term-anchor" title="Direct link to Placement-New">Placement-New</a>
+              </h3>
+              <div class="glossary-expansion">In-Place Object Construction</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="placement-new" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Memory Management</span> <span class="tag">C++ Idiom</span> <span class="tag">Zero-Heap</span> <span class="tag">Static Pools</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A form of the <code>new</code> operator (<code>new (address) ClassName(...)</code>) that constructs an object inside a pre-allocated memory buffer without performing dynamic heap allocation.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enables object-oriented C++ classes with constructors to be instantiated inside statically allocated SRAM pools, memory-mapped peripherals, or DMA buffers with zero heap allocation.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_8/dynamic_fun.html" class="glossary-project-link">📌 Sec 8: Dynamic Memory &amp; Placement New</a> <a href="section_8/dynamic_dogs.html" class="glossary-project-link">📌 Sec 8: Dynamic Dogs</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="pointer-decay" data-category="cpp-idiom" data-letter="P">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#pointer-decay" class="term-anchor" title="Direct link to Pointer Decay">Pointer Decay</a>
+              </h3>
+              <div class="glossary-expansion">Array-to-Pointer Implicit Conversion</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="pointer-decay" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Arrays</span> <span class="tag">Pointers</span> <span class="tag">Type Safety</span> <span class="tag">std::span</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The automatic conversion of a C-style array to a raw pointer to its first element when passed into a function by value, losing all compile-time size information.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>A major source of buffer overflow vulnerabilities in embedded C/C++. Modern C++ replaces decayed arrays with <code>std::span&lt;T&gt;</code> or <code>std::array&lt;T, N&gt;</code> to preserve bounds information with zero runtime overhead.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: Arrays &amp; Pointer Decay</a> <a href="section_5/passing_schemes.html" class="glossary-project-link">📌 Sec 5: Passing Schemes &amp; Pointers</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-R" data-letter="R">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">R</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="raii" data-category="cpp-idiom" data-letter="R">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#raii" class="term-anchor" title="Direct link to RAII">RAII</a>
+              </h3>
+              <div class="glossary-expansion">Resource Acquisition Is Initialization</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="raii" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Core</span> <span class="tag">Resource Management</span> <span class="tag">Hardware Locks</span> <span class="tag">Safety</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A fundamental C++ design pattern where resource allocation (memory, mutex locks, hardware peripheral clocks) is tied to object lifetime via constructors and automatically released in destructors upon scope exit.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Guarantees that hardware peripherals (SPI buses, DMA channels, interrupts) are safely closed, disabled, or unlocked even when functions exit early due to return statements or errors.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_6/book_fun.html" class="glossary-project-link">📌 Sec 6: OOP Foundations &amp; RAII</a> <a href="section_11/smart_pointer_fun.html" class="glossary-project-link">📌 Sec 11: Smart Pointers &amp; Custom Deleters</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="red-black-tree" data-category="data-structures" data-letter="R">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#red-black-tree" class="term-anchor" title="Direct link to Red-Black Tree">Red-Black Tree</a>
+              </h3>
+              <div class="glossary-expansion">Self-Balancing Binary Search Tree (`std::map` / `std::set`)</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-data-structures">📐 Data Structures &amp; Algorithms</span>
+              <button class="btn-copy-term" data-anchor="red-black-tree" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Data Structures</span> <span class="tag">STL</span> <span class="tag">std::map</span> <span class="tag">Binary Search Tree</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A self-balancing binary search tree algorithm that guarantees $O(\log N)$ worst-case search, insertion, and deletion time complexity.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Standard library containers like <code>std::map</code> and <code>std::set</code> use node-based Red-Black trees. Each node incurs a 3-pointer + color byte overhead (24–32 bytes/node) and triggers an individual dynamic heap allocation per element, making them poorly suited for cache performance and RAM-constrained MCUs.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/map_vs_unordered_map.html" class="glossary-project-link">📌 Sec 11: Map vs Unordered Map</a> <a href="section_12/linked_list_app.html" class="glossary-project-link">📌 Sec 12: Data Structures &amp; Trees</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="ring-buffer" data-category="data-structures" data-letter="R">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#ring-buffer" class="term-anchor" title="Direct link to Ring Buffer / Circular FIFO">Ring Buffer / Circular FIFO</a>
+              </h3>
+              <div class="glossary-expansion">Circular First-In First-Out Buffer</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-data-structures">📐 Data Structures &amp; Algorithms</span>
+              <button class="btn-copy-term" data-anchor="ring-buffer" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Data Structures</span> <span class="tag">UART/SPI</span> <span class="tag">Interrupts</span> <span class="tag">Zero-Copy</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A fixed-size array treated as circular using head and tail indices with modulo arithmetic or bitmask wrapping.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>The gold standard for asynchronous UART/SPI communication and interrupt service routines (ISRs). Enables lock-free single-producer single-consumer (SPSC) data transfer between hardware interrupts and main processing loops without dynamic memory.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: Arrays &amp; Ring Buffers</a> <a href="section_12/array_queue_app.html" class="glossary-project-link">📌 Sec 12: Array Queue Implementation</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="rodata-section" data-category="toolchain-standards" data-letter="R">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#rodata-section" class="term-anchor" title="Direct link to .rodata Section">.rodata Section</a>
+              </h3>
+              <div class="glossary-expansion">Read-Only Data Section</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="rodata-section" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ELF</span> <span class="tag">Linker</span> <span class="tag">Flash ROM</span> <span class="tag">Zero-SRAM</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The memory section containing read-only constants, string literals, and virtual method tables (VTables).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Mapped directly to non-volatile Flash ROM, consuming 0 bytes of precious SRAM. Marking lookup tables and configuration strings as <code>const</code> or <code>constexpr</code> ensures they are placed in <code>.rodata</code>.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Linker Scripts</a> <a href="section_2/constant_fun.html" class="glossary-project-link">📌 Sec 2: Constants &amp; ROM</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="rule-of-three-five-zero" data-category="cpp-idiom" data-letter="R">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#rule-of-three-five-zero" class="term-anchor" title="Direct link to Rule of Three / Five / Zero">Rule of Three / Five / Zero</a>
+              </h3>
+              <div class="glossary-expansion">C++ Resource Management Special Member Functions</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="rule-of-three-five-zero" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++11</span> <span class="tag">Special Members</span> <span class="tag">Destructors</span> <span class="tag">Move Semantics</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A C++ design guideline dictating that if a class manages resources and defines a destructor, copy constructor, or copy assignment, it should explicitly define all three (C++98) or all five (including move constructor and move assignment in C++11), or none (Rule of Zero).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Prevents double-free errors, hardware register lock leaks, and shallow-copy memory corruption when objects managing hardware peripherals or static buffers are passed or returned.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/rule_of_three_five_zero.html" class="glossary-project-link">📌 Sec 11: Rule of Three/Five/Zero</a> <a href="section_6/book_fun.html" class="glossary-project-link">📌 Sec 6: OOP Foundations</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="rvo-nrvo" data-category="cpp-idiom" data-letter="R">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#rvo-nrvo" class="term-anchor" title="Direct link to RVO &amp; NRVO">RVO &amp; NRVO</a>
+              </h3>
+              <div class="glossary-expansion">Return Value Optimization &amp; Named RVO</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="rvo-nrvo" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Compilers</span> <span class="tag">Optimization</span> <span class="tag">Zero-Copy</span> <span class="tag">Stack</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A compiler optimization (mandatory copy elision in C++17) where a function returning an object constructs it directly inside the storage allocated by the caller's stack frame.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Eliminates temporary object construction, copy/move constructors, and destruction overhead, enabling large structs and buffers to be returned by value with zero runtime copy cost.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/return_type_parameter_fun.html" class="glossary-project-link">📌 Sec 5: Return Types &amp; RVO</a> <a href="section_5/function_overloading.html" class="glossary-project-link">📌 Sec 5: Function Overloading</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-S" data-letter="S">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">S</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="saturating-arithmetic" data-category="embedded-hw" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#saturating-arithmetic" class="term-anchor" title="Direct link to Saturating Math (QADD / QSUB)">Saturating Math (QADD / QSUB)</a>
+              </h3>
+              <div class="glossary-expansion">Non-Wrapping Fixed-Point DSP Arithmetic</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="saturating-arithmetic" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">DSP</span> <span class="tag">ALU</span> <span class="tag">Arithmetic Safety</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>Arithmetic operations that clamp results to the maximum or minimum representable values upon overflow or underflow instead of wrapping around.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Essential in digital signal processing (DSP), motor control, and audio processing to prevent catastrophic audio clipping or motor control loop inversions. Executed in a single cycle via ARM DSP instructions (<code>QADD</code>, <code>QSUB</code>, <code>SSAT</code>, <code>USAT</code>).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_2/arithmetic_fun.html" class="glossary-project-link">📌 Sec 2: Arithmetic &amp; Overflow</a> <a href="section_2/variable_fun.html" class="glossary-project-link">📌 Sec 2: Variables &amp; Types</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="stack-pointer-sp" data-category="embedded-hw" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#stack-pointer-sp" class="term-anchor" title="Direct link to SP (R13 - MSP / PSP)">SP (R13 - MSP / PSP)</a>
+              </h3>
+              <div class="glossary-expansion">Stack Pointer (Main Stack Pointer &amp; Process Stack Pointer)</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="stack-pointer-sp" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">Registers</span> <span class="tag">RTOS</span> <span class="tag">Stack</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The CPU register pointing to the current top of the descending call stack in SRAM.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>ARM Cortex-M cores feature dual banked stack pointers: MSP (Main Stack Pointer, used for bootup and interrupt service routines) and PSP (Process Stack Pointer, used by user-space RTOS tasks). This dual architecture isolates task stack overflows from crashing kernel interrupt handlers.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/function_fun_1.html" class="glossary-project-link">📌 Sec 5: AAPCS &amp; Call Stacks</a> <a href="section_5/scope_fun.html" class="glossary-project-link">📌 Sec 5: Scope &amp; Stack Frames</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="sram" data-category="memory-storage" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#sram" class="term-anchor" title="Direct link to SRAM">SRAM</a>
+              </h3>
+              <div class="glossary-expansion">Static Random-Access Memory</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="sram" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Memory</span> <span class="tag">Volatile</span> <span class="tag">SRAM</span> <span class="tag">Microcontroller</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>Fast, volatile semiconductor memory that stores variables, stacks, heaps, and runtime buffers as long as power is supplied.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Typically scarce in microcontrollers (ranging from 2KB on low-end MCUs to 512KB on high-end Cortex-M7). Every global variable, stack frame, and struct member must be engineered to minimize SRAM consumption.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_2/variable_fun.html" class="glossary-project-link">📌 Sec 2: Variables &amp; Types</a> <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: Arrays &amp; Memory</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="static-init-fiasco" data-category="cpp-idiom" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#static-init-fiasco" class="term-anchor" title="Direct link to Static Initialization Order Fiasco">Static Initialization Order Fiasco</a>
+              </h3>
+              <div class="glossary-expansion">Cross-Translation-Unit Global Object Initialization Order Hazard</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="static-init-fiasco" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Idiom</span> <span class="tag">Initialization</span> <span class="tag">Singletons</span> <span class="tag">Safety</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A critical C++ bug where the initialization order of global/static variables across different translation units (.cpp files) is undefined, potentially causing one global object to access an uninitialized global object during startup.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Commonly occurs when hardware driver objects (e.g. <code>UartDriver</code>) attempt to log to an uninitialized console object on bootup. Solved by Meyers' Singleton (lazy initialization of a function-local static).</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_6/book_fun.html" class="glossary-project-link">📌 Sec 6: OOP Foundations</a> <a href="section_5/scope_fun.html" class="glossary-project-link">📌 Sec 5: Scope &amp; Lifetime</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="std-expected" data-category="cpp-idiom" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#std-expected" class="term-anchor" title="Direct link to std::expected&lt;T, E&gt;">std::expected&lt;T, E&gt;</a>
+              </h3>
+              <div class="glossary-expansion">C++23 Deterministic Tagged Value/Error Return Type</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="std-expected" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++23</span> <span class="tag">Error Handling</span> <span class="tag">Zero-Cost</span> <span class="tag">Deterministic</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A standard library vocabulary type that represents either an expected value of type <code>T</code> or an unexpected error of type <code>E</code> without using exceptions.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides type-safe, deterministic error handling with zero ROM overhead from exception tables and zero heap allocation, making it the preferred modern error model for embedded firmware.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/custom_exceptions.html" class="glossary-project-link">📌 Sec 7: Exceptions &amp; Faults</a> <a href="section_7/logic_error_fun.html" class="glossary-project-link">📌 Sec 7: Logic Error Fun</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="std-span" data-category="cpp-idiom" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#std-span" class="term-anchor" title="Direct link to std::span">std::span</a>
+              </h3>
+              <div class="glossary-expansion">C++20 Non-Owning Contiguous Memory View</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="std-span" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++20</span> <span class="tag">Bounds Safety</span> <span class="tag">Zero-Copy</span> <span class="tag">Arrays</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A lightweight non-owning reference to a contiguous sequence of objects (stores only a pointer and a length).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Eliminates C-style array pointer decay by passing bounds information cleanly into functions, working seamlessly across C arrays, <code>std::array</code>, and DMA buffers with zero allocation overhead.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/passing_schemes.html" class="glossary-project-link">📌 Sec 5: Passing Schemes &amp; std::span</a> <a href="section_4/array_fun.html" class="glossary-project-link">📌 Sec 4: Arrays &amp; Views</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="std-string-view" data-category="cpp-idiom" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#std-string-view" class="term-anchor" title="Direct link to std::string_view">std::string_view</a>
+              </h3>
+              <div class="glossary-expansion">C++17 Non-Owning String Slice Reference</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="std-string-view" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++17</span> <span class="tag">Zero-Allocation</span> <span class="tag">Flash Strings</span> <span class="tag">Optimization</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A non-owning view of a character string consisting of a pointer to character data and a length count.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Allows string slicing and parsing directly over Flash ROM string literals (<code>.rodata</code>) or UART receive buffers without triggering dynamic heap memory allocation or copying.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_4/names_array.html" class="glossary-project-link">📌 Sec 4: Text &amp; Strings</a> <a href="section_2/text_fun.html" class="glossary-project-link">📌 Sec 2: Text Fun</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="std-unique-ptr" data-category="cpp-idiom" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#std-unique-ptr" class="term-anchor" title="Direct link to std::unique_ptr">std::unique_ptr</a>
+              </h3>
+              <div class="glossary-expansion">Exclusive Ownership Smart Pointer</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="std-unique-ptr" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++11</span> <span class="tag">Smart Pointers</span> <span class="tag">RAII</span> <span class="tag">Zero-Cost</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A smart pointer that owns and manages another object through a pointer and disposes of that object when the <code>std::unique_ptr</code> goes out of scope.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Incurs zero memory overhead compared to a raw C pointer (<code>sizeof(unique_ptr&lt;T&gt;) == sizeof(T*)</code>). With custom deleters, provides automatic RAII management of hardware locks and peripheral clocks.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_11/smart_pointer_fun.html" class="glossary-project-link">📌 Sec 11: Smart Pointers &amp; Custom Deleters</a> <a href="section_8/dynamic_fun.html" class="glossary-project-link">📌 Sec 8: Dynamic Memory</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="systick" data-category="embedded-hw" data-letter="S">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#systick" class="term-anchor" title="Direct link to SysTick">SysTick</a>
+              </h3>
+              <div class="glossary-expansion">ARM Cortex-M System Timer Peripheral</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="systick" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">Timers</span> <span class="tag">RTOS</span> <span class="tag">Interrupts</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A standardized 24-bit down-counting hardware timer integrated directly inside the core of every ARM Cortex-M processor.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Provides the periodic system tick interrupt (typically configured for 1ms intervals) that drives RTOS kernel context switches, <code>HAL_Delay()</code> timing, and software timer callbacks.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_5/function_fun_1.html" class="glossary-project-link">📌 Sec 5: Functions &amp; SysTick Delays</a> <a href="section_3/repetition_fun.html" class="glossary-project-link">📌 Sec 3: Control Flow &amp; Timers</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-T" data-letter="T">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">T</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="text-section" data-category="toolchain-standards" data-letter="T">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#text-section" class="term-anchor" title="Direct link to .text Section">.text Section</a>
+              </h3>
+              <div class="glossary-expansion">Executable Code Memory Section</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-toolchain-standards">🛡️ Toolchains, Linkers &amp; Safety Standards</span>
+              <button class="btn-copy-term" data-anchor="text-section" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ELF</span> <span class="tag">Linker</span> <span class="tag">Flash ROM</span> <span class="tag">Machine Code</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The memory section in binary files where compiled CPU machine code instructions reside.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Stored in and executed directly from non-volatile Flash ROM on microcontrollers, consuming zero SRAM space.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_1/hello.html" class="glossary-project-link">📌 Sec 1: Linker Scripts</a> <a href="section_1/vsc_hello.html" class="glossary-project-link">📌 Sec 1: Toolchains</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="thumb-2" data-category="embedded-hw" data-letter="T">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#thumb-2" class="term-anchor" title="Direct link to Thumb-2">Thumb-2</a>
+              </h3>
+              <div class="glossary-expansion">ARM Mixed 16-Bit / 32-Bit Instruction Set Architecture</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="thumb-2" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">ARM Cortex-M</span> <span class="tag">ISA</span> <span class="tag">Code Density</span> <span class="tag">Performance</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The core instruction set architecture utilized by all ARM Cortex-M processors, dynamically combining high-density 16-bit instructions with powerful 32-bit instructions.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Delivers up to 35% better code density than pure 32-bit ARM code while maintaining full 32-bit performance, fitting complex modern firmware into constrained Flash ROM budgets.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/control_statements_intro.html" class="glossary-project-link">📌 Sec 3: Control Statements &amp; Assembly</a> <a href="section_5/function_fun_1.html" class="glossary-project-link">📌 Sec 5: Functions &amp; Thumb-2</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="trng" data-category="embedded-hw" data-letter="T">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#trng" class="term-anchor" title="Direct link to TRNG">TRNG</a>
+              </h3>
+              <div class="glossary-expansion">True Random Number Generator Peripheral</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="trng" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Hardware Peripheral</span> <span class="tag">Cryptography</span> <span class="tag">Entropy</span> <span class="tag">Security</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A dedicated hardware peripheral that harvests true physical entropy (such as thermal electronic noise and ring oscillator jitter) to produce cryptographically secure random numbers.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Unlike software pseudorandom algorithms (<code>rand()</code> / PRNG) which repeat predictable sequences if not seeded properly, hardware TRNGs provide unpredictable random numbers essential for cryptographic keys, TLS sessions, and secure boot authentication.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/random_fun.html" class="glossary-project-link">📌 Sec 3: Random Numbers &amp; Hardware TRNG</a> <a href="section_3/die_rolls.html" class="glossary-project-link">📌 Sec 3: Die Rolls</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-U" data-letter="U">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">U</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="undefined-behavior" data-category="cpp-idiom" data-letter="U">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#undefined-behavior" class="term-anchor" title="Direct link to Undefined Behavior (UB)">Undefined Behavior (UB)</a>
+              </h3>
+              <div class="glossary-expansion">Language Unspecified Non-Deterministic Execution</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="undefined-behavior" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Standard</span> <span class="tag">UB</span> <span class="tag">Safety</span> <span class="tag">Compiler Optimizations</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>Situations in C++ where the language specification imposes no requirements, allowing the compiler to optimize under the assumption that the condition can never occur.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Signed integer overflow, out-of-bounds pointer indexing, and strict aliasing violations allow aggressive compiler optimizations to silently eliminate critical safety checks or crash the microcontroller in unpredictable ways.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_2/arithmetic_fun.html" class="glossary-project-link">📌 Sec 2: Arithmetic &amp; Signed Overflow UB</a> <a href="section_8/pointer_fun.html" class="glossary-project-link">📌 Sec 8: Pointer Safety &amp; UB</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="usagefault" data-category="embedded-hw" data-letter="U">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#usagefault" class="term-anchor" title="Direct link to UsageFault">UsageFault</a>
+              </h3>
+              <div class="glossary-expansion">ARM Cortex-M Program Execution Fault</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="usagefault" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Fault Handling</span> <span class="tag">ARM Cortex-M</span> <span class="tag">Exceptions</span> <span class="tag">Instructions</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A hardware fault triggered by execution errors such as undefined instructions, unaligned memory accesses (when unaligned trap is enabled), or division by zero (when DIVBYZERO trap is enabled).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Enabling the <code>DIV_0_TRP</code> bit in the CCR register ensures integer division by zero triggers a deterministic hardware exception instead of returning 0 silently.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_7/bug_fun.html" class="glossary-project-link">📌 Sec 7: Hardware Faults &amp; UsageFault</a> <a href="section_2/arithmetic_fun.html" class="glossary-project-link">📌 Sec 2: Arithmetic Fun</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-V" data-letter="V">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">V</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="volatile-keyword" data-category="cpp-idiom" data-letter="V">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#volatile-keyword" class="term-anchor" title="Direct link to volatile">volatile</a>
+              </h3>
+              <div class="glossary-expansion">Compiler Optimization Barrier for Hardware Access</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="volatile-keyword" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Keyword</span> <span class="tag">MMIO</span> <span class="tag">Registers</span> <span class="tag">Interrupts</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A type qualifier telling the compiler that a variable's value may change at any time through means outside the compiler's control (such as hardware peripherals or interrupt service routines).</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Prevents the compiler from caching register reads in CPU registers or optimizing away repeated writes. Mandatory for memory-mapped I/O (MMIO) and shared ISR flags.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_8/pointer_fun.html" class="glossary-project-link">📌 Sec 8: Pointers &amp; volatile MMIO</a> <a href="section_8/const_correctness.html" class="glossary-project-link">📌 Sec 8: Const Correctness</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="vtable-vptr" data-category="cpp-idiom" data-letter="V">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#vtable-vptr" class="term-anchor" title="Direct link to VTable &amp; VPtr">VTable &amp; VPtr</a>
+              </h3>
+              <div class="glossary-expansion">Virtual Method Table &amp; Virtual Pointer</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="vtable-vptr" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">OOP</span> <span class="tag">Polymorphism</span> <span class="tag">VTable</span> <span class="tag">RAM Overhead</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The compiler mechanism for dynamic polymorphism: a VTable is an array of function pointers stored in Flash ROM (<code>.rodata</code>), and a VPtr is a hidden pointer stored inside every polymorphic object in SRAM pointing to its VTable.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Adding a single virtual method adds 4 bytes of hidden SRAM overhead per object instance on a 32-bit MCU, and indirect branch calls through function pointers prevent compiler inlining and incur pipeline bubbles.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_10/animal_fun.html" class="glossary-project-link">📌 Sec 10: OOP Polymorphism &amp; VTable Cost</a> <a href="section_10/enum_fun.html" class="glossary-project-link">📌 Sec 10: Enums &amp; Classes</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-W" data-letter="W">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">W</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="watchdog-timer" data-category="embedded-hw" data-letter="W">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#watchdog-timer" class="term-anchor" title="Direct link to Watchdog Timer (WDT / IWDG)">Watchdog Timer (WDT / IWDG)</a>
+              </h3>
+              <div class="glossary-expansion">Hardware Super-Loop Liveness Monitor</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-embedded-hw">⚡ Embedded &amp; CPU Architecture</span>
+              <button class="btn-copy-term" data-anchor="watchdog-timer" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Hardware Safety</span> <span class="tag">Reliability</span> <span class="tag">Reset</span> <span class="tag">Super-Loop</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>An independent hardware countdown timer that automatically resets the microcontroller if the main firmware loop fails to refresh ('kick' / 'feed') it within a specified timeout window.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Protects against firmware deadlocks, infinite loops, and hardware lockups in harsh EMI environments, ensuring automatic recovery in unattended systems.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_3/repetition_fun.html" class="glossary-project-link">📌 Sec 3: Control Flow &amp; Watchdogs</a> <a href="section_3/control_statements_intro.html" class="glossary-project-link">📌 Sec 3: Control Statements</a>
+            </div>
+          </div>
+        </article>
+        
+
+        <article class="glossary-card" id="wear-leveling" data-category="memory-storage" data-letter="W">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#wear-leveling" class="term-anchor" title="Direct link to Wear Leveling (Dynamic vs Static)">Wear Leveling (Dynamic vs Static)</a>
+              </h3>
+              <div class="glossary-expansion">Flash Memory Erase-Cycle Distribution Algorithm</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-memory-storage">💾 Memory, Storage &amp; Real-Time</span>
+              <button class="btn-copy-term" data-anchor="wear-leveling" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">Flash Memory</span> <span class="tag">Storage</span> <span class="tag">Endurance</span> <span class="tag">File System</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>A technique used by embedded file systems (e.g. LittleFS) to distribute write and erase operations uniformly across all physical flash memory blocks.</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>NOR and NAND Flash blocks degrade after 10,000 to 100,000 erase cycles. Dynamic wear leveling rotates active data writes, while static wear leveling also periodically relocates read-only static files to equalize wear, extending hardware lifespan from months to decades.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_9/file_input_fun.html" class="glossary-project-link">📌 Sec 9: Flash Streams &amp; File Systems</a> <a href="section_9/file_output_fun.html" class="glossary-project-link">📌 Sec 9: File Output Logging</a>
+            </div>
+          </div>
+        </article>
+        
+
+            <div class="glossary-letter-group" id="letter-Z" data-letter="Z">
+              <div class="glossary-letter-header">
+                <span class="letter-badge">Z</span>
+                <span class="letter-line"></span>
+              </div>
+            </div>
+            
+
+        <article class="glossary-card" id="zero-cost-abstraction" data-category="cpp-idiom" data-letter="Z">
+          <div class="glossary-card-top">
+            <div class="glossary-term-wrap">
+              <h3 class="glossary-term-title">
+                <a href="#zero-cost-abstraction" class="term-anchor" title="Direct link to Zero-Cost Abstraction">Zero-Cost Abstraction</a>
+              </h3>
+              <div class="glossary-expansion">Bjarne Stroustrup&#x27;s Guiding C++ Principle</div>
+            </div>
+            <div class="glossary-card-meta">
+              <span class="glossary-cat-badge cat-cpp-idiom">📚 Modern C++ Mechanics &amp; Idioms</span>
+              <button class="btn-copy-term" data-anchor="zero-cost-abstraction" title="Copy direct anchor link">🔗 Copy Link</button>
+            </div>
+          </div>
+          
+          <div class="glossary-tags">
+            <span class="tag">C++ Philosophy</span> <span class="tag">Optimization</span> <span class="tag">Compilers</span> <span class="tag">Efficiency</span>
+          </div>
+          
+          <div class="glossary-body">
+            <div class="glossary-def">
+              <strong>Definition &amp; Concept:</strong>
+              <p>The foundational C++ principle stating: 'What you don't use, you don't pay for. What you do use, you couldn't hand code any better.'</p>
+            </div>
+            
+            <div class="glossary-hw-box">
+              <div class="hw-box-title">⚡ Embedded Systems &amp; Low-Level Reality</div>
+              <p>Modern C++ features such as templates, <code>std::string_view</code>, <code>std::span</code>, <code>constexpr</code>, and range-based for loops compile down to the exact same or more optimal assembly instructions as hand-written C pointer arithmetic.</p>
+            </div>
+          </div>
+          
+          <div class="glossary-footer">
+            <span class="rel-label">Related Curriculum Projects:</span>
+            <div class="rel-links-list">
+              <a href="section_10/animal_fun.html" class="glossary-project-link">📌 Sec 10: OOP &amp; CRTP</a> <a href="section_11/templates.html" class="glossary-project-link">📌 Sec 11: Templates &amp; Zero Cost</a>
+            </div>
+          </div>
+        </article>
+        
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h4>⚡ Modern C++ &amp; Embedded Systems Study Portal</h4>
+        <p>An interactive companion for mastering Modern C++ (C++11/14/17/20), zero-overhead abstractions, and bare-metal microcontroller firmware design.</p>
+      </div>
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h5>Curriculum &amp; Navigation</h5>
+          <ul>
+            <li><a href="index.html">🏠 Home Portal (116 Projects)</a></li>
+            <li><a href="glossary.html" class="active">📖 Technical Glossary &amp; Reference</a></li>
+            <li><a href="section_1/hello.html">Section 1: Toolchains &amp; Linkers</a></li>
+            <li><a href="section_5/function_fun_1.html">Section 5: Functions &amp; AAPCS</a></li>
+            <li><a href="section_8/pointer_fun.html">Section 8: Pointers &amp; MMIO</a></li>
+            <li><a href="section_11/smart_pointer_fun.html">Section 11: Templates &amp; STL</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Core Embedded Concepts</h5>
+          <ul>
+            <li><a href="glossary.html#aapcs">ARM AAPCS Standard</a></li>
+            <li><a href="glossary.html#mmio">Memory-Mapped I/O (MMIO)</a></li>
+            <li><a href="glossary.html#crtp">CRTP Static Polymorphism</a></li>
+            <li><a href="glossary.html#littlefs">LittleFS Flash Storage</a></li>
+            <li><a href="glossary.html#dma">Direct Memory Access (DMA)</a></li>
+            <li><a href="glossary.html#misra-cpp">MISRA C++ Guidelines</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Attribution &amp; Source</h5>
+          <ul>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+            <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Course Syllabus &amp; Setup</a></li>
+            <li><span>Author: Mohamed Soubhi</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

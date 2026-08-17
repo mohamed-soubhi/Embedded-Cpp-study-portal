@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyButtons();
   initQuiz();
   initSearchAndFilters();
+  initGlossary();
 });
 
 // Day & Night Theme Toggle Manager
@@ -252,4 +253,141 @@ function initSearchAndFilters() {
   });
 
   filterCards();
+}
+
+// ==============================================================================
+// TECHNICAL GLOSSARY ENGINE
+// ==============================================================================
+function initGlossary() {
+  const searchInput = document.getElementById('glossarySearch');
+  const chips = document.querySelectorAll('.glossary-chips .chip');
+  const cards = document.querySelectorAll('.glossary-card');
+  const letterGroups = document.querySelectorAll('.glossary-letter-group');
+  const resultsCounter = document.getElementById('glossaryCounter');
+  const copyButtons = document.querySelectorAll('.btn-copy-term');
+  const alphaJumpButtons = document.querySelectorAll('.alpha-jump-btn');
+
+  if (!cards.length) return;
+
+  let activeCategory = 'all';
+  let searchTerm = '';
+
+  function filterGlossary() {
+    let visibleCount = 0;
+    const visibleLetters = new Set();
+
+    cards.forEach(card => {
+      const term = card.querySelector('.glossary-term-title')?.innerText.toLowerCase() || '';
+      const expansion = card.querySelector('.glossary-expansion')?.innerText.toLowerCase() || '';
+      const def = card.querySelector('.glossary-def')?.innerText.toLowerCase() || '';
+      const hw = card.querySelector('.glossary-hw-box')?.innerText.toLowerCase() || '';
+      const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.innerText.toLowerCase()).join(' ');
+      const category = card.getAttribute('data-category') || '';
+      const letter = card.getAttribute('data-letter') || '';
+
+      const matchesSearch = !searchTerm || 
+        term.includes(searchTerm) || 
+        expansion.includes(searchTerm) || 
+        def.includes(searchTerm) || 
+        hw.includes(searchTerm) || 
+        tags.includes(searchTerm);
+
+      const matchesCategory = (activeCategory === 'all') || (category === activeCategory);
+
+      if (matchesSearch && matchesCategory) {
+        card.style.display = 'block';
+        visibleCount++;
+        if (letter) visibleLetters.add(letter);
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Hide or show letter group headers based on visible cards
+    letterGroups.forEach(group => {
+      const groupLetter = group.getAttribute('data-letter');
+      if (visibleLetters.has(groupLetter)) {
+        group.style.display = 'block';
+      } else {
+        group.style.display = 'none';
+      }
+    });
+
+    // Update Alphabet Jump buttons active / disabled states
+    alphaJumpButtons.forEach(btn => {
+      const btnLetter = btn.getAttribute('data-letter');
+      if (visibleLetters.has(btnLetter)) {
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+      } else {
+        btn.style.opacity = '0.3';
+        btn.style.pointerEvents = 'none';
+      }
+    });
+
+    // Update Result Counter
+    if (resultsCounter) {
+      resultsCounter.innerHTML = `Showing <strong>${visibleCount}</strong> of <strong>${cards.length}</strong> Technical Terms`;
+    }
+  }
+
+  // Search Input Listener
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value.toLowerCase().trim();
+      filterGlossary();
+    });
+  }
+
+  // Category Filter Chips
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCategory = chip.getAttribute('data-filter') || 'all';
+      filterGlossary();
+    });
+  });
+
+  // 1-Click Copy Term Anchor Link
+  copyButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const anchorId = btn.getAttribute('data-anchor');
+      const url = `${window.location.origin}${window.location.pathname}#${anchorId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✓ Copied Link!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy anchor link:', err);
+      });
+    });
+  });
+
+  // Highlight targeted card if opened with hash (e.g. glossary.html#aapcs)
+  function handleHashHighlight() {
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      const targetEl = document.getElementById(targetId);
+      if (targetEl && targetEl.classList.contains('glossary-card')) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        targetEl.style.borderColor = 'var(--accent-neon)';
+        targetEl.style.boxShadow = '0 0 20px rgba(0, 255, 136, 0.35)';
+        setTimeout(() => {
+          targetEl.style.borderColor = '';
+          targetEl.style.boxShadow = '';
+        }, 3000);
+      }
+    }
+  }
+
+  handleHashHighlight();
+  window.addEventListener('hashchange', handleHashHighlight);
+
+  filterGlossary();
 }

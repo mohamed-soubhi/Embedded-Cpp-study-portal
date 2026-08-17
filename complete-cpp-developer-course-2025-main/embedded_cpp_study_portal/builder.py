@@ -406,6 +406,7 @@ def generate_page(data, prev_link, next_link, section_num):
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
+        <li><a href="../glossary.html">📖 Glossary</a></li>
         <li><a href="../section_1/hello.html">Sec 1</a></li>
         <li><a href="../section_2/hello_world.html">Sec 2</a></li>
         <li><a href="../section_3/control_statements_intro.html">Sec 3</a></li>
@@ -534,6 +535,7 @@ def generate_page(data, prev_link, next_link, section_num):
         <div class="footer-col">
           <h5>Attribution &amp; Source</h5>
           <ul>
+            <li><a href="../glossary.html">📖 Technical Glossary &amp; Reference</a></li>
             <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
             <li><a href="https://github.com/mohamed-soubhi/The-Complete-Cpp-Developer-Course/blob/main/README.md" target="_blank" rel="noopener noreferrer">Original Course README</a></li>
             <li><span>Author: Mohamed Soubhi</span></li>

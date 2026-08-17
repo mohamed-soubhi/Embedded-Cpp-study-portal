@@ -32,11 +32,14 @@ Activate this skill when you need to:
 repo-root/
 ├── study_portal/                       # Static portal root (GitHub Pages target)
 │   ├── index.html                     # Master landing page with filters & search
+│   ├── glossary.html                  # Searchable Technical Glossary & Architecture Reference
 │   ├── assets/
-│   │   ├── style.css                  # Cyber Matrix & Light Theme tokens, layout, UML
-│   │   └── app.js                     # Theme toggle, search, filtering & quiz engine
+│   │   ├── style.css                  # Cyber Matrix & Light Theme tokens, layout, UML, Glossary
+│   │   └── app.js                     # Theme toggle, search, filtering, quiz & glossary engine
 │   ├── section_1/ ... section_N/      # Generated project deep-dive HTML pages
 │   ├── builder.py                     # C++ syntax tokenizer, tab builder, and page assembler
+│   ├── build_glossary.py              # Glossary HTML generator and alphabet indexer
+│   ├── glossary_data.py               # Comprehensive dataset of technical terms & hardware realities
 │   ├── generate_all.py                # Master build orchestrator & index generator
 │   ├── section_1_data.py              # Section 1 project metadata & quizzes
 │   └── section_N_data.py              # Modular data definition files
