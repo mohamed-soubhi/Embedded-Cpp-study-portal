@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Output Streams, Buffering &amp; Flush Mechanics - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[9.02] File Output Streams, Buffering &amp; Flush Mechanics - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 9</span>
+        <span class="badge-tag">Section 9 • #9.02</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-advanced">Section 9</a>
       <span class="sep">/</span>
-      <span class="current">FileOutputFun</span>
+      <span class="current">Project 9.02: FileOutputFun</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 9.02</span>
         <span class="section-pill section-9">Section 9</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
         <span class="tag">std::ofstream</span> <span class="tag">Buffering</span> <span class="tag">Power Loss</span> <span class="tag">Atomic Writes</span> <span class="tag">Data Logging</span>
       </div>
-      <h1 class="project-title">std::ofstream Buffering, Power-Loss Corruption &amp; Atomic Flash Commits</h1>
+      <h1 class="project-title"><span class="title-num">9.02</span> std::ofstream Buffering, Power-Loss Corruption &amp; Atomic Flash Commits</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Exploring file writing via std::ofstream. We analyze write buffering, explicit stream flushing, the severe hazard of power loss during file writes causing metadata corruption, and implementing atomic write transactions on embedded telemetry loggers.
       </div>
@@ -404,9 +405,9 @@ bool appendLogRecord(const TelemetryLogEntry&amp; entry) noexcept {
     
 
     <footer class="page-nav-footer">
-      <a href="file_input_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="file_input_fun.html" class="btn-nav">← Previous (9.01)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="twice_file.html" class="btn-nav">Next Project →</a>
+      <a href="twice_file.html" class="btn-nav">Next (9.03) →</a>
     </footer>
   </main>
 

@@ -377,7 +377,10 @@ def build_uml_section(uml_data, default_title="UML Architecture & Class Model"):
     </div>
     '''
 
-def generate_page(data, prev_link, next_link, section_num):
+def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_num=None, next_num=None):
+    if proj_num is None:
+        proj_num = data.get('proj_num', f"{section_num}.01")
+        
     files_dict = {}
     for fpath in data['files']:
         fname = os.path.basename(fpath)
@@ -389,12 +392,15 @@ def generate_page(data, prev_link, next_link, section_num):
     
     tags_html = " ".join([f'<span class="tag">{html.escape(t)}</span>' for t in data['tags']])
     
+    prev_label = f"← Previous ({prev_num})" if prev_num else "← Previous Project"
+    next_label = f"Next ({next_num}) →" if next_num else "Next Project →"
+    
     html_content = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{html.escape(data['title'])} - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[{proj_num}] {html.escape(data['title'])} - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -402,7 +408,7 @@ def generate_page(data, prev_link, next_link, section_num):
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section {section_num}</span>
+        <span class="badge-tag">Section {section_num} • #{proj_num}</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -436,16 +442,17 @@ def generate_page(data, prev_link, next_link, section_num):
       <span class="sep">/</span>
       <a href="../index.html#grid-{'foundations' if int(section_num) <= 6 else 'advanced'}">Section {section_num}</a>
       <span class="sep">/</span>
-      <span class="current">{html.escape(data['name'])}</span>
+      <span class="current">Project {proj_num}: {html.escape(data['name'])}</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project {proj_num}</span>
         <span class="section-pill section-{section_num}">Section {section_num}</span>
         <span class="embedded-badge {data['emb_class']}">{data['emb_badge']}</span>
         {tags_html}
       </div>
-      <h1 class="project-title">{html.escape(data['headline'])}</h1>
+      <h1 class="project-title"><span class="title-num">{proj_num}</span> {html.escape(data['headline'])}</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> {data['summary']}
       </div>
@@ -497,9 +504,9 @@ def generate_page(data, prev_link, next_link, section_num):
     {quiz_html}
 
     <footer class="page-nav-footer">
-      <a href="{prev_link}" class="btn-nav">← Previous Project</a>
+      <a href="{prev_link}" class="btn-nav">{prev_label}</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="{next_link}" class="btn-nav">Next Project →</a>
+      <a href="{next_link}" class="btn-nav">{next_label}</a>
     </footer>
   </main>
 

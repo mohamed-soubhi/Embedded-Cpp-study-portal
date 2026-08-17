@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Numbers: PRNG vs Hardware True RNG (TRNG) - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[3.11] Random Numbers: PRNG vs Hardware True RNG (TRNG) - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 3</span>
+        <span class="badge-tag">Section 3 • #3.11</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-foundations">Section 3</a>
       <span class="sep">/</span>
-      <span class="current">DieRolls</span>
+      <span class="current">Project 3.11: DieRolls</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 3.11</span>
         <span class="section-pill section-3">Section 3</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
         <span class="tag">PRNG</span> <span class="tag">TRNG</span> <span class="tag">Hardware RNG</span> <span class="tag">Entropy</span> <span class="tag">Cryptography</span>
       </div>
-      <h1 class="project-title">std::rand() Hazards, Seed Management &amp; Hardware True Random Number Generators (TRNG)</h1>
+      <h1 class="project-title"><span class="title-num">3.11</span> std::rand() Hazards, Seed Management &amp; Hardware True Random Number Generators (TRNG)</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Exploring random number generation and dice simulation. We analyze the severe cryptographic and statistical flaws of std::rand() (Linear Congruential Generators), seed initialization from uninitialized ADC noise, and hardware True Random Number Generators (TRNG peripherals) on microcontrollers (e.g. STM32 RNG).
       </div>
@@ -275,9 +276,9 @@ uint32_t getHardwareTrueRandom() noexcept {
     
 
     <footer class="page-nav-footer">
-      <a href="continue_break.html" class="btn-nav">← Previous Project</a>
+      <a href="continue_break.html" class="btn-nav">← Previous (3.10)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="random_fun.html" class="btn-nav">Next Project →</a>
+      <a href="random_fun.html" class="btn-nav">Next (3.12) →</a>
     </footer>
   </main>
 

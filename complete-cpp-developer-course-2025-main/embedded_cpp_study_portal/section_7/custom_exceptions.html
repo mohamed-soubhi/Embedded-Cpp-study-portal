@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Exception Hierarchies vs Lightweight Tagged Enums - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[7.02] Custom Exception Hierarchies vs Lightweight Tagged Enums - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 7</span>
+        <span class="badge-tag">Section 7 • #7.02</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-advanced">Section 7</a>
       <span class="sep">/</span>
-      <span class="current">CustomExceptions</span>
+      <span class="current">Project 7.02: CustomExceptions</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 7.02</span>
         <span class="section-pill section-7">Section 7</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
         <span class="tag">std::exception</span> <span class="tag">what()</span> <span class="tag">Object Slicing</span> <span class="tag">Code Bloat</span> <span class="tag">enum class</span> <span class="tag">AUTOSAR C++14</span>
       </div>
-      <h1 class="project-title">std::exception Subclassing, Object Slicing Pitfalls &amp; ROM Bloat in Embedded Firmware</h1>
+      <h1 class="project-title"><span class="title-num">7.02</span> std::exception Subclassing, Object Slicing Pitfalls &amp; ROM Bloat in Embedded Firmware</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Building domain-specific exception hierarchies by inheriting from std::runtime_error and std::exception. We analyze how exception unwinding tables (.eh_frame / DWARF) add 15-40KB of Flash overhead, why dynamic exception allocation is hazardous in constrained SRAM, and how to refactor with zero-cost tagged error codes.
       </div>
@@ -413,9 +414,9 @@ constexpr std::string_view to_string(SensorStatus status) noexcept {
     
 
     <footer class="page-nav-footer">
-      <a href="bug_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="bug_fun.html" class="btn-nav">← Previous (7.01)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="dog_fun.html" class="btn-nav">Next Project →</a>
+      <a href="dog_fun.html" class="btn-nav">Next (7.03) →</a>
     </footer>
   </main>
 

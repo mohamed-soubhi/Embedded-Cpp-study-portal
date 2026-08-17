@@ -1391,14 +1391,18 @@ def build_index():
         ("8", SECTION_8_PROJECTS),
         ("9", SECTION_9_PROJECTS),
         ("10", SECTION_10_PROJECTS),
+        ("11", SECTION_11_PROJECTS),
+        ("12", SECTION_12_PROJECTS),
     ]
 
     for sec_num, proj_list in sections_data:
-        for p in proj_list:
+        for idx, p in enumerate(proj_list):
+            proj_num = f"{sec_num}.{idx + 1:02d}"
             rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
             track = "foundations" if int(sec_num) <= 6 else "advanced"
             all_projects.append({
                 "sec": sec_num,
+                "num": proj_num,
                 "track": track,
                 "id": p['id'],
                 "name": p['name'],
@@ -1411,40 +1415,6 @@ def build_index():
                 "link": f"section_{sec_num}/{p['id']}.html"
             })
 
-    # Section 11 Projects
-    for p in SECTION_11_PROJECTS:
-        rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
-        all_projects.append({
-            "sec": "11",
-            "track": "advanced",
-            "id": p['id'],
-            "name": p['name'],
-            "title": p['title'],
-            "desc": sanitize_card_desc(p['summary']),
-            "tags": p['tags'][:3],
-            "rel": "high" if rel == "high" else "core",
-            "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
-            "rel_cls": p['emb_class'],
-            "link": f"section_11/{p['id']}.html"
-        })
-
-    # Section 12 Projects
-    for p in SECTION_12_PROJECTS:
-        rel = "high" if "Critical" in p['emb_badge'] or "High" in p['emb_badge'] else ("med" if "Medium" in p['emb_badge'] else "core")
-        all_projects.append({
-            "sec": "12",
-            "track": "advanced",
-            "id": p['id'],
-            "name": p['name'],
-            "title": p['title'],
-            "desc": sanitize_card_desc(p['summary']),
-            "tags": p['tags'][:3],
-            "rel": "high" if rel == "high" else "core",
-            "rel_text": p['emb_badge'].replace("⚡ Embedded Relevance: ", ""),
-            "rel_cls": p['emb_class'],
-            "link": f"section_12/{p['id']}.html"
-        })
-
     foundations_cards = []
     advanced_cards = []
 
@@ -1453,10 +1423,13 @@ def build_index():
         card_html = f'''
         <a href="{p['link']}" class="project-card" data-section="{p['sec']}" data-track="{p['track']}" data-relevance="{p['rel']}">
           <div class="card-top">
-            <span class="section-pill section-{p['sec']}">Section {p['sec']}</span>
+            <div class="card-pills">
+              <span class="section-pill section-{p['sec']}">Section {p['sec']}</span>
+              <span class="project-num-badge">#{p['num']}</span>
+            </div>
             <span class="embedded-badge {p['rel_cls']}">⚡ {p['rel_text']}</span>
           </div>
-          <h3 class="card-title">{p['name']}</h3>
+          <h3 class="card-title"><span class="card-num-prefix">{p['num']}</span> {p['name']}</h3>
           <p class="card-desc">{p['desc']}</p>
           <div class="card-tags">
             {tags_rendered}
@@ -1698,17 +1671,26 @@ def main():
             if 'uml_diagram' not in p and p['id'] in UML_DEFINITIONS:
                 p['uml_diagram'] = UML_DEFINITIONS[p['id']]
             
-            prev_p = proj_list[idx - 1] if idx > 0 else proj_list[-1]
-            next_p = proj_list[idx + 1] if idx < len(proj_list) - 1 else proj_list[0]
+            prev_idx = idx - 1 if idx > 0 else len(proj_list) - 1
+            next_idx = idx + 1 if idx < len(proj_list) - 1 else 0
+            
+            prev_p = proj_list[prev_idx]
+            next_p = proj_list[next_idx]
+            
+            proj_num = f"{sec_num}.{idx + 1:02d}"
+            prev_num = f"{sec_num}.{prev_idx + 1:02d}"
+            next_num = f"{sec_num}.{next_idx + 1:02d}"
+            
+            p['proj_num'] = proj_num
             
             prev_link = f"{prev_p['id']}.html"
             next_link = f"{next_p['id']}.html"
             
-            html_out = generate_page(p, prev_link, next_link, section_num=sec_num)
+            html_out = generate_page(p, prev_link, next_link, section_num=sec_num, proj_num=proj_num, prev_num=prev_num, next_num=next_num)
             out_path = os.path.join(PORTAL_DIR, f"section_{sec_num}", f"{p['id']}.html")
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(html_out)
-            print(f"  ✓ [{idx+1}/{len(proj_list)}] section_{sec_num}/{p['id']}.html")
+            print(f"  ✓ [{proj_num}] section_{sec_num}/{p['id']}.html")
 
     print("Building Technical Glossary Page...")
     generate_glossary_page()

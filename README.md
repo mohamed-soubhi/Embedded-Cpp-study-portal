@@ -67,27 +67,27 @@ The portal elevates traditional desktop C++ curriculum code into **bare-metal em
 
 ### 📘 Track 1: Foundations & Core Architecture (61 Projects)
 
-| Section | Domain Focus | Projects | Key Embedded & Hardware Systems Realities |
-|---|---|:---:|---|
-| **Section 1** | **Toolchains & Linkers** | **2** | Hosted vs Freestanding environments, `arm-none-eabi-gcc`, Linker scripts (`.ld`), ELF memory sections (`.text`, `.rodata`, `.data`, `.bss`), SWD/JTAG debuggers, OpenOCD. |
-| **Section 2** | **Types, Variables & Memory** | **14** | Architecture-dependent `sizeof(int)`, Fixed-width integers (`<cstdint>`), Arithmetic promotion rules, Signed overflow UB, Saturating math (`QADD`), Floating-point epsilon drift, 1-byte packed bitfields, Zero-SRAM `constexpr` constants. |
-| **Section 3** | **Control Flow & Branching** | **13** | ARM condition flags (APSR: N, Z, C, V), Instruction pipeline flush penalties, C++20 `[[likely]]`/`[[unlikely]]`, Cyclomatic complexity bounds (ISO 26262), Switch jump tables (`TBB`/`TBH`), Super-loops, Watchdogs, Hardware TRNG peripherals. |
-| **Section 4** | **Arrays & Memory Locality** | **11** | C-array pointer decay traps, Uninitialized SRAM garbage, SIMD DSP instructions, `std::string` heap bloat vs Flash string pools (`std::string_view`), Row-major contiguity, DMA framebuffers, `std::vector` reallocation latency, `etl::vector`, Circular ring buffers. |
-| **Section 5** | **Functions & AAPCS** | **15** | ARM AAPCS calling conventions (R0–R3 register passing, Link Register R14), Parameter passing (`const&`), `extern "C"` name mangling, RTOS stack hazards of recursion, Hardware CORDIC math, SysTick delays, Branchless counting, RVO, `std::span`, `[[nodiscard]]`. |
-| **Section 6** | **OOP Foundations & Alignment** | **6** | Classes vs Structs, Natural alignment, Struct padding RAM waste, `alignas`, `__attribute__((packed))`, `constexpr` bounding boxes, `this` pointer in R0, RAII peripheral power gating, Solving Static Initialization Order Fiasco (Meyers Singleton). |
+| Section | Domain Focus | Project IDs | Count | Key Embedded & Hardware Systems Realities |
+|---|---|:---:|:---:|---|
+| **Section 1** | **Toolchains & Linkers** | `1.01 – 1.02` | **2** | Hosted vs Freestanding environments, `arm-none-eabi-gcc`, Linker scripts (`.ld`), ELF memory sections (`.text`, `.rodata`, `.data`, `.bss`), SWD/JTAG debuggers, OpenOCD. |
+| **Section 2** | **Types, Variables & Memory** | `2.01 – 2.14` | **14** | Architecture-dependent `sizeof(int)`, Fixed-width integers (`<cstdint>`), Arithmetic promotion rules, Signed overflow UB, Saturating math (`QADD`), Floating-point epsilon drift, 1-byte packed bitfields, Zero-SRAM `constexpr` constants. |
+| **Section 3** | **Control Flow & Branching** | `3.01 – 3.13` | **13** | ARM condition flags (APSR: N, Z, C, V), Instruction pipeline flush penalties, C++20 `[[likely]]`/`[[unlikely]]`, Cyclomatic complexity bounds (ISO 26262), Switch jump tables (`TBB`/`TBH`), Super-loops, Watchdogs, Hardware TRNG peripherals. |
+| **Section 4** | **Arrays & Memory Locality** | `4.01 – 4.11` | **11** | C-array pointer decay traps, Uninitialized SRAM garbage, SIMD DSP instructions, `std::string` heap bloat vs Flash string pools (`std::string_view`), Row-major contiguity, DMA framebuffers, `std::vector` reallocation latency, `etl::vector`, Circular ring buffers. |
+| **Section 5** | **Functions & AAPCS** | `5.01 – 5.15` | **15** | ARM AAPCS calling conventions (R0–R3 register passing, Link Register R14), Parameter passing (`const&`), `extern "C"` name mangling, RTOS stack hazards of recursion, Hardware CORDIC math, SysTick delays, Branchless counting, RVO, `std::span`, `[[nodiscard]]`. |
+| **Section 6** | **OOP Foundations & Alignment** | `6.01 – 6.06` | **6** | Classes vs Structs, Natural alignment, Struct padding RAM waste, `alignas`, `__attribute__((packed))`, `constexpr` bounding boxes, `this` pointer in R0, RAII peripheral power gating, Solving Static Initialization Order Fiasco (Meyers Singleton). |
 
 ---
 
 ### 🚀 Track 2: Advanced Systems, Real-Time Hardware & Memory (55 Projects)
 
-| Section | Domain Focus | Projects | Key Embedded & Hardware Systems Realities |
-|---|---|:---:|---|
-| **Section 7** | **Exceptions & Fault Systems** | **9** | ARM Cortex-M Hardware Faults (`HardFault`, `MemManage`, `BusFault`), `.eh_frame` DWARF ROM bloat (15–40KB penalty), 1-byte tagged error enums, Invariant enforcement, Stack unwinding latency jitter vs `std::expected<T, E>`, Analog Watchdog (AWD), Constructor exception hazards. |
-| **Section 8** | **Pointers & Memory Access** | **7** | Memory-Mapped I/O (MMIO), `volatile` hardware register wrappers, 4 pointer constness permutations, Flash ROM `.rodata` placement, Heap fragmentation hazards, Placement-new in pre-allocated static pools, Flat Array-of-Structures (AoS), Deterministic fixed-block allocators. |
-| **Section 9** | **Streams & Flash File Systems** | **7** | `std::ifstream`/`ofstream` lifecycles, LittleFS & FatFS on Quad-SPI NOR Flash, Dynamic wear leveling, Power-cut corruption resilience, Circular EEPROM event rings, Multi-sensor timestamp synchronization, Static histogram bins, `<iomanip>` vs `snprintf`, Hardware CRC32. |
-| **Section 10** | **OOP, Enums & Polymorphism** | **3** | Scoped enum classes (`uint8_t`), Bitmask operations, Switch jump tables, Abstract classes, VTable & VPtr RAM overhead (4 bytes/object), Disabling RTTI (`-fno-rtti`), Curiously Recurring Template Pattern (CRTP) for zero-cost static polymorphism, Virtual destructors. |
-| **Section 11** | **Templates & STL Mastery** | **19** | `std::unique_ptr` exclusive ownership & zero memory overhead, Custom RAII deleters for hardware peripherals, Rule of Three/Five/Zero, `std::map` Red-Black tree heap fragmentation vs cache-friendly sorted flat maps, FIFO queues, Erase-Remove idiom, Template bloat mitigation (`-Wtemplates`). |
-| **Section 12** | **Data Structures Deep-Dive** | **10** | ArrayQueue, ArrayList, ArrayStack, LinkedChain, LinkedList, LinkedQueue, LinkedStack, ListStack, Templated ArrayStack, Proj12.2 — analyzed for worst-case time complexity, cache lines, pointer chasing, and deterministic embedded safety. |
+| Section | Domain Focus | Project IDs | Count | Key Embedded & Hardware Systems Realities |
+|---|---|:---:|:---:|---|
+| **Section 7** | **Exceptions & Fault Systems** | `7.01 – 7.09` | **9** | ARM Cortex-M Hardware Faults (`HardFault`, `MemManage`, `BusFault`), `.eh_frame` DWARF ROM bloat (15–40KB penalty), 1-byte tagged error enums, Invariant enforcement, Stack unwinding latency jitter vs `std::expected<T, E>`, Analog Watchdog (AWD), Constructor exception hazards. |
+| **Section 8** | **Pointers & Memory Access** | `8.01 – 8.07` | **7** | Memory-Mapped I/O (MMIO), `volatile` hardware register wrappers, 4 pointer constness permutations, Flash ROM `.rodata` placement, Heap fragmentation hazards, Placement-new in pre-allocated static pools, Flat Array-of-Structures (AoS), Deterministic fixed-block allocators. |
+| **Section 9** | **Streams & Flash File Systems** | `9.01 – 9.07` | **7** | `std::ifstream`/`ofstream` lifecycles, LittleFS & FatFS on Quad-SPI NOR Flash, Dynamic wear leveling, Power-cut corruption resilience, Circular EEPROM event rings, Multi-sensor timestamp synchronization, Static histogram bins, `<iomanip>` vs `snprintf`, Hardware CRC32. |
+| **Section 10** | **OOP, Enums & Polymorphism** | `10.01 – 10.03` | **3** | Scoped enum classes (`uint8_t`), Bitmask operations, Switch jump tables, Abstract classes, VTable & VPtr RAM overhead (4 bytes/object), Disabling RTTI (`-fno-rtti`), Curiously Recurring Template Pattern (CRTP) for zero-cost static polymorphism, Virtual destructors. |
+| **Section 11** | **Templates & STL Mastery** | `11.01 – 11.19` | **19** | `std::unique_ptr` exclusive ownership & zero memory overhead, Custom RAII deleters for hardware peripherals, Rule of Three/Five/Zero, `std::map` Red-Black tree heap fragmentation vs cache-friendly sorted flat maps, FIFO queues, Erase-Remove idiom, Template bloat mitigation (`-Wtemplates`). |
+| **Section 12** | **Data Structures Deep-Dive** | `12.01 – 12.10` | **10** | ArrayQueue, ArrayList, ArrayStack, LinkedChain, LinkedList, LinkedQueue, LinkedStack, ListStack, Templated ArrayStack, Proj12.2 — analyzed for worst-case time complexity, cache lines, pointer chasing, and deterministic embedded safety. |
 
 ---
 

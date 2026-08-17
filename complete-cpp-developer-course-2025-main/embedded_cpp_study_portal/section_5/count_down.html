@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loop Timing, Delay Loops vs Hardware Timers &amp; RTOS Delays - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[5.06] Loop Timing, Delay Loops vs Hardware Timers &amp; RTOS Delays - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 5</span>
+        <span class="badge-tag">Section 5 • #5.06</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
-      <span class="current">CountDown</span>
+      <span class="current">Project 5.06: CountDown</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 5.06</span>
         <span class="section-pill section-5">Section 5</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
         <span class="tag">Hardware Timers</span> <span class="tag">SysTick</span> <span class="tag">vTaskDelay</span> <span class="tag">Busy-Wait</span> <span class="tag">Low Power WFI</span>
       </div>
-      <h1 class="project-title">Software Busy-Wait Delays vs Hardware SysTick Timers &amp; RTOS vTaskDelay</h1>
+      <h1 class="project-title"><span class="title-num">5.06</span> Software Busy-Wait Delays vs Hardware SysTick Timers &amp; RTOS vTaskDelay</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Exploring loop countdowns and delays. We demonstrate why software busy-wait loops (for(volatile int i=0...)) waste battery power and jitter across compiler optimization levels, and replace them with hardware SysTick timers and RTOS sleep delays (WFI).
       </div>
@@ -290,9 +291,9 @@ void delay_ms(uint32_t ms) noexcept {
     
 
     <footer class="page-nav-footer">
-      <a href="math_fun.html" class="btn-nav">← Previous Project</a>
+      <a href="math_fun.html" class="btn-nav">← Previous (5.05)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="count_evens.html" class="btn-nav">Next Project →</a>
+      <a href="count_evens.html" class="btn-nav">Next (5.07) →</a>
     </footer>
   </main>
 

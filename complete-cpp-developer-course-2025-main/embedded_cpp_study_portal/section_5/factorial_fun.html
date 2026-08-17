@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recursion vs Iteration &amp; Stack Overflow Dangers in RTOS - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[5.04] Recursion vs Iteration &amp; Stack Overflow Dangers in RTOS - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 5</span>
+        <span class="badge-tag">Section 5 • #5.04</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
-      <span class="current">FactorialFun</span>
+      <span class="current">Project 5.04: FactorialFun</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 5.04</span>
         <span class="section-pill section-5">Section 5</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
         <span class="tag">Recursion</span> <span class="tag">Stack Overflow</span> <span class="tag">constexpr</span> <span class="tag">Tail Call Optimization</span> <span class="tag">RTOS</span>
       </div>
-      <h1 class="project-title">Recursive Stack Frame Growth, Call Depth Hazards &amp; constexpr Compile-Time Evaluation</h1>
+      <h1 class="project-title"><span class="title-num">5.04</span> Recursive Stack Frame Growth, Call Depth Hazards &amp; constexpr Compile-Time Evaluation</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Exploring recursive algorithms vs iterative implementations. We demonstrate why unbounded recursion is banned in embedded standards (MISRA / NASA) due to small RTOS task stack budgets (e.g. 512 bytes), analyze Tail-Call Optimization (TCO), and evaluate math at compile-time using constexpr.
       </div>
@@ -282,9 +283,9 @@ constexpr uint32_t FACT_6 = factorial(6); // Emits MOV R0, #720</pre>
     
 
     <footer class="page-nav-footer">
-      <a href="function_overloading.html" class="btn-nav">← Previous Project</a>
+      <a href="function_overloading.html" class="btn-nav">← Previous (5.03)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="math_fun.html" class="btn-nav">Next Project →</a>
+      <a href="math_fun.html" class="btn-nav">Next (5.05) →</a>
     </footer>
   </main>
 

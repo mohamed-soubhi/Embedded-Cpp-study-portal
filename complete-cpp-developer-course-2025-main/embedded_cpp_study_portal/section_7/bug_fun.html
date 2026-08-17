@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debugging Diagnostics, Fault Handlers &amp; Defensive Assertions - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[7.01] Debugging Diagnostics, Fault Handlers &amp; Defensive Assertions - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 7</span>
+        <span class="badge-tag">Section 7 • #7.01</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-advanced">Section 7</a>
       <span class="sep">/</span>
-      <span class="current">BugFun</span>
+      <span class="current">Project 7.01: BugFun</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 7.01</span>
         <span class="section-pill section-7">Section 7</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: Critical</span>
         <span class="tag">HardFault</span> <span class="tag">MemManage</span> <span class="tag">Stack Smashing</span> <span class="tag">Defensive Assertions</span> <span class="tag">static_assert</span> <span class="tag">MISRA C++</span>
       </div>
-      <h1 class="project-title">Syntax, Runtime, &amp; Logic Bugs vs Microcontroller Hardware Faults (HardFault &amp; MemManage)</h1>
+      <h1 class="project-title"><span class="title-num">7.01</span> Syntax, Runtime, &amp; Logic Bugs vs Microcontroller Hardware Faults (HardFault &amp; MemManage)</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Exploring the taxonomy of bugs: syntax errors, runtime faults, and subtle logic errors. In bare-metal systems, logic errors often manifest as fatal ARM Cortex-M HardFaults, MemManage violations, or stack-smashing crashes. We explore hardware fault triggers and defensive compile-time/runtime assertion architectures.
       </div>
@@ -325,9 +326,9 @@ extern "C" void HardFault_Handler_C(FaultFrame* frame) {
     
 
     <footer class="page-nav-footer">
-      <a href="rethrow_fun_1.html" class="btn-nav">← Previous Project</a>
+      <a href="rethrow_fun_1.html" class="btn-nav">← Previous (7.09)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="custom_exceptions.html" class="btn-nav">Next Project →</a>
+      <a href="custom_exceptions.html" class="btn-nav">Next (7.02) →</a>
     </footer>
   </main>
 

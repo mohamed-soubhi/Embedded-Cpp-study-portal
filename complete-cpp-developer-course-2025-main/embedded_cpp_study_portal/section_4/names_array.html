@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>String Arrays, Dynamic Heap Overhead &amp; Flash String Pools - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[4.05] String Arrays, Dynamic Heap Overhead &amp; Flash String Pools - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 4</span>
+        <span class="badge-tag">Section 4 • #4.05</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-foundations">Section 4</a>
       <span class="sep">/</span>
-      <span class="current">NamesArray</span>
+      <span class="current">Project 4.05: NamesArray</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 4.05</span>
         <span class="section-pill section-4">Section 4</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
         <span class="tag">std::string</span> <span class="tag">std::string_view</span> <span class="tag">Heap Overhead</span> <span class="tag">Small String Optimization</span> <span class="tag">.rodata</span>
       </div>
-      <h1 class="project-title">std::string Array Heap Overhead vs string_view Flash String Literals</h1>
+      <h1 class="project-title"><span class="title-num">4.05</span> std::string Array Heap Overhead vs string_view Flash String Literals</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Comparing arrays of std::string objects with lightweight string_view arrays. We reveal how an array of std::string objects triggers hidden heap allocations and RAM bloat, and demonstrate how to store string tables entirely in Flash ROM.
       </div>
@@ -275,9 +276,9 @@ static constexpr std::array&lt;std::string_view, 4&gt; DEVICE_NAMES = {
     
 
     <footer class="page-nav-footer">
-      <a href="twice_numbers.html" class="btn-nav">← Previous Project</a>
+      <a href="twice_numbers.html" class="btn-nav">← Previous (4.04)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="temperature_converter.html" class="btn-nav">Next Project →</a>
+      <a href="temperature_converter.html" class="btn-nav">Next (4.06) →</a>
     </footer>
   </main>
 

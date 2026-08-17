@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Array Parameter Passing, Spans &amp; Contiguous Memory Guarantees - Embedded Modern C++: From Bare-Metal to STL</title>
+  <title>[5.10] Array Parameter Passing, Spans &amp; Contiguous Memory Guarantees - Embedded Modern C++: From Bare-Metal to STL</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <div class="container nav-bar">
       <a href="../index.html" class="nav-brand">
         ⚡ Embedded Modern C++
-        <span class="badge-tag">Section 5</span>
+        <span class="badge-tag">Section 5 • #5.10</span>
       </a>
       <ul class="nav-links">
         <li><a href="../index.html">🏠 Home Portal</a></li>
@@ -45,16 +45,17 @@
       <span class="sep">/</span>
       <a href="../index.html#grid-foundations">Section 5</a>
       <span class="sep">/</span>
-      <span class="current">ProductArrayByReference</span>
+      <span class="current">Project 5.10: ProductArrayByReference</span>
     </div>
 
     <header class="project-header">
       <div class="project-meta">
+        <span class="project-num-pill">Project 5.10</span>
         <span class="section-pill section-5">Section 5</span>
         <span class="embedded-badge emb-high">⚡ Embedded Relevance: High</span>
         <span class="tag">Array References</span> <span class="tag">std::span</span> <span class="tag">Size Preservation</span> <span class="tag">Bounds Safety</span> <span class="tag">C++20</span>
       </div>
-      <h1 class="project-title">Passing Arrays by Reference (int(&amp;)[N]) vs C++20 std::span in Embedded APIs</h1>
+      <h1 class="project-title"><span class="title-num">5.10</span> Passing Arrays by Reference (int(&amp;)[N]) vs C++20 std::span in Embedded APIs</h1>
       <div class="project-summary-box">
         <strong>Executive Summary:</strong> Passing fixed arrays by reference (int(&)[N]) to prevent pointer decay. We analyze template-based array references and modern C++20 std::span for zero-overhead, non-owning contiguous memory views.
       </div>
@@ -293,9 +294,9 @@ T computeProduct(const T (&amp;arr)[N]) noexcept {
     
 
     <footer class="page-nav-footer">
-      <a href="parameter_challenge.html" class="btn-nav">← Previous Project</a>
+      <a href="parameter_challenge.html" class="btn-nav">← Previous (5.09)</a>
       <a href="../index.html" class="btn-nav">🏠 Portal Index</a>
-      <a href="product_array_object.html" class="btn-nav">Next Project →</a>
+      <a href="product_array_object.html" class="btn-nav">Next (5.11) →</a>
     </footer>
   </main>
 
