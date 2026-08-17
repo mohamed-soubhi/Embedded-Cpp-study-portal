@@ -2,9 +2,10 @@
 name: study-portal-generator
 description: >-
   Systematic workflow and architecture guide for building, scaling, and maintaining
-  an interactive, high-performance static engineering study portal (with annotated code viewers,
-  C++ syntax tokenizers, day/night themes, responsive SVG/UML diagrams, systems architecture deep-dives,
-  hardware realities, production refactors, self-checking MCQ quiz engines, and Cyber Matrix UI) from any code repository or multi-section programming curriculum.
+  an interactive, high-performance static engineering study portal (with internal X.YY project numbering,
+  interactive technical glossary, annotated code viewers, C++ syntax tokenizers, day/night themes,
+  responsive SVG/UML diagrams, systems architecture deep-dives, hardware realities, production refactors,
+  self-checking MCQ quiz engines, and Cyber Matrix UI) from any code repository or multi-section programming curriculum.
 ---
 
 # ⚡ Interactive Engineering Study Portal Generator Skill
@@ -17,8 +18,10 @@ This skill provides a complete, repeatable, production-tested blueprint for tran
 
 Activate this skill when you need to:
 - Transform a multi-section code repository into an interactive, browser-accessible documentation and learning portal.
-- Translate software constructs into **bare-metal systems realities** (CPU registers, memory alignment, cache locality, calling conventions, assembly mappings).
-- Add interactive multi-file code viewers with **C++ syntax highlighting tokenizers** and 1-click clipboard copying.
+- Translate software constructs into **bare-metal systems realities** (CPU registers, memory alignment, cache locality, calling conventions, assembly mappings, MMIO, AUTOSAR/MISRA).
+- Implement systematic **internal project numbering (`X.YY`)** across portal index cards, navigation headers, breadcrumbs, and footer controls.
+- Generate an interactive, searchable **Technical Glossary & Architecture Reference** (`glossary.html`) cross-linking terms directly to curriculum projects.
+- Add interactive multi-file code viewers with **pure-Python C++ syntax highlighting tokenizers** and 1-click clipboard copying.
 - Support **Day & Night theme toggling** (Cyber Matrix Dark / Clean Slate Light) with `localStorage` persistence.
 - Render **responsive inline SVG diagrams** (FIFO queues, LIFO stacks, memory maps) and **UML class hierarchy cards**.
 - Embed interactive self-checking MCQ quizzes with immediate feedback and technical explanations.
@@ -30,21 +33,69 @@ Activate this skill when you need to:
 
 ```
 repo-root/
-├── study_portal/                       # Static portal root (GitHub Pages target)
-│   ├── index.html                     # Master landing page with filters & search
-│   ├── assets/
-│   │   ├── style.css                  # Cyber Matrix & Light Theme tokens, layout, UML
-│   │   └── app.js                     # Theme toggle, search, filtering & quiz engine
-│   ├── section_1/ ... section_N/      # Generated project deep-dive HTML pages
-│   ├── builder.py                     # C++ syntax tokenizer, tab builder, and page assembler
-│   ├── generate_all.py                # Master build orchestrator & index generator
-│   ├── section_1_data.py              # Section 1 project metadata & quizzes
-│   └── section_N_data.py              # Modular data definition files
+├── README.md                                  # Complete course roadmap & embedded realities table
+├── complete-cpp-developer-course-2025-main/
+│   └── embedded_cpp_study_portal/             # Static portal root (GitHub Pages target)
+│       ├── index.html                         # Master landing page (Track 1 & 2 grids, live search)
+│       ├── glossary.html                      # Interactive 68-term Technical Glossary & Reference
+│       ├── assets/
+│       │   ├── style.css                      # Cyber Matrix & Light Theme tokens, layout, UML, pills
+│       │   └── app.js                         # Theme toggle, search, category filter & quiz engine
+│       ├── section_1/ ... section_12/         # 116 generated project deep-dive HTML pages
+│       ├── builder.py                         # C++ syntax tokenizer, tab builder, and page assembler
+│       ├── generate_all.py                    # Master build orchestrator & index generator
+│       ├── build_glossary.py                  # Standalone glossary page builder
+│       ├── glossary_data.py                   # 68-term structured engineering dictionary
+│       ├── uml_data_definitions.py            # SVG and UML class models
+│       ├── section_1_data.py ... section_10_data.py # Modular data definitions & quizzes
+│       └── generate_uml_diagrams.py           # UML generator utilities
 ```
 
 ---
 
-## 📚 2. The 4-Pillar Pedagogical Framework
+## 🏷️ 2. Internal Project Numbering Standard (`X.YY`)
+
+To maintain clean traceability across large curriculum sets (e.g. 116 projects), every project receives a deterministic two-part identifier: `X.YY` where `X` is the Section Number (1–12) and `YY` is the zero-padded 2-digit project index (`01`, `02`, ...).
+
+### Numbering Scheme Example:
+- **Section 1 (Toolchains):** `1.01` (`hello`), `1.02` (`vsc_hello`)
+- **Section 2 (Memory & Types):** `2.01` (`hello_world`) &rarr; `2.14` (`secret_agent_id`)
+- **Section 5 (Functions & AAPCS):** `5.01` (`function_fun_1`) &rarr; `5.15` (`tic_tac_toe`)
+- **Section 11 (Templates & STL):** `11.01` (`smart_pointer_fun`) &rarr; `11.19` (`swapper_test`)
+- **Section 12 (Data Structures):** `12.01` (`array_queue_app`) &rarr; `12.10` (`for_proj12_2_files`)
+
+### Numbering Placement Rules:
+1. **Master Index Cards (`index.html`)**:
+   - Render `#X.YY` pill in `.card-pills`: `<span class="project-num-badge">#{p['num']}</span>`.
+   - Prepend title prefix: `<h3 class="card-title"><span class="card-num-prefix">{p['num']}</span> {p['name']}</h3>`.
+2. **Individual Project Pages (`section_X/id.html`)**:
+   - `<title>[X.YY] Title - Embedded Modern C++: From Bare-Metal to STL</title>`
+   - Top Header brand badge: `Section X • #X.YY`
+   - Breadcrumbs: `Portal Home / Section X / Project X.YY: Name`
+   - Project Meta Header: `<span class="project-num-pill">Project X.YY</span>`
+   - Project Headline: `<h1 class="project-title"><span class="title-num">X.YY</span> Headline</h1>`
+   - Footer Navigation: `← Previous (X.YY)` / `Next (X.YY) →`
+
+---
+
+## 📖 3. Interactive Technical Glossary Engine (`build_glossary.py` & `glossary_data.py`)
+
+A comprehensive architectural reference linking core concepts to specific projects:
+
+### Architecture:
+- **Data Definition (`glossary_data.py`)**: Structured array of term dictionaries containing:
+  - `term`: Official technical name (e.g., `AAPCS`, `MMIO`, `Placement-New`, `CRTP`, `Strict Aliasing`, `Erase-Remove Idiom`).
+  - `category`: Category slug (`memory`, `hardware`, `concurrency`, `autosar`, `modern_cpp`, `data_structures`).
+  - `badge`: Display category badge with distinct color styling.
+  - `definition`: Precise technical definition with inline code and embedded hardware implications.
+  - `related_projects`: List of internal links with project numbers (e.g., `[{"id": "5.01", "name": "FunctionFun1", "url": "section_5/function_fun_1.html"}]`).
+- **Glossary Page Builder (`build_glossary.py`)**:
+  - Standalone generator script rendering category filter pills, real-time live search filter, and responsive glossary cards.
+  - Callable directly or orchestrated within `generate_all.py`.
+
+---
+
+## 📚 4. The 4-Pillar Pedagogical Framework
 
 Every project page in the portal must follow this 4-pillar structure:
 
@@ -67,7 +118,7 @@ Every project page in the portal must follow this 4-pillar structure:
 
 ---
 
-## 🎨 3. Design System & Theming (Cyber Matrix + Light Mode)
+## 🎨 5. Design System & Theming (Cyber Matrix + Light Mode)
 
 ### CSS Variables & Dual-Theme Tokens (`style.css`)
 ```css
@@ -136,7 +187,7 @@ function applyTheme(theme) {
 
 ---
 
-## 💻 4. High-Performance C++ Syntax Tokenizer (`builder.py`)
+## 💻 6. High-Performance C++ Syntax Tokenizer (`builder.py`)
 
 A pure-Python regex-based tokenizer that emits high-contrast semantic syntax spans without heavy JavaScript runtime dependencies:
 
@@ -200,7 +251,7 @@ def highlight_cpp(code_str):
 
 ---
 
-## 📊 5. Visual Architecture & UML Component Design
+## 📊 7. Visual Architecture & UML Component Design
 
 ### Inline Responsive SVG Diagram (e.g. Ring Buffer Queue)
 ```html
@@ -245,9 +296,9 @@ def highlight_cpp(code_str):
 
 ---
 
-## 🛠️ 6. Automated Pre-Flight Verification Script
+## 🛠️ 8. Automated Pre-Flight Verification Script
 
-Run this script before every release to guarantee zero broken links, zero tag mismatches, and accurate quiz structures:
+Run this verification routine before every release to guarantee zero broken links, zero tag mismatches, and accurate quiz structures:
 
 ```python
 import os, glob, re
@@ -270,7 +321,7 @@ for fpath in html_files:
         print(f"Missing themeToggle: {fpath}"); errors += 1
 
     # 2. Check tab balance
-    if 'index.html' not in fpath:
+    if 'index.html' not in fpath and 'glossary.html' not in fpath:
         tabs = len(re.findall(r'\bclass=[\"\']code-tab\b', content))
         panels = len(re.findall(r'\bclass=[\"\']code-panel\b', content))
         if tabs != panels:
@@ -284,16 +335,25 @@ for fpath in html_files:
                 print(f"Broken link in {fpath} -> {link}"); errors += 1
 
 if errors == 0:
-    print("✅ All 117 pages passed 100% verification with 0 errors!")
+    print("✅ All pages passed 100% verification with 0 errors!")
 ```
 
 ---
 
-## 🚀 7. GitHub Pages Deployment Steps
+## 🚀 9. Build, Test & Deployment Workflow
 
-1. Commit and push the generated portal directory to GitHub `main` branch.
-2. In GitHub repository settings:
-   - Navigate to **Settings** &rarr; **Pages**.
-   - Set **Source** to `Deploy from a branch`.
-   - Set **Branch** to `main` and **Folder** to `/complete-cpp-developer-course-2025-main/embedded_cpp_study_portal` (or `/` if at repository root).
-3. Tag release: `git tag -a v1.1 -m "Release v1.1 - Day/Night theme, C++ syntax highlighting, SVG & UML diagrams" && git push origin v1.1`.
+1. **Regenerate Entire Portal:**
+   ```bash
+   cd complete-cpp-developer-course-2025-main/embedded_cpp_study_portal
+   python3 generate_all.py
+   ```
+2. **Commit & Push:**
+   ```bash
+   git add -A
+   git commit -m "feat: add interactive features and project updates"
+   git push origin main
+   ```
+3. **GitHub Pages URL Configuration:**
+   - Repository: `https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal`
+   - Portal Home: `https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/`
+   - Technical Glossary: `https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/glossary.html`
