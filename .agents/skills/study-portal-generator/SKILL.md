@@ -3,9 +3,10 @@ name: study-portal-generator
 description: >-
   Systematic workflow and architecture guide for building, scaling, and maintaining
   an interactive, high-performance static engineering study portal (with internal X.YY project numbering,
-  interactive technical glossary, annotated code viewers, C++ syntax tokenizers, day/night themes,
-  responsive SVG/UML diagrams, systems architecture deep-dives, hardware realities, production refactors,
-  self-checking MCQ quiz engines, and Cyber Matrix UI) from any code repository or multi-section programming curriculum.
+  interactive technical glossary, annotated code viewers, C++ syntax tokenizers, 1-click copy buttons,
+  day/night themes, responsive SVG/UML diagrams, systems architecture deep-dives, hardware realities,
+  production refactors, self-checking MCQ quiz engines, and Cyber Matrix UI) from any code repository
+  or multi-section programming curriculum.
 ---
 
 # ⚡ Interactive Engineering Study Portal Generator Skill
@@ -21,7 +22,8 @@ Activate this skill when you need to:
 - Translate software constructs into **bare-metal systems realities** (CPU registers, memory alignment, cache locality, calling conventions, assembly mappings, MMIO, AUTOSAR/MISRA).
 - Implement systematic **internal project numbering (`X.YY`)** across portal index cards, navigation headers, breadcrumbs, and footer controls.
 - Generate an interactive, searchable **Technical Glossary & Architecture Reference** (`glossary.html`) cross-linking terms directly to curriculum projects.
-- Add interactive multi-file code viewers with **pure-Python C++ syntax highlighting tokenizers** and 1-click clipboard copying.
+- Add interactive multi-file code viewers with **pure-Python C++ syntax highlighting tokenizers** and **1-click clipboard copy buttons**.
+- Add 1-click clipboard copy buttons with visual feedback to **Production-Ready Embedded Refactoring** code sections.
 - Support **Day & Night theme toggling** (Cyber Matrix Dark / Clean Slate Light) with `localStorage` persistence.
 - Render **responsive inline SVG diagrams** (FIFO queues, LIFO stacks, memory maps) and **UML class hierarchy cards**.
 - Embed interactive self-checking MCQ quizzes with immediate feedback and technical explanations.
@@ -36,11 +38,11 @@ repo-root/
 ├── README.md                                  # Complete course roadmap & embedded realities table
 ├── complete-cpp-developer-course-2025-main/
 │   └── embedded_cpp_study_portal/             # Static portal root (GitHub Pages target)
-│       ├── index.html                         # Master landing page (Track 1 & 2 grids, live search)
+│       ├── index.html                         # Master landing page (Hero stats, Track 1 & 2 grids, live search)
 │       ├── glossary.html                      # Interactive 68-term Technical Glossary & Reference
 │       ├── assets/
-│       │   ├── style.css                      # Cyber Matrix & Light Theme tokens, layout, UML, pills
-│       │   └── app.js                         # Theme toggle, search, category filter & quiz engine
+│       │   ├── style.css                      # Cyber Matrix & Light Theme tokens, layout, UML, snippets, pills
+│       │   └── app.js                         # Theme toggle, search, copy buttons, category filter & quiz engine
 │       ├── section_1/ ... section_12/         # 116 generated project deep-dive HTML pages
 │       ├── builder.py                         # C++ syntax tokenizer, tab builder, and page assembler
 │       ├── generate_all.py                    # Master build orchestrator & index generator
@@ -57,12 +59,22 @@ repo-root/
 
 To maintain clean traceability across large curriculum sets (e.g. 116 projects), every project receives a deterministic two-part identifier: `X.YY` where `X` is the Section Number (1–12) and `YY` is the zero-padded 2-digit project index (`01`, `02`, ...).
 
-### Numbering Scheme Example:
-- **Section 1 (Toolchains):** `1.01` (`hello`), `1.02` (`vsc_hello`)
-- **Section 2 (Memory & Types):** `2.01` (`hello_world`) &rarr; `2.14` (`secret_agent_id`)
-- **Section 5 (Functions & AAPCS):** `5.01` (`function_fun_1`) &rarr; `5.15` (`tic_tac_toe`)
-- **Section 11 (Templates & STL):** `11.01` (`smart_pointer_fun`) &rarr; `11.19` (`swapper_test`)
-- **Section 12 (Data Structures):** `12.01` (`array_queue_app`) &rarr; `12.10` (`for_proj12_2_files`)
+### Curriculum Breakdown & Numbering Ranges:
+
+| Section | Domain Name | Project Range | Count | Primary Focus |
+|---|---|---|---|---|
+| **Sec 1** | Toolchains & Freestanding C++ | `1.01 – 1.02` | 2 | GCC/Clang cross-compilation, CMake, bare-metal `main()` |
+| **Sec 2** | Fundamental Types, Memory & Logic | `2.01 – 2.14` | 14 | Fixed-width types (`uint8_t`), IEEE-754 floats, integer overflow |
+| **Sec 3** | Control Flow & Hardware Branching | `3.01 – 3.13` | 13 | Table branch (`TBB`/`TBH`), branch prediction, super-loops |
+| **Sec 4** | Arrays, Vectors & Memory Locality | `4.01 – 4.11` | 11 | Cache lines (L1/L2), contiguous RAM, `std::array` vs `std::vector` |
+| **Sec 5** | Functions, AAPCS & Stack Frames | `5.01 – 5.15` | 15 | ARM AAPCS (R0–R3), pass-by-reference, recursion stack safety |
+| **Sec 6** | Object-Oriented Foundations | `6.01 – 6.06` | 6 | Memory layout, constructors, access control, zero heap overhead |
+| **Sec 7** | Exceptions & Embedded Faults | `7.01 – 7.09` | 9 | Table-driven unwinding, `-fno-exceptions`, `std::expected`, error codes |
+| **Sec 8** | Pointers, Dynamic Memory & MMIO | `8.01 – 8.07` | 7 | Pointer arithmetic, MMIO peripheral registers, placement-new, leak hazards |
+| **Sec 9** | Streams, Files & Non-Volatile Flash | `9.01 – 9.07` | 7 | Flash memory sectors, LittleFS/FATfs wear leveling, binary I/O |
+| **Sec 10** | Scoped Enums & Static Members | `10.01 – 10.03` | 3 | Type-safe `enum class : uint8_t`, static driver singletons |
+| **Sec 11** | Smart Pointers, STL & Templates | `11.01 – 11.19` | 19 | `std::unique_ptr` with custom MMIO deleters, Move semantics, cache-friendly algorithms |
+| **Sec 12** | Embedded Data Structures | `12.01 – 12.10` | 10 | Bounded Ring Buffer Queue, Static Array Stack, Intrusive Linked Lists |
 
 ### Numbering Placement Rules:
 1. **Master Index Cards (`index.html`)**:
@@ -78,7 +90,32 @@ To maintain clean traceability across large curriculum sets (e.g. 116 projects),
 
 ---
 
-## 📖 3. Interactive Technical Glossary Engine (`build_glossary.py` & `glossary_data.py`)
+## 📊 3. Master Landing Page Architecture (`index.html`)
+
+The master landing page serves as the mission control for the entire portal:
+
+### 1. Hero Statistics Metrics Grid (`.hero-stats`):
+A prominent 4-card statistics bar directly beneath the title:
+- **Total Projects**: `116` (`Projects 1.01 – 12.10`)
+- **Curriculum Sections**: `12` (`Sec 1 – Sec 12`)
+- **Technical Glossary**: `68+` (`Hardware & STL Terms`)
+- **Curriculum Tracks**: `2` (`Foundations & Advanced`)
+
+### 2. Track & Section Filter Chips:
+- **Track Switchers**:
+  - `🌟 All Curriculum (1.01–12.10 • 116)`
+  - `📘 Foundations Track (1.01–6.06 • 61)`
+  - `🚀 Advanced Systems Track (7.01–12.10 • 55)`
+  - `⚡ High / Critical Relevance (50+)`
+- **Section Filter Chips**:
+  - Each chip features the section name, project range, and total count (e.g. `Sec 5: Functions & AAPCS (5.01–5.15 • 15)`).
+
+### 3. Instant Live Search Engine (`app.js`):
+- Real-time client-side search filtering across project names, summaries, tags, and internal project numbers (`#5.01`, `11.01`, etc.).
+
+---
+
+## 📖 4. Interactive Technical Glossary Engine (`build_glossary.py` & `glossary_data.py`)
 
 A comprehensive architectural reference linking core concepts to specific projects:
 
@@ -95,9 +132,9 @@ A comprehensive architectural reference linking core concepts to specific projec
 
 ---
 
-## 📚 4. The 4-Pillar Pedagogical Framework
+## 📚 5. The 4-Pillar Pedagogical Framework
 
-Every project page in the portal must follow this 4-pillar structure:
+Every project page in the portal follows this structured, battle-tested layout:
 
 ### Pillar 1: Annotated Multi-File Source Code
 - Display full working source code with semantic C++ syntax token highlighting.
@@ -115,10 +152,11 @@ Every project page in the portal must follow this 4-pillar structure:
 
 ### Pillar 4: Production-Ready Refactoring
 - Concrete, copy-pasteable code examples demonstrating zero-cost abstractions, MISRA/AUTOSAR compliance, and deterministic memory patterns.
+- Colorized C++ syntax highlighting with standalone 1-click copy snippet container (`.code-snippet-box`).
 
 ---
 
-## 🎨 5. Design System & Theming (Cyber Matrix + Light Mode)
+## 🎨 6. Design System & Theming (Cyber Matrix + Light Mode)
 
 ### CSS Variables & Dual-Theme Tokens (`style.css`)
 ```css
@@ -187,7 +225,7 @@ function applyTheme(theme) {
 
 ---
 
-## 💻 6. High-Performance C++ Syntax Tokenizer (`builder.py`)
+## 💻 7. C++ Syntax Tokenizer & Snippet Copy System (`builder.py` & `app.js`)
 
 A pure-Python regex-based tokenizer that emits high-contrast semantic syntax spans without heavy JavaScript runtime dependencies:
 
@@ -267,9 +305,44 @@ def colorize_code_blocks(html_str, default_title="💡 C++ Production Refactor")
     return re.sub(r'(<pre[^>]*>)(.*?)(</pre>)', replacer, html_str, flags=re.DOTALL)
 ```
 
+### 1-Click Clipboard Copy Handler (`app.js`):
+```javascript
+function initCopyButtons() {
+  // 1. Multi-File Tabs in Code Viewer
+  document.querySelectorAll('.btn-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const viewer = btn.closest('.code-viewer');
+      const activePanel = viewer ? viewer.querySelector('.code-panel.active pre') : null;
+      if (activePanel) copyToClipboard(btn, activePanel.innerText);
+    });
+  });
+
+  // 2. Standalone Refactoring & Deep-Dive Snippet Boxes
+  document.querySelectorAll('.btn-copy-snippet').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.closest('.code-snippet-box');
+      const pre = box ? box.querySelector('pre') : null;
+      if (pre) copyToClipboard(btn, pre.innerText);
+    });
+  });
+}
+
+function copyToClipboard(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+```
+
 ---
 
-## 📊 7. Visual Architecture & UML Component Design
+## 📊 8. Visual Architecture & UML Component Design
 
 ### Inline Responsive SVG Diagram (e.g. Ring Buffer Queue)
 ```html
@@ -314,7 +387,7 @@ def colorize_code_blocks(html_str, default_title="💡 C++ Production Refactor")
 
 ---
 
-## 🛠️ 8. Automated Pre-Flight Verification Script
+## 🛠️ 9. Automated Pre-Flight Verification Script
 
 Run this verification routine before every release to guarantee zero broken links, zero tag mismatches, and accurate quiz structures:
 
@@ -358,7 +431,7 @@ if errors == 0:
 
 ---
 
-## 🚀 9. Build, Test & Deployment Workflow
+## 🚀 10. Build, Test & Deployment Workflow
 
 1. **Regenerate Entire Portal:**
    ```bash
