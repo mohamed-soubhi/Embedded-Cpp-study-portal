@@ -7,7 +7,8 @@
 [![Quizzes](https://img.shields.io/badge/Self--Checking_MCQs-464_Questions-a855f7?style=for-the-badge)](https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/)
 [![Standard](https://img.shields.io/badge/Standard-C%2B%2B11%20%7C%2014%20%7C%2017%20%7C%2020-f59e0b?style=for-the-badge&logo=c%2B%2B)](https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/)
 [![Target](https://img.shields.io/badge/Target-ARM_Cortex--M_%7C_MISRA_C%2B%2B-ef4444?style=for-the-badge&logo=arm)](https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/)
-[![Release](https://img.shields.io/badge/Release-v2.1-00ff88?style=for-the-badge)](https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal/releases/tag/v2.1)
+[![Release](https://img.shields.io/badge/Release-v2.2-00ff88?style=for-the-badge)](https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal/releases/tag/v2.2)
+[![Portal Visits](https://hits.sh/mohamed-soubhi.github.io/Embedded-Cpp-study-portal.svg?style=for-the-badge&label=👁️%20Visits&color=10b981&labelColor=111822)](https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/)
 
 ---
 
