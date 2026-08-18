@@ -448,3 +448,46 @@ if errors == 0:
    - Repository: `https://github.com/mohamed-soubhi/Embedded-Cpp-study-portal`
    - Portal Home: `https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/`
    - Technical Glossary: `https://mohamed-soubhi.github.io/Embedded-Cpp-study-portal/glossary.html`
+
+---
+
+## 📈 11. Live Web Visits Counter Architecture
+
+To provide real-time engagement telemetry on purely static GitHub Pages hosting without tracking cookies or custom backend databases:
+
+### Architecture & Mechanism:
+- **Serverless Edge Hit Service (`hits.sh`)**:
+  - Image endpoint: `https://hits.sh/mohamed-soubhi.github.io/Embedded-Cpp-study-portal.svg?style=flat-square&label=👁️+Portal+Visits&color=10b981&labelColor=111822`
+  - Keyed by static repository domain: `mohamed-soubhi.github.io/Embedded-Cpp-study-portal`.
+  - Atomically increments in a persistent remote key-value cloud store on every page hit.
+  - Returns a lightweight, styled SVG badge (`~1.2 KB`).
+- **Update Resilience**:
+  - Code rebuilds (`python3 generate_all.py`), Git pushes, commits, and tag releases **never reset** the counter.
+- **Footer Integration (`builder.py`, `generate_all.py`, `build_glossary.py`)**:
+  ```html
+  <div class="footer-bottom">
+    <div class="footer-stats-badge">
+      <a href="https://hits.sh/mohamed-soubhi.github.io/Embedded-Cpp-study-portal/" target="_blank" rel="noopener noreferrer" title="Live Total Web Visits">
+        <img alt="Portal Visits" src="https://hits.sh/mohamed-soubhi.github.io/Embedded-Cpp-study-portal.svg?style=flat-square&label=👁️+Portal+Visits&color=10b981&labelColor=111822" />
+      </a>
+    </div>
+    <p>Original Course &copy; Packt Publishing / Dr. John P. Baugh. Extended Architectural Analysis &amp; Interactive Study Portal by Mohamed Soubhi.</p>
+  </div>
+  ```
+- **CSS Styling (`style.css`)**:
+  ```css
+  .footer-stats-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease;
+  }
+  .footer-stats-badge:hover {
+    transform: translateY(-2px);
+  }
+  .footer-stats-badge img {
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+  ```
+
