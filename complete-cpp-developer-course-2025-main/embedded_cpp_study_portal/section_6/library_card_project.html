@@ -250,7 +250,12 @@
       <div class="content-card">
         
         <p>Type-safe validated identity class:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;string_view&gt;</span>
 
 <span class="tok-kw">class</span> DeviceAuthToken {
@@ -272,6 +277,7 @@
 
     <span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">is_authenticated</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> is_valid_; }
 };</pre>
+        </div>
         
       </div>
     </section>

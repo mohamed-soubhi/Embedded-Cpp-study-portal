@@ -245,7 +245,12 @@ T <span class="tok-fn">getSmaller</span>(T a, T b) {
       <div class="content-card">
         
         <p>Template hoisting pattern reducing Flash ROM consumption:</p>
-        <pre class="code-block"><span class="tok-com">// Non-templated base: Single copy in Flash ROM (.text)</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-com">// Non-templated base: Single copy in Flash ROM (.text)</span>
 <span class="tok-kw">class</span> CircularBufferBase {
 <span class="tok-kw">protected</span>:
     <span class="tok-type">void</span>* buffer_;
@@ -262,6 +267,7 @@ T <span class="tok-fn">getSmaller</span>(T a, T b) {
 <span class="tok-kw">private</span>:
     T storage_[N];
 };</pre>
+        </div>
         
       </div>
     </section>

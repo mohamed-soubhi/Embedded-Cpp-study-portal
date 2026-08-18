@@ -196,7 +196,12 @@
       <div class="content-card">
         
         <p>Here is how modern real-time systems handle operations that may fail using <code>std::expected</code> (or lightweight custom Result types):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;string_view&gt;</span>
 
 <span class="tok-com">// Embedded Result / Expected Implementation (C++17/20 Compatible)</span>
@@ -225,6 +230,7 @@ Result&lt;<span class="tok-type">uint16_t</span>, AdcError&gt; <span class="tok-
     <span class="tok-com">// Read hardware ADC register...</span>
     <span class="tok-kw">return</span> <span class="tok-type">uint16_t</span>(<span class="tok-num">2048</span>); <span class="tok-com">// Success: 12-bit ADC mid-scale reading</span>
 }</pre>
+        </div>
         
       </div>
     </section>

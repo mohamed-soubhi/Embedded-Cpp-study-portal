@@ -199,7 +199,12 @@
       <div class="content-card">
         
         <p>Type-safe flat 2D display framebuffer wrapper with DMA compatibility:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
 <span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> Rows, <span class="tok-type">size_t</span> Cols&gt;
@@ -218,6 +223,7 @@
     <span class="tok-kw">const</span> <span class="tok-type">uint16_t</span>* <span class="tok-fn">dma_buffer</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> pixels_.<span class="tok-fn">data</span>(); }
     <span class="tok-kw">constexpr</span> <span class="tok-type">size_t</span> <span class="tok-fn">byte_size</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> pixels_.<span class="tok-fn">size</span>() * <span class="tok-kw">sizeof</span>(<span class="tok-type">uint16_t</span>); }
 };</pre>
+        </div>
         
       </div>
     </section>

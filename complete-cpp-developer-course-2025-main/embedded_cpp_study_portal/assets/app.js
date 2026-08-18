@@ -69,6 +69,7 @@ function initTabs() {
 
 // Copy Code Button
 function initCopyButtons() {
+  // 1. Interactive Multi-File Tab Code Viewers
   const copyButtons = document.querySelectorAll('.btn-copy');
   copyButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -77,6 +78,29 @@ function initCopyButtons() {
       if (!activePanel) return;
 
       const codeText = activePanel.innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✓ Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy code: ', err);
+      });
+    });
+  });
+
+  // 2. Standalone Snippet Boxes (Refactoring & Concepts)
+  const snippetCopyButtons = document.querySelectorAll('.btn-copy-snippet');
+  snippetCopyButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.closest('.code-snippet-box');
+      const pre = box ? box.querySelector('pre') : null;
+      if (!pre) return;
+
+      const codeText = pre.innerText;
       navigator.clipboard.writeText(codeText).then(() => {
         const originalText = btn.innerHTML;
         btn.innerHTML = '✓ Copied!';

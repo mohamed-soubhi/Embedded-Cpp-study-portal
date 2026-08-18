@@ -377,7 +377,7 @@ def build_uml_section(uml_data, default_title="UML Architecture & Class Model"):
     </div>
     '''
 
-def colorize_code_blocks(html_str):
+def colorize_code_blocks(html_str, default_title="💡 C++ Production Refactor"):
     if not html_str:
         return ""
     
@@ -387,7 +387,13 @@ def colorize_code_blocks(html_str):
         cleaned = re.sub(r'</?(?:code|span)[^>]*>', '', inner)
         raw_code = html.unescape(cleaned).strip('\r\n')
         highlighted = highlight_cpp(raw_code)
-        return f'<pre class="code-block">{highlighted}</pre>'
+        return f'''<div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">{default_title}</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block">{highlighted}</pre>
+        </div>'''
     
     return re.sub(r'(<pre[^>]*>)(.*?)(</pre>)', replacer, html_str, flags=re.DOTALL)
 
@@ -404,9 +410,9 @@ def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_n
     quiz_html = build_mcq(data['quiz'])
     uml_content_html = build_uml_section(data.get('uml_diagram') or data.get('uml_html', ''))
     
-    concepts_colored = colorize_code_blocks(data.get('concepts_html', ''))
-    embedded_colored = colorize_code_blocks(data.get('embedded_html', ''))
-    refactor_colored = colorize_code_blocks(data.get('refactor_html', ''))
+    concepts_colored = colorize_code_blocks(data.get('concepts_html', ''), default_title="📚 Concept Implementation")
+    embedded_colored = colorize_code_blocks(data.get('embedded_html', ''), default_title="⚡ Embedded Hardware Code")
+    refactor_colored = colorize_code_blocks(data.get('refactor_html', ''), default_title="💡 Production-Ready Refactor")
     
     tags_html = " ".join([f'<span class="tag">{html.escape(t)}</span>' for t in data['tags']])
     

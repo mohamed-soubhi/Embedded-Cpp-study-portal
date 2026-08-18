@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review: Enhancement Roadmap</title>
+<style>
+:root {
+  --bg: #0b0d12; --surface: #12151c; --border: #232733; --text: #dfe3ea;
+  --muted: #8b93a5; --accent: #10b981; --code-bg: #1a1e28;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f7f8fa; --surface: #fff; --border: #e2e5eb; --text: #1a1d24; --muted: #5b6270; --accent: #059669; --code-bg: #f1f3f6; }
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system,Segoe UI,Helvetica,Arial,sans-serif; line-height: 1.6; margin: 0; padding: 2.5rem 1.5rem 5rem; }
+.wrap { max-width: 840px; margin: 0 auto; }
+h1 { font-size: 1.9rem; border-bottom: 2px solid var(--accent); padding-bottom: .5rem; margin-top: 0; }
+h2 { font-size: 1.35rem; margin-top: 2.2rem; color: var(--accent); }
+h3 { font-size: 1.1rem; margin-top: 1.6rem; }
+p { color: var(--text); }
+code { background: var(--code-bg); padding: .15em .4em; border-radius: 4px; font-size: .9em; font-family: ui-monospace,Menlo,Consolas,monospace; }
+pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+a { color: var(--accent); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+th, td { border: 1px solid var(--border); padding: .5rem .7rem; text-align: left; font-size: .92rem; }
+th { background: var(--surface); }
+ul, ol { padding-left: 1.4rem; }
+li { margin: .3rem 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+nav.crumbs { font-size: .85rem; color: var(--muted); margin-bottom: 1.5rem; }
+nav.crumbs a { margin-right: .5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="index.html">&larr; Index</a></nav>
+<h1>Enhancement Roadmap — My Notes</h1>
+
+<p>Prioritized by impact-to-effort for a course whose real product is the portal, not the raw solutions.</p>
+
+<h2>Do first (high impact, contained effort)</h2>
+
+<ol>
+<li>1. <strong>ISSUE-01 — add a root CMake build + CI.</strong> This is the single highest-leverage fix. Right now nothing proves the 116 projects compile. A GitHub Actions matrix job (<code>cmake --build</code> over every <code>section_*/*/</code> folder) turns "trust me it compiles" into a green badge, and catches regressions the moment someone edits old code. Cheap: one <code>CMakeLists.txt</code> pattern reused via <code>file(GLOB)</code>, one workflow file next to the existing <code>deploy-pages.yml</code>.</li>
+</ul>
+
+<ol>
+<li>2. <strong>ISSUE-02/07 — add a real "Embedded Version" code block per project, not just refactor bullets.</strong> This is the difference between "a portal that talks about embedded C++" and "a portal that teaches it." Don't need to rewrite all 116 — start with the ones the README foregrounds as embedded-flagship topics: Section 8 (MMIO/volatile/const), Section 7 (faults/exceptions), Section 6 (RAII peripheral gating). Three sections, highest narrative-to-code gap, highest payoff.</li>
+</ul>
+
+<ol>
+<li>3. <strong>ISSUE-04 — fix or annotate <code>Swapper::swap()</code>.</strong> Five-minute fix, but it's sitting in exactly the section (11: Templates/STL) meant to break students of C's copy-everything habit. Small effort, direct pedagogical win.</li>
+</ul>
+
+<h2>Do next</h2>
+
+<ol>
+<li>4. <strong>ISSUE-03 — add a short "why this code looks like this" note wherever raw course code (heap <code>new</code>, <code>using namespace std</code>) precedes an embedded refactor.</strong> Doesn't require code changes, just a portal template addition (one paragraph, reusable across all 116 pages) explaining the desktop-teaching-code → embedded-refactor arc explicitly instead of implicitly.</li>
+</ul>
+
+<ol>
+<li>5. <strong>Embedded gaps items 5, 6, 8 (move semantics, RAII-for-hardware, ISR-safety)</strong> — these are the three concepts a C-background student most reliably gets wrong when moving to embedded C++, per the gap analysis. Worth a dedicated small project each rather than folding into an existing one, since they're each a genuine "here's the C mental model, here's why it's wrong for C++/embedded" moment.</li>
+</ul>
+
+<h2>Do eventually</h2>
+
+<ol>
+<li>6. <strong>ISSUE-05 — pytest suite for the generator.</strong> Low current risk (single maintainer, git history shows careful incremental commits with descriptive audit messages), but worth having before the portal gets community contributions.</li>
+</ul>
+
+<ol>
+<li>7. <strong>ISSUE-06 — split oversized <code>section_N_data.py</code> files</strong> once any one file crosses ~800 lines. Not urgent today; <code>section_8_data.py</code> at 631 lines and <code>glossary_data.py</code> at 902 lines are the ones to watch.</li>
+</ul>
+
+<h2>What's already working well — keep doing this</h2>
+
+<ul>
+<li><strong>Data-driven generator architecture</strong> (<code>section_N_data.py</code> feeding a shared <code>builder.py</code>) is the right call — it's what makes 116 consistent pages maintainable by one person. Don't refactor this away.</li>
+<li><strong>The 5-pillar-per-project structure</strong> (source / UML / mechanics / hardware reality / production refactor) is a genuinely good pedagogical shape — it's the *content* inside pillars 4–5 that needs the code-backing described above, not the structure itself.</li>
+<li><strong>Commit discipline</strong> — git history shows scoped, descriptive commits (theming, then glossary, then UML diagrams, then numbering) rather than giant dumps. Keep shipping in this style; it makes ISSUE-01's CI addition low-risk to bolt on.</li>
+<li><strong>README curriculum table</strong> is honestly the best artifact in the repo right now — it's specific, accurate about what each section covers, and is the document I'd point a prospective student to first. The fixes above are about making the *code* live up to that table, not about improving the table itself.</li>
+</ul>
+
+</div>
+</body>
+</html>

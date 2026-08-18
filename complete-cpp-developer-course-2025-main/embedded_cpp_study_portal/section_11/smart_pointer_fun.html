@@ -265,7 +265,12 @@
       <div class="content-card">
         
         <p>Here is how embedded engineers use <code>std::unique_ptr</code> with a custom lambda deleter to automatically power-down an SPI peripheral when done:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;memory&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;memory&gt;</span>
 <span class="tok-pre">#include &lt;iostream&gt;</span>
 
 <span class="tok-kw">struct</span> SpiPeripheral {
@@ -287,6 +292,7 @@
     SpiHandle <span class="tok-fn">handle</span>(&amp;hwSpi); <span class="tok-com">// Automatically unlocks on function exit!</span>
     handle-&gt;<span class="tok-fn">write</span>(<span class="tok-num">0xAA</span>);
 } <span class="tok-com">// &lt;-- SpiDeleter runs automatically here!</span></pre>
+        </div>
         
       </div>
     </section>

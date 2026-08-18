@@ -186,7 +186,12 @@
       <div class="content-card">
         
         <p>Fast bitwise integer square root (0 float overhead):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Fast integer square root algorithm (Deterministic O(1) loop)</span>
 <span class="tok-type">uint32_t</span> <span class="tok-fn">isqrt</span>(<span class="tok-type">uint32_t</span> val) <span class="tok-kw">noexcept</span> {
@@ -206,6 +211,7 @@
     }
     <span class="tok-kw">return</span> res;
 }</pre>
+        </div>
         
       </div>
     </section>

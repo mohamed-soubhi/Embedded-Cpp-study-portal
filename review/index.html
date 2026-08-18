@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Review Index</title>
+<style>
+:root {
+  --bg: #0b0d12; --surface: #12151c; --border: #232733; --text: #dfe3ea;
+  --muted: #8b93a5; --accent: #10b981; --code-bg: #1a1e28;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f7f8fa; --surface: #fff; --border: #e2e5eb; --text: #1a1d24; --muted: #5b6270; --accent: #059669; --code-bg: #f1f3f6; }
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system,Segoe UI,Helvetica,Arial,sans-serif; line-height: 1.6; margin: 0; padding: 2.5rem 1.5rem 5rem; }
+.wrap { max-width: 720px; margin: 0 auto; }
+h1 { font-size: 1.9rem; border-bottom: 2px solid var(--accent); padding-bottom: .5rem; margin-top: 0; }
+p.lede { color: var(--muted); }
+.card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem; margin: .8rem 0; text-decoration: none; color: var(--text); }
+.card:hover { border-color: var(--accent); }
+.card h2 { margin: 0 0 .3rem; font-size: 1.1rem; color: var(--accent); }
+.card p { margin: 0; color: var(--muted); font-size: .92rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Project Review</h1>
+<p class="lede">Embedded Modern C++ course + study portal — findings and enhancement notes, 2026-08-18.</p>
+
+<a class="card" href="00-overview.html">
+<h2>00 · Overview</h2>
+<p>What the repo is, how the course code and the portal relate, and why that relationship is the central finding.</p>
+</a>
+
+<a class="card" href="01-issues.html">
+<h2>01 · Issues (open these on GitHub)</h2>
+<p>7 numbered, severity-tagged findings with file:line references and suggested fixes — copy-paste ready.</p>
+</a>
+
+<a class="card" href="02-embedded-gaps.html">
+<h2>02 · Embedded-Boundary Gaps</h2>
+<p>What a C-background student needs to bridge into embedded C++ that the curriculum doesn't yet show in code.</p>
+</a>
+
+<a class="card" href="03-enhancement-roadmap.html">
+<h2>03 · Enhancement Roadmap</h2>
+<p>Prioritized recommendations — what to fix first, and what's already working well.</p>
+</a>
+</div>
+</body>
+</html>

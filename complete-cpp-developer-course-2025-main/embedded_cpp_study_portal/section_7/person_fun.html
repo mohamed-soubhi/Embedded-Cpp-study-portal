@@ -203,10 +203,16 @@ Person::<span class="tok-fn">Person</span>(<span class="tok-type">string</span> 
         
         <h3>1. The Partial Construction Problem</h3>
         <p>Consider a class that allocates two raw pointer resources in its constructor:</p>
-        <pre class="code-block">MyClass::<span class="tok-fn">MyClass</span>() {
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">📚 Concept Implementation</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block">MyClass::<span class="tok-fn">MyClass</span>() {
     ptr1 = <span class="tok-kw">new</span> <span class="tok-fn">ResourceA</span>(); <span class="tok-com">// Succeeded</span>
     ptr2 = <span class="tok-kw">new</span> <span class="tok-fn">ResourceB</span>(); <span class="tok-com">// THROWS EXCEPTION!</span>
 }</pre>
+        </div>
         <p>Because the constructor never finished, <code>~MyClass()</code> will <strong>never be called</strong>. <code>ptr1</code> is leaked forever! This is why raw pointers in constructors violate basic exception safety.</p>
 
         <h3>2. Solving via RAII Smart Wrappers</h3>
@@ -237,7 +243,12 @@ Person::<span class="tok-fn">Person</span>(<span class="tok-type">string</span> 
       <div class="content-card">
         
         <p>Here is how to design exception-safe classes with guaranteed cleanup and noexcept construction:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;string_view&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
@@ -259,6 +270,7 @@ Person::<span class="tok-fn">Person</span>(<span class="tok-type">string</span> 
     <span class="tok-kw">constexpr</span> <span class="tok-type">uint8_t</span> <span class="tok-fn">get_id</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> node_id_; }
     <span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">string_view</span> <span class="tok-fn">get_name</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> node_name_.<span class="tok-fn">data</span>(); }
 };</pre>
+        </div>
         
       </div>
     </section>

@@ -186,7 +186,12 @@
       <div class="content-card">
         
         <p>Zero-SRAM Flash string table:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;string_view&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;string_view&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
 <span class="tok-com">// Stored 100% in Flash ROM (.rodata); Zero SRAM consumed</span>
@@ -196,6 +201,7 @@
     <span class="tok-str">&quot;Gps_Receiver&quot;</span>,
     <span class="tok-str">&quot;Can_Transceiver&quot;</span>
 };</pre>
+        </div>
         
       </div>
     </section>

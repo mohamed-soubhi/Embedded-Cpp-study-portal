@@ -327,7 +327,12 @@
       <div class="content-card">
         
         <p>Here is an embedded non-copyable, move-only DMA packet buffer compliant with AUTOSAR A12-8-1:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;utility&gt;</span>
 
 <span class="tok-kw">class</span> DmaBuffer {
@@ -360,6 +365,7 @@
     <span class="tok-type">size_t</span> size_;
     <span class="tok-type">uint8_t</span>* data_;
 };</pre>
+        </div>
         
       </div>
     </section>

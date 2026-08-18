@@ -182,7 +182,12 @@
       <div class="content-card">
         
         <p>Hardware True Random Number Generator (TRNG) driver:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Hardware TRNG Peripheral Access (STM32 RNG)</span>
 <span class="tok-kw">struct</span> HardwareRNG {
@@ -196,6 +201,7 @@
     <span class="tok-kw">while</span> ((rng-&gt;SR &amp; 1UL) == <span class="tok-num">0</span>); <span class="tok-com">// Wait for Data Ready (DRDY)</span>
     <span class="tok-kw">return</span> rng-&gt;DR; <span class="tok-com">// True physical analog entropy!</span>
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -276,7 +276,12 @@
       <div class="content-card">
         
         <p>100% constexpr UI bounding box class:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">class</span> BoundingBox {
 <span class="tok-kw">private</span>:
@@ -298,6 +303,7 @@
 <span class="tok-com">// Computed at compile-time and placed in Flash .rodata</span>
 <span class="tok-kw">constexpr</span> BoundingBox STATUS_BAR_RECT{<span class="tok-num">0</span>, <span class="tok-num">0</span>, <span class="tok-num">320</span>, <span class="tok-num">24</span>};
 <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> STATUS_BAR_AREA = STATUS_BAR_RECT.<span class="tok-fn">area</span>(); <span class="tok-com">// 7680</span></pre>
+        </div>
         
       </div>
     </section>

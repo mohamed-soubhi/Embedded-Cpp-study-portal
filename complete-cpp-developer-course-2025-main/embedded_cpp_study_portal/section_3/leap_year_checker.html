@@ -192,7 +192,12 @@
       <div class="content-card">
         
         <p>Compile-time constexpr leap year calculation:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">isLeapYear</span>(<span class="tok-type">uint32_t</span> year) <span class="tok-kw">noexcept</span> {
     <span class="tok-kw">return</span> ((year % <span class="tok-num">4</span> == <span class="tok-num">0</span>) &amp;&amp; (year % <span class="tok-num">100</span> != <span class="tok-num">0</span>)) || (year % <span class="tok-num">400</span> == <span class="tok-num">0</span>);
@@ -203,6 +208,7 @@
     <span class="tok-kw">if</span> (month == <span class="tok-num">2</span> &amp;&amp; <span class="tok-fn">isLeapYear</span>(year)) <span class="tok-kw">return</span> <span class="tok-num">29</span>;
     <span class="tok-kw">return</span> month &lt;= <span class="tok-num">12</span> ? DAYS[month] : <span class="tok-num">0</span>;
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -231,7 +231,12 @@
       <div class="content-card">
         
         <p>Here is an embedded multi-tier fault escalation and telemetry logging architecture:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">enum</span> <span class="tok-kw">class</span> EscalationLevel : <span class="tok-type">uint8_t</span> {
     TaskHandled = <span class="tok-num">0</span>,
@@ -272,6 +277,7 @@
         <span class="tok-com">// NVIC_SystemReset(); (ARM Cortex-M CMSIS call)</span>
     }
 };</pre>
+        </div>
         
       </div>
     </section>

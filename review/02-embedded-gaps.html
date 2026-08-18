@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review: Embedded Gaps</title>
+<style>
+:root {
+  --bg: #0b0d12; --surface: #12151c; --border: #232733; --text: #dfe3ea;
+  --muted: #8b93a5; --accent: #10b981; --code-bg: #1a1e28;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f7f8fa; --surface: #fff; --border: #e2e5eb; --text: #1a1d24; --muted: #5b6270; --accent: #059669; --code-bg: #f1f3f6; }
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system,Segoe UI,Helvetica,Arial,sans-serif; line-height: 1.6; margin: 0; padding: 2.5rem 1.5rem 5rem; }
+.wrap { max-width: 840px; margin: 0 auto; }
+h1 { font-size: 1.9rem; border-bottom: 2px solid var(--accent); padding-bottom: .5rem; margin-top: 0; }
+h2 { font-size: 1.35rem; margin-top: 2.2rem; color: var(--accent); }
+h3 { font-size: 1.1rem; margin-top: 1.6rem; }
+p { color: var(--text); }
+code { background: var(--code-bg); padding: .15em .4em; border-radius: 4px; font-size: .9em; font-family: ui-monospace,Menlo,Consolas,monospace; }
+pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+a { color: var(--accent); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+th, td { border: 1px solid var(--border); padding: .5rem .7rem; text-align: left; font-size: .92rem; }
+th { background: var(--surface); }
+ul, ol { padding-left: 1.4rem; }
+li { margin: .3rem 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+nav.crumbs { font-size: .85rem; color: var(--muted); margin-bottom: 1.5rem; }
+nav.crumbs a { margin-right: .5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="index.html">&larr; Index</a></nav>
+<h1>Embedded-Boundary Gaps for a C-Background Student</h1>
+
+<p>The portal's *prose* already covers most of the right vocabulary (MMIO, AAPCS, MISRA, cache lines, <code>alignas</code>). What's missing is <strong>hands-on code and exercises</strong> that a student who knows C but is new to C++'s embedded-safe subset actually needs to practice. Grouped by theme.</p>
+
+<h2>1. The "no exceptions / no RTTI / no heap" freestanding subset</h2>
+
+<p>A C programmer already writes allocation-free, no-exception code by default — that part transfers. What doesn't transfer is knowing *which C++ features quietly assume a hosted environment*. None of the 116 projects show:</p>
+
+<ul>
+<li>A <code>-fno-exceptions -fno-rtti</code> build actually failing/succeeding to demonstrate what breaks (e.g. <code>dynamic_cast</code>, <code>throw</code>, <code>typeid</code>).</li>
+<li><code>std::expected</code>/tagged error codes used *instead of* exceptions in a full worked example (Section 7 discusses this in prose, per README, but confirm a compiling example exists — it wasn't found among the sampled files).</li>
+<li>A comparison of <code>.eh_frame</code>/exception-table binary bloat with <code>-fno-exceptions</code> on vs off, with real <code>size</code> output.</li>
+</ul>
+
+<h2>2. Static/stack-only allocation patterns</h2>
+
+<p>C students are used to fixed-size arrays and manual buffers. The bridge to modern C++ is <code>std::array</code>, <code>etl::vector</code>, static ring buffers — the README promises this ("static ring buffers", "etl::vector") but the sampled course code uses raw <code>new</code>/<code>delete</code> and no <code>std::array</code> at all in the files reviewed. Concretely missing:</p>
+
+<ul>
+<li>A worked <code>std::array&lt;T, N&gt;</code> vs C array vs <code>std::vector</code> comparison with a stack/heap diagram.</li>
+<li>A static ring buffer / circular queue implemented with <code>std::array</code>, no dynamic allocation, no <code>%</code>-based wraparound bugs.</li>
+<li>Placement-new into a pre-allocated static byte pool (mentioned in Section 8's topic list) shown as actual code, not just a bullet point.</li>
+</ul>
+
+<h2>3. <code>volatile</code> and hardware register access</h2>
+
+<p>Central to embedded C++ and completely new to most C-background students who never had to think about compiler reordering with peripherals. Section 8 promises this but the sampled <code>PointerFun</code> source has none of it. Needed:</p>
+
+<ul>
+<li>A <code>volatile uint32_t* const REG = reinterpret_cast&lt;volatile uint32_t*&gt;(0x40021000);</code> pattern, contrasted with a non-volatile version and an explanation of what UB/optimization bug the <code>volatile</code> prevents.</li>
+<li>A tiny register wrapper struct/class (<code>class GpioRegister { volatile uint32_t&amp; reg; ... }</code>) showing RAII applied to hardware, not just heap objects.</li>
+</ul>
+
+<h2>4. <code>const</code>-correctness beyond "add the keyword"</h2>
+
+<p>C has <code>const</code>, but C++ layers <code>const</code> onto pointers, methods, and references in ways that matter for embedded (read-only Flash placement, <code>.rodata</code>). Section 8 promises "4 pointer constness permutations" and const-correctness — but the reviewed <code>Swapper.h</code> doesn't even mark its getters' parameters const-correct beyond the trivial <code>const</code> return methods, and no permutation table exists in code. Needed: one concrete file showing all four <code>const</code>/pointer combinations with an ASM/<code>.rodata</code> placement note per line.</p>
+
+<h2>5. Move semantics as "the C++ answer to C's memcpy-and-hope"</h2>
+
+<p>C-background students default to copy-everything thinking (that's literally how C structs work). Section 11 is the natural home for un-teaching this, but the sampled <code>Swapper&lt;T&gt;::swap()</code> does a plain copy-based swap. This is the single highest-leverage fix in the repo: show <code>std::move</code>, <code>std::swap</code>, and *why* it matters for embedded (avoiding a redundant SRAM copy of a large buffer/DMA descriptor).</p>
+
+<h2>6. RAII for hardware resources, not just memory</h2>
+
+<p>C teaches "always match your <code>malloc</code>/<code>free</code>" as manual discipline. C++'s pitch is "make the compiler do it." The README's Section 6 mentions "RAII peripheral power gating" — that's exactly the right example, but confirm it exists as compiling code (not found in the sampled files) — a <code>class PeripheralPowerGuard</code> that enables a peripheral clock in its constructor and disables it in its destructor is the canonical bridge example and should be one of the very first embedded-flavored examples students see, not buried in Section 6 of 12.</p>
+
+<h2>7. Compile-time computation (<code>constexpr</code>) as a *zero-runtime-cost* concept</h2>
+
+<p>C students know <code>#define</code> and enum tricks for compile-time constants but not <code>constexpr</code> functions/classes computing lookup tables at compile time with zero flash/SRAM runtime cost. This is mentioned ("constexpr bounding boxes", "constexpr tables") but should get its own small, standalone, heavily-commented project early (Section 2 or 3) rather than only appearing as an embedded-refactor suggestion later.</p>
+
+<h2>8. Interrupt-safety vocabulary</h2>
+
+<p>Not seen anywhere in the sampled material: <code>sig_atomic_t</code>/atomic flag patterns, ISR-safe data sharing (no locks in ISR context), or <code>std::atomic</code> in a freestanding/no-OS context. If the course is going to claim ARM Cortex-M / bare-metal framing, at least one project should touch "this variable is written by an ISR and read by main — here's what changes" (<code>volatile</code> isn't enough by itself; students conflate <code>volatile</code> with atomicity, and this is the exact repo to correct that misconception cleanly).</p>
+
+<hr>
+
+<p><strong>Net summary:</strong> the curriculum's stated topic list (README's per-section "Key Embedded &amp; Hardware Systems Realities" column) is the right list. The gap is between *portal narrative describing these ideas* and *course/portal code actually demonstrating them compiling and running*. Closing ISSUE-02 and ISSUE-07 from <code>01-issues.md</code> would fix most of items 1–4 above as a side effect.</p>
+
+</div>
+</body>
+</html>

@@ -297,7 +297,13 @@ Crop Crop::<span class="tok-kw">operator</span>+(<span class="tok-kw">const</spa
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block"><span class="tok-kw">struct</span> Vector3D { <span class="tok-type">float</span> x, y, z; Vector3D <span class="tok-kw">operator</span>+(<span class="tok-kw">const</span> Vector3D&amp; o) <span class="tok-kw">const</span> { <span class="tok-kw">return</span> {x+o.x, y+o.y, z+o.z}; } };</pre>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-kw">struct</span> Vector3D { <span class="tok-type">float</span> x, y, z; Vector3D <span class="tok-kw">operator</span>+(<span class="tok-kw">const</span> Vector3D&amp; o) <span class="tok-kw">const</span> { <span class="tok-kw">return</span> {x+o.x, y+o.y, z+o.z}; } };</pre>
+        </div>
       </div>
     </section>
 

@@ -190,7 +190,12 @@
       <div class="content-card">
         
         <p>Compile-time constexpr factorial calculation:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Evaluated 100% at compile-time; 0 runtime stack usage!</span>
 <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> <span class="tok-fn">factorial</span>(<span class="tok-type">uint32_t</span> n) <span class="tok-kw">noexcept</span> {
@@ -203,6 +208,7 @@
 
 <span class="tok-com">// Stored as an immediate constant in Flash ROM</span>
 <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> FACT_6 = <span class="tok-fn">factorial</span>(<span class="tok-num">6</span>); <span class="tok-com">// Emits MOV R0, #720</span></pre>
+        </div>
         
       </div>
     </section>

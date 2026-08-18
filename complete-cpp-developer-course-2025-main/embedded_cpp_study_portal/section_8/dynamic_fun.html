@@ -234,7 +234,12 @@
       <div class="content-card">
         
         <p>Here is how embedded engineers replace heap <code>new</code> with static storage buffers (zero heap allocation):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;cstddef&gt;</span>
 <span class="tok-pre">#include &lt;new&gt;</span>
 
@@ -260,6 +265,7 @@
         }
     }
 };</pre>
+        </div>
         
       </div>
     </section>

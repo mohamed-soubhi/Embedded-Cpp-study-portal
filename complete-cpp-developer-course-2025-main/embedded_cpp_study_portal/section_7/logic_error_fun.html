@@ -232,7 +232,12 @@
       <div class="content-card">
         
         <p>Here is a compile-time bounded array index that prevents out-of-bounds bugs at compile time:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;cstddef&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
@@ -254,6 +259,7 @@
         <span class="tok-kw">return</span> data_[Index];
     }
 };</pre>
+        </div>
         
       </div>
     </section>

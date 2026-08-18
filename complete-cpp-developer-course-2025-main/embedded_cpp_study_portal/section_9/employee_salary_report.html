@@ -259,7 +259,12 @@
       <div class="content-card">
         
         <p>Lightweight string buffer table formatter:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;cstdio&gt;</span>
 
 <span class="tok-kw">struct</span> SensorReport {
@@ -273,6 +278,7 @@
     <span class="tok-fn">snprintf</span>(out_buf, buf_len, <span class="tok-str">&quot;| ID: %02u | Temp: %+03d C | V: %04u mV |\r\n&quot;</span>,
              r.id, r.temp_c, r.voltage_mv);
 }</pre>
+        </div>
         
       </div>
     </section>

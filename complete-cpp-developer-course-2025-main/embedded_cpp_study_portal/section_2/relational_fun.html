@@ -199,7 +199,12 @@
       <div class="content-card">
         
         <p>Robust floating-point and fixed-point comparison helper:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cmath&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cmath&gt;</span>
 
 <span class="tok-kw">constexpr</span> <span class="tok-type">float</span> EPSILON = <span class="tok-num">0.0001f</span>;
 
@@ -207,6 +212,7 @@
     <span class="tok-type">float</span> diff = a - b;
     <span class="tok-kw">return</span> (diff &lt; <span class="tok-num">0.0f</span> ? -diff : diff) &lt; EPSILON;
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -317,7 +317,12 @@ George Hall <span class="tok-num">3.9</span></pre>
       <div class="content-card">
         
         <p>Binary record serialization with CRC32 integrity verification:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
 <span class="tok-pre">#pragma pack(push, 1) // Packed: 0 padding bytes across network / Flash</span>
@@ -334,6 +339,7 @@ George Hall <span class="tok-num">3.9</span></pre>
     <span class="tok-com">// Feed bytes into STM32 Hardware CRC Peripheral (CRC-&gt;DR)...</span>
     <span class="tok-kw">return</span> <span class="tok-num">0x12345678</span>;
 }</pre>
+        </div>
         
       </div>
     </section>

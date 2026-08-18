@@ -279,7 +279,12 @@
       <div class="content-card">
         
         <p>Here is how const correctness is applied in production hardware peripheral drivers:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Hardware register map structure</span>
 <span class="tok-kw">struct</span> UartHardwareMap {
@@ -302,6 +307,7 @@ UartHardwareMap* <span class="tok-kw">const</span> UART1_HW = <span class="tok-k
     .raw_counts    = {<span class="tok-num">0</span>, <span class="tok-num">1024</span>, <span class="tok-num">2048</span>, <span class="tok-num">3072</span>, <span class="tok-num">4095</span>},
     .voltage_volts = {<span class="tok-num">0.0f</span>, <span class="tok-num">0.825f</span>, <span class="tok-num">1.65f</span>, <span class="tok-num">2.475f</span>, <span class="tok-num">3.3f</span>}
 };</pre>
+        </div>
         
       </div>
     </section>

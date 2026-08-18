@@ -268,11 +268,17 @@
         <div class="callout callout-tip">
           <h4>💡 Embedded Hardware Tip: Specifying Underlying Types</h4>
           <p>Always specify the underlying fixed-width integer type matching the physical register width:</p>
+          <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">⚡ Embedded Hardware Code</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
           <pre class="code-block"><span class="tok-kw">enum</span> <span class="tok-kw">class</span> UartBaud : <span class="tok-type">uint8_t</span> {
     B9600   = <span class="tok-num">0x01</span>,
     B19200  = <span class="tok-num">0x02</span>,
     B115200 = <span class="tok-num">0x03</span>
 }; <span class="tok-com">// Guaranteed exactly 1 byte in SRAM/Flash!</span></pre>
+        </div>
         </div>
 
         <h3>2. Microcontroller Branching: If-Else Cascades vs Jump Tables</h3>
@@ -288,7 +294,12 @@
       <div class="content-card">
         
         <p>Production-grade scoped enum with type-safe bitmask operators for peripheral control:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;type_traits&gt;</span>
 
 <span class="tok-com">// Scoped Enum with explicit 1-byte storage</span>
@@ -306,6 +317,7 @@
         <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">std</span>::underlying_type_t&lt;GpioPin&gt;&gt;(b)
     );
 }</pre>
+        </div>
         
       </div>
     </section>

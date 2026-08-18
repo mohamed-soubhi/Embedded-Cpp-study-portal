@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review: Issues</title>
+<style>
+:root {
+  --bg: #0b0d12; --surface: #12151c; --border: #232733; --text: #dfe3ea;
+  --muted: #8b93a5; --accent: #10b981; --code-bg: #1a1e28;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f7f8fa; --surface: #fff; --border: #e2e5eb; --text: #1a1d24; --muted: #5b6270; --accent: #059669; --code-bg: #f1f3f6; }
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system,Segoe UI,Helvetica,Arial,sans-serif; line-height: 1.6; margin: 0; padding: 2.5rem 1.5rem 5rem; }
+.wrap { max-width: 840px; margin: 0 auto; }
+h1 { font-size: 1.9rem; border-bottom: 2px solid var(--accent); padding-bottom: .5rem; margin-top: 0; }
+h2 { font-size: 1.35rem; margin-top: 2.2rem; color: var(--accent); }
+h3 { font-size: 1.1rem; margin-top: 1.6rem; }
+p { color: var(--text); }
+code { background: var(--code-bg); padding: .15em .4em; border-radius: 4px; font-size: .9em; font-family: ui-monospace,Menlo,Consolas,monospace; }
+pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+a { color: var(--accent); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+th, td { border: 1px solid var(--border); padding: .5rem .7rem; text-align: left; font-size: .92rem; }
+th { background: var(--surface); }
+ul, ol { padding-left: 1.4rem; }
+li { margin: .3rem 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+nav.crumbs { font-size: .85rem; color: var(--muted); margin-bottom: 1.5rem; }
+nav.crumbs a { margin-right: .5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="index.html">&larr; Index</a></nav>
+<h1>Review Findings — copy-paste into GitHub Issues</h1>
+
+<p>Severity: 🔴 High (misleads students or blocks verification) · 🟡 Medium (quality/consistency) · 🟢 Low (polish)</p>
+
+<hr>
+
+<h2>ISSUE-01 🔴 No build system — 116 projects can't be compiled or verified</h2>
+
+<p><strong>Where:</strong> <code>complete-cpp-developer-course-2025-main/section_1</code> … <code>section_12</code> (all projects)</p>
+
+<p><strong>Problem:</strong> There is no <code>CMakeLists.txt</code>, <code>Makefile</code>, <code>.vcxproj</code>, or any build file anywhere under <code>complete-cpp-developer-course-2025-main/section_*</code>. Every project is a bare folder of <code>.cpp</code>/<code>.h</code> files. A student can't <code>git clone</code> and build — they have to reverse-engineer a Visual Studio project manually, guess include paths for multi-file projects (e.g. <code>DroneFleet/Drone.cpp</code> + <code>Drone.h</code> + <code>main.cpp</code>), and there's no CI proving any of the 116 projects actually compiles.</p>
+
+<p><strong>Fix:</strong> Add one root <code>CMakeLists.txt</code> with a subdirectory per project (or a single generated <code>add_executable</code> per folder via <code>file(GLOB ...)</code> + loop), plus a GitHub Actions job that builds every project on push. This alone would catch stale/broken code before students hit it.</p>
+
+<hr>
+
+<h2>ISSUE-02 🔴 Portal's embedded narrative isn't demonstrated in the actual code</h2>
+
+<p><strong>Where:</strong> <code>embedded_cpp_study_portal/section_8_data.py</code> (MMIO/<code>volatile</code> deep-dive) vs. <code>section_8/PointerFun/PointerFun/main.cpp</code></p>
+
+<p><strong>Problem:</strong> The portal page for this project talks about memory-mapped I/O, <code>volatile</code> hardware registers, ARM AAPCS register passing. The actual source it's describing is:</p>
+
+<pre><code>int myLovelyInt = 150;
+int* somePtr = &amp;myLovelyInt;
+cout &lt;&lt; &quot;pointer holds value: &quot; &lt;&lt; somePtr &lt;&lt; endl;</code></pre>
+
+<p>Plain heap-free pointer demo, <code>&lt;iostream&gt;</code>, zero hardware content. The embedded framing is bolted on in the portal's prose/diagrams, not shown as a <code>volatile uint32_t* const REG = (volatile uint32_t*)0x4002...;</code> example anywhere. A student who reads the portal page and then opens the linked source will find the two don't visibly connect — the connection is asserted, not shown.</p>
+
+<p><strong>Fix:</strong> For each project, add a *second* code sample in the portal ("Embedded version") that is real, compilable, freestanding-flavored C++ illustrating the concept discussed — not just refactoring bullet points. <code>section_8</code>, <code>section_7</code> (faults/MPU), and <code>section_9</code> (LittleFS/flash) are the projects where this gap is most visible because the desktop code has nothing structurally in common with the embedded claims.</p>
+
+<hr>
+
+<h2>ISSUE-03 🟡 Raw course code teaches patterns the portal tells students to avoid</h2>
+
+<p><strong>Where:</strong> <code>section_8/DynamicFun/DynamicFun/main.cpp</code>, most <code>main.cpp</code> files across all sections</p>
+
+<p><strong>Problem:</strong></p>
+<pre><code>int* myIntPtr = new int;
+delete myIntPtr;
+myIntPtr = nullptr;</code></pre>
+<p>and <code>using namespace std;</code> at file scope in nearly every <code>main.cpp</code>. Meanwhile the portal's own "Production-Ready Embedded Refactoring" pillar tells students to avoid heap allocation and prefer RAII/smart pointers. The base code the student actually reads and runs contradicts the lesson the portal teaches about it two clicks later.</p>
+
+<p><strong>Fix:</strong> Not asking to rewrite Packt's original solutions (that'd break attribution/fidelity to the course). Instead: in the portal's "Core C++ Mechanics" or refactoring section, explicitly call out *why* the shown code uses raw <code>new</code>/<code>using namespace std</code>, and mark it "desktop-teaching-code, not embedded-safe" rather than silently jumping to the embedded refactor. Right now the jump from raw→refactored looks unmotivated to a student who hasn't been told the raw code is the "before," not the target.</p>
+
+<hr>
+
+<h2>ISSUE-04 🟡 Template code shown without move semantics in the STL/templates section</h2>
+
+<p><strong>Where:</strong> <code>section_11/SwapperTest/SwapperTest/Swapper.h</code></p>
+
+<p><strong>Problem:</strong></p>
+<pre><code>template &lt;class T&gt;
+void Swapper&lt;T&gt;::swap() {
+    T temp = first;
+    first = second;
+    second = temp;
+}</code></pre>
+<p>Section 11 is billed as "Templates, STL &amp; Memory" and covers <code>std::unique_ptr</code>, Rule of Three/Five/Zero elsewhere — but this specific class does a copy-based swap with no <code>std::move</code>, right in the section that's supposed to be teaching move semantics and STL idioms. For a student moving from C, this reads as "that's just how C++ swap works," reinforcing a copy-heavy mental model exactly where the course should be breaking it.</p>
+
+<p><strong>Fix:</strong> Either fix <code>Swapper&lt;T&gt;::swap()</code> to use <code>std::move</code>, or if intentionally left naive as a teaching contrast, add a comment/portal callout: "this copies — see std::swap / move semantics for the zero-copy version."</p>
+
+<hr>
+
+<h2>ISSUE-05 🟡 No tests anywhere in the repository</h2>
+
+<p><strong>Where:</strong> whole repo</p>
+
+<p><strong>Problem:</strong> Zero unit tests for the 116 course projects, and none for the portal generator itself (<code>builder.py</code>, <code>generator.py</code>, <code>section_*_data.py</code>). The portal's own generation pipeline (<code>generate_all.py</code>) has no regression check beyond "0 audit errors" mentioned in a commit message — i.e. someone eyeballed it once. A broken <code>section_N_data.py</code> edit (bad HTML escaping, broken quiz answer key, etc.) would ship silently.</p>
+
+<p><strong>Fix:</strong> For the course code: not critical (see ISSUE-01, a build-only CI check covers the main risk). For the portal generator: add a small pytest suite that runs <code>generate_all.py</code> against a temp dir and asserts (a) exit code 0, (b) every section's page count matches its data file's project count, (c) no unescaped <code>{{</code> placeholders leak into output HTML.</p>
+
+<hr>
+
+<h2>ISSUE-06 🟢 Generator files will exceed maintainable size as content grows</h2>
+
+<p><strong>Where:</strong> <code>embedded_cpp_study_portal/glossary_data.py</code> (902 lines), <code>section_8_data.py</code> (631 lines), <code>builder.py</code> (581 lines)</p>
+
+<p><strong>Problem:</strong> These are single flat files holding large embedded dicts/strings. Currently fine, but <code>section_N_data.py</code> for the bigger sections (11 has 19 projects, 12 has 10) will keep growing, and there's no per-project file split. At 800+ lines a single bad edit is hard to diff/review.</p>
+
+<p><strong>Fix:</strong> Not urgent. If sections keep growing, split <code>section_N_data.py</code> into <code>section_N/&lt;project_id&gt;.py</code> fragments imported into a dict, same pattern already used for the <code>section_N/</code> HTML output folders.</p>
+
+<hr>
+
+<h2>ISSUE-07 🟢 <code>PointerFun</code> (and similar single-file demos) have no header/const-correctness examples</h2>
+
+<p><strong>Where:</strong> <code>section_8/PointerFun/PointerFun/main.cpp</code></p>
+
+<p><strong>Problem:</strong> No <code>const int*</code> vs <code>int* const</code> vs <code>const int* const</code> demonstrated in code, even though <code>section_8</code>'s own portal topic list promises "4 pointer constness permutations." The four permutations are explained in prose on the portal page but not exercised in the compilable source.</p>
+
+<p><strong>Fix:</strong> Add the four-permutation snippet directly into <code>PointerFun/main.cpp</code> (or a new small project) so the portal's claim and the code line up 1:1.</p>
+
+</div>
+</body>
+</html>

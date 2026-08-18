@@ -215,7 +215,12 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block"><span class="tok-com">// Prefer contiguous std::array for maximum CPU cache throughput</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-com">// Prefer contiguous std::array for maximum CPU cache throughput</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 <span class="tok-pre">#include &lt;iostream&gt;</span>
 
@@ -223,6 +228,7 @@
     <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">int</span>, <span class="tok-num">64</span>&gt; fastData;
     <span class="tok-com">// Sequential memory access maximizes cache line utilization</span>
 }</pre>
+        </div>
         
       </div>
     </section>

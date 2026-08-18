@@ -224,7 +224,12 @@
       <div class="content-card">
         
         <p>Here is an embedded lock-free SPSC circular ring buffer for microcontroller communication:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
 <span class="tok-pre">#include &lt;atomic&gt;</span>
 <span class="tok-pre">#include &lt;optional&gt;</span>
 <span class="tok-pre">#include &lt;cstdint&gt;</span>
@@ -260,6 +265,7 @@
     <span class="tok-type">std</span>::atomic&lt;<span class="tok-type">size_t</span>&gt; head_{<span class="tok-num">0</span>};
     <span class="tok-type">std</span>::atomic&lt;<span class="tok-type">size_t</span>&gt; tail_{<span class="tok-num">0</span>};
 };</pre>
+        </div>
         
       </div>
     </section>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review: Overview</title>
+<style>
+:root {
+  --bg: #0b0d12; --surface: #12151c; --border: #232733; --text: #dfe3ea;
+  --muted: #8b93a5; --accent: #10b981; --code-bg: #1a1e28;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg: #f7f8fa; --surface: #fff; --border: #e2e5eb; --text: #1a1d24; --muted: #5b6270; --accent: #059669; --code-bg: #f1f3f6; }
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system,Segoe UI,Helvetica,Arial,sans-serif; line-height: 1.6; margin: 0; padding: 2.5rem 1.5rem 5rem; }
+.wrap { max-width: 840px; margin: 0 auto; }
+h1 { font-size: 1.9rem; border-bottom: 2px solid var(--accent); padding-bottom: .5rem; margin-top: 0; }
+h2 { font-size: 1.35rem; margin-top: 2.2rem; color: var(--accent); }
+h3 { font-size: 1.1rem; margin-top: 1.6rem; }
+p { color: var(--text); }
+code { background: var(--code-bg); padding: .15em .4em; border-radius: 4px; font-size: .9em; font-family: ui-monospace,Menlo,Consolas,monospace; }
+pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+a { color: var(--accent); }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+th, td { border: 1px solid var(--border); padding: .5rem .7rem; text-align: left; font-size: .92rem; }
+th { background: var(--surface); }
+ul, ol { padding-left: 1.4rem; }
+li { margin: .3rem 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+nav.crumbs { font-size: .85rem; color: var(--muted); margin-bottom: 1.5rem; }
+nav.crumbs a { margin-right: .5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="index.html">&larr; Index</a></nav>
+<h1>Project Review — Overview</h1>
+
+<p><strong>Reviewed:</strong> 2026-08-18</p>
+<p><strong>Repo:</strong> Embedded Modern C++: From Bare-Metal to STL (Complete C++ Developer Course + Study Portal)</p>
+<p><strong>Audience for this review:</strong> the course author/maintainer. Written for handoff to students who already know C and are learning modern C++ with an embedded-systems lens.</p>
+
+<h2>What this repo is</h2>
+
+<p>Two things live side by side:</p>
+
+<ol>
+<li>1. <strong><code>complete-cpp-developer-course-2025-main/section_1</code> … <code>section_12</code></strong> — the original Packt/Dr. John P. Baugh "Complete C++ Developer Course" solution code. Plain <code>.cpp</code>/<code>.h</code> files, one small project per folder (e.g. <code>PointerFun</code>, <code>DynamicDogs</code>, <code>Swapper</code>). No build files, no tests, no CI for this code.</li>
+<li>2. <strong><code>embedded_cpp_study_portal/</code></strong> — a custom static-site generator (Python, data-driven: one <code>section_N_data.py</code> per section feeding a shared <code>builder.py</code>) that produces 116 project pages, a 68-term glossary, and 464 quiz questions. This is the actual teaching product — it re-frames each vanilla course exercise through an "embedded/bare-metal" lens (MMIO, AAPCS, cache lines, MISRA, etc.) and adds a "Production-Ready Embedded Refactoring" section per project.</li>
+</ul>
+
+<h2>Why this split matters</h2>
+
+<p>The course code (part 1) is <strong>desktop-oriented, C++11-ish, teaching-first code</strong> — <code>using namespace std;</code>, raw <code>new</code>/<code>delete</code>, no <code>const</code>-correctness on template parameters, no move semantics. That's normal for an intro course. The portal (part 2) is where the "embedded boundary" content actually lives, and it's added *on top of* the raw code as narrative, not demonstrated as compiling embedded code.</p>
+
+<p>That gap is the central finding of this review: <strong>students read hardware-accurate prose next to code that never touches hardware and isn't restricted the way real embedded code is.</strong> See <code>01-issues.md</code> for specifics.</p>
+
+<h2>Files in this review folder</h2>
+
+<div class="table-wrap"><table>
+<thead><tr><th>File</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>00-overview.md</code></td><td>this file</td></tr>
+<tr><td><code>01-issues.md</code></td><td>numbered, severity-tagged findings — copy each into a GitHub issue directly</td></tr>
+<tr><td><code>02-embedded-gaps.md</code></td><td>topics a C→embedded-C++ student needs that are missing or under-covered</td></tr>
+<tr><td><code>03-enhancement-roadmap.md</code></td><td>prioritized recommendations, my notes for what to fix first</td></tr>
+</tbody></table></div>
+
+<p>Each <code>.md</code> has a matching <code>.html</code> for offline/browser reading.</p>
+
+</div>
+</body>
+</html>

@@ -248,8 +248,8 @@ def highlight_cpp(code_str):
 
     return "\n".join(highlighted)
 
-def colorize_code_blocks(html_str):
-    """Automatically extracts and applies semantic C++ syntax highlighting to any <pre> blocks in HTML content cards."""
+def colorize_code_blocks(html_str, default_title="💡 C++ Production Refactor"):
+    """Automatically extracts and applies semantic C++ syntax highlighting and 1-click copy buttons to any <pre> blocks in HTML content cards."""
     if not html_str:
         return ""
     def replacer(match):
@@ -257,7 +257,13 @@ def colorize_code_blocks(html_str):
         cleaned = re.sub(r'</?(?:code|span)[^>]*>', '', inner)
         raw_code = html.unescape(cleaned).strip('\r\n')
         highlighted = highlight_cpp(raw_code)
-        return f'<pre class="code-block">{highlighted}</pre>'
+        return f'''<div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">{default_title}</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block">{highlighted}</pre>
+        </div>'''
     return re.sub(r'(<pre[^>]*>)(.*?)(</pre>)', replacer, html_str, flags=re.DOTALL)
 ```
 

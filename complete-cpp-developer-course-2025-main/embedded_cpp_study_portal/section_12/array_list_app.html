@@ -354,11 +354,17 @@
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block"><span class="tok-com">// Bounded ArrayList with zero dynamic allocation</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-com">// Bounded ArrayList with zero dynamic allocation</span>
 <span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> MaxSize&gt;
 <span class="tok-kw">class</span> BoundedList {
     <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, MaxSize&gt; data_; <span class="tok-type">size_t</span> size_ = <span class="tok-num">0</span>;
 };</pre>
+        </div>
       </div>
     </section>
 

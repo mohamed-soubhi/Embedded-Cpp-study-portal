@@ -186,7 +186,12 @@
       <div class="content-card">
         
         <p>Deterministic ETL fixed-capacity vector usage:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-com">// Conceptually equivalent to etl::vector&lt;uint32_t, 10&gt;</span>
 <span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> MAX_SIZE&gt;
 <span class="tok-kw">class</span> EtlVectorDemo {
@@ -206,6 +211,7 @@
 
     <span class="tok-type">size_t</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> current_size_; }
 };</pre>
+        </div>
         
       </div>
     </section>

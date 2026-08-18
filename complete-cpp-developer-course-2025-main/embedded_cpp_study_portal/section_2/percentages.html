@@ -190,7 +190,12 @@
       <div class="content-card">
         
         <p>Safe, high-precision integer percentage calculation:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Calculates percentage (0-100%) with 0 float overhead and 0 overflow risk</span>
 <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> <span class="tok-fn">calculatePercentage</span>(<span class="tok-type">uint32_t</span> part, <span class="tok-type">uint32_t</span> total) <span class="tok-kw">noexcept</span> {
@@ -198,6 +203,7 @@
     <span class="tok-com">// 64-bit promotion prevents 32-bit intermediate multiplication overflow</span>
     <span class="tok-kw">return</span> <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint32_t</span>&gt;((<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint64_t</span>&gt;(part) * 100UL) / total);
 }</pre>
+        </div>
         
       </div>
     </section>

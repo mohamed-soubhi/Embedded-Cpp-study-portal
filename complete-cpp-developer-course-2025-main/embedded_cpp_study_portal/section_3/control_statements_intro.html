@@ -185,7 +185,12 @@
       <div class="content-card">
         
         <p>Branch-predictable condition ordering (most likely path first):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Optimize for the 99.9% common case (heartbeat healthy)</span>
 <span class="tok-type">void</span> <span class="tok-fn">evaluateHeartbeat</span>(<span class="tok-type">uint32_t</span> missed_ticks) <span class="tok-kw">noexcept</span> {
@@ -197,6 +202,7 @@
     <span class="tok-com">// Rare fault path</span>
     <span class="tok-fn">triggerSafetyShutdown</span>();
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -168,7 +168,13 @@
         
         <h3>1. The Two-Step Remove-Erase Idiom</h3>
         <p>In standard C++, <code>std::remove</code> only shifts non-matching elements to the front of the range and returns a past-the-end iterator. It cannot alter the container's <code>size()</code> because generic algorithms operate only on iterators without knowledge of container topology. The container's <code>erase()</code> method must be called to truncate the tail.</p>
-        <pre class="code-block">vec.<span class="tok-fn">erase</span>(<span class="tok-type">std</span>::<span class="tok-fn">remove</span>(vec.<span class="tok-fn">begin</span>(), vec.<span class="tok-fn">end</span>(), targetValue), vec.<span class="tok-fn">end</span>());</pre>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">📚 Concept Implementation</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block">vec.<span class="tok-fn">erase</span>(<span class="tok-type">std</span>::<span class="tok-fn">remove</span>(vec.<span class="tok-fn">begin</span>(), vec.<span class="tok-fn">end</span>(), targetValue), vec.<span class="tok-fn">end</span>());</pre>
+        </div>
         
       </div>
     </section>
@@ -197,7 +203,12 @@
       <div class="content-card">
         
         <p>In modern C++20, the verbose two-step idiom is replaced with uniform, clear <code>std::erase</code>:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;vector&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;vector&gt;</span>
 <span class="tok-pre">#include &lt;iostream&gt;</span>
 
 <span class="tok-type">int</span> <span class="tok-fn">main</span>() {
@@ -211,6 +222,7 @@
     }
     <span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
+        </div>
         
       </div>
     </section>

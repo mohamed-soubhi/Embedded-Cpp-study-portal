@@ -216,7 +216,12 @@
       <div class="content-card">
         
         <p>Ultra-lightweight Xorshift32 PRNG (4 Bytes of SRAM Total):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Marsaglia Xorshift32: High-quality randomness; 4 bytes RAM; 3 clock cycles!</span>
 <span class="tok-type">uint32_t</span> <span class="tok-fn">xorshift32</span>(<span class="tok-type">uint32_t</span>&amp; state) <span class="tok-kw">noexcept</span> {
@@ -227,6 +232,7 @@
     state = x;
     <span class="tok-kw">return</span> x;
 }</pre>
+        </div>
         
       </div>
     </section>

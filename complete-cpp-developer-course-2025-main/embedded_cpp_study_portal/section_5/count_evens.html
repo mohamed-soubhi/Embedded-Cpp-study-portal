@@ -190,7 +190,12 @@
       <div class="content-card">
         
         <p>Branchless even-number counter:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;cstddef&gt;</span>
 
 <span class="tok-type">size_t</span> <span class="tok-fn">countEvensBranchless</span>(<span class="tok-kw">const</span> <span class="tok-type">uint32_t</span>* data, <span class="tok-type">size_t</span> len) <span class="tok-kw">noexcept</span> {
@@ -201,6 +206,7 @@
     }
     <span class="tok-kw">return</span> count;
 }</pre>
+        </div>
         
       </div>
     </section>

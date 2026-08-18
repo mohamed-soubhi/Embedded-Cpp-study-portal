@@ -259,7 +259,12 @@
       <div class="content-card">
         
         <p>Software saturating integer addition:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;algorithm&gt;</span>
 
 <span class="tok-com">// Saturating addition: Clamps to 255 rather than wrapping to 0</span>
@@ -267,6 +272,7 @@
     <span class="tok-type">uint16_t</span> sum = <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint16_t</span>&gt;(a) + b;
     <span class="tok-kw">return</span> <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint8_t</span>&gt;(sum &gt; <span class="tok-num">255</span> ? <span class="tok-num">255</span> : sum);
 }</pre>
+        </div>
         
       </div>
     </section>

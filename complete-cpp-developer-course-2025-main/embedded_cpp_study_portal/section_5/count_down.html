@@ -201,7 +201,12 @@
       <div class="content-card">
         
         <p>Non-blocking hardware timer delay:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">extern</span> <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> g_system_ticks_ms; <span class="tok-com">// Incremented by SysTick_Handler</span>
 
@@ -211,6 +216,7 @@
         __asm <span class="tok-kw">volatile</span>(&quot;wfi&quot;); <span class="tok-com">// Wait For Interrupt: Sleep CPU until next timer tick!</span>
     }
 }</pre>
+        </div>
         
       </div>
     </section>

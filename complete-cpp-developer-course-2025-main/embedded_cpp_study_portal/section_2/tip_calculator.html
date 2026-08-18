@@ -190,7 +190,12 @@
       <div class="content-card">
         
         <p>Exact integer fixed-point currency calculation:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">struct</span> CurrencyUSD {
     <span class="tok-type">uint64_t</span> total_cents{<span class="tok-num">0</span>};
@@ -200,6 +205,7 @@
         <span class="tok-kw">return</span> CurrencyUSD{(total_cents * percent + <span class="tok-num">50</span>) / <span class="tok-num">100</span>}; <span class="tok-com">// +50 for rounding</span>
     }
 };</pre>
+        </div>
         
       </div>
     </section>

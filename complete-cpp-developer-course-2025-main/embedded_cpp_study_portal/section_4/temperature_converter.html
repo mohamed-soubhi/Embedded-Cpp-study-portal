@@ -192,7 +192,12 @@
       <div class="content-card">
         
         <p>Q8.8 Fixed-Point Temperature Representation (Single-Cycle Arithmetic):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Fixed-Point Q8.8 (16-bit integer: 8 bits integer, 8 bits fraction)</span>
 <span class="tok-kw">struct</span> FixedQ8_8 {
@@ -212,6 +217,7 @@
     <span class="tok-type">int32_t</span> intermediate = (<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">int32_t</span>&gt;(c.raw) * <span class="tok-num">9</span>) / <span class="tok-num">5</span>;
     <span class="tok-kw">return</span> FixedQ8_8{<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">int16_t</span>&gt;(intermediate + (<span class="tok-num">32</span> &lt;&lt; <span class="tok-num">8</span>))};
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -173,7 +173,12 @@
       <div class="content-card">
         
         <p>Packed 8-flag status register (1 Byte Total):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">struct</span> SystemFlags {
     <span class="tok-type">uint8_t</span> power_good    : <span class="tok-num">1</span>;
@@ -183,6 +188,7 @@
     <span class="tok-type">uint8_t</span> over_temp     : <span class="tok-num">1</span>;
     <span class="tok-type">uint8_t</span> reserved      : <span class="tok-num">3</span>;
 }; <span class="tok-com">// Exactly 1 byte in SRAM!</span></pre>
+        </div>
         
       </div>
     </section>

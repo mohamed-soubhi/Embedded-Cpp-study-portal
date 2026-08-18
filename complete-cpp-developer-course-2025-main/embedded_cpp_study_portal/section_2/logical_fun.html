@@ -184,7 +184,12 @@
       <div class="content-card">
         
         <p>Short-circuit hardware peripheral guard:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">struct</span> UartHardware {
     <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> SR;
@@ -195,6 +200,7 @@
 <span class="tok-kw">bool</span> <span class="tok-fn">isUartReady</span>(<span class="tok-kw">const</span> UartHardware* dev) <span class="tok-kw">noexcept</span> {
     <span class="tok-kw">return</span> (dev != <span class="tok-kw">nullptr</span>) &amp;&amp; ((dev-&gt;SR &amp; (1UL &lt;&lt; <span class="tok-num">7</span>)) != <span class="tok-num">0</span>);
 }</pre>
+        </div>
         
       </div>
     </section>

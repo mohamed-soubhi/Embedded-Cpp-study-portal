@@ -283,7 +283,12 @@
       <div class="content-card">
         
         <p>Here is an embedded safety-critical monitor using a deterministic state machine with hysteresis:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">enum</span> <span class="tok-kw">class</span> SafetyState : <span class="tok-type">uint8_t</span> {
     Nominal = <span class="tok-num">0</span>,
@@ -322,6 +327,7 @@
         <span class="tok-com">// Assert GPIO pin to trip physical safety relay</span>
     }
 };</pre>
+        </div>
         
       </div>
     </section>

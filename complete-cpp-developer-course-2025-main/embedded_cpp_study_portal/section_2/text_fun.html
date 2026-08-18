@@ -183,7 +183,12 @@
       <div class="content-card">
         
         <p>ASCII serial framing parser:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">enum</span> <span class="tok-kw">class</span> AsciiControl : <span class="tok-type">uint8_t</span> {
     STX = <span class="tok-num">0x02</span>, <span class="tok-com">// Start of Packet</span>
@@ -198,6 +203,7 @@
     <span class="tok-kw">return</span> byte == <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint8_t</span>&gt;(AsciiControl::ETX) || 
            byte == <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint8_t</span>&gt;(AsciiControl::LF);
 }</pre>
+        </div>
         
       </div>
     </section>

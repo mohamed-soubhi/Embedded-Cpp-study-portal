@@ -177,7 +177,12 @@
       <div class="content-card">
         
         <p>Zero-overhead hardware ITM debug logging:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Hardware ITM Stimulus Port 0 write (0 ROM bloat!)</span>
 <span class="tok-type">void</span> <span class="tok-fn">itm_putc</span>(<span class="tok-type">char</span> ch) <span class="tok-kw">noexcept</span> {
@@ -189,6 +194,7 @@
         *<span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint8_t</span>*&gt;(ITM_STIM0) = <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint8_t</span>&gt;(ch);
     }
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -460,7 +460,12 @@
       <div class="content-card">
         
         <p>Zero-overhead static polymorphism using the Curiously Recurring Template Pattern (CRTP):</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// CRTP Base Interface: 0 bytes RAM overhead, 0 vtable pointers!</span>
 <span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> Derived&gt;
@@ -477,6 +482,7 @@
         <span class="tok-kw">return</span> <span class="tok-num">0x0123</span>; <span class="tok-com">// Direct hardware register read</span>
     }
 };</pre>
+        </div>
         
       </div>
     </section>

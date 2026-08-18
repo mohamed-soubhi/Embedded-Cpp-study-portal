@@ -189,7 +189,12 @@
       <div class="content-card">
         
         <p>Modern C++ guarantees zero-initialization with clean syntax:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
 <span class="tok-com">// Guaranteed zero-initialized on the stack (zero garbage RAM)</span>
@@ -197,6 +202,7 @@
 
 <span class="tok-com">// Compile-time verified size</span>
 <span class="tok-kw">constexpr</span> <span class="tok-type">size_t</span> BUFFER_LEN = <span class="tok-type">std</span>::<span class="tok-fn">size</span>(telemetry_buffer);</pre>
+        </div>
         
       </div>
     </section>

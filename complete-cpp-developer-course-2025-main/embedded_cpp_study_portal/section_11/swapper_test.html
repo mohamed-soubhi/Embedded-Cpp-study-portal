@@ -222,10 +222,16 @@ T Swapper&lt;T&gt;::<span class="tok-fn">getSecond</span>() <span class="tok-kw"
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block"><span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T&gt;
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T&gt;
 <span class="tok-type">void</span> <span class="tok-fn">fastSwap</span>(T&amp; a, T&amp; b) <span class="tok-kw">noexcept</span> {
     T tmp = <span class="tok-type">std</span>::<span class="tok-type">move</span>(a); a = <span class="tok-type">std</span>::<span class="tok-type">move</span>(b); b = <span class="tok-type">std</span>::<span class="tok-type">move</span>(tmp);
 }</pre>
+        </div>
       </div>
     </section>
 

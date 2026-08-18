@@ -246,7 +246,12 @@
       <div class="content-card">
         
         <p>Embedded LittleFS file read operation:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;array&gt;</span>
 
 <span class="tok-com">// Conceptually equivalent to lfs_file_read</span>
@@ -260,6 +265,7 @@
     <span class="tok-com">// Read raw binary struct directly from LittleFS SPI Flash block...</span>
     <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -213,7 +213,12 @@
       <div class="content-card">
         
         <p>Enforcing error code checking with [[nodiscard]]:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-kw">enum</span> <span class="tok-kw">class</span> SpiStatus : <span class="tok-type">uint8_t</span> { Ok = <span class="tok-num">0</span>, Busy, Timeout, WriteCollision };
 
@@ -221,6 +226,7 @@
     <span class="tok-com">// Write to SPI Data Register...</span>
     <span class="tok-kw">return</span> SpiStatus::Ok;
 }</pre>
+        </div>
         
       </div>
     </section>

@@ -453,10 +453,16 @@
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block"><span class="tok-kw">struct</span> TaskControlBlock {
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-kw">struct</span> TaskControlBlock {
     TaskControlBlock* nextReadyTask;
     <span class="tok-type">uint32_t</span> taskId;
 }; <span class="tok-com">// Zero heap overhead intrusive node!</span></pre>
+        </div>
       </div>
     </section>
 

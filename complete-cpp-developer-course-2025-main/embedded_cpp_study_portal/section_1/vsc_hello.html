@@ -215,7 +215,12 @@
       <div class="content-card">
         
         <p>CMake cross-compilation toolchain setup snippet:</p>
-        <pre class="code-block"><span class="tok-pre"># CMake Cross-Compilation Definition for ARM Cortex-M</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre"># CMake Cross-Compilation Definition for ARM Cortex-M</span>
 <span class="tok-type">set</span>(CMAKE_SYSTEM_NAME Generic)
 <span class="tok-type">set</span>(CMAKE_SYSTEM_PROCESSOR arm)
 
@@ -225,6 +230,7 @@
 <span class="tok-pre"># Cortex-M4 Hardware FPU compiler flags</span>
 <span class="tok-type">set</span>(CPU_FLAGS <span class="tok-str">&quot;-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard&quot;</span>)
 <span class="tok-type">set</span>(CMAKE_CXX_FLAGS <span class="tok-str">&quot;${CMAKE_CXX_FLAGS} ${CPU_FLAGS} -std=c++20 -Wall -Wextra -O2&quot;</span>)</pre>
+        </div>
         
       </div>
     </section>

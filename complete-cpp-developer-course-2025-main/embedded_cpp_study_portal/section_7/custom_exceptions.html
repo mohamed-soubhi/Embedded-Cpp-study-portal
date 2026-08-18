@@ -301,7 +301,12 @@
       <div class="content-card">
         
         <p>Here is how modern embedded C++ implements zero-overhead, strongly typed error reporting without heap allocation or unwind tables:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;string_view&gt;</span>
 
 <span class="tok-com">// 1. Strongly-typed 1-byte error code (Zero RAM overhead)</span>
@@ -334,6 +339,7 @@
     out_temp_celsius = <span class="tok-num">42</span>;
     <span class="tok-kw">return</span> SensorStatus::Ok;
 }</pre>
+        </div>
         
       </div>
     </section>

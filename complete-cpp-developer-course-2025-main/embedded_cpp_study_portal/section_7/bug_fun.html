@@ -215,7 +215,12 @@
       <div class="content-card">
         
         <p>Production firmware replaces generic runtime crashes with compile-time <code>static_assert</code> and custom hardware fault capture handlers:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 <span class="tok-pre">#include &lt;type_traits&gt;</span>
 
 <span class="tok-com">// 1. Compile-Time Invariant Verification</span>
@@ -246,6 +251,7 @@
         <span class="tok-com">// Halt or trigger controlled watchdog reset</span>
     }
 }</pre>
+        </div>
         
       </div>
     </section>

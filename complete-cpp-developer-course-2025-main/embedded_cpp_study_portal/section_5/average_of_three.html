@@ -181,12 +181,18 @@
       <div class="content-card">
         
         <p>Properly rounded integer average:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Integer average with nearest-integer rounding</span>
 <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> <span class="tok-fn">averageThreeRounded</span>(<span class="tok-type">uint32_t</span> a, <span class="tok-type">uint32_t</span> b, <span class="tok-type">uint32_t</span> c) <span class="tok-kw">noexcept</span> {
     <span class="tok-kw">return</span> (a + b + c + <span class="tok-num">1</span>) / <span class="tok-num">3</span>; <span class="tok-com">// Adding divisor/2 (1 for divisor 3) rounds correctly</span>
 }</pre>
+        </div>
         
       </div>
     </section>

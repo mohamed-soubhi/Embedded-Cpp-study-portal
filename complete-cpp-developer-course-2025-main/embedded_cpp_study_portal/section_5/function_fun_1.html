@@ -194,12 +194,18 @@
       <div class="content-card">
         
         <p>Register-friendly driver API design:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// Fits perfectly in R0, R1, R2 (Zero stack memory traffic)</span>
 <span class="tok-type">void</span> <span class="tok-fn">configureTimer</span>(<span class="tok-type">uint8_t</span> timer_id, <span class="tok-type">uint32_t</span> prescaler, <span class="tok-type">uint32_t</span> auto_reload) <span class="tok-kw">noexcept</span> {
     <span class="tok-com">// Direct MMIO writes using hardware registers...</span>
 }</pre>
+        </div>
         
       </div>
     </section>

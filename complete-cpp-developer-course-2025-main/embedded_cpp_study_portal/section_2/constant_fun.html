@@ -184,7 +184,12 @@
       <div class="content-card">
         
         <p>Replacing macros with type-safe constexpr definitions:</p>
-        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+        <div class="code-snippet-box">
+          <div class="code-snippet-header">
+            <span class="code-snippet-title">💡 Production-Ready Refactor</span>
+            <button class="btn-copy-snippet" title="Copy code snippet">📋 Copy</button>
+          </div>
+          <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
 <span class="tok-com">// BAD (Legacy C Macro): No type, no scope, debugger blind</span>
 <span class="tok-com">// #define MAX_VOLTAGE 3.3</span>
@@ -195,6 +200,7 @@
     <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> SPI_BAUD_RATE  = <span class="tok-num">10</span>&#x27;<span class="tok-num">000</span>&#x27;<span class="tok-num">000</span>; <span class="tok-com">// 10 MHz</span>
     <span class="tok-kw">constexpr</span> <span class="tok-type">uint8_t</span>  MAX_RETRY_COUNT = <span class="tok-num">3</span>;
 }</pre>
+        </div>
         
       </div>
     </section>
