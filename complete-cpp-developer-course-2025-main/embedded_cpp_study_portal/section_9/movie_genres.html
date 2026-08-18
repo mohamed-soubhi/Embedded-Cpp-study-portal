@@ -263,32 +263,32 @@ animation</pre>
       <div class="content-card">
         
         <p>Fixed-array event diagnostic histogram:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-enum class FaultCategory : uint8_t {
-    OverVoltage = 0,
+<span class="tok-kw">enum</span> <span class="tok-kw">class</span> FaultCategory : <span class="tok-type">uint8_t</span> {
+    OverVoltage = <span class="tok-num">0</span>,
     UnderVoltage,
     OverTemperature,
     CanBusTimeout,
     SensorMismatch,
-    Count // 5 categories
+    Count <span class="tok-com">// 5 categories</span>
 };
 
-class DiagnosticHistogram {
-private:
-    std::array&lt;uint32_t, static_cast&lt;size_t&gt;(FaultCategory::Count)&gt; counts_{};
+<span class="tok-kw">class</span> DiagnosticHistogram {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint32_t</span>, <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">size_t</span>&gt;(FaultCategory::Count)&gt; counts_{};
 
-public:
-    void record_fault(FaultCategory fault) noexcept {
-        size_t idx = static_cast&lt;size_t&gt;(fault);
-        if (idx &lt; counts_.size()) {
-            ++counts_[idx]; // O(1) single-instruction increment!
+<span class="tok-kw">public</span>:
+    <span class="tok-type">void</span> <span class="tok-fn">record_fault</span>(FaultCategory fault) <span class="tok-kw">noexcept</span> {
+        <span class="tok-type">size_t</span> idx = <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">size_t</span>&gt;(fault);
+        <span class="tok-kw">if</span> (idx &lt; counts_.<span class="tok-fn">size</span>()) {
+            ++counts_[idx]; <span class="tok-com">// O(1) single-instruction increment!</span>
         }
     }
 
-    uint32_t get_count(FaultCategory fault) const noexcept {
-        return counts_[static_cast&lt;size_t&gt;(fault)];
+    <span class="tok-type">uint32_t</span> <span class="tok-fn">get_count</span>(FaultCategory fault) <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> counts_[<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">size_t</span>&gt;(fault)];
     }
 };</pre>
         

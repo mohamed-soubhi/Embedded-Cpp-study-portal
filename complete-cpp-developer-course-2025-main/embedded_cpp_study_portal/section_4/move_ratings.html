@@ -199,16 +199,16 @@
       <div class="content-card">
         
         <p>Cache-friendly matrix row accumulator:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-template &lt;size_t Rows, size_t Cols&gt;
-void computeRowSums(const std::array&lt;std::array&lt;uint16_t, Cols&gt;, Rows&gt;&amp; matrix,
-                    std::array&lt;uint32_t, Rows&gt;&amp; out_sums) noexcept {
-    for (size_t r = 0; r &lt; Rows; ++r) {
-        uint32_t sum = 0;
-        for (size_t c = 0; c &lt; Cols; ++c) {
-            sum += matrix[r][c]; // Optimal sequential memory access
+<span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> Rows, <span class="tok-type">size_t</span> Cols&gt;
+<span class="tok-type">void</span> <span class="tok-fn">computeRowSums</span>(<span class="tok-kw">const</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint16_t</span>, Cols&gt;, Rows&gt;&amp; matrix,
+                    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint32_t</span>, Rows&gt;&amp; out_sums) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> r = <span class="tok-num">0</span>; r &lt; Rows; ++r) {
+        <span class="tok-type">uint32_t</span> sum = <span class="tok-num">0</span>;
+        <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> c = <span class="tok-num">0</span>; c &lt; Cols; ++c) {
+            sum += matrix[r][c]; <span class="tok-com">// Optimal sequential memory access</span>
         }
         out_sums[r] = sum;
     }

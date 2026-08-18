@@ -597,25 +597,25 @@ Race <span class="tok-type">Player</span>::<span class="tok-fn">getRace</span>()
       <div class="content-card">
         
         <p>Fixed-capacity deterministic static object pool:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-template &lt;typename T, size_t Capacity&gt;
-class StaticObjectPool {
-private:
-    alignas(T) uint8_t storage_[Capacity][sizeof(T)];
-    std::array&lt;bool, Capacity&gt; in_use_{};
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> Capacity&gt;
+<span class="tok-kw">class</span> StaticObjectPool {
+<span class="tok-kw">private</span>:
+    <span class="tok-kw">alignas</span>(T) <span class="tok-type">uint8_t</span> storage_[Capacity][<span class="tok-kw">sizeof</span>(T)];
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-kw">bool</span>, Capacity&gt; in_use_{};
 
-public:
-    template &lt;typename... Args&gt;
-    T* allocate(Args&amp;&amp;... args) noexcept {
-        for (size_t i = 0; i &lt; Capacity; ++i) {
-            if (!in_use_[i]) {
-                in_use_[i] = true;
-                return new (&amp;storage_[i]) T(std::forward&lt;Args&gt;(args)...); // Placement new
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span>... Args&gt;
+    T* <span class="tok-fn">allocate</span>(Args&amp;&amp;... args) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; Capacity; ++i) {
+            <span class="tok-kw">if</span> (!in_use_[i]) {
+                in_use_[i] = <span class="tok-kw">true</span>;
+                <span class="tok-kw">return</span> <span class="tok-kw">new</span> (&amp;storage_[i]) <span class="tok-fn">T</span>(<span class="tok-type">std</span>::<span class="tok-type">forward</span>&lt;Args&gt;(args)...); <span class="tok-com">// Placement new</span>
             }
         }
-        return nullptr; // Pool exhausted (predictable failure!)
+        <span class="tok-kw">return</span> <span class="tok-kw">nullptr</span>; <span class="tok-com">// Pool exhausted (predictable failure!)</span>
     }
 };</pre>
         

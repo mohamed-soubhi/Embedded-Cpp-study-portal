@@ -229,33 +229,33 @@
       <div class="content-card">
         
         <p>Here is how embedded engineers design robust classes with deterministic factory initialization:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;optional&gt;
-#include &lt;string_view&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;optional&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
 
-class UartDriver {
-private:
-    uint32_t baud_rate_;
-    uint8_t  port_id_;
-    bool     is_initialized_{false};
+<span class="tok-kw">class</span> UartDriver {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">uint32_t</span> baud_rate_;
+    <span class="tok-type">uint8_t</span>  port_id_;
+    <span class="tok-kw">bool</span>     is_initialized_{<span class="tok-kw">false</span>};
 
-    // Private constructor enforces creation through verified factory method
-    constexpr UartDriver(uint8_t port, uint32_t baud) noexcept
-        : baud_rate_(baud), port_id_(port) {}
+    <span class="tok-com">// Private constructor enforces creation through verified factory method</span>
+    <span class="tok-kw">constexpr</span> <span class="tok-fn">UartDriver</span>(<span class="tok-type">uint8_t</span> port, <span class="tok-type">uint32_t</span> baud) <span class="tok-kw">noexcept</span>
+        : <span class="tok-fn">baud_rate_</span>(baud), <span class="tok-fn">port_id_</span>(port) {}
 
-public:
-    // Factory method validating invariants before creating the object
-    static std::optional&lt;UartDriver&gt; create(uint8_t port, uint32_t baud) noexcept {
-        if (port &gt; 3) return std::nullopt; // Microcontroller has only UART 0-3
-        if (baud &lt; 9600 || baud &gt; 921600) return std::nullopt; // Unsupported baud rate
+<span class="tok-kw">public</span>:
+    <span class="tok-com">// Factory method validating invariants before creating the object</span>
+    <span class="tok-kw">static</span> <span class="tok-type">std</span>::<span class="tok-type">optional</span>&lt;UartDriver&gt; <span class="tok-fn">create</span>(<span class="tok-type">uint8_t</span> port, <span class="tok-type">uint32_t</span> baud) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (port &gt; <span class="tok-num">3</span>) <span class="tok-kw">return</span> <span class="tok-type">std</span>::nullopt; <span class="tok-com">// Microcontroller has only UART 0-3</span>
+        <span class="tok-kw">if</span> (baud &lt; <span class="tok-num">9600</span> || baud &gt; <span class="tok-num">921600</span>) <span class="tok-kw">return</span> <span class="tok-type">std</span>::nullopt; <span class="tok-com">// Unsupported baud rate</span>
         
-        return UartDriver(port, baud);
+        <span class="tok-kw">return</span> <span class="tok-fn">UartDriver</span>(port, baud);
     }
 
-    [[nodiscard]] bool init_hardware() noexcept {
-        // Configure MMIO registers (e.g., USART-&gt;BRR = ...)...
-        is_initialized_ = true;
-        return true;
+    [[nodiscard]] <span class="tok-kw">bool</span> <span class="tok-fn">init_hardware</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-com">// Configure MMIO registers (e.g., USART-&gt;BRR = ...)...</span>
+        is_initialized_ = <span class="tok-kw">true</span>;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 };</pre>
         

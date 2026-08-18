@@ -199,24 +199,24 @@
       <div class="content-card">
         
         <p>Type-safe flat 2D display framebuffer wrapper with DMA compatibility:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-template &lt;size_t Rows, size_t Cols&gt;
-class Framebuffer2D {
-private:
-    // Contiguous in memory; 100% DMA transfer compatible
-    std::array&lt;uint16_t, Rows * Cols&gt; pixels_{};
+<span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> Rows, <span class="tok-type">size_t</span> Cols&gt;
+<span class="tok-kw">class</span> Framebuffer2D {
+<span class="tok-kw">private</span>:
+    <span class="tok-com">// Contiguous in memory; 100% DMA transfer compatible</span>
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint16_t</span>, Rows * Cols&gt; pixels_{};
 
-public:
-    constexpr void set_pixel(size_t r, size_t c, uint16_t rgb565) noexcept {
-        if (r &lt; Rows &amp;&amp; c &lt; Cols) {
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">constexpr</span> <span class="tok-type">void</span> <span class="tok-fn">set_pixel</span>(<span class="tok-type">size_t</span> r, <span class="tok-type">size_t</span> c, <span class="tok-type">uint16_t</span> rgb565) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (r &lt; Rows &amp;&amp; c &lt; Cols) {
             pixels_[r * Cols + c] = rgb565;
         }
     }
 
-    const uint16_t* dma_buffer() const noexcept { return pixels_.data(); }
-    constexpr size_t byte_size() const noexcept { return pixels_.size() * sizeof(uint16_t); }
+    <span class="tok-kw">const</span> <span class="tok-type">uint16_t</span>* <span class="tok-fn">dma_buffer</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> pixels_.<span class="tok-fn">data</span>(); }
+    <span class="tok-kw">constexpr</span> <span class="tok-type">size_t</span> <span class="tok-fn">byte_size</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> pixels_.<span class="tok-fn">size</span>() * <span class="tok-kw">sizeof</span>(<span class="tok-type">uint16_t</span>); }
 };</pre>
         
       </div>

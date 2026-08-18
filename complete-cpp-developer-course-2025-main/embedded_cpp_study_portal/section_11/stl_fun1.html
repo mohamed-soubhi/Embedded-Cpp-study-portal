@@ -235,15 +235,15 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;vector&gt;
-#include &lt;iostream&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
 
-void initAdcTelemetry() {
-    std::vector&lt;uint16_t&gt; adcSamples;
-    adcSamples.reserve(256); // Pre-allocate: ZERO reallocations during sampling!
+<span class="tok-type">void</span> <span class="tok-fn">initAdcTelemetry</span>() {
+    <span class="tok-type">std</span>::<span class="tok-type">vector</span>&lt;<span class="tok-type">uint16_t</span>&gt; adcSamples;
+    adcSamples.<span class="tok-fn">reserve</span>(<span class="tok-num">256</span>); <span class="tok-com">// Pre-allocate: ZERO reallocations during sampling!</span>
 
-    for (int i = 0; i &lt; 256; ++i) {
-        adcSamples.push_back(i * 4); // Deterministic O(1) insertion
+    <span class="tok-kw">for</span> (<span class="tok-type">int</span> i = <span class="tok-num">0</span>; i &lt; <span class="tok-num">256</span>; ++i) {
+        adcSamples.<span class="tok-fn">push_back</span>(i * <span class="tok-num">4</span>); <span class="tok-com">// Deterministic O(1) insertion</span>
     }
 }</pre>
         

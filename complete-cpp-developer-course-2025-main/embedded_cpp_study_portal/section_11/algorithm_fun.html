@@ -210,20 +210,20 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;algorithm&gt;
-#include &lt;array&gt;
-#include &lt;iostream&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;algorithm&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
 
-int main() {
-    std::array&lt;int, 5&gt; telemetry = {45, 12, 85, 32, 89};
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">int</span>, <span class="tok-num">5</span>&gt; telemetry = {<span class="tok-num">45</span>, <span class="tok-num">12</span>, <span class="tok-num">85</span>, <span class="tok-num">32</span>, <span class="tok-num">89</span>};
     
-    // Fully inlined at -O2: Zero function pointer overhead
-    std::sort(telemetry.begin(), telemetry.end(), [](int a, int b) {
-        return a &lt; b;
+    <span class="tok-com">// Fully inlined at -O2: Zero function pointer overhead</span>
+    <span class="tok-type">std</span>::<span class="tok-fn">sort</span>(telemetry.<span class="tok-fn">begin</span>(), telemetry.<span class="tok-fn">end</span>(), [](<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
+        <span class="tok-kw">return</span> a &lt; b;
     });
 
-    for (int val : telemetry) std::cout &lt;&lt; val &lt;&lt; ' ';
-    return 0;
+    <span class="tok-kw">for</span> (<span class="tok-type">int</span> val : telemetry) <span class="tok-type">std</span>::<span class="tok-type">cout</span> &lt;&lt; val &lt;&lt; &#x27; &#x27;;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         
       </div>

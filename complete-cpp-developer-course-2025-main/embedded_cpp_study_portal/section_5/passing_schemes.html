@@ -202,22 +202,22 @@
       <div class="content-card">
         
         <p>Idiomatic passing schemes in embedded systems:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct CanMessage {
-    uint32_t id;
-    uint8_t  payload[8];
-    uint8_t  dlc;
+<span class="tok-kw">struct</span> CanMessage {
+    <span class="tok-type">uint32_t</span> id;
+    <span class="tok-type">uint8_t</span>  payload[<span class="tok-num">8</span>];
+    <span class="tok-type">uint8_t</span>  dlc;
 };
 
-// 1. Primitive: Pass-by-value (fits in R0)
-void setFilterId(uint32_t id) noexcept;
+<span class="tok-com">// 1. Primitive: Pass-by-value (fits in R0)</span>
+<span class="tok-type">void</span> <span class="tok-fn">setFilterId</span>(<span class="tok-type">uint32_t</span> id) <span class="tok-kw">noexcept</span>;
 
-// 2. Struct: Pass-by-const-ref (passes 4-byte pointer; avoids 16-byte copy)
-void transmitCan(const CanMessage&amp; msg) noexcept;
+<span class="tok-com">// 2. Struct: Pass-by-const-ref (passes 4-byte pointer; avoids 16-byte copy)</span>
+<span class="tok-type">void</span> <span class="tok-fn">transmitCan</span>(<span class="tok-kw">const</span> CanMessage&amp; msg) <span class="tok-kw">noexcept</span>;
 
-// 3. Mutator: Pass-by-ref (modifies caller's object directly)
-void readCan(CanMessage&amp; out_msg) noexcept;</pre>
+<span class="tok-com">// 3. Mutator: Pass-by-ref (modifies caller&#x27;s object directly)</span>
+<span class="tok-type">void</span> <span class="tok-fn">readCan</span>(CanMessage&amp; out_msg) <span class="tok-kw">noexcept</span>;</pre>
         
       </div>
     </section>

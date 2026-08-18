@@ -250,13 +250,13 @@ Samantha Struthers <span class="tok-num">17</span></pre>
       <div class="content-card">
         
         <p>Unified synchronized telemetry record:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct SynchronizedFlightFrame {
-    uint32_t timestamp_ms;
-    int16_t  accel_z_mg;
-    int32_t  gps_latitude_scaled;
-    uint16_t airspeed_knots;
+<span class="tok-kw">struct</span> SynchronizedFlightFrame {
+    <span class="tok-type">uint32_t</span> timestamp_ms;
+    <span class="tok-type">int16_t</span>  accel_z_mg;
+    <span class="tok-type">int32_t</span>  gps_latitude_scaled;
+    <span class="tok-type">uint16_t</span> airspeed_knots;
 };</pre>
         
       </div>

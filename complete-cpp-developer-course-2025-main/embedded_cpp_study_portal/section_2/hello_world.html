@@ -177,16 +177,16 @@
       <div class="content-card">
         
         <p>Zero-overhead hardware ITM debug logging:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Hardware ITM Stimulus Port 0 write (0 ROM bloat!)
-void itm_putc(char ch) noexcept {
-    volatile uint32_t* const ITM_STIM0 = reinterpret_cast&lt;volatile uint32_t*&gt;(0xE0000000);
-    volatile uint32_t* const ITM_TER   = reinterpret_cast&lt;volatile uint32_t*&gt;(0xE0000E00);
+<span class="tok-com">// Hardware ITM Stimulus Port 0 write (0 ROM bloat!)</span>
+<span class="tok-type">void</span> <span class="tok-fn">itm_putc</span>(<span class="tok-type">char</span> ch) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>* <span class="tok-kw">const</span> ITM_STIM0 = <span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>*&gt;(<span class="tok-num">0xE0000000</span>);
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>* <span class="tok-kw">const</span> ITM_TER   = <span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>*&gt;(<span class="tok-num">0xE0000E00</span>);
     
-    if (*ITM_TER &amp; 1UL) { // If ITM Port 0 is enabled by debugger
-        while (*ITM_STIM0 == 0); // Wait until FIFO ready
-        *reinterpret_cast&lt;volatile uint8_t*&gt;(ITM_STIM0) = static_cast&lt;uint8_t&gt;(ch);
+    <span class="tok-kw">if</span> (*ITM_TER &amp; 1UL) { <span class="tok-com">// If ITM Port 0 is enabled by debugger</span>
+        <span class="tok-kw">while</span> (*ITM_STIM0 == <span class="tok-num">0</span>); <span class="tok-com">// Wait until FIFO ready</span>
+        *<span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint8_t</span>*&gt;(ITM_STIM0) = <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint8_t</span>&gt;(ch);
     }
 }</pre>
         

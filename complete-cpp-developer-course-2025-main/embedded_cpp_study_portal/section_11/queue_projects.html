@@ -224,41 +224,41 @@
       <div class="content-card">
         
         <p>Here is an embedded lock-free SPSC circular ring buffer for microcontroller communication:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
-#include &lt;atomic&gt;
-#include &lt;optional&gt;
-#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;atomic&gt;</span>
+<span class="tok-pre">#include &lt;optional&gt;</span>
+<span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-template &lt;typename T, size_t Capacity&gt;
-class RingBuffer {
-public:
-    // Called from ISR (Producer)
-    bool push(T item) noexcept {
-        size_t head = head_.load(std::memory_order_relaxed);
-        size_t nextHead = (head + 1) % Capacity;
-        if (nextHead == tail_.load(std::memory_order_acquire)) {
-            return false; // Buffer Full! (Drop or flag error)
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> Capacity&gt;
+<span class="tok-kw">class</span> RingBuffer {
+<span class="tok-kw">public</span>:
+    <span class="tok-com">// Called from ISR (Producer)</span>
+    <span class="tok-kw">bool</span> <span class="tok-fn">push</span>(T item) <span class="tok-kw">noexcept</span> {
+        <span class="tok-type">size_t</span> head = head_.<span class="tok-fn">load</span>(<span class="tok-type">std</span>::memory_order_relaxed);
+        <span class="tok-type">size_t</span> nextHead = (head + <span class="tok-num">1</span>) % Capacity;
+        <span class="tok-kw">if</span> (nextHead == tail_.<span class="tok-fn">load</span>(<span class="tok-type">std</span>::memory_order_acquire)) {
+            <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// Buffer Full! (Drop or flag error)</span>
         }
         buffer_[head] = item;
-        head_.store(nextHead, std::memory_order_release);
-        return true;
+        head_.<span class="tok-fn">store</span>(nextHead, <span class="tok-type">std</span>::memory_order_release);
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 
-    // Called from Main Thread (Consumer)
-    std::optional&lt;T&gt; pop() noexcept {
-        size_t tail = tail_.load(std::memory_order_relaxed);
-        if (tail == head_.load(std::memory_order_acquire)) {
-            return std::nullopt; // Buffer Empty!
+    <span class="tok-com">// Called from Main Thread (Consumer)</span>
+    <span class="tok-type">std</span>::<span class="tok-type">optional</span>&lt;T&gt; <span class="tok-fn">pop</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-type">size_t</span> tail = tail_.<span class="tok-fn">load</span>(<span class="tok-type">std</span>::memory_order_relaxed);
+        <span class="tok-kw">if</span> (tail == head_.<span class="tok-fn">load</span>(<span class="tok-type">std</span>::memory_order_acquire)) {
+            <span class="tok-kw">return</span> <span class="tok-type">std</span>::nullopt; <span class="tok-com">// Buffer Empty!</span>
         }
         T item = buffer_[tail];
-        tail_.store((tail + 1) % Capacity, std::memory_order_release);
-        return item;
+        tail_.<span class="tok-fn">store</span>((tail + <span class="tok-num">1</span>) % Capacity, <span class="tok-type">std</span>::memory_order_release);
+        <span class="tok-kw">return</span> item;
     }
 
-private:
-    std::array&lt;T, Capacity&gt; buffer_;
-    std::atomic&lt;size_t&gt; head_{0};
-    std::atomic&lt;size_t&gt; tail_{0};
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, Capacity&gt; buffer_;
+    <span class="tok-type">std</span>::atomic&lt;<span class="tok-type">size_t</span>&gt; head_{<span class="tok-num">0</span>};
+    <span class="tok-type">std</span>::atomic&lt;<span class="tok-type">size_t</span>&gt; tail_{<span class="tok-num">0</span>};
 };</pre>
         
       </div>

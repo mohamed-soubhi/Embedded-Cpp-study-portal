@@ -242,35 +242,35 @@
       <div class="content-card">
         
         <p>Here is an embedded object pool utilizing placement-new for zero-heap, deterministic object creation:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;cstddef&gt;
-#include &lt;new&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;cstddef&gt;</span>
+<span class="tok-pre">#include &lt;new&gt;</span>
 
-template &lt;typename T, size_t MaxCount&gt;
-class StaticObjectPool {
-private:
-    alignas(alignof(T)) std::byte storage_[MaxCount][sizeof(T)];
-    bool in_use_[MaxCount]{false};
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> MaxCount&gt;
+<span class="tok-kw">class</span> StaticObjectPool {
+<span class="tok-kw">private</span>:
+    <span class="tok-kw">alignas</span>(<span class="tok-kw">alignof</span>(T)) <span class="tok-type">std</span>::byte storage_[MaxCount][<span class="tok-kw">sizeof</span>(T)];
+    <span class="tok-kw">bool</span> in_use_[MaxCount]{<span class="tok-kw">false</span>};
 
-public:
-    template &lt;typename... Args&gt;
-    T* allocate(Args&amp;&amp;... args) noexcept {
-        for (size_t i = 0; i &lt; MaxCount; ++i) {
-            if (!in_use_[i]) {
-                in_use_[i] = true;
-                return new (storage_[i]) T(std::forward&lt;Args&gt;(args)...);
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span>... Args&gt;
+    T* <span class="tok-fn">allocate</span>(Args&amp;&amp;... args) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; MaxCount; ++i) {
+            <span class="tok-kw">if</span> (!in_use_[i]) {
+                in_use_[i] = <span class="tok-kw">true</span>;
+                <span class="tok-kw">return</span> <span class="tok-kw">new</span> (storage_[i]) <span class="tok-fn">T</span>(<span class="tok-type">std</span>::<span class="tok-type">forward</span>&lt;Args&gt;(args)...);
             }
         }
-        return nullptr; // Pool exhausted (no heap fallback)
+        <span class="tok-kw">return</span> <span class="tok-kw">nullptr</span>; <span class="tok-com">// Pool exhausted (no heap fallback)</span>
     }
 
-    void free(T* ptr) noexcept {
-        if (!ptr) return;
-        for (size_t i = 0; i &lt; MaxCount; ++i) {
-            if (reinterpret_cast&lt;T*&gt;(storage_[i]) == ptr) {
-                ptr-&gt;~T(); // Explicit destructor call
-                in_use_[i] = false;
-                return;
+    <span class="tok-type">void</span> <span class="tok-fn">free</span>(T* ptr) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (!ptr) <span class="tok-kw">return</span>;
+        <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; MaxCount; ++i) {
+            <span class="tok-kw">if</span> (<span class="tok-kw">reinterpret_cast</span>&lt;T*&gt;(storage_[i]) == ptr) {
+                ptr-&gt;~<span class="tok-fn">T</span>(); <span class="tok-com">// Explicit destructor call</span>
+                in_use_[i] = <span class="tok-kw">false</span>;
+                <span class="tok-kw">return</span>;
             }
         }
     }

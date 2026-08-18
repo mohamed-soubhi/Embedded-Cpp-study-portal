@@ -273,10 +273,10 @@
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">struct Millivolts {
-    int32_t val;
-    constexpr Millivolts operator+(Millivolts o) const { return {val + o.val}; }
-    constexpr bool operator==(Millivolts o) const { return val == o.val; }
+        <pre class="code-block"><span class="tok-kw">struct</span> Millivolts {
+    <span class="tok-type">int32_t</span> val;
+    <span class="tok-kw">constexpr</span> Millivolts <span class="tok-kw">operator</span>+(Millivolts o) <span class="tok-kw">const</span> { <span class="tok-kw">return</span> {val + o.val}; }
+    <span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-kw">operator</span>==(Millivolts o) <span class="tok-kw">const</span> { <span class="tok-kw">return</span> val == o.val; }
 };</pre>
       </div>
     </section>

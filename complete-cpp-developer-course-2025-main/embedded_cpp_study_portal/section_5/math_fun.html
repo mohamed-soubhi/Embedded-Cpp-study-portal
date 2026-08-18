@@ -186,25 +186,25 @@
       <div class="content-card">
         
         <p>Fast bitwise integer square root (0 float overhead):</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Fast integer square root algorithm (Deterministic O(1) loop)
-uint32_t isqrt(uint32_t val) noexcept {
-    uint32_t res = 0;
-    uint32_t bit = 1UL &lt;&lt; 30; // Second-to-top bit set
+<span class="tok-com">// Fast integer square root algorithm (Deterministic O(1) loop)</span>
+<span class="tok-type">uint32_t</span> <span class="tok-fn">isqrt</span>(<span class="tok-type">uint32_t</span> val) <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">uint32_t</span> res = <span class="tok-num">0</span>;
+    <span class="tok-type">uint32_t</span> bit = 1UL &lt;&lt; <span class="tok-num">30</span>; <span class="tok-com">// Second-to-top bit set</span>
 
-    while (bit &gt; val) bit &gt;&gt;= 2;
+    <span class="tok-kw">while</span> (bit &gt; val) bit &gt;&gt;= <span class="tok-num">2</span>;
 
-    while (bit != 0) {
-        if (val &gt;= res + bit) {
+    <span class="tok-kw">while</span> (bit != <span class="tok-num">0</span>) {
+        <span class="tok-kw">if</span> (val &gt;= res + bit) {
             val -= res + bit;
-            res = (res &gt;&gt; 1) + bit;
-        } else {
-            res &gt;&gt;= 1;
+            res = (res &gt;&gt; <span class="tok-num">1</span>) + bit;
+        } <span class="tok-kw">else</span> {
+            res &gt;&gt;= <span class="tok-num">1</span>;
         }
-        bit &gt;&gt;= 2;
+        bit &gt;&gt;= <span class="tok-num">2</span>;
     }
-    return res;
+    <span class="tok-kw">return</span> res;
 }</pre>
         
       </div>

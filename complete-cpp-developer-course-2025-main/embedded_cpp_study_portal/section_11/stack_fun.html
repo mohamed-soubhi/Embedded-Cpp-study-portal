@@ -198,13 +198,13 @@
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">template &lt;typename T, size_t MaxDepth&gt;
-class StaticStack {
-public:
-    bool push(T val) { if (top_ &gt;= MaxDepth) return false; data_[top_++] = val; return true; }
-    T pop() { return data_[--top_]; }
-private:
-    std::array&lt;T, MaxDepth&gt; data_; size_t top_ = 0;
+        <pre class="code-block"><span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> MaxDepth&gt;
+<span class="tok-kw">class</span> StaticStack {
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">push</span>(T val) { <span class="tok-kw">if</span> (top_ &gt;= MaxDepth) <span class="tok-kw">return</span> <span class="tok-kw">false</span>; data_[top_++] = val; <span class="tok-kw">return</span> <span class="tok-kw">true</span>; }
+    T <span class="tok-fn">pop</span>() { <span class="tok-kw">return</span> data_[--top_]; }
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, MaxDepth&gt; data_; <span class="tok-type">size_t</span> top_ = <span class="tok-num">0</span>;
 };</pre>
       </div>
     </section>

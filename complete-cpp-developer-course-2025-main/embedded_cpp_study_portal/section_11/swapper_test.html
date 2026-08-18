@@ -222,9 +222,9 @@ T Swapper&lt;T&gt;::<span class="tok-fn">getSecond</span>() <span class="tok-kw"
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">template &lt;typename T&gt;
-void fastSwap(T&amp; a, T&amp; b) noexcept {
-    T tmp = std::move(a); a = std::move(b); b = std::move(tmp);
+        <pre class="code-block"><span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T&gt;
+<span class="tok-type">void</span> <span class="tok-fn">fastSwap</span>(T&amp; a, T&amp; b) <span class="tok-kw">noexcept</span> {
+    T tmp = <span class="tok-type">std</span>::<span class="tok-type">move</span>(a); a = <span class="tok-type">std</span>::<span class="tok-type">move</span>(b); b = <span class="tok-type">std</span>::<span class="tok-type">move</span>(tmp);
 }</pre>
       </div>
     </section>

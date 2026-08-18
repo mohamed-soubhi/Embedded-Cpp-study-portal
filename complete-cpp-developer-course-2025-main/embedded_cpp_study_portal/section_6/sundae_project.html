@@ -249,24 +249,24 @@
       <div class="content-card">
         
         <p>RAII composite sensor subsystem with automatic hardware teardown:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct SpiClockGate {
-    SpiClockGate() noexcept { /* RCC-&gt;APB2ENR |= SPI1_EN; */ }
-    ~SpiClockGate() noexcept { /* RCC-&gt;APB2ENR &amp;= ~SPI1_EN; Disable clock on exit! */ }
+<span class="tok-kw">struct</span> SpiClockGate {
+    <span class="tok-fn">SpiClockGate</span>() <span class="tok-kw">noexcept</span> { /* RCC-&gt;APB2ENR |= SPI1_EN; */ }
+    ~<span class="tok-fn">SpiClockGate</span>() <span class="tok-kw">noexcept</span> { /* RCC-&gt;APB2ENR &amp;= ~SPI1_EN; Disable clock on exit! */ }
 };
 
-struct GpioChipSelect {
-    GpioChipSelect() noexcept { /* Set CS Pin LOW (Active) */ }
-    ~GpioChipSelect() noexcept { /* Set CS Pin HIGH (Idle) */ }
+<span class="tok-kw">struct</span> GpioChipSelect {
+    <span class="tok-fn">GpioChipSelect</span>() <span class="tok-kw">noexcept</span> { /* Set CS Pin LOW (Active) */ }
+    ~<span class="tok-fn">GpioChipSelect</span>() <span class="tok-kw">noexcept</span> { /* Set CS Pin HIGH (Idle) */ }
 };
 
-class SpiTransactionScope {
-private:
-    SpiClockGate clock_gate_;      // Constructed 1st; Destroyed 2nd
-    GpioChipSelect chip_select_;    // Constructed 2nd; Destroyed 1st
-public:
-    void write_data(uint8_t byte) noexcept { /* SPI1-&gt;DR = byte; */ }
+<span class="tok-kw">class</span> SpiTransactionScope {
+<span class="tok-kw">private</span>:
+    SpiClockGate clock_gate_;      <span class="tok-com">// Constructed 1st; Destroyed 2nd</span>
+    GpioChipSelect chip_select_;    <span class="tok-com">// Constructed 2nd; Destroyed 1st</span>
+<span class="tok-kw">public</span>:
+    <span class="tok-type">void</span> <span class="tok-fn">write_data</span>(<span class="tok-type">uint8_t</span> byte) <span class="tok-kw">noexcept</span> { /* SPI1-&gt;DR = byte; */ }
 };</pre>
         
       </div>

@@ -295,38 +295,38 @@
       <div class="content-card">
         
         <p>Here is an embedded fleet manager using flat contiguous memory with zero pointer indirection:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;string_view&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-struct DroneTelemetry {
-    char     model_name[16];
-    uint16_t battery_milli_volts; // e.g. 3700 mV
-    uint8_t  active_status;
+<span class="tok-kw">struct</span> DroneTelemetry {
+    <span class="tok-type">char</span>     model_name[<span class="tok-num">16</span>];
+    <span class="tok-type">uint16_t</span> battery_milli_volts; <span class="tok-com">// e.g. 3700 mV</span>
+    <span class="tok-type">uint8_t</span>  active_status;
 };
 
-template &lt;size_t MaxFleetSize&gt;
-class FlatDroneFleet {
-private:
-    // Contiguous in SRAM; 100% spatial cache locality; 0 pointer overhead
-    std::array&lt;DroneTelemetry, MaxFleetSize&gt; drones_{};
-    size_t active_count_{0};
+<span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> MaxFleetSize&gt;
+<span class="tok-kw">class</span> FlatDroneFleet {
+<span class="tok-kw">private</span>:
+    <span class="tok-com">// Contiguous in SRAM; 100% spatial cache locality; 0 pointer overhead</span>
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;DroneTelemetry, MaxFleetSize&gt; drones_{};
+    <span class="tok-type">size_t</span> active_count_{<span class="tok-num">0</span>};
 
-public:
-    bool register_drone(std::string_view model, uint16_t battery_mv) noexcept {
-        if (active_count_ &gt;= MaxFleetSize) return false;
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">register_drone</span>(<span class="tok-type">std</span>::<span class="tok-type">string_view</span> model, <span class="tok-type">uint16_t</span> battery_mv) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (active_count_ &gt;= MaxFleetSize) <span class="tok-kw">return</span> <span class="tok-kw">false</span>;
         
         DroneTelemetry&amp; d = drones_[active_count_++];
-        size_t len = model.size() &lt; 15 ? model.size() : 15;
-        for (size_t i = 0; i &lt; len; ++i) d.model_name[i] = model[i];
-        d.model_name[len] = '\0';
+        <span class="tok-type">size_t</span> len = model.<span class="tok-fn">size</span>() &lt; <span class="tok-num">15</span> ? model.<span class="tok-fn">size</span>() : <span class="tok-num">15</span>;
+        <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; len; ++i) d.model_name[i] = model[i];
+        d.model_name[len] = &#x27;\<span class="tok-num">0</span>&#x27;;
         d.battery_milli_volts = battery_mv;
-        d.active_status = 1;
-        return true;
+        d.active_status = <span class="tok-num">1</span>;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 
-    const DroneTelemetry* data() const noexcept { return drones_.data(); }
-    size_t count() const noexcept { return active_count_; }
+    <span class="tok-kw">const</span> DroneTelemetry* <span class="tok-fn">data</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> drones_.<span class="tok-fn">data</span>(); }
+    <span class="tok-type">size_t</span> <span class="tok-fn">count</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> active_count_; }
 };</pre>
         
       </div>

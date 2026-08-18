@@ -279,28 +279,28 @@
       <div class="content-card">
         
         <p>Here is how const correctness is applied in production hardware peripheral drivers:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Hardware register map structure
-struct UartHardwareMap {
-    volatile uint32_t SR;   // Status Register
-    volatile uint32_t DR;   // Data Register
-    volatile uint32_t BRR;  // Baud Rate Register
-    volatile uint32_t CR1;  // Control Register 1
+<span class="tok-com">// Hardware register map structure</span>
+<span class="tok-kw">struct</span> UartHardwareMap {
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> SR;   <span class="tok-com">// Status Register</span>
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> DR;   <span class="tok-com">// Data Register</span>
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> BRR;  <span class="tok-com">// Baud Rate Register</span>
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> CR1;  <span class="tok-com">// Control Register 1</span>
 };
 
-// 1. Const pointer to volatile hardware register (Permanent MMIO base address)
-UartHardwareMap* const UART1_HW = reinterpret_cast&lt;UartHardwareMap* const&gt;(0x40011000);
+<span class="tok-com">// 1. Const pointer to volatile hardware register (Permanent MMIO base address)</span>
+UartHardwareMap* <span class="tok-kw">const</span> UART1_HW = <span class="tok-kw">reinterpret_cast</span>&lt;UartHardwareMap* <span class="tok-kw">const</span>&gt;(<span class="tok-num">0x40011000</span>);
 
-// 2. Calibration curve stored 100% in Flash ROM (.rodata section)
-struct AdcCalibrationCurve {
-    const uint16_t raw_counts[5];
-    const float    voltage_volts[5];
+<span class="tok-com">// 2. Calibration curve stored 100% in Flash ROM (.rodata section)</span>
+<span class="tok-kw">struct</span> AdcCalibrationCurve {
+    <span class="tok-kw">const</span> <span class="tok-type">uint16_t</span> raw_counts[<span class="tok-num">5</span>];
+    <span class="tok-kw">const</span> <span class="tok-type">float</span>    voltage_volts[<span class="tok-num">5</span>];
 };
 
-static constexpr AdcCalibrationCurve SENSOR_CALIB = {
-    .raw_counts    = {0, 1024, 2048, 3072, 4095},
-    .voltage_volts = {0.0f, 0.825f, 1.65f, 2.475f, 3.3f}
+<span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> AdcCalibrationCurve SENSOR_CALIB = {
+    .raw_counts    = {<span class="tok-num">0</span>, <span class="tok-num">1024</span>, <span class="tok-num">2048</span>, <span class="tok-num">3072</span>, <span class="tok-num">4095</span>},
+    .voltage_volts = {<span class="tok-num">0.0f</span>, <span class="tok-num">0.825f</span>, <span class="tok-num">1.65f</span>, <span class="tok-num">2.475f</span>, <span class="tok-num">3.3f</span>}
 };</pre>
         
       </div>

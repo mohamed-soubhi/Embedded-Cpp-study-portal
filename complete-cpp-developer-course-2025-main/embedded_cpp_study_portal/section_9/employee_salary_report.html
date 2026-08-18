@@ -259,18 +259,18 @@
       <div class="content-card">
         
         <p>Lightweight string buffer table formatter:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;cstdio&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;cstdio&gt;</span>
 
-struct SensorReport {
-    uint8_t  id;
-    int16_t  temp_c;
-    uint16_t voltage_mv;
+<span class="tok-kw">struct</span> SensorReport {
+    <span class="tok-type">uint8_t</span>  id;
+    <span class="tok-type">int16_t</span>  temp_c;
+    <span class="tok-type">uint16_t</span> voltage_mv;
 };
 
-// Compact snprintf formatting: 0 <iomanip> Flash bloat!
-void formatReportLine(const SensorReport&amp; r, char* out_buf, size_t buf_len) noexcept {
-    snprintf(out_buf, buf_len, "| ID: %02u | Temp: %+03d C | V: %04u mV |\r\n",
+<span class="tok-com">// Compact snprintf formatting: 0 &lt;iomanip&gt; Flash bloat!</span>
+<span class="tok-type">void</span> <span class="tok-fn">formatReportLine</span>(<span class="tok-kw">const</span> SensorReport&amp; r, <span class="tok-type">char</span>* out_buf, <span class="tok-type">size_t</span> buf_len) <span class="tok-kw">noexcept</span> {
+    <span class="tok-fn">snprintf</span>(out_buf, buf_len, <span class="tok-str">&quot;| ID: %02u | Temp: %+03d C | V: %04u mV |\r\n&quot;</span>,
              r.id, r.temp_c, r.voltage_mv);
 }</pre>
         

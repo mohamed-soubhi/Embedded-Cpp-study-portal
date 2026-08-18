@@ -185,13 +185,13 @@
       <div class="content-card">
         
         <p>Functional array multiplication using standard algorithms:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
-#include &lt;numeric&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;numeric&gt;</span>
 
-template &lt;size_t N&gt;
-uint32_t computeArrayProduct(const std::array&lt;uint32_t, N&gt;&amp; arr) noexcept {
-    return std::accumulate(arr.begin(), arr.end(), 1UL, std::multiplies&lt;uint32_t&gt;());
+<span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> N&gt;
+<span class="tok-type">uint32_t</span> <span class="tok-fn">computeArrayProduct</span>(<span class="tok-kw">const</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint32_t</span>, N&gt;&amp; arr) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">return</span> <span class="tok-type">std</span>::<span class="tok-fn">accumulate</span>(arr.<span class="tok-fn">begin</span>(), arr.<span class="tok-fn">end</span>(), 1UL, <span class="tok-type">std</span>::multiplies&lt;<span class="tok-type">uint32_t</span>&gt;());
 }</pre>
         
       </div>

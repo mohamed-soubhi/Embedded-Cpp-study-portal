@@ -190,13 +190,13 @@
       <div class="content-card">
         
         <p>Explicit fixed-width register structures:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Deterministic width across 8-bit, 16-bit, 32-bit, and 64-bit CPUs
-struct AdcChannelConfig {
-    uint8_t  channel_number; // Exactly 8 bits (0-255)
-    uint16_t sampling_cycles;// Exactly 16 bits (0-65535)
-    uint32_t calibration_val;// Exactly 32 bits
+<span class="tok-com">// Deterministic width across 8-bit, 16-bit, 32-bit, and 64-bit CPUs</span>
+<span class="tok-kw">struct</span> AdcChannelConfig {
+    <span class="tok-type">uint8_t</span>  channel_number; <span class="tok-com">// Exactly 8 bits (0-255)</span>
+    <span class="tok-type">uint16_t</span> sampling_cycles;<span class="tok-com">// Exactly 16 bits (0-65535)</span>
+    <span class="tok-type">uint32_t</span> calibration_val;<span class="tok-com">// Exactly 32 bits</span>
 };</pre>
         
       </div>

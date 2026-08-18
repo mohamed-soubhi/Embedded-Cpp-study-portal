@@ -379,26 +379,26 @@
       <div class="content-card">
         
         <p>Embedded matrix keypad scanner state machine:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-enum class GridCell : uint8_t { Empty = 0, PlayerX, PlayerO };
-enum class GameState : uint8_t { InProgress = 0, X_Won, O_Won, Draw };
+<span class="tok-kw">enum</span> <span class="tok-kw">class</span> GridCell : <span class="tok-type">uint8_t</span> { Empty = <span class="tok-num">0</span>, PlayerX, PlayerO };
+<span class="tok-kw">enum</span> <span class="tok-kw">class</span> GameState : <span class="tok-type">uint8_t</span> { InProgress = <span class="tok-num">0</span>, X_Won, O_Won, Draw };
 
-class TicTacToeEngine {
-private:
-    std::array&lt;GridCell, 9&gt; board_{};
+<span class="tok-kw">class</span> TicTacToeEngine {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;GridCell, <span class="tok-num">9</span>&gt; board_{};
     GridCell current_player_{GridCell::PlayerX};
 
-public:
-    bool place_move(uint8_t cell_index) noexcept {
-        if (cell_index &gt;= 9 || board_[cell_index] != GridCell::Empty) return false;
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">place_move</span>(<span class="tok-type">uint8_t</span> cell_index) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (cell_index &gt;= <span class="tok-num">9</span> || board_[cell_index] != GridCell::Empty) <span class="tok-kw">return</span> <span class="tok-kw">false</span>;
         board_[cell_index] = current_player_;
         current_player_ = (current_player_ == GridCell::PlayerX) ? GridCell::PlayerO : GridCell::PlayerX;
-        return true;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 
-    const std::array&lt;GridCell, 9&gt;&amp; board() const noexcept { return board_; }
+    <span class="tok-kw">const</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;GridCell, <span class="tok-num">9</span>&gt;&amp; <span class="tok-fn">board</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> board_; }
 };</pre>
         
       </div>

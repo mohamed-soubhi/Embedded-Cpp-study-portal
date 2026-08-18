@@ -201,14 +201,14 @@
       <div class="content-card">
         
         <p>Non-blocking hardware timer delay:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-extern volatile uint32_t g_system_ticks_ms; // Incremented by SysTick_Handler
+<span class="tok-kw">extern</span> <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> g_system_ticks_ms; <span class="tok-com">// Incremented by SysTick_Handler</span>
 
-void delay_ms(uint32_t ms) noexcept {
-    uint32_t start = g_system_ticks_ms;
-    while ((g_system_ticks_ms - start) &lt; ms) {
-        __asm volatile("wfi"); // Wait For Interrupt: Sleep CPU until next timer tick!
+<span class="tok-type">void</span> <span class="tok-fn">delay_ms</span>(<span class="tok-type">uint32_t</span> ms) <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">uint32_t</span> start = g_system_ticks_ms;
+    <span class="tok-kw">while</span> ((g_system_ticks_ms - start) &lt; ms) {
+        __asm <span class="tok-kw">volatile</span>(&quot;wfi&quot;); <span class="tok-com">// Wait For Interrupt: Sleep CPU until next timer tick!</span>
     }
 }</pre>
         

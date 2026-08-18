@@ -184,16 +184,16 @@
       <div class="content-card">
         
         <p>Short-circuit hardware peripheral guard:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct UartHardware {
-    volatile uint32_t SR;
-    volatile uint32_t DR;
+<span class="tok-kw">struct</span> UartHardware {
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> SR;
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> DR;
 };
 
-// Safe: If dev is null, dev->SR is never accessed
-bool isUartReady(const UartHardware* dev) noexcept {
-    return (dev != nullptr) &amp;&amp; ((dev-&gt;SR &amp; (1UL &lt;&lt; 7)) != 0);
+<span class="tok-com">// Safe: If dev is null, dev-&gt;SR is never accessed</span>
+<span class="tok-kw">bool</span> <span class="tok-fn">isUartReady</span>(<span class="tok-kw">const</span> UartHardware* dev) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">return</span> (dev != <span class="tok-kw">nullptr</span>) &amp;&amp; ((dev-&gt;SR &amp; (1UL &lt;&lt; <span class="tok-num">7</span>)) != <span class="tok-num">0</span>);
 }</pre>
         
       </div>

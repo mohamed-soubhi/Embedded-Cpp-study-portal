@@ -298,21 +298,21 @@
       <div class="content-card">
         
         <p>Construct-On-First-Use idiom preventing bootloader crashes:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-class SpiBusManager {
-private:
-    SpiBusManager() noexcept {
-        // Initialize SPI hardware registers safely...
+<span class="tok-kw">class</span> SpiBusManager {
+<span class="tok-kw">private</span>:
+    <span class="tok-fn">SpiBusManager</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-com">// Initialize SPI hardware registers safely...</span>
     }
-public:
-    // Guaranteed to initialize safely on first call!
-    static SpiBusManager&amp; instance() noexcept {
-        static SpiBusManager bus; // Meyers' Singleton
-        return bus;
+<span class="tok-kw">public</span>:
+    <span class="tok-com">// Guaranteed to initialize safely on first call!</span>
+    <span class="tok-kw">static</span> SpiBusManager&amp; <span class="tok-fn">instance</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">static</span> SpiBusManager bus; <span class="tok-com">// Meyers&#x27; Singleton</span>
+        <span class="tok-kw">return</span> bus;
     }
 
-    void write(uint8_t byte) noexcept { /* ... */ }
+    <span class="tok-type">void</span> <span class="tok-fn">write</span>(<span class="tok-type">uint8_t</span> byte) <span class="tok-kw">noexcept</span> { /* ... */ }
 };</pre>
         
       </div>

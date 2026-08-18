@@ -245,21 +245,21 @@ T <span class="tok-fn">getSmaller</span>(T a, T b) {
       <div class="content-card">
         
         <p>Template hoisting pattern reducing Flash ROM consumption:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">// Non-templated base: Single copy in Flash ROM (.text)
-class CircularBufferBase {
-protected:
-    void* buffer_;
-    size_t head_ = 0, tail_ = 0, capacity_;
-    void advanceTail() { tail_ = (tail_ + 1) % capacity_; }
+        <pre class="code-block"><span class="tok-com">// Non-templated base: Single copy in Flash ROM (.text)</span>
+<span class="tok-kw">class</span> CircularBufferBase {
+<span class="tok-kw">protected</span>:
+    <span class="tok-type">void</span>* buffer_;
+    <span class="tok-type">size_t</span> head_ = <span class="tok-num">0</span>, tail_ = <span class="tok-num">0</span>, capacity_;
+    <span class="tok-type">void</span> <span class="tok-fn">advanceTail</span>() { tail_ = (tail_ + <span class="tok-num">1</span>) % capacity_; }
 };
 
-// Thin templated wrapper: Inlined with ZERO extra Flash code
-template &lt;typename T, size_t N&gt;
-class CircularBuffer : public CircularBufferBase {
-public:
-    CircularBuffer() { buffer_ = storage_; capacity_ = N; }
-    void push(T val) { storage_[head_] = val; head_ = (head_ + 1) % N; }
-private:
+<span class="tok-com">// Thin templated wrapper: Inlined with ZERO extra Flash code</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> N&gt;
+<span class="tok-kw">class</span> CircularBuffer : <span class="tok-kw">public</span> CircularBufferBase {
+<span class="tok-kw">public</span>:
+    <span class="tok-fn">CircularBuffer</span>() { buffer_ = storage_; capacity_ = N; }
+    <span class="tok-type">void</span> <span class="tok-fn">push</span>(T val) { storage_[head_] = val; head_ = (head_ + <span class="tok-num">1</span>) % N; }
+<span class="tok-kw">private</span>:
     T storage_[N];
 };</pre>
         

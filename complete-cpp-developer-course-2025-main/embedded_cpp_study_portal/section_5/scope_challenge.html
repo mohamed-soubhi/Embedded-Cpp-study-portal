@@ -183,14 +183,14 @@
       <div class="content-card">
         
         <p>Internal linkage with anonymous namespaces:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-namespace {
-    // Internal linkage: Invisible to other translation units (Zero symbol collisions)
-    constexpr uint32_t INTERNAL_TIMEOUT_MS = 500;
+<span class="tok-kw">namespace</span> {
+    <span class="tok-com">// Internal linkage: Invisible to other translation units (Zero symbol collisions)</span>
+    <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> INTERNAL_TIMEOUT_MS = <span class="tok-num">500</span>;
     
-    void configureHardwarePll() noexcept {
-        // Driver internal initialization...
+    <span class="tok-type">void</span> <span class="tok-fn">configureHardwarePll</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-com">// Driver internal initialization...</span>
     }
 }</pre>
         

@@ -195,19 +195,19 @@
       <div class="content-card">
         
         <p>Robust C/C++ compatible header wrapper:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#ifdef __cplusplus
-extern "C" {
-#endif
+        <pre class="code-block"><span class="tok-pre">#ifdef __cplusplus</span>
+<span class="tok-kw">extern</span> <span class="tok-str">&quot;C&quot;</span> {
+<span class="tok-pre">#endif</span>
 
-// Hardware ISR handler (must match C symbol name for vector table)
-void USART1_IRQHandler(void);
+<span class="tok-com">// Hardware ISR handler (must match C symbol name for vector table)</span>
+<span class="tok-type">void</span> <span class="tok-fn">USART1_IRQHandler</span>(<span class="tok-type">void</span>);
 
-// FreeRTOS Task Entry Point
-void vSensorTask(void* pvParameters);
+<span class="tok-com">// FreeRTOS Task Entry Point</span>
+<span class="tok-type">void</span> <span class="tok-fn">vSensorTask</span>(<span class="tok-type">void</span>* pvParameters);
 
-#ifdef __cplusplus
+<span class="tok-pre">#ifdef __cplusplus</span>
 }
-#endif</pre>
+<span class="tok-pre">#endif</span></pre>
         
       </div>
     </section>

@@ -232,26 +232,26 @@
       <div class="content-card">
         
         <p>Here is a compile-time bounded array index that prevents out-of-bounds bugs at compile time:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;cstddef&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;cstddef&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-template &lt;typename T, size_t N&gt;
-class SafeArray {
-    std::array&lt;T, N&gt; data_{};
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> N&gt;
+<span class="tok-kw">class</span> SafeArray {
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, N&gt; data_{};
 
-public:
-    // 1. Clamped access: Guarantees no out-of-bounds without throwing
-    constexpr const T&amp; at_clamped(size_t index) const noexcept {
-        if (index &gt;= N) index = N - 1;
-        return data_[index];
+<span class="tok-kw">public</span>:
+    <span class="tok-com">// 1. Clamped access: Guarantees no out-of-bounds without throwing</span>
+    <span class="tok-kw">constexpr</span> <span class="tok-kw">const</span> T&amp; <span class="tok-fn">at_clamped</span>(<span class="tok-type">size_t</span> index) <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (index &gt;= N) index = N - <span class="tok-num">1</span>;
+        <span class="tok-kw">return</span> data_[index];
     }
 
-    // 2. Compile-time checked access for constant indices
-    template &lt;size_t Index&gt;
-    constexpr const T&amp; get() const noexcept {
-        static_assert(Index &lt; N, "Array index is out of compile-time bounds!");
-        return data_[Index];
+    <span class="tok-com">// 2. Compile-time checked access for constant indices</span>
+    <span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> Index&gt;
+    <span class="tok-kw">constexpr</span> <span class="tok-kw">const</span> T&amp; <span class="tok-fn">get</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">static_assert</span>(Index &lt; N, <span class="tok-str">&quot;Array index is out of compile-time bounds!&quot;</span>);
+        <span class="tok-kw">return</span> data_[Index];
     }
 };</pre>
         

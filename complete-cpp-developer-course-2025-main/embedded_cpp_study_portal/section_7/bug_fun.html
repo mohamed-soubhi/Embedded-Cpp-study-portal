@@ -215,35 +215,35 @@
       <div class="content-card">
         
         <p>Production firmware replaces generic runtime crashes with compile-time <code>static_assert</code> and custom hardware fault capture handlers:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;type_traits&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;type_traits&gt;</span>
 
-// 1. Compile-Time Invariant Verification
-template &lt;typename T, size_t BufferSize&gt;
-struct DmaRingBuffer {
-    static_assert(BufferSize &gt; 0, "Buffer size must be non-zero");
-    static_assert((BufferSize &amp; (BufferSize - 1)) == 0, "Buffer size must be a power of 2 for fast bitmask indexing");
-    static_assert(std::is_trivially_copyable&lt;T&gt;::value, "DMA elements must be trivially copyable");
+<span class="tok-com">// 1. Compile-Time Invariant Verification</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> BufferSize&gt;
+<span class="tok-kw">struct</span> DmaRingBuffer {
+    <span class="tok-kw">static_assert</span>(BufferSize &gt; <span class="tok-num">0</span>, <span class="tok-str">&quot;Buffer size must be non-zero&quot;</span>);
+    <span class="tok-kw">static_assert</span>((BufferSize &amp; (BufferSize - <span class="tok-num">1</span>)) == <span class="tok-num">0</span>, <span class="tok-str">&quot;Buffer size must be a power of 2 for fast bitmask indexing&quot;</span>);
+    <span class="tok-kw">static_assert</span>(<span class="tok-type">std</span>::is_trivially_copyable&lt;T&gt;::value, <span class="tok-str">&quot;DMA elements must be trivially copyable&quot;</span>);
     
     T buffer[BufferSize];
-    uint32_t head{0};
-    uint32_t tail{0};
+    <span class="tok-type">uint32_t</span> head{<span class="tok-num">0</span>};
+    <span class="tok-type">uint32_t</span> tail{<span class="tok-num">0</span>};
 };
 
-// 2. Hardware Fault Capture Handler (ARM Cortex-M Example)
-struct FaultFrame {
-    uint32_t r0, r1, r2, r3, r12, lr, pc, psr;
+<span class="tok-com">// 2. Hardware Fault Capture Handler (ARM Cortex-M Example)</span>
+<span class="tok-kw">struct</span> FaultFrame {
+    <span class="tok-type">uint32_t</span> r0, r1, r2, r3, r12, lr, pc, psr;
 };
 
-extern "C" void HardFault_Handler_C(FaultFrame* frame) {
-    // Read NVIC Configurable Fault Status Register (CFSR)
-    volatile uint32_t* const CFSR = reinterpret_cast&lt;volatile uint32_t*&gt;(0xE000ED28);
-    uint32_t fault_reason = *CFSR;
+<span class="tok-kw">extern</span> <span class="tok-str">&quot;C&quot;</span> <span class="tok-type">void</span> <span class="tok-fn">HardFault_Handler_C</span>(FaultFrame* frame) {
+    <span class="tok-com">// Read NVIC Configurable Fault Status Register (CFSR)</span>
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>* <span class="tok-kw">const</span> CFSR = <span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>*&gt;(<span class="tok-num">0xE000ED28</span>);
+    <span class="tok-type">uint32_t</span> fault_reason = *CFSR;
     
-    // Log crash telemetry (PC and LR) to persistent battery-backed backup SRAM
-    // Safe shutdown: disable all actuators
-    while (1) {
-        // Halt or trigger controlled watchdog reset
+    <span class="tok-com">// Log crash telemetry (PC and LR) to persistent battery-backed backup SRAM</span>
+    <span class="tok-com">// Safe shutdown: disable all actuators</span>
+    <span class="tok-kw">while</span> (<span class="tok-num">1</span>) {
+        <span class="tok-com">// Halt or trigger controlled watchdog reset</span>
     }
 }</pre>
         

@@ -202,17 +202,17 @@
       <div class="content-card">
         
         <p>Clean driver buffer API using <code>std::span</code>:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;numeric&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;numeric&gt;</span>
 
-// Non-decaying template array reference
-template &lt;typename T, size_t N&gt;
-T computeProduct(const T (&amp;arr)[N]) noexcept {
-    T product = 1;
-    for (size_t i = 0; i &lt; N; ++i) {
+<span class="tok-com">// Non-decaying template array reference</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> N&gt;
+T <span class="tok-fn">computeProduct</span>(<span class="tok-kw">const</span> T (&amp;arr)[N]) <span class="tok-kw">noexcept</span> {
+    T product = <span class="tok-num">1</span>;
+    <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; N; ++i) {
         product *= arr[i];
     }
-    return product;
+    <span class="tok-kw">return</span> product;
 }</pre>
         
       </div>

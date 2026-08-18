@@ -184,14 +184,14 @@
       <div class="content-card">
         
         <p>In-place scaling using modern C++ algorithms:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
-#include &lt;algorithm&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;algorithm&gt;</span>
 
-template &lt;size_t N&gt;
-void doubleValues(std::array&lt;uint32_t, N&gt;&amp; arr) noexcept {
-    std::transform(arr.begin(), arr.end(), arr.begin(), [](uint32_t val) {
-        return val * 2;
+<span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> N&gt;
+<span class="tok-type">void</span> <span class="tok-fn">doubleValues</span>(<span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint32_t</span>, N&gt;&amp; arr) <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">std</span>::<span class="tok-fn">transform</span>(arr.<span class="tok-fn">begin</span>(), arr.<span class="tok-fn">end</span>(), arr.<span class="tok-fn">begin</span>(), [](<span class="tok-type">uint32_t</span> val) {
+        <span class="tok-kw">return</span> val * <span class="tok-num">2</span>;
     });
 }</pre>
         

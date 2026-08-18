@@ -197,24 +197,24 @@
       <div class="content-card">
         
         <p>Here is an optimized zero-SRAM, zero-allocation lookup table implementation:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;string_view&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-class CalendarLookup {
-public:
-    // Stored 100% in Flash ROM (.rodata); Zero RAM allocated
-    static constexpr std::array&lt;std::string_view, 12&gt; MONTH_NAMES = {
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+<span class="tok-kw">class</span> CalendarLookup {
+<span class="tok-kw">public</span>:
+    <span class="tok-com">// Stored 100% in Flash ROM (.rodata); Zero RAM allocated</span>
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">std</span>::<span class="tok-type">string_view</span>, <span class="tok-num">12</span>&gt; MONTH_NAMES = {
+        <span class="tok-str">&quot;January&quot;</span>, <span class="tok-str">&quot;February&quot;</span>, <span class="tok-str">&quot;March&quot;</span>, <span class="tok-str">&quot;April&quot;</span>, <span class="tok-str">&quot;May&quot;</span>, <span class="tok-str">&quot;June&quot;</span>,
+        <span class="tok-str">&quot;July&quot;</span>, <span class="tok-str">&quot;August&quot;</span>, <span class="tok-str">&quot;September&quot;</span>, <span class="tok-str">&quot;October&quot;</span>, <span class="tok-str">&quot;November&quot;</span>, <span class="tok-str">&quot;December&quot;</span>
     };
 
-    // O(1) branchless lookup with safe boundary fallback
-    static constexpr std::string_view get_month(uint8_t month_1_to_12) noexcept {
-        if (month_1_to_12 &lt; 1 || month_1_to_12 &gt; 12) {
-            return "Invalid Month";
+    <span class="tok-com">// O(1) branchless lookup with safe boundary fallback</span>
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">string_view</span> <span class="tok-fn">get_month</span>(<span class="tok-type">uint8_t</span> month_1_to_12) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (month_1_to_12 &lt; <span class="tok-num">1</span> || month_1_to_12 &gt; <span class="tok-num">12</span>) {
+            <span class="tok-kw">return</span> <span class="tok-str">&quot;Invalid Month&quot;</span>;
         }
-        return MONTH_NAMES[month_1_to_12 - 1];
+        <span class="tok-kw">return</span> MONTH_NAMES[month_1_to_12 - <span class="tok-num">1</span>];
     }
 };</pre>
         

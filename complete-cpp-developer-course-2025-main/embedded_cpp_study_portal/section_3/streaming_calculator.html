@@ -221,18 +221,18 @@
       <div class="content-card">
         
         <p>Embedded UART CLI command tokenizer:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;string_view&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
 
-void executeCliCommand(std::string_view cmd) noexcept {
-    if (cmd == "ping") {
-        sendResponse("PONG\r\n");
-    } else if (cmd == "status") {
-        sendResponse("STATUS: ALL SYSTEMS OK\r\n");
-    } else if (cmd == "reset") {
-        system_reboot();
-    } else {
-        sendResponse("ERROR: UNKNOWN COMMAND\r\n");
+<span class="tok-type">void</span> <span class="tok-fn">executeCliCommand</span>(<span class="tok-type">std</span>::<span class="tok-type">string_view</span> cmd) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">if</span> (cmd == <span class="tok-str">&quot;ping&quot;</span>) {
+        <span class="tok-fn">sendResponse</span>(&quot;PONG\r\n&quot;);
+    } <span class="tok-kw">else</span> <span class="tok-kw">if</span> (cmd == <span class="tok-str">&quot;status&quot;</span>) {
+        <span class="tok-fn">sendResponse</span>(&quot;STATUS: ALL SYSTEMS OK\r\n&quot;);
+    } <span class="tok-kw">else</span> <span class="tok-kw">if</span> (cmd == <span class="tok-str">&quot;reset&quot;</span>) {
+        <span class="tok-fn">system_reboot</span>();
+    } <span class="tok-kw">else</span> {
+        <span class="tok-fn">sendResponse</span>(&quot;ERROR: UNKNOWN COMMAND\r\n&quot;);
     }
 }</pre>
         

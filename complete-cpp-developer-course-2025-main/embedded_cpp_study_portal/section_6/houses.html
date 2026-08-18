@@ -289,22 +289,22 @@
       <div class="content-card">
         
         <p>Compact building telemetry node array:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-struct RoomNode {
-    uint8_t  room_id;
-    int16_t  temp_centi_celsius; // e.g. 2150 = 21.50 C
-    uint16_t light_lux;
+<span class="tok-kw">struct</span> RoomNode {
+    <span class="tok-type">uint8_t</span>  room_id;
+    <span class="tok-type">int16_t</span>  temp_centi_celsius; <span class="tok-com">// e.g. 2150 = 21.50 C</span>
+    <span class="tok-type">uint16_t</span> light_lux;
 };
 
-class SmartBuilding {
-private:
-    std::array&lt;RoomNode, 8&gt; rooms_{};
+<span class="tok-kw">class</span> SmartBuilding {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;RoomNode, <span class="tok-num">8</span>&gt; rooms_{};
 
-public:
-    void update_sensor(uint8_t room_idx, int16_t temp, uint16_t lux) noexcept {
-        if (room_idx &lt; rooms_.size()) {
+<span class="tok-kw">public</span>:
+    <span class="tok-type">void</span> <span class="tok-fn">update_sensor</span>(<span class="tok-type">uint8_t</span> room_idx, <span class="tok-type">int16_t</span> temp, <span class="tok-type">uint16_t</span> lux) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (room_idx &lt; rooms_.<span class="tok-fn">size</span>()) {
             rooms_[room_idx].temp_centi_celsius = temp;
             rooms_[room_idx].light_lux = lux;
         }

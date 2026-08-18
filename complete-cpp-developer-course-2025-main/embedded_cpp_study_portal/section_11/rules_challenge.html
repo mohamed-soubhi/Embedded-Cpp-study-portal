@@ -272,22 +272,22 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
-#include &lt;cstdint&gt;
-#include &lt;iostream&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
 
-template &lt;size_t BoundedCapacity&gt;
-class StaticBuffer {
-public:
-    bool append(uint8_t byte) {
-        if (size_ &gt;= BoundedCapacity) return false;
+<span class="tok-kw">template</span> &lt;<span class="tok-type">size_t</span> BoundedCapacity&gt;
+<span class="tok-kw">class</span> StaticBuffer {
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">append</span>(<span class="tok-type">uint8_t</span> byte) {
+        <span class="tok-kw">if</span> (size_ &gt;= BoundedCapacity) <span class="tok-kw">return</span> <span class="tok-kw">false</span>;
         data_[size_++] = byte;
-        return true;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
-    size_t size() const { return size_; }
-private:
-    std::array&lt;uint8_t, BoundedCapacity&gt; data_;
-    size_t size_ = 0;
+    <span class="tok-type">size_t</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> { <span class="tok-kw">return</span> size_; }
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint8_t</span>, BoundedCapacity&gt; data_;
+    <span class="tok-type">size_t</span> size_ = <span class="tok-num">0</span>;
 };</pre>
         
       </div>

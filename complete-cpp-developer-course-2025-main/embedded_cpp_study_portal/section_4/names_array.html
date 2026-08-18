@@ -186,15 +186,15 @@
       <div class="content-card">
         
         <p>Zero-SRAM Flash string table:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;string_view&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;string_view&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-// Stored 100% in Flash ROM (.rodata); Zero SRAM consumed
-static constexpr std::array&lt;std::string_view, 4&gt; DEVICE_NAMES = {
-    "Telemetry_Sensor",
-    "Imu_Accelerometer",
-    "Gps_Receiver",
-    "Can_Transceiver"
+<span class="tok-com">// Stored 100% in Flash ROM (.rodata); Zero SRAM consumed</span>
+<span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">std</span>::<span class="tok-type">string_view</span>, <span class="tok-num">4</span>&gt; DEVICE_NAMES = {
+    <span class="tok-str">&quot;Telemetry_Sensor&quot;</span>,
+    <span class="tok-str">&quot;Imu_Accelerometer&quot;</span>,
+    <span class="tok-str">&quot;Gps_Receiver&quot;</span>,
+    <span class="tok-str">&quot;Can_Transceiver&quot;</span>
 };</pre>
         
       </div>

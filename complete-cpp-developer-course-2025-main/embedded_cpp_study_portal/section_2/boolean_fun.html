@@ -173,16 +173,16 @@
       <div class="content-card">
         
         <p>Packed 8-flag status register (1 Byte Total):</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct SystemFlags {
-    uint8_t power_good    : 1;
-    uint8_t wifi_connected: 1;
-    uint8_t sd_card_ready : 1;
-    uint8_t motor_fault   : 1;
-    uint8_t over_temp     : 1;
-    uint8_t reserved      : 3;
-}; // Exactly 1 byte in SRAM!</pre>
+<span class="tok-kw">struct</span> SystemFlags {
+    <span class="tok-type">uint8_t</span> power_good    : <span class="tok-num">1</span>;
+    <span class="tok-type">uint8_t</span> wifi_connected: <span class="tok-num">1</span>;
+    <span class="tok-type">uint8_t</span> sd_card_ready : <span class="tok-num">1</span>;
+    <span class="tok-type">uint8_t</span> motor_fault   : <span class="tok-num">1</span>;
+    <span class="tok-type">uint8_t</span> over_temp     : <span class="tok-num">1</span>;
+    <span class="tok-type">uint8_t</span> reserved      : <span class="tok-num">3</span>;
+}; <span class="tok-com">// Exactly 1 byte in SRAM!</span></pre>
         
       </div>
     </section>

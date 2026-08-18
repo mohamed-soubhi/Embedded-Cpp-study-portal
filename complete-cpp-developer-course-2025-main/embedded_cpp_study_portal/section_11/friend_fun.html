@@ -310,10 +310,10 @@
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">class UartDriver {
-    friend class UartDiagnostics;
-private:
-    uint32_t errorCount_ = 0;
+        <pre class="code-block"><span class="tok-kw">class</span> UartDriver {
+    <span class="tok-kw">friend</span> <span class="tok-kw">class</span> UartDiagnostics;
+<span class="tok-kw">private</span>:
+    <span class="tok-type">uint32_t</span> errorCount_ = <span class="tok-num">0</span>;
 };</pre>
       </div>
     </section>

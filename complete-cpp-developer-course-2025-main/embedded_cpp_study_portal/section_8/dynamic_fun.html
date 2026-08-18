@@ -234,29 +234,29 @@
       <div class="content-card">
         
         <p>Here is how embedded engineers replace heap <code>new</code> with static storage buffers (zero heap allocation):</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;cstddef&gt;
-#include &lt;new&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;cstddef&gt;</span>
+<span class="tok-pre">#include &lt;new&gt;</span>
 
-// Statically allocated memory slot (Zero Heap Overhead)
-template &lt;typename T&gt;
-class StaticSlot {
-    alignas(T) std::byte storage_[sizeof(T)];
-    bool occupied_{false};
+<span class="tok-com">// Statically allocated memory slot (Zero Heap Overhead)</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T&gt;
+<span class="tok-kw">class</span> StaticSlot {
+    <span class="tok-kw">alignas</span>(T) <span class="tok-type">std</span>::byte storage_[<span class="tok-kw">sizeof</span>(T)];
+    <span class="tok-kw">bool</span> occupied_{<span class="tok-kw">false</span>};
 
-public:
-    template &lt;typename... Args&gt;
-    T* construct(Args&amp;&amp;... args) noexcept {
-        if (occupied_) return nullptr;
-        T* obj = new (storage_) T(std::forward&lt;Args&gt;(args)...); // Placement new
-        occupied_ = true;
-        return obj;
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span>... Args&gt;
+    T* <span class="tok-fn">construct</span>(Args&amp;&amp;... args) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (occupied_) <span class="tok-kw">return</span> <span class="tok-kw">nullptr</span>;
+        T* obj = <span class="tok-kw">new</span> (storage_) <span class="tok-fn">T</span>(<span class="tok-type">std</span>::<span class="tok-type">forward</span>&lt;Args&gt;(args)...); <span class="tok-com">// Placement new</span>
+        occupied_ = <span class="tok-kw">true</span>;
+        <span class="tok-kw">return</span> obj;
     }
 
-    void destroy() noexcept {
-        if (occupied_) {
-            reinterpret_cast&lt;T*&gt;(storage_)-&gt;~T(); // Explicit destructor call
-            occupied_ = false;
+    <span class="tok-type">void</span> <span class="tok-fn">destroy</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (occupied_) {
+            <span class="tok-kw">reinterpret_cast</span>&lt;T*&gt;(storage_)-&gt;~<span class="tok-fn">T</span>(); <span class="tok-com">// Explicit destructor call</span>
+            occupied_ = <span class="tok-kw">false</span>;
         }
     }
 };</pre>

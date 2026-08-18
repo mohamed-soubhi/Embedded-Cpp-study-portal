@@ -277,34 +277,34 @@
       <div class="content-card">
         
         <p>Here is an embedded compile-time Flash ROM lookup table using binary search on sorted array:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
-#include &lt;algorithm&gt;
-#include &lt;iostream&gt;
-#include &lt;string_view&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;algorithm&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
 
-struct CanMessageDescriptor {
-    uint32_t canId;
-    std::string_view name;
+<span class="tok-kw">struct</span> CanMessageDescriptor {
+    <span class="tok-type">uint32_t</span> canId;
+    <span class="tok-type">std</span>::<span class="tok-type">string_view</span> name;
 };
 
-// Stored directly in Flash ROM (.rodata) - ZERO RAM overhead!
-constexpr std::array&lt;CanMessageDescriptor, 4&gt; CAN_LUT = {{
-    {0x100, "Engine RPM"},
-    {0x101, "Vehicle Speed"},
-    {0x200, "Brake Pressure"},
-    {0x305, "Battery Voltage"}
+<span class="tok-com">// Stored directly in Flash ROM (.rodata) - ZERO RAM overhead!</span>
+<span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;CanMessageDescriptor, <span class="tok-num">4</span>&gt; CAN_LUT = {{
+    {<span class="tok-num">0x100</span>, <span class="tok-str">&quot;Engine RPM&quot;</span>},
+    {<span class="tok-num">0x101</span>, <span class="tok-str">&quot;Vehicle Speed&quot;</span>},
+    {<span class="tok-num">0x200</span>, <span class="tok-str">&quot;Brake Pressure&quot;</span>},
+    {<span class="tok-num">0x305</span>, <span class="tok-str">&quot;Battery Voltage&quot;</span>}
 }};
 
-std::string_view lookupCanName(uint32_t id) {
-    auto it = std::lower_bound(CAN_LUT.begin(), CAN_LUT.end(), id,
-        [](const CanMessageDescriptor&amp; item, uint32_t target) {
-            return item.canId &lt; target;
+<span class="tok-type">std</span>::<span class="tok-type">string_view</span> <span class="tok-fn">lookupCanName</span>(<span class="tok-type">uint32_t</span> id) {
+    <span class="tok-kw">auto</span> it = <span class="tok-type">std</span>::<span class="tok-fn">lower_bound</span>(CAN_LUT.<span class="tok-fn">begin</span>(), CAN_LUT.<span class="tok-fn">end</span>(), id,
+        [](<span class="tok-kw">const</span> CanMessageDescriptor&amp; item, <span class="tok-type">uint32_t</span> target) {
+            <span class="tok-kw">return</span> item.canId &lt; target;
         });
 
-    if (it != CAN_LUT.end() &amp;&amp; it-&gt;canId == id) {
-        return it-&gt;name;
+    <span class="tok-kw">if</span> (it != CAN_LUT.<span class="tok-fn">end</span>() &amp;&amp; it-&gt;canId == id) {
+        <span class="tok-kw">return</span> it-&gt;name;
     }
-    return "Unknown ID";
+    <span class="tok-kw">return</span> <span class="tok-str">&quot;Unknown ID&quot;</span>;
 }</pre>
         
       </div>

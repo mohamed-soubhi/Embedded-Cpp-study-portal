@@ -182,18 +182,18 @@
       <div class="content-card">
         
         <p>Non-blocking interrupt-driven UART byte receiver:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Non-blocking UART receiver check
-bool uart_try_read(uint8_t&amp; out_byte) noexcept {
-    volatile uint32_t* const USART1_SR = reinterpret_cast&lt;volatile uint32_t*&gt;(0x40013800);
-    volatile uint32_t* const USART1_DR = reinterpret_cast&lt;volatile uint32_t*&gt;(0x40013804);
+<span class="tok-com">// Non-blocking UART receiver check</span>
+<span class="tok-kw">bool</span> <span class="tok-fn">uart_try_read</span>(<span class="tok-type">uint8_t</span>&amp; out_byte) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>* <span class="tok-kw">const</span> USART1_SR = <span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>*&gt;(<span class="tok-num">0x40013800</span>);
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>* <span class="tok-kw">const</span> USART1_DR = <span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span>*&gt;(<span class="tok-num">0x40013804</span>);
 
-    if (*USART1_SR &amp; (1UL &lt;&lt; 5)) { // RXNE: Read Data Register Not Empty
-        out_byte = static_cast&lt;uint8_t&gt;(*USART1_DR &amp; 0xFF);
-        return true; // Byte received instantly!
+    <span class="tok-kw">if</span> (*USART1_SR &amp; (1UL &lt;&lt; <span class="tok-num">5</span>)) { <span class="tok-com">// RXNE: Read Data Register Not Empty</span>
+        out_byte = <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint8_t</span>&gt;(*USART1_DR &amp; <span class="tok-num">0xFF</span>);
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>; <span class="tok-com">// Byte received instantly!</span>
     }
-    return false; // No data available; does NOT block CPU!
+    <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// No data available; does NOT block CPU!</span>
 }</pre>
         
       </div>

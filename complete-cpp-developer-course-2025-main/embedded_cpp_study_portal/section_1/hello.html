@@ -242,18 +242,18 @@
       <div class="content-card">
         
         <p>Minimal freestanding bare-metal main with zero OS dependencies:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Bare-metal main: never returns in an embedded system
-extern "C" int main(void) {
-    // Hardware peripheral initialization (RCC clocks, GPIO pins)...
+<span class="tok-com">// Bare-metal main: never returns in an embedded system</span>
+<span class="tok-kw">extern</span> <span class="tok-str">&quot;C&quot;</span> <span class="tok-type">int</span> <span class="tok-fn">main</span>(<span class="tok-type">void</span>) {
+    <span class="tok-com">// Hardware peripheral initialization (RCC clocks, GPIO pins)...</span>
     
-    while (true) {
-        // Super-loop / RTOS scheduler...
+    <span class="tok-kw">while</span> (<span class="tok-kw">true</span>) {
+        <span class="tok-com">// Super-loop / RTOS scheduler...</span>
     }
     
-    // Unreachable in bare metal
-    return 0;
+    <span class="tok-com">// Unreachable in bare metal</span>
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         
       </div>

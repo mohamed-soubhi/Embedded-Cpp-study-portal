@@ -184,17 +184,17 @@
       <div class="content-card">
         
         <p>Idiomatic modern C++ array processing with auto deduction:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-constexpr std::array&lt;uint8_t, 8&gt; CAN_PAYLOAD = {0x01, 0x02, 0x03, 0x04, 0xAA, 0xBB, 0xCC, 0xDD};
+<span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">uint8_t</span>, <span class="tok-num">8</span>&gt; CAN_PAYLOAD = {<span class="tok-num">0x01</span>, <span class="tok-num">0x02</span>, <span class="tok-num">0x03</span>, <span class="tok-num">0x04</span>, <span class="tok-num">0xAA</span>, <span class="tok-num">0xBB</span>, <span class="tok-num">0xCC</span>, <span class="tok-num">0xDD</span>};
 
-uint16_t computeChecksum() noexcept {
-    uint16_t sum = 0;
-    for (const uint8_t byte : CAN_PAYLOAD) {
+<span class="tok-type">uint16_t</span> <span class="tok-fn">computeChecksum</span>() <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">uint16_t</span> sum = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-kw">const</span> <span class="tok-type">uint8_t</span> byte : CAN_PAYLOAD) {
         sum += byte;
     }
-    return sum;
+    <span class="tok-kw">return</span> sum;
 }</pre>
         
       </div>

@@ -206,15 +206,15 @@
       <div class="content-card">
         
         <p>Reentrant task-safe function design:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Reentrant: All state is passed via caller-provided context (Zero static state)
-struct CounterContext {
-    uint32_t count{0};
+<span class="tok-com">// Reentrant: All state is passed via caller-provided context (Zero static state)</span>
+<span class="tok-kw">struct</span> CounterContext {
+    <span class="tok-type">uint32_t</span> count{<span class="tok-num">0</span>};
 };
 
-uint32_t incrementReentrant(CounterContext&amp; ctx) noexcept {
-    return ++ctx.count; // 100% thread-safe across independent tasks
+<span class="tok-type">uint32_t</span> <span class="tok-fn">incrementReentrant</span>(CounterContext&amp; ctx) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">return</span> ++ctx.count; <span class="tok-com">// 100% thread-safe across independent tasks</span>
 }</pre>
         
       </div>

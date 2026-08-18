@@ -249,13 +249,13 @@
       <div class="content-card">
         
         <p>Pre-reserving capacity or using fixed-capacity bounded vectors:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;vector&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;vector&gt;</span>
 
-// If std::vector MUST be used, reserve capacity upfront at boot
-std::vector&lt;int&gt; createTelemetryVector(size_t expected_items) {
-    std::vector&lt;int&gt; vec;
-    vec.reserve(expected_items); // Allocates ONCE; eliminates dynamic reallocations
-    return vec;
+<span class="tok-com">// If std::vector MUST be used, reserve capacity upfront at boot</span>
+<span class="tok-type">std</span>::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; <span class="tok-fn">createTelemetryVector</span>(<span class="tok-type">size_t</span> expected_items) {
+    <span class="tok-type">std</span>::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; vec;
+    vec.<span class="tok-fn">reserve</span>(expected_items); <span class="tok-com">// Allocates ONCE; eliminates dynamic reallocations</span>
+    <span class="tok-kw">return</span> vec;
 }</pre>
         
       </div>

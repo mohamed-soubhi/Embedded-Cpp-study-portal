@@ -250,27 +250,27 @@
       <div class="content-card">
         
         <p>Type-safe validated identity class:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;string_view&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
 
-class DeviceAuthToken {
-private:
-    uint32_t device_uid_{0};
-    uint16_t security_pin_{0};
-    bool     is_valid_{false};
+<span class="tok-kw">class</span> DeviceAuthToken {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">uint32_t</span> device_uid_{<span class="tok-num">0</span>};
+    <span class="tok-type">uint16_t</span> security_pin_{<span class="tok-num">0</span>};
+    <span class="tok-kw">bool</span>     is_valid_{<span class="tok-kw">false</span>};
 
-public:
-    constexpr bool provision(uint32_t uid, uint16_t pin) noexcept {
-        if (uid == 0 || pin &lt; 1000 || pin &gt; 9999) {
-            return false; // Invariant violation: PIN must be 4 digits
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">provision</span>(<span class="tok-type">uint32_t</span> uid, <span class="tok-type">uint16_t</span> pin) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (uid == <span class="tok-num">0</span> || pin &lt; <span class="tok-num">1000</span> || pin &gt; <span class="tok-num">9999</span>) {
+            <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// Invariant violation: PIN must be 4 digits</span>
         }
         device_uid_ = uid;
         security_pin_ = pin;
-        is_valid_ = true;
-        return true;
+        is_valid_ = <span class="tok-kw">true</span>;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 
-    constexpr bool is_authenticated() const noexcept { return is_valid_; }
+    <span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">is_authenticated</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> is_valid_; }
 };</pre>
         
       </div>

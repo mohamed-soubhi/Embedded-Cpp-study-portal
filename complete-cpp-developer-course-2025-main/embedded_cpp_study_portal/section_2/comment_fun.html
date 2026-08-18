@@ -183,14 +183,14 @@
       <div class="content-card">
         
         <p>Production Doxygen driver header documentation:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">/**
- * @brief  Transmits a single data byte over the SPI1 hardware bus.
- * @param  payload: The 8-bit unsigned byte to transmit.
- * @param  timeout_ms: Maximum duration in milliseconds to wait for TXE flag.
- * @retval 0 on success, -1 on timeout or bus fault error.
- * @note   This function is reentrant and thread-safe.
- */
-[[nodiscard]] int32_t spi_transmit_byte(uint8_t payload, uint32_t timeout_ms) noexcept;</pre>
+        <pre class="code-block"><span class="tok-com">/**</span>
+<span class="tok-com"> * @brief  Transmits a single data byte over the SPI1 hardware bus.</span>
+<span class="tok-com"> * @param  payload: The 8-bit unsigned byte to transmit.</span>
+<span class="tok-com"> * @param  timeout_ms: Maximum duration in milliseconds to wait for TXE flag.</span>
+<span class="tok-com"> * @retval 0 on success, -1 on timeout or bus fault error.</span>
+<span class="tok-com"> * @note   This function is reentrant and thread-safe.</span>
+<span class="tok-com"> */</span>
+[[nodiscard]] <span class="tok-type">int32_t</span> <span class="tok-fn">spi_transmit_byte</span>(<span class="tok-type">uint8_t</span> payload, <span class="tok-type">uint32_t</span> timeout_ms) <span class="tok-kw">noexcept</span>;</pre>
         
       </div>
     </section>

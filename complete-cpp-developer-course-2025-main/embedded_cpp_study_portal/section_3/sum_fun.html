@@ -185,11 +185,11 @@
       <div class="content-card">
         
         <p>Closed-form $O(1)$ arithmetic series summation:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// O(1) Constant Time Summation: 1 + 2 + ... + N
-constexpr uint64_t sumNaturalNumbers(uint32_t n) noexcept {
-    return (static_cast&lt;uint64_t&gt;(n) * (n + 1)) / 2;
+<span class="tok-com">// O(1) Constant Time Summation: 1 + 2 + ... + N</span>
+<span class="tok-kw">constexpr</span> <span class="tok-type">uint64_t</span> <span class="tok-fn">sumNaturalNumbers</span>(<span class="tok-type">uint32_t</span> n) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">return</span> (<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint64_t</span>&gt;(n) * (n + <span class="tok-num">1</span>)) / <span class="tok-num">2</span>;
 }</pre>
         
       </div>

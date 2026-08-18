@@ -283,43 +283,43 @@
       <div class="content-card">
         
         <p>Here is an embedded safety-critical monitor using a deterministic state machine with hysteresis:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-enum class SafetyState : uint8_t {
-    Nominal = 0,
+<span class="tok-kw">enum</span> <span class="tok-kw">class</span> SafetyState : <span class="tok-type">uint8_t</span> {
+    Nominal = <span class="tok-num">0</span>,
     Warning,
     CriticalShutdown,
     FaultLatched
 };
 
-class FuelSafetyMonitor {
-private:
-    static constexpr uint16_t CRITICAL_THRESHOLD = 50;  // 5.0 Liters
-    static constexpr uint16_t WARNING_THRESHOLD  = 150; // 15.0 Liters
-    static constexpr uint16_t HYSTERESIS         = 10;  // Prevents state fluttering
+<span class="tok-kw">class</span> FuelSafetyMonitor {
+<span class="tok-kw">private</span>:
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">uint16_t</span> CRITICAL_THRESHOLD = <span class="tok-num">50</span>;  <span class="tok-com">// 5.0 Liters</span>
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">uint16_t</span> WARNING_THRESHOLD  = <span class="tok-num">150</span>; <span class="tok-com">// 15.0 Liters</span>
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">uint16_t</span> HYSTERESIS         = <span class="tok-num">10</span>;  <span class="tok-com">// Prevents state fluttering</span>
     
     SafetyState state_{SafetyState::Nominal};
-    bool latch_engaged_{false};
+    <span class="tok-kw">bool</span> latch_engaged_{<span class="tok-kw">false</span>};
 
-public:
-    SafetyState update(uint16_t raw_sensor_level) noexcept {
-        if (latch_engaged_) return SafetyState::FaultLatched;
+<span class="tok-kw">public</span>:
+    SafetyState <span class="tok-fn">update</span>(<span class="tok-type">uint16_t</span> raw_sensor_level) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (latch_engaged_) <span class="tok-kw">return</span> SafetyState::FaultLatched;
 
-        if (raw_sensor_level &lt;= CRITICAL_THRESHOLD) {
+        <span class="tok-kw">if</span> (raw_sensor_level &lt;= CRITICAL_THRESHOLD) {
             state_ = SafetyState::CriticalShutdown;
-            latch_engaged_ = true;
-            trigger_hardware_shutdown();
-        } else if (raw_sensor_level &lt;= WARNING_THRESHOLD) {
+            latch_engaged_ = <span class="tok-kw">true</span>;
+            <span class="tok-fn">trigger_hardware_shutdown</span>();
+        } <span class="tok-kw">else</span> <span class="tok-kw">if</span> (raw_sensor_level &lt;= WARNING_THRESHOLD) {
             state_ = SafetyState::Warning;
-        } else if (raw_sensor_level &gt; (WARNING_THRESHOLD + HYSTERESIS)) {
+        } <span class="tok-kw">else</span> <span class="tok-kw">if</span> (raw_sensor_level &gt; (WARNING_THRESHOLD + HYSTERESIS)) {
             state_ = SafetyState::Nominal;
         }
-        return state_;
+        <span class="tok-kw">return</span> state_;
     }
 
-private:
-    void trigger_hardware_shutdown() noexcept {
-        // Assert GPIO pin to trip physical safety relay
+<span class="tok-kw">private</span>:
+    <span class="tok-type">void</span> <span class="tok-fn">trigger_hardware_shutdown</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-com">// Assert GPIO pin to trip physical safety relay</span>
     }
 };</pre>
         

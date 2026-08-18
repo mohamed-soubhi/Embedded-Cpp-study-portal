@@ -182,19 +182,19 @@
       <div class="content-card">
         
         <p>Hardware True Random Number Generator (TRNG) driver:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Hardware TRNG Peripheral Access (STM32 RNG)
-struct HardwareRNG {
-    volatile uint32_t CR;  // Control Register
-    volatile uint32_t SR;  // Status Register
-    volatile uint32_t DR;  // Data Register (32-bit random word)
+<span class="tok-com">// Hardware TRNG Peripheral Access (STM32 RNG)</span>
+<span class="tok-kw">struct</span> HardwareRNG {
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> CR;  <span class="tok-com">// Control Register</span>
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> SR;  <span class="tok-com">// Status Register</span>
+    <span class="tok-kw">volatile</span> <span class="tok-type">uint32_t</span> DR;  <span class="tok-com">// Data Register (32-bit random word)</span>
 };
 
-uint32_t getHardwareTrueRandom() noexcept {
-    HardwareRNG* const rng = reinterpret_cast&lt;HardwareRNG*&gt;(0x50060800);
-    while ((rng-&gt;SR &amp; 1UL) == 0); // Wait for Data Ready (DRDY)
-    return rng-&gt;DR; // True physical analog entropy!
+<span class="tok-type">uint32_t</span> <span class="tok-fn">getHardwareTrueRandom</span>() <span class="tok-kw">noexcept</span> {
+    HardwareRNG* <span class="tok-kw">const</span> rng = <span class="tok-kw">reinterpret_cast</span>&lt;HardwareRNG*&gt;(<span class="tok-num">0x50060800</span>);
+    <span class="tok-kw">while</span> ((rng-&gt;SR &amp; 1UL) == <span class="tok-num">0</span>); <span class="tok-com">// Wait for Data Ready (DRDY)</span>
+    <span class="tok-kw">return</span> rng-&gt;DR; <span class="tok-com">// True physical analog entropy!</span>
 }</pre>
         
       </div>

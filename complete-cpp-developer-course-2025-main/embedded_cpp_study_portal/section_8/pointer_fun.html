@@ -193,34 +193,34 @@
       <div class="content-card">
         
         <p>Modern embedded C++ wraps raw MMIO addresses in type-safe, zero-overhead register abstractions:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Type-safe, zero-cost MMIO Register Wrapper
-template &lt;uintptr_t Address, typename T = uint32_t&gt;
-struct MmioRegister {
-    static void write(T value) noexcept {
-        *reinterpret_cast&lt;volatile T*&gt;(Address) = value;
+<span class="tok-com">// Type-safe, zero-cost MMIO Register Wrapper</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-type">uintptr_t</span> Address, <span class="tok-kw">typename</span> T = <span class="tok-type">uint32_t</span>&gt;
+<span class="tok-kw">struct</span> MmioRegister {
+    <span class="tok-kw">static</span> <span class="tok-type">void</span> <span class="tok-fn">write</span>(T value) <span class="tok-kw">noexcept</span> {
+        *<span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> T*&gt;(Address) = value;
     }
     
-    static T read() noexcept {
-        return *reinterpret_cast&lt;volatile T*&gt;(Address);
+    <span class="tok-kw">static</span> T <span class="tok-fn">read</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> *<span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> T*&gt;(Address);
     }
     
-    static void set_bit(uint8_t bit) noexcept {
-        *reinterpret_cast&lt;volatile T*&gt;(Address) |= (1UL &lt;&lt; bit);
+    <span class="tok-kw">static</span> <span class="tok-type">void</span> <span class="tok-fn">set_bit</span>(<span class="tok-type">uint8_t</span> bit) <span class="tok-kw">noexcept</span> {
+        *<span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> T*&gt;(Address) |= (1UL &lt;&lt; bit);
     }
     
-    static void clear_bit(uint8_t bit) noexcept {
-        *reinterpret_cast&lt;volatile T*&gt;(Address) &amp;= ~(1UL &lt;&lt; bit);
+    <span class="tok-kw">static</span> <span class="tok-type">void</span> <span class="tok-fn">clear_bit</span>(<span class="tok-type">uint8_t</span> bit) <span class="tok-kw">noexcept</span> {
+        *<span class="tok-kw">reinterpret_cast</span>&lt;<span class="tok-kw">volatile</span> T*&gt;(Address) &amp;= ~(1UL &lt;&lt; bit);
     }
 };
 
-// Concrete GPIO Pin Definition (STM32 GPIOA ODR at 0x40020014)
-using GpioA_ODR = MmioRegister&lt;0x40020014, uint32_t&gt;;
+<span class="tok-com">// Concrete GPIO Pin Definition (STM32 GPIOA ODR at 0x40020014)</span>
+<span class="tok-kw">using</span> GpioA_ODR = MmioRegister&lt;<span class="tok-num">0x40020014</span>, <span class="tok-type">uint32_t</span>&gt;;
 
-void toggle_status_led() noexcept {
-    GpioA_ODR::set_bit(5);   // Set Pin 5 HIGH (LED ON)
-    GpioA_ODR::clear_bit(5); // Set Pin 5 LOW (LED OFF)
+<span class="tok-type">void</span> <span class="tok-fn">toggle_status_led</span>() <span class="tok-kw">noexcept</span> {
+    GpioA_ODR::<span class="tok-fn">set_bit</span>(<span class="tok-num">5</span>);   <span class="tok-com">// Set Pin 5 HIGH (LED ON)</span>
+    GpioA_ODR::<span class="tok-fn">clear_bit</span>(<span class="tok-num">5</span>); <span class="tok-com">// Set Pin 5 LOW (LED OFF)</span>
 }</pre>
         
       </div>

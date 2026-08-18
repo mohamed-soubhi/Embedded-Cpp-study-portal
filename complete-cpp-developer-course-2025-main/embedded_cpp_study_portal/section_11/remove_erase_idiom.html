@@ -168,7 +168,7 @@
         
         <h3>1. The Two-Step Remove-Erase Idiom</h3>
         <p>In standard C++, <code>std::remove</code> only shifts non-matching elements to the front of the range and returns a past-the-end iterator. It cannot alter the container's <code>size()</code> because generic algorithms operate only on iterators without knowledge of container topology. The container's <code>erase()</code> method must be called to truncate the tail.</p>
-        <pre class="code-block" style="background:#161b22; padding:10px; border-radius:6px;">vec.erase(std::remove(vec.begin(), vec.end(), targetValue), vec.end());</pre>
+        <pre class="code-block">vec.<span class="tok-fn">erase</span>(<span class="tok-type">std</span>::<span class="tok-fn">remove</span>(vec.<span class="tok-fn">begin</span>(), vec.<span class="tok-fn">end</span>(), targetValue), vec.<span class="tok-fn">end</span>());</pre>
         
       </div>
     </section>
@@ -197,19 +197,19 @@
       <div class="content-card">
         
         <p>In modern C++20, the verbose two-step idiom is replaced with uniform, clear <code>std::erase</code>:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;vector&gt;
-#include &lt;iostream&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;vector&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
 
-int main() {
-    std::vector&lt;int&gt; sensorReadings = {10, -999, 25, -999, 32};
+<span class="tok-type">int</span> <span class="tok-fn">main</span>() {
+    <span class="tok-type">std</span>::<span class="tok-type">vector</span>&lt;<span class="tok-type">int</span>&gt; sensorReadings = {<span class="tok-num">10</span>, -<span class="tok-num">999</span>, <span class="tok-num">25</span>, -<span class="tok-num">999</span>, <span class="tok-num">32</span>};
 
-    // Modern C++20: Single expressive call
-    std::erase(sensorReadings, -999);
+    <span class="tok-com">// Modern C++20: Single expressive call</span>
+    <span class="tok-type">std</span>::<span class="tok-fn">erase</span>(sensorReadings, -<span class="tok-num">999</span>);
 
-    for (int val : sensorReadings) {
-        std::cout &lt;&lt; val &lt;&lt; ' '; // Prints: 10 25 32
+    <span class="tok-kw">for</span> (<span class="tok-type">int</span> val : sensorReadings) {
+        <span class="tok-type">std</span>::<span class="tok-type">cout</span> &lt;&lt; val &lt;&lt; &#x27; &#x27;; <span class="tok-com">// Prints: 10 25 32</span>
     }
-    return 0;
+    <span class="tok-kw">return</span> <span class="tok-num">0</span>;
 }</pre>
         
       </div>

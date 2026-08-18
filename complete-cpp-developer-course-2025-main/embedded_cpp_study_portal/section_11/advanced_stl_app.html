@@ -215,13 +215,13 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">// Prefer contiguous std::array for maximum CPU cache throughput
-#include &lt;array&gt;
-#include &lt;iostream&gt;
+        <pre class="code-block"><span class="tok-com">// Prefer contiguous std::array for maximum CPU cache throughput</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
 
-void processSensorArray() {
-    std::array&lt;int, 64&gt; fastData;
-    // Sequential memory access maximizes cache line utilization
+<span class="tok-type">void</span> <span class="tok-fn">processSensorArray</span>() {
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">int</span>, <span class="tok-num">64</span>&gt; fastData;
+    <span class="tok-com">// Sequential memory access maximizes cache line utilization</span>
 }</pre>
         
       </div>

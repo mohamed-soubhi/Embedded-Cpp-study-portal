@@ -327,38 +327,38 @@
       <div class="content-card">
         
         <p>Here is an embedded non-copyable, move-only DMA packet buffer compliant with AUTOSAR A12-8-1:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;utility&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;utility&gt;</span>
 
-class DmaBuffer {
-public:
-    explicit DmaBuffer(size_t size) : size_(size), data_(new uint8_t[size]) {}
-    ~DmaBuffer() { delete[] data_; }
+<span class="tok-kw">class</span> DmaBuffer {
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">explicit</span> <span class="tok-fn">DmaBuffer</span>(<span class="tok-type">size_t</span> size) : <span class="tok-fn">size_</span>(size), <span class="tok-fn">data_</span>(<span class="tok-kw">new</span> <span class="tok-type">uint8_t</span>[size]) {}
+    ~<span class="tok-fn">DmaBuffer</span>() { <span class="tok-kw">delete</span>[] data_; }
 
-    // Disable dangerous copying (Prevents double-free of DMA buffer)
-    DmaBuffer(const DmaBuffer&amp;) = delete;
-    DmaBuffer&amp; operator=(const DmaBuffer&amp;) = delete;
+    <span class="tok-com">// Disable dangerous copying (Prevents double-free of DMA buffer)</span>
+    <span class="tok-fn">DmaBuffer</span>(<span class="tok-kw">const</span> DmaBuffer&amp;) = <span class="tok-kw">delete</span>;
+    DmaBuffer&amp; <span class="tok-kw">operator</span>=(<span class="tok-kw">const</span> DmaBuffer&amp;) = <span class="tok-kw">delete</span>;
 
-    // Enable fast zero-copy move operations
-    DmaBuffer(DmaBuffer&amp;&amp; other) noexcept : size_(other.size_), data_(other.data_) {
-        other.size_ = 0;
-        other.data_ = nullptr;
+    <span class="tok-com">// Enable fast zero-copy move operations</span>
+    <span class="tok-fn">DmaBuffer</span>(DmaBuffer&amp;&amp; other) <span class="tok-kw">noexcept</span> : <span class="tok-fn">size_</span>(other.size_), <span class="tok-fn">data_</span>(other.data_) {
+        other.size_ = <span class="tok-num">0</span>;
+        other.data_ = <span class="tok-kw">nullptr</span>;
     }
 
-    DmaBuffer&amp; operator=(DmaBuffer&amp;&amp; other) noexcept {
-        if (this != &amp;other) {
-            delete[] data_;
+    DmaBuffer&amp; <span class="tok-kw">operator</span>=(DmaBuffer&amp;&amp; other) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (<span class="tok-kw">this</span> != &amp;other) {
+            <span class="tok-kw">delete</span>[] data_;
             data_ = other.data_;
             size_ = other.size_;
-            other.data_ = nullptr;
-            other.size_ = 0;
+            other.data_ = <span class="tok-kw">nullptr</span>;
+            other.size_ = <span class="tok-num">0</span>;
         }
-        return *this;
+        <span class="tok-kw">return</span> *<span class="tok-kw">this</span>;
     }
 
-private:
-    size_t size_;
-    uint8_t* data_;
+<span class="tok-kw">private</span>:
+    <span class="tok-type">size_t</span> size_;
+    <span class="tok-type">uint8_t</span>* data_;
 };</pre>
         
       </div>

@@ -190,16 +190,16 @@
       <div class="content-card">
         
         <p>Branchless even-number counter:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;cstddef&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;cstddef&gt;</span>
 
-size_t countEvensBranchless(const uint32_t* data, size_t len) noexcept {
-    size_t count = 0;
-    for (size_t i = 0; i &lt; len; ++i) {
-        // Branchless: (data[i] & 1) is 0 for even, 1 for odd
-        count += (data[i] &amp; 1) ^ 1;
+<span class="tok-type">size_t</span> <span class="tok-fn">countEvensBranchless</span>(<span class="tok-kw">const</span> <span class="tok-type">uint32_t</span>* data, <span class="tok-type">size_t</span> len) <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">size_t</span> count = <span class="tok-num">0</span>;
+    <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; len; ++i) {
+        <span class="tok-com">// Branchless: (data[i] &amp; 1) is 0 for even, 1 for odd</span>
+        count += (data[i] &amp; <span class="tok-num">1</span>) ^ <span class="tok-num">1</span>;
     }
-    return count;
+    <span class="tok-kw">return</span> count;
 }</pre>
         
       </div>

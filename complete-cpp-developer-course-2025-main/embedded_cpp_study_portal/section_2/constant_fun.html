@@ -184,16 +184,16 @@
       <div class="content-card">
         
         <p>Replacing macros with type-safe constexpr definitions:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// BAD (Legacy C Macro): No type, no scope, debugger blind
-// #define MAX_VOLTAGE 3.3
+<span class="tok-com">// BAD (Legacy C Macro): No type, no scope, debugger blind</span>
+<span class="tok-com">// #define MAX_VOLTAGE 3.3</span>
 
-// GOOD (Modern C++): Type-safe, scoped, compile-time verified
-namespace HardwareConfig {
-    constexpr float    MAX_VOLTAGE_V  = 3.3f;
-    constexpr uint32_t SPI_BAUD_RATE  = 10'000'000; // 10 MHz
-    constexpr uint8_t  MAX_RETRY_COUNT = 3;
+<span class="tok-com">// GOOD (Modern C++): Type-safe, scoped, compile-time verified</span>
+<span class="tok-kw">namespace</span> HardwareConfig {
+    <span class="tok-kw">constexpr</span> <span class="tok-type">float</span>    MAX_VOLTAGE_V  = <span class="tok-num">3.3f</span>;
+    <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> SPI_BAUD_RATE  = <span class="tok-num">10</span>&#x27;<span class="tok-num">000</span>&#x27;<span class="tok-num">000</span>; <span class="tok-com">// 10 MHz</span>
+    <span class="tok-kw">constexpr</span> <span class="tok-type">uint8_t</span>  MAX_RETRY_COUNT = <span class="tok-num">3</span>;
 }</pre>
         
       </div>

@@ -528,11 +528,11 @@
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">template &lt;typename Container&gt;
-class StackAdapter {
+        <pre class="code-block"><span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> Container&gt;
+<span class="tok-kw">class</span> StackAdapter {
     Container c_;
-public:
-    void push(typename Container::value_type v) { c_.push_back(v); }
+<span class="tok-kw">public</span>:
+    <span class="tok-type">void</span> <span class="tok-fn">push</span>(<span class="tok-kw">typename</span> Container::value_type v) { c_.<span class="tok-fn">push_back</span>(v); }
 };</pre>
       </div>
     </section>

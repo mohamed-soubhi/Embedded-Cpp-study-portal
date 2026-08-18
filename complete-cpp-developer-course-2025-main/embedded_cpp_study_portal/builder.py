@@ -377,6 +377,20 @@ def build_uml_section(uml_data, default_title="UML Architecture & Class Model"):
     </div>
     '''
 
+def colorize_code_blocks(html_str):
+    if not html_str:
+        return ""
+    
+    def replacer(match):
+        inner = match.group(2)
+        # Strip existing code and span tags
+        cleaned = re.sub(r'</?(?:code|span)[^>]*>', '', inner)
+        raw_code = html.unescape(cleaned).strip('\r\n')
+        highlighted = highlight_cpp(raw_code)
+        return f'<pre class="code-block">{highlighted}</pre>'
+    
+    return re.sub(r'(<pre[^>]*>)(.*?)(</pre>)', replacer, html_str, flags=re.DOTALL)
+
 def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_num=None, next_num=None):
     if proj_num is None:
         proj_num = data.get('proj_num', f"{section_num}.01")
@@ -389,6 +403,10 @@ def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_n
     code_viewer_html = build_tabs(files_dict)
     quiz_html = build_mcq(data['quiz'])
     uml_content_html = build_uml_section(data.get('uml_diagram') or data.get('uml_html', ''))
+    
+    concepts_colored = colorize_code_blocks(data.get('concepts_html', ''))
+    embedded_colored = colorize_code_blocks(data.get('embedded_html', ''))
+    refactor_colored = colorize_code_blocks(data.get('refactor_html', ''))
     
     tags_html = " ".join([f'<span class="tag">{html.escape(t)}</span>' for t in data['tags']])
     
@@ -479,7 +497,7 @@ def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_n
         <span class="icon">📚</span> 3. Core C++ Concepts Deep-Dive
       </h2>
       <div class="content-card">
-        {data['concepts_html']}
+        {concepts_colored}
       </div>
     </section>
 
@@ -488,7 +506,7 @@ def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_n
         <span class="icon">⚡</span> 4. Embedded Systems &amp; Hardware Reality
       </h2>
       <div class="content-card">
-        {data['embedded_html']}
+        {embedded_colored}
       </div>
     </section>
 
@@ -497,7 +515,7 @@ def generate_page(data, prev_link, next_link, section_num, proj_num=None, prev_n
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        {data['refactor_html']}
+        {refactor_colored}
       </div>
     </section>
 

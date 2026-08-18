@@ -186,25 +186,25 @@
       <div class="content-card">
         
         <p>Deterministic ETL fixed-capacity vector usage:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-// Conceptually equivalent to etl::vector&lt;uint32_t, 10&gt;
-template &lt;typename T, size_t MAX_SIZE&gt;
-class EtlVectorDemo {
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-com">// Conceptually equivalent to etl::vector&lt;uint32_t, 10&gt;</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> MAX_SIZE&gt;
+<span class="tok-kw">class</span> EtlVectorDemo {
     T storage_[MAX_SIZE];
-    size_t current_size_{0};
+    <span class="tok-type">size_t</span> current_size_{<span class="tok-num">0</span>};
 
-public:
-    bool push_back(const T&amp; item) noexcept {
-        if (current_size_ &gt;= MAX_SIZE) return false;
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">push_back</span>(<span class="tok-kw">const</span> T&amp; item) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (current_size_ &gt;= MAX_SIZE) <span class="tok-kw">return</span> <span class="tok-kw">false</span>;
         storage_[current_size_++] = item;
-        return true;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 
-    void pop_back() noexcept {
-        if (current_size_ &gt; 0) --current_size_;
+    <span class="tok-type">void</span> <span class="tok-fn">pop_back</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (current_size_ &gt; <span class="tok-num">0</span>) --current_size_;
     }
 
-    size_t size() const noexcept { return current_size_; }
+    <span class="tok-type">size_t</span> <span class="tok-fn">size</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> current_size_; }
 };</pre>
         
       </div>

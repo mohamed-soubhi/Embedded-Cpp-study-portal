@@ -309,21 +309,21 @@
       <div class="content-card">
         
         <p>Power-fail safe atomic log writer:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct TelemetryLogEntry {
-    uint32_t timestamp_s;
-    int16_t  temperature_c;
-    uint16_t voltage_mv;
-    uint32_t crc32;
+<span class="tok-kw">struct</span> TelemetryLogEntry {
+    <span class="tok-type">uint32_t</span> timestamp_s;
+    <span class="tok-type">int16_t</span>  temperature_c;
+    <span class="tok-type">uint16_t</span> voltage_mv;
+    <span class="tok-type">uint32_t</span> crc32;
 };
 
-// Write with explicit hardware flush to guarantee persistence
-bool appendLogRecord(const TelemetryLogEntry&amp; entry) noexcept {
-    // 1. Write binary entry to Flash buffer...
-    // 2. Force hardware SPI Flash write transaction...
-    // 3. Update non-volatile commit pointer in Flash header...
-    return true;
+<span class="tok-com">// Write with explicit hardware flush to guarantee persistence</span>
+<span class="tok-kw">bool</span> <span class="tok-fn">appendLogRecord</span>(<span class="tok-kw">const</span> TelemetryLogEntry&amp; entry) <span class="tok-kw">noexcept</span> {
+    <span class="tok-com">// 1. Write binary entry to Flash buffer...</span>
+    <span class="tok-com">// 2. Force hardware SPI Flash write transaction...</span>
+    <span class="tok-com">// 3. Update non-volatile commit pointer in Flash header...</span>
+    <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
 }</pre>
         
       </div>

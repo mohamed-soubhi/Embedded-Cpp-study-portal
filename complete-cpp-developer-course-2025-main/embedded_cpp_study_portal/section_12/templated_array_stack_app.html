@@ -329,24 +329,24 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
-#include &lt;optional&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;optional&gt;</span>
 
-template &lt;typename T, size_t MaxCapacity&gt;
-class EmbeddedStack {
-public:
-    bool push(const T&amp; item) {
-        if (top_ &gt;= MaxCapacity) return false;
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> MaxCapacity&gt;
+<span class="tok-kw">class</span> EmbeddedStack {
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">push</span>(<span class="tok-kw">const</span> T&amp; item) {
+        <span class="tok-kw">if</span> (top_ &gt;= MaxCapacity) <span class="tok-kw">return</span> <span class="tok-kw">false</span>;
         data_[top_++] = item;
-        return true;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
-    std::optional&lt;T&gt; pop() {
-        if (top_ == 0) return std::nullopt;
-        return data_[--top_];
+    <span class="tok-type">std</span>::<span class="tok-type">optional</span>&lt;T&gt; <span class="tok-fn">pop</span>() {
+        <span class="tok-kw">if</span> (top_ == <span class="tok-num">0</span>) <span class="tok-kw">return</span> <span class="tok-type">std</span>::nullopt;
+        <span class="tok-kw">return</span> data_[--top_];
     }
-private:
-    std::array&lt;T, MaxCapacity&gt; data_;
-    size_t top_ = 0;
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, MaxCapacity&gt; data_;
+    <span class="tok-type">size_t</span> top_ = <span class="tok-num">0</span>;
 };</pre>
         
       </div>

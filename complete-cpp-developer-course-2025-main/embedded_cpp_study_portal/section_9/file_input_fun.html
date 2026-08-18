@@ -246,19 +246,19 @@
       <div class="content-card">
         
         <p>Embedded LittleFS file read operation:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-// Conceptually equivalent to lfs_file_read
-struct EmbeddedConfig {
-    uint32_t baud_rate{115200};
-    uint16_t sensor_interval_ms{1000};
-    uint8_t  device_id{1};
+<span class="tok-com">// Conceptually equivalent to lfs_file_read</span>
+<span class="tok-kw">struct</span> EmbeddedConfig {
+    <span class="tok-type">uint32_t</span> baud_rate{<span class="tok-num">115200</span>};
+    <span class="tok-type">uint16_t</span> sensor_interval_ms{<span class="tok-num">1000</span>};
+    <span class="tok-type">uint8_t</span>  device_id{<span class="tok-num">1</span>};
 };
 
-bool readConfigFile(EmbeddedConfig&amp; out_cfg) noexcept {
-    // Read raw binary struct directly from LittleFS SPI Flash block...
-    return true;
+<span class="tok-kw">bool</span> <span class="tok-fn">readConfigFile</span>(EmbeddedConfig&amp; out_cfg) <span class="tok-kw">noexcept</span> {
+    <span class="tok-com">// Read raw binary struct directly from LittleFS SPI Flash block...</span>
+    <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
 }</pre>
         
       </div>

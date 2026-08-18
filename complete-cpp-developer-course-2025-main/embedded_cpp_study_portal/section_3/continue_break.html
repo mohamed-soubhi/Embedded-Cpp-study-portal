@@ -185,17 +185,17 @@
       <div class="content-card">
         
         <p>Clean early-return linear search replacing nested break flags:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;cstddef&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;cstddef&gt;</span>
 
-// Early return cleanly terminates search without complex break flags
-size_t findSensorFaultIndex(const uint16_t* samples, size_t count, uint16_t threshold) noexcept {
-    for (size_t i = 0; i &lt; count; ++i) {
-        if (samples[i] &gt; threshold) {
-            return i; // Found fault! Exits loop and function immediately
+<span class="tok-com">// Early return cleanly terminates search without complex break flags</span>
+<span class="tok-type">size_t</span> <span class="tok-fn">findSensorFaultIndex</span>(<span class="tok-kw">const</span> <span class="tok-type">uint16_t</span>* samples, <span class="tok-type">size_t</span> count, <span class="tok-type">uint16_t</span> threshold) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; count; ++i) {
+        <span class="tok-kw">if</span> (samples[i] &gt; threshold) {
+            <span class="tok-kw">return</span> i; <span class="tok-com">// Found fault! Exits loop and function immediately</span>
         }
     }
-    return static_cast&lt;size_t&gt;(-1); // No fault found
+    <span class="tok-kw">return</span> <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">size_t</span>&gt;(-<span class="tok-num">1</span>); <span class="tok-com">// No fault found</span>
 }</pre>
         
       </div>

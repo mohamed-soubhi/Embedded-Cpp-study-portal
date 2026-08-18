@@ -203,9 +203,9 @@ Person::<span class="tok-fn">Person</span>(<span class="tok-type">string</span> 
         
         <h3>1. The Partial Construction Problem</h3>
         <p>Consider a class that allocates two raw pointer resources in its constructor:</p>
-        <pre class="code-block">MyClass::MyClass() {
-    ptr1 = new ResourceA(); // Succeeded
-    ptr2 = new ResourceB(); // THROWS EXCEPTION!
+        <pre class="code-block">MyClass::<span class="tok-fn">MyClass</span>() {
+    ptr1 = <span class="tok-kw">new</span> <span class="tok-fn">ResourceA</span>(); <span class="tok-com">// Succeeded</span>
+    ptr2 = <span class="tok-kw">new</span> <span class="tok-fn">ResourceB</span>(); <span class="tok-com">// THROWS EXCEPTION!</span>
 }</pre>
         <p>Because the constructor never finished, <code>~MyClass()</code> will <strong>never be called</strong>. <code>ptr1</code> is leaked forever! This is why raw pointers in constructors violate basic exception safety.</p>
 
@@ -237,27 +237,27 @@ Person::<span class="tok-fn">Person</span>(<span class="tok-type">string</span> 
       <div class="content-card">
         
         <p>Here is how to design exception-safe classes with guaranteed cleanup and noexcept construction:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;string_view&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;string_view&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-class FirmwareNode {
-private:
-    std::array&lt;char, 16&gt; node_name_{};
-    uint8_t node_id_{0};
+<span class="tok-kw">class</span> FirmwareNode {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;<span class="tok-type">char</span>, <span class="tok-num">16</span>&gt; node_name_{};
+    <span class="tok-type">uint8_t</span> node_id_{<span class="tok-num">0</span>};
 
-public:
-    // Fully noexcept constructor; zero possibility of memory leak or throwing
-    constexpr FirmwareNode(uint8_t id, std::string_view name) noexcept : node_id_(id) {
-        size_t len = name.size() &lt; 15 ? name.size() : 15;
-        for (size_t i = 0; i &lt; len; ++i) {
+<span class="tok-kw">public</span>:
+    <span class="tok-com">// Fully noexcept constructor; zero possibility of memory leak or throwing</span>
+    <span class="tok-kw">constexpr</span> <span class="tok-fn">FirmwareNode</span>(<span class="tok-type">uint8_t</span> id, <span class="tok-type">std</span>::<span class="tok-type">string_view</span> name) <span class="tok-kw">noexcept</span> : <span class="tok-fn">node_id_</span>(id) {
+        <span class="tok-type">size_t</span> len = name.<span class="tok-fn">size</span>() &lt; <span class="tok-num">15</span> ? name.<span class="tok-fn">size</span>() : <span class="tok-num">15</span>;
+        <span class="tok-kw">for</span> (<span class="tok-type">size_t</span> i = <span class="tok-num">0</span>; i &lt; len; ++i) {
             node_name_[i] = name[i];
         }
-        node_name_[len] = '\0';
+        node_name_[len] = &#x27;\<span class="tok-num">0</span>&#x27;;
     }
 
-    constexpr uint8_t get_id() const noexcept { return node_id_; }
-    constexpr std::string_view get_name() const noexcept { return node_name_.data(); }
+    <span class="tok-kw">constexpr</span> <span class="tok-type">uint8_t</span> <span class="tok-fn">get_id</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> node_id_; }
+    <span class="tok-kw">constexpr</span> <span class="tok-type">std</span>::<span class="tok-type">string_view</span> <span class="tok-fn">get_name</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> node_name_.<span class="tok-fn">data</span>(); }
 };</pre>
         
       </div>

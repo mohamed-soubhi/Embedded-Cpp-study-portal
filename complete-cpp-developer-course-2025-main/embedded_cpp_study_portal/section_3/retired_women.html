@@ -223,18 +223,18 @@
       <div class="content-card">
         
         <p>Industrial machinery safety interlock evaluation:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct MachineSafetySensors {
-    bool emergency_stop_released;
-    bool light_curtain_clear;
-    bool guard_door_closed;
-    bool hydraulic_pressure_ok;
+<span class="tok-kw">struct</span> MachineSafetySensors {
+    <span class="tok-kw">bool</span> emergency_stop_released;
+    <span class="tok-kw">bool</span> light_curtain_clear;
+    <span class="tok-kw">bool</span> guard_door_closed;
+    <span class="tok-kw">bool</span> hydraulic_pressure_ok;
 };
 
-// All interlocks must evaluate true simultaneously (Category 4 Safety)
-constexpr bool isMachineInterlockSafe(MachineSafetySensors s) noexcept {
-    return s.emergency_stop_released &amp;&amp;
+<span class="tok-com">// All interlocks must evaluate true simultaneously (Category 4 Safety)</span>
+<span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">isMachineInterlockSafe</span>(MachineSafetySensors s) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">return</span> s.emergency_stop_released &amp;&amp;
            s.light_curtain_clear &amp;&amp;
            s.guard_door_closed &amp;&amp;
            s.hydraulic_pressure_ok;

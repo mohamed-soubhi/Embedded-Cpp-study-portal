@@ -203,11 +203,11 @@ Car::<span class="tok-fn">Car</span>(<span class="tok-type">string</span> color,
         <span class="icon">💡</span> 5. Production-Ready Embedded Refactoring
       </h2>
       <div class="content-card">
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px;">class MotorController {
-public:
-    void setPwmDuty(uint8_t duty) { duty_ = (duty &gt; 100) ? 100 : duty; }
-private:
-    uint8_t duty_ = 0;
+        <pre class="code-block"><span class="tok-kw">class</span> MotorController {
+<span class="tok-kw">public</span>:
+    <span class="tok-type">void</span> <span class="tok-fn">setPwmDuty</span>(<span class="tok-type">uint8_t</span> duty) { duty_ = (duty &gt; <span class="tok-num">100</span>) ? <span class="tok-num">100</span> : duty; }
+<span class="tok-kw">private</span>:
+    <span class="tok-type">uint8_t</span> duty_ = <span class="tok-num">0</span>;
 };</pre>
       </div>
     </section>

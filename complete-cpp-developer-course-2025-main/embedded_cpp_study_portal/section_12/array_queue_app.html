@@ -357,30 +357,30 @@
       </h2>
       <div class="content-card">
         
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;array&gt;
-#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;array&gt;</span>
+<span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-template &lt;typename T, size_t PowerOfTwoCap = 64&gt;
-class FastRingBuffer {
-    static_assert((PowerOfTwoCap &amp; (PowerOfTwoCap - 1)) == 0, "Capacity must be power of 2!");
-public:
-    bool enqueue(T val) {
-        size_t nextHead = (head_ + 1) &amp; MASK;
-        if (nextHead == tail_) return false; // Full
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> PowerOfTwoCap = <span class="tok-num">64</span>&gt;
+<span class="tok-kw">class</span> FastRingBuffer {
+    <span class="tok-kw">static_assert</span>((PowerOfTwoCap &amp; (PowerOfTwoCap - <span class="tok-num">1</span>)) == <span class="tok-num">0</span>, <span class="tok-str">&quot;Capacity must be power of 2!&quot;</span>);
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">enqueue</span>(T val) {
+        <span class="tok-type">size_t</span> nextHead = (head_ + <span class="tok-num">1</span>) &amp; MASK;
+        <span class="tok-kw">if</span> (nextHead == tail_) <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// Full</span>
         buffer_[head_] = val;
         head_ = nextHead;
-        return true;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
-    bool dequeue(T&amp; out) {
-        if (head_ == tail_) return false; // Empty
+    <span class="tok-kw">bool</span> <span class="tok-fn">dequeue</span>(T&amp; out) {
+        <span class="tok-kw">if</span> (head_ == tail_) <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// Empty</span>
         out = buffer_[tail_];
-        tail_ = (tail_ + 1) &amp; MASK;
-        return true;
+        tail_ = (tail_ + <span class="tok-num">1</span>) &amp; MASK;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
-private:
-    static constexpr size_t MASK = PowerOfTwoCap - 1;
-    std::array&lt;T, PowerOfTwoCap&gt; buffer_;
-    size_t head_ = 0, tail_ = 0;
+<span class="tok-kw">private</span>:
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> <span class="tok-type">size_t</span> MASK = PowerOfTwoCap - <span class="tok-num">1</span>;
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, PowerOfTwoCap&gt; buffer_;
+    <span class="tok-type">size_t</span> head_ = <span class="tok-num">0</span>, tail_ = <span class="tok-num">0</span>;
 };</pre>
         
       </div>

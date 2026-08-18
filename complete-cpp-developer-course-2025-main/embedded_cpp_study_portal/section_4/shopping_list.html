@@ -189,30 +189,30 @@
       <div class="content-card">
         
         <p>Embedded ring buffer for streaming data:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-template &lt;typename T, size_t Capacity&gt;
-class RingBuffer {
-    static_assert((Capacity &amp; (Capacity - 1)) == 0, "Capacity must be power of 2");
-    std::array&lt;T, Capacity&gt; buffer_{};
-    uint32_t head_{0};
-    uint32_t tail_{0};
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> T, <span class="tok-type">size_t</span> Capacity&gt;
+<span class="tok-kw">class</span> RingBuffer {
+    <span class="tok-kw">static_assert</span>((Capacity &amp; (Capacity - <span class="tok-num">1</span>)) == <span class="tok-num">0</span>, <span class="tok-str">&quot;Capacity must be power of 2&quot;</span>);
+    <span class="tok-type">std</span>::<span class="tok-type">array</span>&lt;T, Capacity&gt; buffer_{};
+    <span class="tok-type">uint32_t</span> head_{<span class="tok-num">0</span>};
+    <span class="tok-type">uint32_t</span> tail_{<span class="tok-num">0</span>};
 
-public:
-    bool push(T item) noexcept {
-        uint32_t next = (head_ + 1) &amp; (Capacity - 1);
-        if (next == tail_) return false; // Full
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">bool</span> <span class="tok-fn">push</span>(T item) <span class="tok-kw">noexcept</span> {
+        <span class="tok-type">uint32_t</span> next = (head_ + <span class="tok-num">1</span>) &amp; (Capacity - <span class="tok-num">1</span>);
+        <span class="tok-kw">if</span> (next == tail_) <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// Full</span>
         buffer_[head_] = item;
         head_ = next;
-        return true;
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 
-    bool pop(T&amp; out) noexcept {
-        if (head_ == tail_) return false; // Empty
+    <span class="tok-kw">bool</span> <span class="tok-fn">pop</span>(T&amp; out) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">if</span> (head_ == tail_) <span class="tok-kw">return</span> <span class="tok-kw">false</span>; <span class="tok-com">// Empty</span>
         out = buffer_[tail_];
-        tail_ = (tail_ + 1) &amp; (Capacity - 1);
-        return true;
+        tail_ = (tail_ + <span class="tok-num">1</span>) &amp; (Capacity - <span class="tok-num">1</span>);
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>;
     }
 };</pre>
         

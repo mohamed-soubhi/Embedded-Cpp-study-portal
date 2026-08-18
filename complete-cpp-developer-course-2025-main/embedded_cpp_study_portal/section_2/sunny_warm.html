@@ -179,17 +179,17 @@
       <div class="content-card">
         
         <p>Simplified, branch-efficient flight safety check:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-struct FlightConditions {
-    bool is_battery_healthy;
-    bool is_gps_locked;
-    bool is_motor_armed;
+<span class="tok-kw">struct</span> FlightConditions {
+    <span class="tok-kw">bool</span> is_battery_healthy;
+    <span class="tok-kw">bool</span> is_gps_locked;
+    <span class="tok-kw">bool</span> is_motor_armed;
 };
 
-// Simplified using De Morgan's laws for fastest early exit
-constexpr bool isFlightReady(FlightConditions f) noexcept {
-    return f.is_battery_healthy &amp;&amp; f.is_gps_locked &amp;&amp; f.is_motor_armed;
+<span class="tok-com">// Simplified using De Morgan&#x27;s laws for fastest early exit</span>
+<span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">isFlightReady</span>(FlightConditions f) <span class="tok-kw">noexcept</span> {
+    <span class="tok-kw">return</span> f.is_battery_healthy &amp;&amp; f.is_gps_locked &amp;&amp; f.is_motor_armed;
 }</pre>
         
       </div>

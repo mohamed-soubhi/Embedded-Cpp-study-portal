@@ -276,28 +276,28 @@
       <div class="content-card">
         
         <p>100% constexpr UI bounding box class:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-class BoundingBox {
-private:
-    int16_t x_{0};
-    int16_t y_{0};
-    uint16_t width_{0};
-    uint16_t height_{0};
+<span class="tok-kw">class</span> BoundingBox {
+<span class="tok-kw">private</span>:
+    <span class="tok-type">int16_t</span> x_{<span class="tok-num">0</span>};
+    <span class="tok-type">int16_t</span> y_{<span class="tok-num">0</span>};
+    <span class="tok-type">uint16_t</span> width_{<span class="tok-num">0</span>};
+    <span class="tok-type">uint16_t</span> height_{<span class="tok-num">0</span>};
 
-public:
-    constexpr BoundingBox(int16_t x, int16_t y, uint16_t w, uint16_t h) noexcept
-        : x_(x), y_(y), width_(w), height_(h) {}
+<span class="tok-kw">public</span>:
+    <span class="tok-kw">constexpr</span> <span class="tok-fn">BoundingBox</span>(<span class="tok-type">int16_t</span> x, <span class="tok-type">int16_t</span> y, <span class="tok-type">uint16_t</span> w, <span class="tok-type">uint16_t</span> h) <span class="tok-kw">noexcept</span>
+        : <span class="tok-fn">x_</span>(x), <span class="tok-fn">y_</span>(y), <span class="tok-fn">width_</span>(w), <span class="tok-fn">height_</span>(h) {}
 
-    constexpr uint32_t area() const noexcept { return static_cast&lt;uint32_t&gt;(width_) * height_; }
-    constexpr bool contains(int16_t px, int16_t py) const noexcept {
-        return (px &gt;= x_ &amp;&amp; px &lt; (x_ + width_) &amp;&amp; py &gt;= y_ &amp;&amp; py &lt; (y_ + height_));
+    <span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> <span class="tok-fn">area</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> { <span class="tok-kw">return</span> <span class="tok-kw">static_cast</span>&lt;<span class="tok-type">uint32_t</span>&gt;(width_) * height_; }
+    <span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">contains</span>(<span class="tok-type">int16_t</span> px, <span class="tok-type">int16_t</span> py) <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> (px &gt;= x_ &amp;&amp; px &lt; (x_ + width_) &amp;&amp; py &gt;= y_ &amp;&amp; py &lt; (y_ + height_));
     }
 };
 
-// Computed at compile-time and placed in Flash .rodata
-constexpr BoundingBox STATUS_BAR_RECT{0, 0, 320, 24};
-constexpr uint32_t STATUS_BAR_AREA = STATUS_BAR_RECT.area(); // 7680</pre>
+<span class="tok-com">// Computed at compile-time and placed in Flash .rodata</span>
+<span class="tok-kw">constexpr</span> BoundingBox STATUS_BAR_RECT{<span class="tok-num">0</span>, <span class="tok-num">0</span>, <span class="tok-num">320</span>, <span class="tok-num">24</span>};
+<span class="tok-kw">constexpr</span> <span class="tok-type">uint32_t</span> STATUS_BAR_AREA = STATUS_BAR_RECT.<span class="tok-fn">area</span>(); <span class="tok-com">// 7680</span></pre>
         
       </div>
     </section>

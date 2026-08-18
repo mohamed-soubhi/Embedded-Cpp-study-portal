@@ -192,25 +192,25 @@
       <div class="content-card">
         
         <p>Q8.8 Fixed-Point Temperature Representation (Single-Cycle Arithmetic):</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// Fixed-Point Q8.8 (16-bit integer: 8 bits integer, 8 bits fraction)
-struct FixedQ8_8 {
-    int16_t raw;
+<span class="tok-com">// Fixed-Point Q8.8 (16-bit integer: 8 bits integer, 8 bits fraction)</span>
+<span class="tok-kw">struct</span> FixedQ8_8 {
+    <span class="tok-type">int16_t</span> raw;
 
-    static constexpr FixedQ8_8 from_float(float val) noexcept {
-        return FixedQ8_8{static_cast&lt;int16_t&gt;(val * 256.0f)};
+    <span class="tok-kw">static</span> <span class="tok-kw">constexpr</span> FixedQ8_8 <span class="tok-fn">from_float</span>(<span class="tok-type">float</span> val) <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> FixedQ8_8{<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">int16_t</span>&gt;(val * <span class="tok-num">256.0f</span>)};
     }
 
-    constexpr int16_t to_celsius_int() const noexcept {
-        return raw &gt;&gt; 8; // Fast single-cycle bit shift
+    <span class="tok-kw">constexpr</span> <span class="tok-type">int16_t</span> <span class="tok-fn">to_celsius_int</span>() <span class="tok-kw">const</span> <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> raw &gt;&gt; <span class="tok-num">8</span>; <span class="tok-com">// Fast single-cycle bit shift</span>
     }
 };
 
-// Celsius to Fahrenheit in Q8.8 fixed-point: (C * 9/5) + 32
-constexpr FixedQ8_8 celsiusToFahrenheit(FixedQ8_8 c) noexcept {
-    int32_t intermediate = (static_cast&lt;int32_t&gt;(c.raw) * 9) / 5;
-    return FixedQ8_8{static_cast&lt;int16_t&gt;(intermediate + (32 &lt;&lt; 8))};
+<span class="tok-com">// Celsius to Fahrenheit in Q8.8 fixed-point: (C * 9/5) + 32</span>
+<span class="tok-kw">constexpr</span> FixedQ8_8 <span class="tok-fn">celsiusToFahrenheit</span>(FixedQ8_8 c) <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">int32_t</span> intermediate = (<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">int32_t</span>&gt;(c.raw) * <span class="tok-num">9</span>) / <span class="tok-num">5</span>;
+    <span class="tok-kw">return</span> FixedQ8_8{<span class="tok-kw">static_cast</span>&lt;<span class="tok-type">int16_t</span>&gt;(intermediate + (<span class="tok-num">32</span> &lt;&lt; <span class="tok-num">8</span>))};
 }</pre>
         
       </div>

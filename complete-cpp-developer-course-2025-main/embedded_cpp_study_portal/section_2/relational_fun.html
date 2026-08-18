@@ -199,13 +199,13 @@
       <div class="content-card">
         
         <p>Robust floating-point and fixed-point comparison helper:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cmath&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cmath&gt;</span>
 
-constexpr float EPSILON = 0.0001f;
+<span class="tok-kw">constexpr</span> <span class="tok-type">float</span> EPSILON = <span class="tok-num">0.0001f</span>;
 
-constexpr bool areFloatsEqual(float a, float b) noexcept {
-    float diff = a - b;
-    return (diff &lt; 0.0f ? -diff : diff) &lt; EPSILON;
+<span class="tok-kw">constexpr</span> <span class="tok-kw">bool</span> <span class="tok-fn">areFloatsEqual</span>(<span class="tok-type">float</span> a, <span class="tok-type">float</span> b) <span class="tok-kw">noexcept</span> {
+    <span class="tok-type">float</span> diff = a - b;
+    <span class="tok-kw">return</span> (diff &lt; <span class="tok-num">0.0f</span> ? -diff : diff) &lt; EPSILON;
 }</pre>
         
       </div>

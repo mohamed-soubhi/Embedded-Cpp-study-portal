@@ -265,28 +265,28 @@
       <div class="content-card">
         
         <p>Here is how embedded engineers use <code>std::unique_ptr</code> with a custom lambda deleter to automatically power-down an SPI peripheral when done:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;memory&gt;
-#include &lt;iostream&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;memory&gt;</span>
+<span class="tok-pre">#include &lt;iostream&gt;</span>
 
-struct SpiPeripheral {
-    void write(uint8_t data) { std::cout &lt;&lt; "SPI Tx: " &lt;&lt; int(data) &lt;&lt; '\n'; }
+<span class="tok-kw">struct</span> SpiPeripheral {
+    <span class="tok-type">void</span> <span class="tok-fn">write</span>(<span class="tok-type">uint8_t</span> data) { <span class="tok-type">std</span>::<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;SPI Tx: &quot;</span> &lt;&lt; <span class="tok-type">int</span>(data) &lt;&lt; &#x27;\n&#x27;; }
 };
 
-// Custom deleter that disables the hardware clock
-struct SpiDeleter {
-    void operator()(SpiPeripheral* spi) const {
-        std::cout &lt;&lt; "Hardware Clock Disabled (Safe RAII State)\n";
-        // e.g., RCC-&gt;APB2ENR &amp;= ~SPI1_EN;
+<span class="tok-com">// Custom deleter that disables the hardware clock</span>
+<span class="tok-kw">struct</span> SpiDeleter {
+    <span class="tok-type">void</span> <span class="tok-kw">operator</span>()(SpiPeripheral* spi) <span class="tok-kw">const</span> {
+        <span class="tok-type">std</span>::<span class="tok-type">cout</span> &lt;&lt; <span class="tok-str">&quot;Hardware Clock Disabled (Safe RAII State)\n&quot;</span>;
+        <span class="tok-com">// e.g., RCC-&gt;APB2ENR &amp;= ~SPI1_EN;</span>
     }
 };
 
-using SpiHandle = std::unique_ptr&lt;SpiPeripheral, SpiDeleter&gt;;
+<span class="tok-kw">using</span> SpiHandle = <span class="tok-type">std</span>::<span class="tok-type">unique_ptr</span>&lt;SpiPeripheral, SpiDeleter&gt;;
 
-void transmitSensorPacket() {
+<span class="tok-type">void</span> <span class="tok-fn">transmitSensorPacket</span>() {
     SpiPeripheral hwSpi;
-    SpiHandle handle(&amp;hwSpi); // Automatically unlocks on function exit!
-    handle-&gt;write(0xAA);
-} // &lt;-- SpiDeleter runs automatically here!</pre>
+    SpiHandle <span class="tok-fn">handle</span>(&amp;hwSpi); <span class="tok-com">// Automatically unlocks on function exit!</span>
+    handle-&gt;<span class="tok-fn">write</span>(<span class="tok-num">0xAA</span>);
+} <span class="tok-com">// &lt;-- SpiDeleter runs automatically here!</span></pre>
         
       </div>
     </section>

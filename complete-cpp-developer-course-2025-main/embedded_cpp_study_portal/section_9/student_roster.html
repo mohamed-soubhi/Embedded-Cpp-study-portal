@@ -317,22 +317,22 @@ George Hall <span class="tok-num">3.9</span></pre>
       <div class="content-card">
         
         <p>Binary record serialization with CRC32 integrity verification:</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
-#include &lt;array&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
+<span class="tok-pre">#include &lt;array&gt;</span>
 
-#pragma pack(push, 1) // Packed: 0 padding bytes across network / Flash
-struct CalibrationRecord {
-    uint32_t magic_header; // 0x55AA55AA
-    uint32_t serial_number;
-    int16_t  zero_offset;
-    uint16_t scale_gain;
-    uint32_t crc32;        // Checksum over payload bytes
+<span class="tok-pre">#pragma pack(push, 1) // Packed: 0 padding bytes across network / Flash</span>
+<span class="tok-kw">struct</span> CalibrationRecord {
+    <span class="tok-type">uint32_t</span> magic_header; <span class="tok-com">// 0x55AA55AA</span>
+    <span class="tok-type">uint32_t</span> serial_number;
+    <span class="tok-type">int16_t</span>  zero_offset;
+    <span class="tok-type">uint16_t</span> scale_gain;
+    <span class="tok-type">uint32_t</span> crc32;        <span class="tok-com">// Checksum over payload bytes</span>
 };
-#pragma pack(pop)
+<span class="tok-pre">#pragma pack(pop)</span>
 
-uint32_t computeHardwareCrc32(const void* data, size_t len) noexcept {
-    // Feed bytes into STM32 Hardware CRC Peripheral (CRC->DR)...
-    return 0x12345678;
+<span class="tok-type">uint32_t</span> <span class="tok-fn">computeHardwareCrc32</span>(<span class="tok-kw">const</span> <span class="tok-type">void</span>* data, <span class="tok-type">size_t</span> len) <span class="tok-kw">noexcept</span> {
+    <span class="tok-com">// Feed bytes into STM32 Hardware CRC Peripheral (CRC-&gt;DR)...</span>
+    <span class="tok-kw">return</span> <span class="tok-num">0x12345678</span>;
 }</pre>
         
       </div>

@@ -460,21 +460,21 @@
       <div class="content-card">
         
         <p>Zero-overhead static polymorphism using the Curiously Recurring Template Pattern (CRTP):</p>
-        <pre class="code-block" style="background:#0d1117; padding:16px; border-radius:8px; border:1px solid #30363d;">#include &lt;cstdint&gt;
+        <pre class="code-block"><span class="tok-pre">#include &lt;cstdint&gt;</span>
 
-// CRTP Base Interface: 0 bytes RAM overhead, 0 vtable pointers!
-template &lt;typename Derived&gt;
-class SensorDriver {
-public:
-    uint16_t read() noexcept {
-        return static_cast&lt;Derived*&gt;(this)-&gt;read_impl(); // Fully inlined!
+<span class="tok-com">// CRTP Base Interface: 0 bytes RAM overhead, 0 vtable pointers!</span>
+<span class="tok-kw">template</span> &lt;<span class="tok-kw">typename</span> Derived&gt;
+<span class="tok-kw">class</span> SensorDriver {
+<span class="tok-kw">public</span>:
+    <span class="tok-type">uint16_t</span> <span class="tok-fn">read</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> <span class="tok-kw">static_cast</span>&lt;Derived*&gt;(<span class="tok-kw">this</span>)-&gt;<span class="tok-fn">read_impl</span>(); <span class="tok-com">// Fully inlined!</span>
     }
 };
 
-class TemperatureSensor : public SensorDriver&lt;TemperatureSensor&gt; {
-public:
-    uint16_t read_impl() noexcept {
-        return 0x0123; // Direct hardware register read
+<span class="tok-kw">class</span> TemperatureSensor : <span class="tok-kw">public</span> SensorDriver&lt;TemperatureSensor&gt; {
+<span class="tok-kw">public</span>:
+    <span class="tok-type">uint16_t</span> <span class="tok-fn">read_impl</span>() <span class="tok-kw">noexcept</span> {
+        <span class="tok-kw">return</span> <span class="tok-num">0x0123</span>; <span class="tok-com">// Direct hardware register read</span>
     }
 };</pre>
         
